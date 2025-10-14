@@ -4,6 +4,34 @@
  */
 using UnityEngine;
 
+public enum UIPanel
+{
+    MainMenu,
+    InGameHUD,
+    PauseMenu,
+    Inventory,
+    Settings,
+    Dialogue,
+    Cutscene
+}
+
+public enum UILayer
+{
+    Background = 0,
+    Default = 1,
+    Popup = 2,
+    Overlay = 3,
+    TopMost = 4
+}
+
+public enum UIMode
+{
+    Exploration,
+    Combat,
+    Dialogue,
+    Cutscene
+}
+
 /*
  * UI管理器，协调所有UI系统的显示和交互
  */

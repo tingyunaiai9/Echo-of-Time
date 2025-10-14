@@ -4,6 +4,14 @@
  */
 using UnityEngine;
 
+public class PuzzleBase : MonoBehaviour
+{
+    public string puzzleId;
+    public bool isCompleted = false;
+
+    // 其他谜题相关属性和方法
+}
+
 /*
  * 谜题管理器，协调多个谜题之间的逻辑关系
  */
@@ -23,6 +31,7 @@ public class PuzzleManager : MonoBehaviour
         // 检查时间线同步
         // 验证谜题序列
         // 返回验证结果
+        return true;
     }
 
     /* 处理谜题完成事件 */

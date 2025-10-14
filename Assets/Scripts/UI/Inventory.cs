@@ -4,6 +4,15 @@
  */
 using UnityEngine;
 
+public class InventoryItem
+{
+    public string itemId;
+    public string itemName;
+    public string description;
+    public int quantity;
+    // 其他物品属性
+}
+
 /*
  * 玩家背包系统，管理物品和线索收集
  */

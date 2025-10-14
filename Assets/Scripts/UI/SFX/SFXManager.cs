@@ -4,6 +4,16 @@
  */
 using UnityEngine;
 
+// 定义音效类型枚举
+public enum SFXType
+{
+    ButtonClick,
+    Notification,
+    Error,
+    Success,
+    // 可根据需要添加更多类型
+}
+
 /*
  * 音效管理器，处理游戏音效播放和控制
  */

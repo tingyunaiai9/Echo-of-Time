@@ -7,6 +7,11 @@ using UnityEngine;
 /*
  * 时间线控制器，管理不同时间线的逻辑和同步
  */
+public class TimelineEvent
+{
+    // 在此定义事件相关属性和方法
+}
+
 public class TLController : MonoBehaviour
 {
     /* 初始化时间线系统 */

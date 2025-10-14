@@ -4,6 +4,22 @@
  */
 using UnityEngine;
 
+public class PlayerStatus
+{
+    public int health;
+    public int energy;
+    public int currentTimeline;
+    public string playerName;
+}
+
+public enum AlertType
+{
+    LowHealth,
+    NewObjective,
+    TimeAnomaly,
+    EnemyNearby
+}
+
 /*
  * 游戏HUD控制器，管理抬头显示信息
  */

@@ -2,6 +2,23 @@
  * 玩家数据模型，管理玩家状态、属性、进度等信息
  * 负责数据的序列化、保存和加载操作
  */
+
+public class ClueData
+{
+    public string clueId;
+    public string description;
+    public bool isVerified;
+    // 其他线索属性
+}
+
+public class PuzzleState
+{
+    public string puzzleId;
+    public bool isSolved;
+    public int progressLevel;
+    // 其他谜题状态属性
+}
+
 /*
 * 玩家数据管理，负责本地玩家数据的存储、同步和持久化
 */

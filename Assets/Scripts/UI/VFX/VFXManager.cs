@@ -4,6 +4,14 @@
  */
 using UnityEngine;
 
+/* 转场特效类型枚举 */
+public enum TransitionType
+{
+    FadeIn,
+    FadeOut,
+    SlideLeft,
+    SlideRight
+}
 /*
  * 视觉特效管理器，控制UI相关的视觉特效
  */

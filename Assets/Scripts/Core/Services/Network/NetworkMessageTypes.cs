@@ -6,7 +6,7 @@
 /*
  * 网络消息类型定义，专门为跨时空合作解谜设计
  */
-public static class NetworkMessageTypes
+public class NetworkMessageTypes
 {
     /*
      * 线索共享消息（玩家间传输线索信息）

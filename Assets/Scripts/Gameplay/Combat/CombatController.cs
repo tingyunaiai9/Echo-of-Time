@@ -4,6 +4,29 @@
  */
 
 using UnityEngine;
+
+public enum AttackType
+{
+    Melee,
+    Ranged,
+    Magic
+}
+
+public enum CombatState
+{
+    Idle,
+    Attacking,
+    Defending,
+    Stunned
+}
+
+public class DamageData
+{
+    public int amount;
+    public AttackType attackType;
+    public GameObject source;
+}
+
 /*
  * 战斗控制器，管理玩家战斗逻辑和状态
  */

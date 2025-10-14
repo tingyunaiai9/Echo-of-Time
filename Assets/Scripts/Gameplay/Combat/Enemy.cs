@@ -5,6 +5,15 @@
 
 using UnityEngine;
 
+public class EnemyConfig
+{
+    public string enemyName;
+    public int health;
+    public float moveSpeed;
+    public float detectionRange;
+    // 其他敌人属性
+}
+
 /*
  * 敌人基类，定义敌人行为和AI逻辑
  */

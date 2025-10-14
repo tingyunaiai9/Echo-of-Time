@@ -4,6 +4,14 @@
  */
 using UnityEngine;
 
+public struct VFXSyncData
+{
+    public int timelineID;
+    public Vector3 position;
+    public Quaternion rotation;
+    public float effectIntensity;
+}
+
 /*
  * 时间线转换特效控制器，专门处理时间线切换的视觉表现
  */
