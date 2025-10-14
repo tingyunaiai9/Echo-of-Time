@@ -1,7 +1,8 @@
 /* UI/HUDController.cs
- * 平视显示器控制器，管理游戏主界面的状态显示
+ * 平视显示器控制器(Head-Up Display)，管理游戏主界面的状态显示
  * 包括血量、能量、任务提示等实时信息
  */
+using UnityEngine;
 
 /*
  * 游戏HUD控制器，管理抬头显示信息

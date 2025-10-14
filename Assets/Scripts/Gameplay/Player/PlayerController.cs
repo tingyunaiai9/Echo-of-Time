@@ -168,12 +168,12 @@ public class PlayerController : NetworkBehaviour
         if (Vector3.Distance(transform.position, target.transform.position) > interactRange + 1.5f) return;
 
         // 尝试调用 IInteractable（如果你的项目中有该接口）
-        var interactable = target.GetComponent<IInteractable>();
-        if (interactable != null)
-        {
-            // connectionToClient 表示请求交互的客户端
-            interactable.OnInteract(connectionToClient.identity.gameObject);
-        }
+        // var interactable = target.GetComponent<IInteractable>();
+        // if (interactable != null)
+        // {
+        //     // connectionToClient 表示请求交互的客户端
+        //     interactable.OnInteract(connectionToClient.identity.gameObject);
+        // }
 
         // 广播播放交互动画/特效
         RpcPlayInteraction(target);
