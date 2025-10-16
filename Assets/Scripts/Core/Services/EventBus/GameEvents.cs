@@ -3,48 +3,163 @@
  * 集中管理所有游戏内可能触发的事件类型
  */
 
-/*
- * 游戏事件定义，包含所有跨时空合作相关的事件类型
- */
-public static class GameEvents
+using UnityEngine;
+
+namespace Events
 {
-    /*
-     * 线索相关事件（收集、分享、更新）
+    /*     
+     * 玩家状态相关事件
      */
-    public class ClueEvents
+    public class PlayerSpawnedEvent
     {
-        // 线索收集完成事件
-        // 线索分享请求事件
-        // 线索验证结果事件
+        public uint playerNetId;
+        public Vector3 spawnPosition;
+    }
+
+    public class PlayerHealthChangedEvent
+    {
+        public uint playerNetId;
+        public int newHealth;
+        public int delta;
+    }
+
+    public class PlayerDiedEvent
+    {
+        public uint playerNetId;
+    }
+
+    public class PlayerRespawnedEvent
+    {
+        public uint playerNetId;
+        public Vector3 respawnPosition;
     }
 
     /*
-     * 解谜进度事件（谜题状态变化、合作解谜触发）
+     * 物品/交互相关事件
      */
-    public class PuzzleEvents
+    public class ItemPickedUpEvent
     {
-        // 谜题状态更新事件
-        // 合作解谜触发事件
-        // 时间线同步事件
+        public uint playerNetId;
+        public string itemId;
+    }
+
+    public class InventoryUpdatedEvent
+    {
+        public uint playerNetId;
+        public string[] inventoryItems;
+    }
+
+    public class PuzzleInteractedEvent
+    {
+        public uint playerNetId;
+        public string puzzleId;
+        public string action;
     }
 
     /*
-     * 时间线交互事件（时间线同步、时空传输）
+     * 谜题与进度相关事件
      */
-    public class TimelineEvents
+    public class PuzzleStateChangedEvent
     {
-        // 时间线切换事件
-        // 跨时间线通信事件
-        // 时空悖论检测事件
+        public string puzzleId;
+        public string newState;
+    }
+
+    public class PuzzleSolvedEvent
+    {
+        public string puzzleId;
+        public uint solverNetId;
+    }
+
+    public class ClueRevealedEvent
+    {
+        public string clueId;
+        public string description;
+    }
+
+    public class GameProgressUpdatedEvent
+    {
+        public float progress; // 0~1
+    }
+
+    public class ObjectiveCompletedEvent
+    {
+        public string objectiveId;
     }
 
     /*
-     * 网络通信事件（消息接收、连接状态）
+     * 时间线交互事件
      */
-    public class NetworkEvents
+    public class TimelineStartEvent
     {
-        // 玩家连接事件
-        // 消息接收事件
-        // 网络延迟事件
+        public int timelineId;
+    }
+
+    public class TimelineSwitchedEvent
+    {
+        public int fromTimelineId;
+        public int toTimelineId;
+    }
+
+    public class TimelineSyncEvent
+    {
+        public int timelineId;
+        public string syncData;
+    }
+
+    public class ParadoxDetectedEvent
+    {
+        public int timelineId;
+        public string paradoxInfo;
+    }
+
+    /*
+     * 网络通信事件
+     */
+    public class ClientConnectedEvent
+    {
+        public uint clientNetId;
+    }
+
+    public class ClientDisconnectedEvent
+    {
+        public uint clientNetId;
+    }
+
+    public class LocalPlayerReadyEvent
+    {
+        public uint playerNetId;
+    }
+
+    /*
+     * UI与视听反馈事件
+     */
+    public class UpdateHUDEvent
+    {
+        public uint playerNetId;
+        public string hudType;
+        public string hudValue;
+    }
+
+    public class ToggleMenuEvent
+    {
+        public bool isOpen;
+    }
+
+    public class PlaySFXEvent
+    {
+        public string sfxName;
+        public Vector3 position;
+    }
+
+    public class PlayVFXEvent
+    {
+        public string vfxName;
+        public Vector3 position;
+    }
+
+    public class SceneTransitionEvent
+    {
+        public string sceneName;
     }
 }
