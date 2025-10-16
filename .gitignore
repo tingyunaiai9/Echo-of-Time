@@ -101,3 +101,15 @@ InitTestScene*.unity*
 
 # Unity generated template .meta files
 Assets/ScriptTemplates/**
+
+# Encryption files
+EncryptKey.cs
+EncryptManager.cs
+EncryptKey.cs.meta
+EncryptManager.cs.meta
+
+# UOS generated files
+UOS.Environments/
+UOS.Environments.meta
+UOS.Sync/
+
