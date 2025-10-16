@@ -66,5 +66,6 @@
     "explorer.fileNesting.patterns": {
         "*.sln": "*.csproj",
     },
-    "dotnet.defaultSolution": "Echo-of-Time.sln"
+    "dotnet.defaultSolution": "Echo-of-Time.sln",
+    "dotnet.preferCSharpExtension": true
 }
