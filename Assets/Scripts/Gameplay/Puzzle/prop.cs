@@ -23,22 +23,15 @@ public class prop : MonoBehaviour
         // 初始化状态
     }
 
-    /* 处理玩家交互触发 */
-    public virtual void OnInteract(PlayerController player)
+    /* 实现物体立刻消失的函数 */
+    public void DisappearImmediately()
     {
-        // 验证交互条件
-        // 执行交互逻辑
-        // 反馈交互结果
+        // 通过设置GameObject为非激活状态，使其在场景中立刻消失
+        // 注意：这不会销毁对象，只是隐藏它，ResetInteraction() 可以再次显示
+        gameObject.SetActive(false);
+        Debug.Log($"Prop '{gameObject.name}' has immediately disappeared.");
     }
-
-    /* 验证解谜条件 */
-    public bool CheckPuzzleConditions()
-    {
-        // 检查前置条件
-        // 验证物品需求
-        // 返回验证结果
-        return true;
-    }
+    
 
     /* 重置交互状态 */
     public void ResetInteraction()
@@ -46,5 +39,6 @@ public class prop : MonoBehaviour
         // 恢复初始状态
         // 清除临时数据
         // 重置动画效果
+        gameObject.SetActive(true); // 示例：重置时重新激活对象
     }
 }
