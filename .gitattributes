@@ -50,3 +50,5 @@
 *.pic filter=lfs diff=lfs merge=lfs -text
 *.prefab filter=lfs diff=lfs merge=lfs -text
 *.anim filter=lfs diff=lfs merge=lfs -text
+
+*.meta filter=meta
