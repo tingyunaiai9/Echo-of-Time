@@ -417,6 +417,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   moveSpeed: 5
   rotationSpeed: 720
+  interactionRange: 3
+  interactableLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  cameraTransform: {fileID: 0}
+  cameraOffset: {x: 3, y: 0, z: -6}
+  cameraSmoothSpeed: 0.125
 --- !u!135 &1326258675
 SphereCollider:
   m_ObjectHideFlags: 0
