@@ -1,0 +1,135 @@
+/* Core/Services/Network/TimelinePlayer.cs
+ * 时间线玩家，每个玩家在不同的时间线中
+ */
+
+using Mirror;
+using UnityEngine;
+
+public class TimelinePlayer : NetworkBehaviour
+{
+    [Header("时间线设置")]
+    [SyncVar(hook = nameof(OnTimelineChanged))]
+    public int timeline = -1;
+    
+    [SyncVar]
+    public string playerName = "";
+    
+    [SyncVar]
+    public uint transportId = 0;
+    
+    [Header("玩家信息")]
+    private Color[] timelineColors = new Color[]
+    {
+        Color.red,      // 时间线 0 - 过去
+        Color.green,    // 时间线 1 - 现在
+        Color.blue      // 时间线 2 - 未来
+    };
+    
+    private EchoNetworkManager networkManager;
+    private Renderer playerRenderer;
+    
+    public override void OnStartLocalPlayer()
+    {
+        base.OnStartLocalPlayer();
+        
+        networkManager = FindFirstObjectByType<EchoNetworkManager>();
+        
+        // 请求服务器分配时间线
+        if (isClient)
+        {
+            CmdRequestTimeline();
+        }
+        
+        Debug.Log($"[TimelinePlayer] Local player started");
+    }
+    
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        
+        // 获取渲染器组件
+        playerRenderer = GetComponent<Renderer>();
+        if (playerRenderer == null)
+        {
+            playerRenderer = GetComponentInChildren<Renderer>();
+        }
+        
+        // 应用时间线颜色
+        if (timeline >= 0)
+        {
+            ApplyTimelineColor();
+        }
+    }
+    
+    [Command]
+    private void CmdRequestTimeline()
+    {
+        if (networkManager == null)
+        {
+            networkManager = FindFirstObjectByType<EchoNetworkManager>();
+        }
+        
+        // 获取 Relay Transport ID
+        var relayTransport = networkManager.GetComponent<Unity.Sync.Relay.Transport.Mirror.RelayTransportMirror>();
+        if (relayTransport != null)
+        {
+            var currentPlayer = relayTransport.GetCurrentPlayer();
+            if (currentPlayer != null)
+            {
+                transportId = currentPlayer.TransportId;
+                playerName = currentPlayer.Name;
+                
+                // 从 NetworkManager 获取已分配的时间线
+                int assignedTimeline = networkManager.GetPlayerTimeline(transportId);
+                
+                if (assignedTimeline >= 0)
+                {
+                    timeline = assignedTimeline;
+                    Debug.Log($"[TimelinePlayer] Assigned to timeline {timeline}");
+                }
+            }
+        }
+    }
+    
+    private void OnTimelineChanged(int oldTimeline, int newTimeline)
+    {
+        Debug.Log($"[TimelinePlayer] Timeline changed from {oldTimeline} to {newTimeline}");
+        ApplyTimelineColor();
+    }
+    
+    private void ApplyTimelineColor()
+    {
+        if (playerRenderer != null && timeline >= 0 && timeline < timelineColors.Length)
+        {
+            // 创建新材质实例以避免修改共享材质
+            Material mat = new Material(playerRenderer.material);
+            mat.color = timelineColors[timeline];
+            playerRenderer.material = mat;
+            
+            Debug.Log($"[TimelinePlayer] Applied color for timeline {timeline}");
+        }
+    }
+    
+    void OnGUI()
+    {
+        if (!isLocalPlayer) return;
+        
+        // 显示玩家信息
+        string info = $"玩家: {playerName}\n";
+        info += $"时间线: {GetTimelineName(timeline)}\n";
+        info += $"Transport ID: {transportId}";
+        
+        GUI.Box(new Rect(10, 10, 200, 80), info);
+    }
+    
+    private string GetTimelineName(int timeline)
+    {
+        switch (timeline)
+        {
+            case 0: return "过去 (Past)";
+            case 1: return "现在 (Present)";
+            case 2: return "未来 (Future)";
+            default: return "未分配";
+        }
+    }
+}
