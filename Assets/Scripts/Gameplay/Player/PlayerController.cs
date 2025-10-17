@@ -29,7 +29,18 @@ public class PlayerController : MonoBehaviour
     public float interactionRange = 3f;
 
     [Tooltip("可交互物体的 LayerMask (可选，用于优化)")]
-    public LayerMask interactableLayer; // <--- 定义在这里！
+    public LayerMask interactableLayer;
+
+    [Header("相机跟随设置")]
+    [Tooltip("要跟随的相机 Transform，通常是场景中的 Main Camera。如果不指定，Awake 时会尝试自动查找。")]
+    public Transform cameraTransform;
+
+    [Tooltip("相机相对于玩家的固定偏移量（如: (0, 10, -10)）。")]
+    public Vector3 cameraOffset = new Vector3(0f, 10f, -10f);
+
+    [Tooltip("相机跟随的平滑度（值越大，跟随越慢/平滑）。推荐值 0.05 到 0.2。")]
+    [Range(0.01f, 1f)]
+    public float cameraSmoothSpeed = 0.125f;
 
     Rigidbody rb;
 
@@ -40,6 +51,16 @@ public class PlayerController : MonoBehaviour
         {
             // 推荐在带刚体的对象上冻结旋转，由脚本控制朝向
             rb.freezeRotation = true;
+        }
+
+        if (cameraTransform == null)
+        {
+            if (Camera.main != null) {
+                cameraTransform = Camera.main.transform;
+            }
+            else {
+                Debug.LogWarning("PlayerController: 未指定 cameraTransform，且场景中没有 Main Camera。请手动设置相机引用。");
+            }
         }
     }
 
@@ -82,6 +103,26 @@ public class PlayerController : MonoBehaviour
             Vector3 input = new Vector3(h, 0f, v).normalized;
             Vector3 targetPos = rb.position + input * moveSpeed * Time.fixedDeltaTime;
             rb.MovePosition(targetPos);
+        }
+    }
+
+    void LateUpdate()
+    {
+        if (cameraTransform != null)
+        {
+            // 1. 计算目标位置 (玩家位置 + 偏移量)
+            Vector3 targetPosition = transform.position + cameraOffset;
+
+            // 2. 使用 Lerp 进行平滑插值移动
+            // Time.deltaTime / cameraSmoothSpeed 决定了平滑度，值越小越平滑
+            cameraTransform.position = Vector3.Lerp(
+                cameraTransform.position, 
+                targetPosition, 
+                Time.deltaTime * (1f / cameraSmoothSpeed)
+            );
+            
+            // 3. (可选) 让相机始终面向玩家
+            cameraTransform.LookAt(transform.position); 
         }
     }
 
