@@ -11,7 +11,9 @@
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
 /Assets/Mirror/
-/Assets/UOSLauncherEncrypt
+/Assets/UOSLauncherEncrypt/
+/Assets/ParrelSync/
+/Assets/Plugins/ParrelSync/
 *.log
 
 # By default unity supports Blender asset imports, *.blend1 blender files do not need to be commited to version control.
@@ -113,4 +115,8 @@ EncryptManager.cs.meta
 UOS.Environments/
 UOS.Environments.meta
 UOS.Sync/
+
+# ParrelSync generated files
+ParrelSync.meta
+Plugins.meta
 
