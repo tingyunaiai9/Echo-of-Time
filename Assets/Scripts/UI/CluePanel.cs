@@ -14,7 +14,7 @@ public class CluePanel : Inventory
     readonly HashSet<string> _clueIds = new HashSet<string>();
 
     /* 添加线索（只加入一次） */
-    public void AddClue(string clueId, string clueText)
+    public new void AddClue(string clueId, string clueText)
     {
         if (string.IsNullOrEmpty(clueId)) return;
         if (!_clueIds.Add(clueId)) return; // 已存在则忽略
@@ -24,14 +24,21 @@ public class CluePanel : Inventory
     }
 
     /* 订阅线索发现事件 */
-    void OnEnable()
+    protected override void Awake()
     {
-        // 订阅一次 Clue 事件
+        base.Awake();
+        Debug.Log($"[CluePanel.Awake] gameObject.activeSelf={gameObject.activeSelf}");
+    }
+
+    protected virtual void OnEnable()
+    {
+        Debug.Log($"[CluePanel.OnEnable] 被调用");
         EventBus.Instance.Subscribe<ClueDiscoveredEvent>(OnClueDiscovered);
     }
 
-    void OnDisable()
+    protected virtual void OnDisable()
     {
+        Debug.Log($"[CluePanel.OnDisable] 被调用");
         EventBus.Instance.Unsubscribe<ClueDiscoveredEvent>(OnClueDiscovered);
     }
 

@@ -36,13 +36,21 @@ public class PropBackpack : Inventory
     }
 
     /* 订阅拾取事件（来自 prop.cs 的 ItemPickedUpEvent） */
-    void OnEnable()
+    protected override void Awake()
     {
+        base.Awake();
+        Debug.Log($"[PropBackpack.Awake] gameObject.activeSelf={gameObject.activeSelf}");
+    }
+
+    protected virtual void OnEnable()
+    {
+        Debug.Log($"[PropBackpack.OnEnable] 被调用");
         EventBus.Instance.Subscribe<ItemPickedUpEvent>(OnItemPickedUp);
     }
 
-    void OnDisable()
+    protected virtual void OnDisable()
     {
+        Debug.Log($"[PropBackpack.OnDisable] 被调用");
         EventBus.Instance.Unsubscribe<ItemPickedUpEvent>(OnItemPickedUp);
     }
 

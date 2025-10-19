@@ -135,10 +135,18 @@ public class PlayerController : NetworkBehaviour
             TryInteract();
         }
 
+        // 背包开关 - 添加详细调试
         if (Input.GetKeyDown(KeyCode.B))
         {
-            // 切换背包界面
+            Debug.Log($"[PlayerController] B 键被按下！isLocalPlayer={isLocalPlayer}");
             Inventory.ToggleBackpack();
+            Debug.Log("[PlayerController] Inventory.ToggleBackpack() 调用完毕");
+        }
+
+        // 每帧检测一次（仅用于调试，确认 Update 在运行）
+        if (Time.frameCount % 60 == 0) // 每60帧（约1秒）输出一次
+        {
+            Debug.Log($"[PlayerController] Update 正在运行，isLocalPlayer={isLocalPlayer}");
         }
     }
 
