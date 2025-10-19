@@ -1,8 +1,5 @@
-/* UI/UIManager.cs
- * UI管理器，统一管理所有UI面板的显示层级和状态
- * 协调不同UI界面之间的切换和交互
- */
 using UnityEngine;
+using Events; // 引入事件命名空间
 
 public enum UIPanel
 {
@@ -35,8 +32,46 @@ public enum UIMode
 /*
  * UI管理器，协调所有UI系统的显示和交互
  */
-public class UIManager : MonoBehaviour
+public class UIManager : Singleton<UIManager>
 {
+    private EventBus eventBus;
+
+    void Awake()
+    {
+        // 获取或创建全局EventBus实例（可根据实际项目结构调整）
+        eventBus = EventBus.Instance;
+        if (eventBus != null)
+        {
+            eventBus.Subscribe<ItemPickedUpEvent>(OnItemPickedUp);
+        }
+        else
+        {
+            Debug.LogWarning("UIManager: 未找到EventBus实例，无法监听事件。");
+        }
+    }
+
+    void OnDestroy()
+    {
+        if (eventBus != null)
+        {
+            eventBus.Unsubscribe<ItemPickedUpEvent>(OnItemPickedUp);
+        }
+    }
+
+    // 监听物品拾取事件，Debug.Log模拟弹窗
+    private void OnItemPickedUp(ItemPickedUpEvent evt)
+    {
+        Debug.Log($"[UIManager] 玩家 {evt.playerNetId} 拾取了物品 {evt.itemId}，弹窗提醒！");
+        ShowPopup($"获得物品：{evt.itemId}");
+    }
+
+    // 简单弹窗方法（实际项目可替换为UI面板控制）
+    private void ShowPopup(string message)
+    {
+        // 示例：用Debug.Log模拟弹窗，实际应弹出UI面板
+        Debug.Log($"[UI弹窗] {message}");
+    }
+
     /* 初始化所有UI系统 */
     public void InitializeAllUI()
     {

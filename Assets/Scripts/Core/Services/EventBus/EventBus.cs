@@ -9,7 +9,7 @@ using System.Text;
 using UnityEngine;
 using Mirror;
 
-public class EventBus
+public class EventBus : Singleton<EventBus>
 {
     // 存储所有事件类型的订阅者列表
     private readonly Dictionary<Type, List<Delegate>> _subscribers = new Dictionary<Type, List<Delegate>>();

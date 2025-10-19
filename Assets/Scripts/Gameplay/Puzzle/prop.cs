@@ -3,6 +3,7 @@
  * 处理玩家与场景物体的互动逻辑
  */
 using UnityEngine;
+using Events;
 
 /*
  * 交互系统基类，定义可交互对象的通用行为
@@ -23,15 +24,22 @@ public class prop : MonoBehaviour
         // 初始化状态
     }
 
-    /* 实现物体立刻消失的函数 */
-    public void DisappearImmediately()
+    /* 实现物体立刻消失的函数，并发布拾取事件 */
+    public void DisappearImmediately(uint playerNetId = 0, string itemId = null)
     {
         // 通过设置GameObject为非激活状态，使其在场景中立刻消失
-        // 注意：这不会销毁对象，只是隐藏它，ResetInteraction() 可以再次显示
         gameObject.SetActive(false);
         Debug.Log($"Prop '{gameObject.name}' has immediately disappeared.");
+
+        // 发布物品拾取事件
+        var evt = new ItemPickedUpEvent
+        {
+            playerNetId = playerNetId,
+            itemId = itemId ?? gameObject.name
+        };
+        EventBus.Instance.Publish(evt);
     }
-    
+
 
     /* 重置交互状态 */
     public void ResetInteraction()
