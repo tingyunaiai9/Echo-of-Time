@@ -47,13 +47,13 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
                 }
 
                 // 如果实例不存在，尝试在当前场景中查找该类型的对象
-                _instance = FindObjectOfType<T>();
+                _instance = FindFirstObjectByType<T>();
 
                 // 如果场景中找到了实例
                 if (_instance != null)
                 {
                     // 检查是否还有其他同类型的实例，这是冗余保护，通常不应发生
-                    var others = FindObjectsOfType<T>();
+                    var others = FindObjectsByType<T>(FindObjectsSortMode.None);
                     if (others.Length > 1)
                     {
                         Debug.LogError($"场景中存在多个 {typeof(T).Name} 的实例，这是不允许的。请检查你的场景设置。");
