@@ -42,10 +42,28 @@ public abstract class Inventory : MonoBehaviour
         if (this is CluePanel clue) s_cluePanel = clue;
     }
 
+    // 在场景加载后预热，避免第一次按 B 时卡顿
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    static void RuntimeInit()
+    {
+        var t0 = Time.realtimeSinceStartup;
+        EnsureRoot();
+        if (s_root != null)
+        {
+            Debug.Log($"Inventory: warmup 完成，用时 {(Time.realtimeSinceStartup - t0) * 1000f:F1} ms");
+        }
+    }
+
     // 开关背包（由 PlayerController B 键调用）
     public static void ToggleBackpack()
     {
         EnsureRoot();
+        if (s_root == null)
+        {
+            Debug.LogWarning("Inventory.ToggleBackpack: s_root 仍未初始化，检查是否已在任一面板组件上设置 backpackRoot，且该对象在场景中（即使未激活也可）。");
+            return;
+        }
+
         s_isOpen = !s_isOpen;
         s_root.SetActive(s_isOpen);
 
@@ -56,6 +74,7 @@ public abstract class Inventory : MonoBehaviour
     public static void OpenBackpack()
     {
         EnsureRoot();
+        if (s_root == null) return;
         s_isOpen = true;
         s_root.SetActive(true);
         SwitchToProps();
@@ -97,19 +116,37 @@ public abstract class Inventory : MonoBehaviour
     public void OnClickPropTab() => SwitchToProps();
     public void OnClickClueTab() => SwitchToClues();
 
-    // 若尚未通过 Inspector 注入，尝试在场景中查找一次
+    // 若尚未通过 Inspector 注入，尝试在场景中查找一次（包含未激活对象）
     static void EnsureRoot()
     {
         if (s_root != null) return;
-        var any = GameObject.FindFirstObjectByType<Inventory>();
-        if (any != null && any.backpackRoot != null)
+
+        // Unity 2022+ 使用 FindObjectsByType，包含未激活
+#if UNITY_2023_1_OR_NEWER
+        var all = Object.FindObjectsByType<Inventory>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+#else
+        // 兼容老版本：包含未激活与资源里的对象，需要过滤场景物体
+        var all = Resources.FindObjectsOfTypeAll<Inventory>();
+#endif
+        foreach (var inv in all)
         {
-            s_root = any.backpackRoot;
-            if (s_root.activeSelf) s_root.SetActive(false);
+            if (inv == null || inv.backpackRoot == null) continue;
+
+            // 仅接受场景对象（排除 Project 资源）
+            if (!inv.gameObject.scene.IsValid()) continue;
+
+            s_root = inv.backpackRoot;
+
+            if (inv is PropBackpack prop) s_propPanel = prop;
+            if (inv is CluePanel clue) s_cluePanel = clue;
+
+            if (s_root.activeSelf) s_root.SetActive(false); // 确保初始关闭
+            break;
         }
-        else
+
+        if (s_root == null)
         {
-            Debug.LogWarning("Inventory: 未能定位背包根节点，请在任一子面板脚本上设置 backpackRoot 引用。");
+            Debug.LogWarning("Inventory: 未能定位背包根节点，请在任一子面板脚本上设置 backpackRoot（允许未激活），并确保该对象在当前场景中。");
         }
     }
 }
