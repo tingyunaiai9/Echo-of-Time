@@ -2,6 +2,7 @@ using System;
 using System.Text;
 using Mirror;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class NetworkEventRelay : Singleton<NetworkEventRelay>
 {
@@ -11,15 +12,19 @@ public class NetworkEventRelay : Singleton<NetworkEventRelay>
         // 服务器接收客户端事件并广播
         NetworkServer.RegisterHandler<NetworkMessageTypes.TimelineEventMessage>((conn, msg) =>
         {
+            if (processedEventGuids.Contains(msg.eventGuid))
+                return; // 已处理，忽略
+    
+            processedEventGuids.Add(msg.eventGuid);
+    
             Type type = Type.GetType(msg.eventType);
             if (type != null)
             {
                 string json = Encoding.UTF8.GetString(msg.eventData);
                 object eventObj = JsonUtility.FromJson(json, type);
-
-                // 服务器本地分发
+    
                 EventBus.Instance.PublishDynamic(type, eventObj);
-
+    
                 // 服务器广播到其它客户端（不回发给发送者）
                 foreach (var c in NetworkServer.connections)
                 {
@@ -34,10 +39,15 @@ public class NetworkEventRelay : Singleton<NetworkEventRelay>
                 Debug.LogWarning($"[NetworkEventRelay] 未知事件类型: {msg.eventType}");
             }
         });
-
+    
         // 客户端接收服务器广播
         NetworkClient.RegisterHandler<NetworkMessageTypes.TimelineEventMessage>(msg =>
         {
+            if (processedEventGuids.Contains(msg.eventGuid))
+                return; // 已处理，忽略
+    
+            processedEventGuids.Add(msg.eventGuid);
+    
             Type type = Type.GetType(msg.eventType);
             if (type != null)
             {
@@ -76,7 +86,7 @@ public class NetworkEventRelay : Singleton<NetworkEventRelay>
     }
 
     // 服务器广播到所有客户端
-    private void BroadcastToClients<T>(T eventData, int sourceTimeline)
+    private void BroadcastToClients<T>(T eventData, int sourceID)
     {
         string eventType = typeof(T).FullName;
         byte[] data = SerializeEvent(eventData);
@@ -85,13 +95,13 @@ public class NetworkEventRelay : Singleton<NetworkEventRelay>
         {
             eventType = eventType,
             eventData = data,
-            sourceTimeline = sourceTimeline
+            sourceID = sourceID
         };
 
         if (NetworkServer.active)
         {
             NetworkServer.SendToAll(msg);
-            Debug.Log($"[NetworkEventRelay] Mirror广播事件: {eventType} from Timeline {sourceTimeline}");
+            Debug.Log($"[NetworkEventRelay] Mirror广播事件: {eventType} from Timeline {sourceID}");
         }
         else
         {
@@ -100,20 +110,24 @@ public class NetworkEventRelay : Singleton<NetworkEventRelay>
     }
 
     // 客户端发送事件到服务器
+    private HashSet<string> processedEventGuids = new HashSet<string>();
     private void SendEventToServer<T>(T eventData)
     {
         string eventType = typeof(T).FullName;
         byte[] data = SerializeEvent(eventData);
+        string eventGuid = Guid.NewGuid().ToString(); // 生成唯一事件ID
 
         var msg = new NetworkMessageTypes.TimelineEventMessage
         {
             eventType = eventType,
             eventData = data,
-            sourceTimeline = 0 // 可根据实际需求设置
+            sourceID = 0,
+            eventGuid = eventGuid
         };
 
+        processedEventGuids.Add(eventGuid); // 本地标记已处理
         NetworkClient.Send(msg);
-        Debug.Log($"[NetworkEventRelay] 客户端发送事件到服务器: {eventType}");
+        Debug.Log($"[NetworkEventRelay] 客户端发送事件到服务器: {eventType}, guid={eventGuid}");
     }
 
     // 序列化事件

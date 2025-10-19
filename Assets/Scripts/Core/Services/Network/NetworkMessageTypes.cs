@@ -55,6 +55,7 @@ public class NetworkMessageTypes
     {
         public string eventType;
         public byte[] eventData;
-        public int sourceTimeline;
+        public int sourceID;
+        public string eventGuid; // 唯一事件ID
     }
 }
