@@ -34,7 +34,7 @@ public class PlayerController : NetworkBehaviour
     [Tooltip("交互的最大范围半径（米）。不再使用方向限制。")]
     public float interactionRange = 3f;
 
-    [Tooltip("可交互物体的 LayerMask (可选，用于优化)")]
+    [Tooltip("可交互物体的 LayerMask ( 可选，用于优化 )")]
     public LayerMask interactableLayer;
 
     [Header("相机跟随设置")]
@@ -134,6 +134,12 @@ public class PlayerController : NetworkBehaviour
         {
             TryInteract();
         }
+
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            // 切换背包界面
+            Inventory.ToggleBackpack();
+        }
     }
 
     /// <summary>
@@ -172,7 +178,7 @@ public class PlayerController : NetworkBehaviour
             );
             
             // 3. (可选) 让相机始终面向玩家
-            cameraTransform.LookAt(transform.position); 
+            // cameraTransform.LookAt(transform.position); 
         }
     }
 
@@ -181,51 +187,62 @@ public class PlayerController : NetworkBehaviour
     /// </summary>
     private void TryInteract()
     {
-        // 使用 Physics.OverlapSphere 检测玩家周围 interactionRange 范围内的所有 Collider
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, interactionRange, interactableLayer);
 
         if (hitColliders.Length > 0)
         {
-            prop bestProp = null;
+            Interaction best = null;
             float closestDistanceSqr = float.MaxValue;
             Vector3 playerPosition = transform.position;
 
-            // 遍历所有检测到的 Collider，找到最近且具有 prop.cs 脚本的物体
             foreach (var hitCollider in hitColliders)
             {
-                prop currentProp = hitCollider.GetComponent<prop>();
-
-                // 检查是否具有 prop.cs 脚本
-                if (currentProp != null)
+                // 优先找任意 Interaction 子类
+                Interaction current = hitCollider.GetComponent<Interaction>();
+                if (current != null)
                 {
-                    // 计算距离平方，避免开方运算，优化性能
                     float distSqr = (hitCollider.transform.position - playerPosition).sqrMagnitude;
-                    
                     if (distSqr < closestDistanceSqr)
                     {
                         closestDistanceSqr = distSqr;
-                        bestProp = currentProp;
+                        best = current;
                     }
                 }
             }
 
-            // 如果找到了最近的可交互物体
-            if (bestProp != null)
+            if (best != null)
             {
-                Debug.Log($"在范围内找到最近的物体: {bestProp.gameObject.name}, 尝试交互。");
-                bestProp.Disappear(); // 调用 prop.cs 的 Disappear 方法
+                Debug.Log($"在范围内找到最近的交互物体: {best.gameObject.name}, 尝试交互。");
+                best.OnInteract(this);
+                return;
+            }
 
-                // 【本地测试/单机模式下】: 直接调用 prop.cs 的 Interact 方法
-                // interactableProp.Interact(this); 
+            // 兼容：若未找到 Interaction，再尝试老的 prop 逻辑
+            prop fallback = null;
+            float closestProp = float.MaxValue;
+            foreach (var hitCollider in hitColliders)
+            {
+                var p = hitCollider.GetComponent<prop>();
+                if (p != null)
+                {
+                    float distSqr = (hitCollider.transform.position - playerPosition).sqrMagnitude;
+                    if (distSqr < closestProp)
+                    {
+                        closestProp = distSqr;
+                        fallback = p;
+                    }
+                }
+            }
+
+            if (fallback != null)
+            {
+                Debug.Log($"在范围内找到 prop: {fallback.gameObject.name}, 尝试交互（拾取）。");
+                fallback.OnInteract(this);
             }
             else
             {
-                Debug.Log("在范围内检测到 Collider，但没有找到有效的 prop.cs 脚本。");
+                Debug.Log("在范围内检测到 Collider，但没有找到可交互对象。");
             }
-        }
-        else
-        {
-            // Debug.Log("未在交互范围内检测到任何物体。");
         }
     }
     

@@ -46,5 +46,6 @@ public class Interaction : MonoBehaviour
         // 恢复初始状态
         // 清除临时数据
         // 重置动画效果
+        gameObject.SetActive(true); // 示例：重置时重新激活对象
     }
 }

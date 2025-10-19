@@ -5,46 +5,13 @@
 using UnityEngine;
 using Events;
 
-public class prop : MonoBehaviour
+/*
+ * 交互系统基类，定义可交互对象的通用行为
+ */
+public class prop : Interaction
 {
-    public class InteractionConfig
-    {
-        // 在此添加交互配置参数，例如 public int someParameter;
-    }
-
-    void Awake()
-    {
-        // 订阅物品拾取事件
-        EventBus.Instance.Subscribe<ItemPickedUpEvent>(OnItemPickedUpEvent);
-    }
-
-    void OnDestroy()
-    {
-        // 取消订阅，防止内存泄漏
-        EventBus.Instance.Unsubscribe<ItemPickedUpEvent>(OnItemPickedUpEvent);
-    }
-
-    // 事件回调：收到ItemPickedUpEvent后判断是否为本物体，若是则消失
-    private void OnItemPickedUpEvent(ItemPickedUpEvent evt)
-    {
-        if (evt.itemId == gameObject.name)
-        {
-            // 避免重复消失
-            if (gameObject.activeSelf)
-            {
-                Disappear(evt.playerNetId, evt.itemId);
-            }
-        }
-    }
-
-    public void InitializeInteraction(InteractionConfig config)
-    {
-        // 设置交互参数
-        // 绑定触发条件
-        // 初始化状态
-    }
-
-    public void Disappear(uint playerNetId = 0, string itemId = null)
+    /* 实现物体立刻消失的函数，并发布拾取事件 */
+    public void DisappearImmediately(uint playerNetId = 0, string itemId = null)
     {
         gameObject.SetActive(false);
         Debug.Log($"Prop '{gameObject.name}' has immediately disappeared.");
@@ -58,8 +25,11 @@ public class prop : MonoBehaviour
         EventBus.Instance.Publish(evt);
     }
 
-    public void ResetInteraction()
+    // 覆盖交互：按 F 拾取后立刻消失
+    public override void OnInteract(PlayerController player)
     {
-        gameObject.SetActive(true);
+        uint pid = player != null ? player.netId : 0u;
+        DisappearImmediately(pid, gameObject.name);
     }
+    
 }
