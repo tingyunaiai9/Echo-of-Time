@@ -172,7 +172,7 @@ public class PlayerController : NetworkBehaviour
             );
             
             // 3. (可选) 让相机始终面向玩家
-            cameraTransform.LookAt(transform.position); 
+            // cameraTransform.LookAt(transform.position); 
         }
     }
 
