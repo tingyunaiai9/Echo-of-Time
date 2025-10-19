@@ -101,7 +101,7 @@ public abstract class Inventory : MonoBehaviour
     static void EnsureRoot()
     {
         if (s_root != null) return;
-        var any = GameObject.FindObjectOfType<Inventory>(true);
+        var any = GameObject.FindFirstObjectByType<Inventory>();
         if (any != null && any.backpackRoot != null)
         {
             s_root = any.backpackRoot;
