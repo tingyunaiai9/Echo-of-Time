@@ -3,9 +3,8 @@
  * 统一管理网络消息的格式和类型
  */
 
-/*
- * 网络消息类型定义，专门为跨时空合作解谜设计
- */
+using Mirror;
+
 public class NetworkMessageTypes
 {
     /*
@@ -46,5 +45,16 @@ public class NetworkMessageTypes
         // 玩家连接状态
         // 准备状态和角色
         // 网络延迟信息
+    }
+
+    /*
+     * 通用游戏事件消息（用于事件总线同步）
+     */
+    [System.Serializable]
+    public struct TimelineEventMessage : NetworkMessage
+    {
+        public string eventType;
+        public byte[] eventData;
+        public int sourceTimeline;
     }
 }

@@ -57,7 +57,7 @@ public class EchoNetworkManager : Mirror.NetworkManager
     public override void Start()
     {
         base.Start();
-        EventBus.RegisterMirrorHandlers(EventBus.Instance);
+        NetworkEventRelay.Instance.RegisterMessageHandlers();
         InitializeRelayTransport();
         RegisterRelayCallbacks();
         SetupPlayerInfo();
