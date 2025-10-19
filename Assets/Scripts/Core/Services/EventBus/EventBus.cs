@@ -115,6 +115,7 @@ public class EventBus : Singleton<EventBus>
     }
 
     // Mirror网络消息定义
+    [System.Serializable]
     public struct TimelineEventMessage : NetworkMessage
     {
         public string eventType;
