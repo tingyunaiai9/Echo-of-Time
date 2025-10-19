@@ -8,22 +8,8 @@ using Events;
 /*
  * 交互系统基类，定义可交互对象的通用行为
  */
-public class prop : MonoBehaviour
+public class prop : Interaction
 {
-    /* 交互配置类定义 */
-    public class InteractionConfig
-    {
-        // 在此添加交互配置参数，例如 public int someParameter;
-    }
-
-    /* 初始化交互配置 */
-    public void InitializeInteraction(InteractionConfig config)
-    {
-        // 设置交互参数
-        // 绑定触发条件
-        // 初始化状态
-    }
-
     /* 实现物体立刻消失的函数，并发布拾取事件 */
     public void DisappearImmediately(uint playerNetId = 0, string itemId = null)
     {
@@ -40,13 +26,11 @@ public class prop : MonoBehaviour
         EventBus.Instance.Publish(evt);
     }
 
-
-    /* 重置交互状态 */
-    public void ResetInteraction()
+    // 覆盖交互：按 F 拾取后立刻消失
+    public override void OnInteract(PlayerController player)
     {
-        // 恢复初始状态
-        // 清除临时数据
-        // 重置动画效果
-        gameObject.SetActive(true); // 示例：重置时重新激活对象
+        uint pid = player != null ? player.netId : 0u;
+        DisappearImmediately(pid, gameObject.name);
     }
+    
 }
