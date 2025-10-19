@@ -134,6 +134,12 @@ public class PlayerController : NetworkBehaviour
         {
             TryInteract();
         }
+
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            // 切换背包界面
+            Inventory.ToggleBackpack();
+        }
     }
 
     /// <summary>
