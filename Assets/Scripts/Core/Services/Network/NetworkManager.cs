@@ -1,4 +1,3 @@
-
 /*
  * EchoNetworkManager.cs
  *
@@ -58,6 +57,7 @@ public class EchoNetworkManager : Mirror.NetworkManager
     public override void Start()
     {
         base.Start();
+        NetworkEventRelay.Instance.RegisterMessageHandlers();
         InitializeRelayTransport();
         RegisterRelayCallbacks();
         SetupPlayerInfo();

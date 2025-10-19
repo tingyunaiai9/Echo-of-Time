@@ -1,43 +1,136 @@
-/* Core/Services/Network/NetworkEventRelay.cs
- * 网络事件中继器，负责本地事件与网络事件的转换和转发
- * 协调本地游戏逻辑与网络同步
- */
+using System;
+using System.Text;
+using Mirror;
+using UnityEngine;
+using System.Collections.Generic;
 
-
-/*
- * 网络事件中继，连接本地事件系统和网络通信
- */
-public class NetworkEventRelay
+public class NetworkEventRelay : Singleton<NetworkEventRelay>
 {
-    /* 注册网络消息处理器 */
+    private HashSet<string> processedEventGuids = new HashSet<string>();
+    // 注册Mirror消息处理器（需在NetworkManager启动时调用）
     public void RegisterMessageHandlers()
     {
-        // 绑定消息类型到处理函数
-        // 设置消息优先级
-        // 初始化错误处理
+        // 服务器接收客户端事件并广播
+        NetworkServer.RegisterHandler<NetworkMessageTypes.TimelineEventMessage>((conn, msg) =>
+        {
+            if (processedEventGuids.Contains(msg.eventGuid))
+                return; // 已处理，忽略
+    
+            processedEventGuids.Add(msg.eventGuid);
+    
+            Type type = Type.GetType(msg.eventType);
+            if (type != null)
+            {
+                string json = Encoding.UTF8.GetString(msg.eventData);
+                object eventObj = JsonUtility.FromJson(json, type);
+    
+                EventBus.Instance.PublishDynamic(type, eventObj);
+    
+                // 服务器广播到其它客户端（不回发给发送者）
+                foreach (var c in NetworkServer.connections)
+                {
+                    c.Value.Send(msg);
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"[NetworkEventRelay] 未知事件类型: {msg.eventType}");
+            }
+        });
+    
+        // 客户端接收服务器广播
+        NetworkClient.RegisterHandler<NetworkMessageTypes.TimelineEventMessage>(msg =>
+        {
+            if (processedEventGuids.Contains(msg.eventGuid))
+                return; // 已处理，忽略
+    
+            processedEventGuids.Add(msg.eventGuid);
+    
+            Type type = Type.GetType(msg.eventType);
+            if (type != null)
+            {
+                string json = Encoding.UTF8.GetString(msg.eventData);
+                object eventObj = JsonUtility.FromJson(json, type);
+                EventBus.Instance.PublishDynamic(type, eventObj);
+            }
+            else
+            {
+                Debug.LogWarning($"[NetworkEventRelay] 未知事件类型: {msg.eventType}");
+            }
+        });
     }
 
-    /* 将本地事件转换为网络消息并发送 */
-    public void RelayLocalEventToNetwork(object eventData)
+    // 游戏事件的网络同步入口
+    public void RelayGameEvent<T>(T eventData)
     {
-        // 事件数据序列化
-        // 添加网络头部信息
-        // 选择发送通道
+        var type = typeof(T);
+
+        if (NetworkServer.active)
+        {
+            // 服务器：本地分发并广播到所有客户端
+            EventBus.Instance.LocalPublish(eventData);
+            BroadcastToClients(eventData, 0); // 0为示例timelineId
+        }
+        else if (NetworkClient.active)
+        {
+            // 客户端：发送到服务器，由服务器分发
+            SendEventToServer(eventData);
+        }
+        else
+        {
+            // 单机或未联网，直接本地分发
+            EventBus.Instance.LocalPublish(eventData);
+        }
     }
 
-    /* 将网络消息转换为本地事件并发布 */
-    public void RelayNetworkToLocalEvent(NetworkMessageTypes message)
+    // 服务器广播到所有客户端
+    private void BroadcastToClients<T>(T eventData, int sourceID)
     {
-        // 消息验证和解析
-        // 创建对应事件对象
-        // 发布到事件总线
+        string eventType = typeof(T).FullName;
+        byte[] data = SerializeEvent(eventData);
+
+        var msg = new NetworkMessageTypes.TimelineEventMessage
+        {
+            eventType = eventType,
+            eventData = data,
+            sourceID = sourceID
+        };
+
+        if (NetworkServer.active)
+        {
+            NetworkServer.SendToAll(msg);
+            Debug.Log($"[NetworkEventRelay] Mirror广播事件: {eventType} from Timeline {sourceID}");
+        }
+        else
+        {
+            Debug.LogWarning("[NetworkEventRelay] 仅服务器可广播Mirror事件");
+        }
     }
 
-    /* 处理跨时间线事件的路由逻辑 */
-    public void RouteCrossTimelineEvent(object eventData, int sourceTimeline, int targetTimeline)
+    // 客户端发送事件到服务器
+    private void SendEventToServer<T>(T eventData)
     {
-        // 验证时间线路由权限
-        // 应用时间线过滤规则
-        // 处理路由异常
+        string eventType = typeof(T).FullName;
+        byte[] data = SerializeEvent(eventData);
+        string eventGuid = Guid.NewGuid().ToString(); // 生成唯一事件ID
+
+        var msg = new NetworkMessageTypes.TimelineEventMessage
+        {
+            eventType = eventType,
+            eventData = data,
+            sourceID = 0,
+            eventGuid = eventGuid
+        };
+
+        processedEventGuids.Add(eventGuid); // 本地标记已处理
+        NetworkClient.Send(msg);
+        Debug.Log($"[NetworkEventRelay] 客户端发送事件到服务器: {eventType}, guid={eventGuid}");
+    }
+
+    // 序列化事件
+    private byte[] SerializeEvent<T>(T eventData)
+    {
+        string json = JsonUtility.ToJson(eventData);
+        return Encoding.UTF8.GetBytes(json);
     }
 }
