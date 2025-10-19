@@ -36,18 +36,11 @@ public class UIManager : Singleton<UIManager>
 {
     private EventBus eventBus;
 
-    void Awake()
+    protected override void Awake()
     {
-        // 获取或创建全局EventBus实例（可根据实际项目结构调整）
-        eventBus = EventBus.Instance;
-        if (eventBus != null)
-        {
-            eventBus.Subscribe<ItemPickedUpEvent>(OnItemPickedUp);
-        }
-        else
-        {
-            Debug.LogWarning("UIManager: 未找到EventBus实例，无法监听事件。");
-        }
+        base.Awake();
+        // 订阅物品拾取事件
+        EventBus.Instance.Subscribe<ItemPickedUpEvent>(OnItemPickedUp);
     }
 
     void OnDestroy()
@@ -62,14 +55,6 @@ public class UIManager : Singleton<UIManager>
     private void OnItemPickedUp(ItemPickedUpEvent evt)
     {
         Debug.Log($"[UIManager] 玩家 {evt.playerNetId} 拾取了物品 {evt.itemId}，弹窗提醒！");
-        ShowPopup($"获得物品：{evt.itemId}");
-    }
-
-    // 简单弹窗方法（实际项目可替换为UI面板控制）
-    private void ShowPopup(string message)
-    {
-        // 示例：用Debug.Log模拟弹窗，实际应弹出UI面板
-        Debug.Log($"[UI弹窗] {message}");
     }
 
     /* 初始化所有UI系统 */
