@@ -42,7 +42,7 @@ public class PlayerController : NetworkBehaviour
     public Transform cameraTransform;
 
     [Tooltip("相机相对于玩家的固定偏移量（如: (0, 10, -10)）。")]
-    public Vector3 cameraOffset = new Vector3(0f, 10f, -10f);
+    public Vector3 cameraOffset = new Vector3(0f, 0f, -10f);
 
     [Tooltip("相机跟随的平滑度（值越大，跟随越慢/平滑）。推荐值 0.05 到 0.2。")]
     [Range(0.01f, 1f)]
@@ -157,6 +157,7 @@ public class PlayerController : NetworkBehaviour
 
     void LateUpdate()
     {
+        if (!isLocalPlayer) return;
         if (cameraTransform != null)
         {
             // 1. 计算目标位置 (玩家位置 + 偏移量)
