@@ -212,7 +212,7 @@ public class PlayerController : NetworkBehaviour
             if (bestProp != null)
             {
                 Debug.Log($"在范围内找到最近的物体: {bestProp.gameObject.name}, 尝试交互。");
-                bestProp.DisappearImmediately(); // 调用 prop.cs 的 DisappearImmediately 方法
+                bestProp.Disappear(); // 调用 prop.cs 的 Disappear 方法
 
                 // 【本地测试/单机模式下】: 直接调用 prop.cs 的 Interact 方法
                 // interactableProp.Interact(this); 

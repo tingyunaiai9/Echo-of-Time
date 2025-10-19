@@ -5,18 +5,38 @@
 using UnityEngine;
 using Events;
 
-/*
- * 交互系统基类，定义可交互对象的通用行为
- */
 public class prop : MonoBehaviour
 {
-    /* 交互配置类定义 */
     public class InteractionConfig
     {
         // 在此添加交互配置参数，例如 public int someParameter;
     }
 
-    /* 初始化交互配置 */
+    void Awake()
+    {
+        // 订阅物品拾取事件
+        EventBus.Instance.Subscribe<ItemPickedUpEvent>(OnItemPickedUpEvent);
+    }
+
+    void OnDestroy()
+    {
+        // 取消订阅，防止内存泄漏
+        EventBus.Instance.Unsubscribe<ItemPickedUpEvent>(OnItemPickedUpEvent);
+    }
+
+    // 事件回调：收到ItemPickedUpEvent后判断是否为本物体，若是则消失
+    private void OnItemPickedUpEvent(ItemPickedUpEvent evt)
+    {
+        if (evt.itemId == gameObject.name)
+        {
+            // 避免重复消失
+            if (gameObject.activeSelf)
+            {
+                Disappear(evt.playerNetId, evt.itemId);
+            }
+        }
+    }
+
     public void InitializeInteraction(InteractionConfig config)
     {
         // 设置交互参数
@@ -24,10 +44,8 @@ public class prop : MonoBehaviour
         // 初始化状态
     }
 
-    /* 实现物体立刻消失的函数，并发布拾取事件 */
-    public void DisappearImmediately(uint playerNetId = 0, string itemId = null)
+    public void Disappear(uint playerNetId = 0, string itemId = null)
     {
-        // 通过设置GameObject为非激活状态，使其在场景中立刻消失
         gameObject.SetActive(false);
         Debug.Log($"Prop '{gameObject.name}' has immediately disappeared.");
 
@@ -40,13 +58,8 @@ public class prop : MonoBehaviour
         EventBus.Instance.Publish(evt);
     }
 
-
-    /* 重置交互状态 */
     public void ResetInteraction()
     {
-        // 恢复初始状态
-        // 清除临时数据
-        // 重置动画效果
-        gameObject.SetActive(true); // 示例：重置时重新激活对象
+        gameObject.SetActive(true);
     }
 }

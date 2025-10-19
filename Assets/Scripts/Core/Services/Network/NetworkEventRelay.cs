@@ -6,6 +6,7 @@ using System.Collections.Generic;
 
 public class NetworkEventRelay : Singleton<NetworkEventRelay>
 {
+    private HashSet<string> processedEventGuids = new HashSet<string>();
     // 注册Mirror消息处理器（需在NetworkManager启动时调用）
     public void RegisterMessageHandlers()
     {
@@ -28,10 +29,7 @@ public class NetworkEventRelay : Singleton<NetworkEventRelay>
                 // 服务器广播到其它客户端（不回发给发送者）
                 foreach (var c in NetworkServer.connections)
                 {
-                    if (c.Value != conn)
-                    {
-                        c.Value.Send(msg);
-                    }
+                    c.Value.Send(msg);
                 }
             }
             else
@@ -110,7 +108,6 @@ public class NetworkEventRelay : Singleton<NetworkEventRelay>
     }
 
     // 客户端发送事件到服务器
-    private HashSet<string> processedEventGuids = new HashSet<string>();
     private void SendEventToServer<T>(T eventData)
     {
         string eventType = typeof(T).FullName;
