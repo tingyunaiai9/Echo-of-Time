@@ -1,22 +1,44 @@
-/* Gameplay/Puzzle/prop.cs
- * 交互系统基类，定义游戏内可交互对象的通用行为
- * 处理玩家与场景物体的互动逻辑
- */
 using UnityEngine;
 using Events;
 
-/*
- * 交互系统基类，定义可交互对象的通用行为
- */
-public class prop : Interaction
+public class prop : MonoBehaviour
 {
-    /* 实现物体立刻消失的函数，并发布拾取事件 */
-    public void DisappearImmediately(uint playerNetId = 0, string itemId = null)
+    public class InteractionConfig
+    {
+        // 在此添加交互配置参数，例如 public int someParameter;
+    }
+
+    void Awake()
+    {
+        EventBus.Instance.Subscribe<ItemPickedUpEvent>(OnItemPickedUpEvent);
+    }
+
+    void OnDestroy()
+    {
+        EventBus.Instance.Unsubscribe<ItemPickedUpEvent>(OnItemPickedUpEvent);
+    }
+
+    private void OnItemPickedUpEvent(ItemPickedUpEvent evt)
+    {
+        if (evt.itemId == gameObject.name)
+        {
+            if (gameObject.activeSelf)
+            {
+                Disappear(evt.playerNetId, evt.itemId);
+            }
+        }
+    }
+
+    public void InitializeInteraction(InteractionConfig config)
+    {
+        // 设置交互参数
+    }
+
+    public void Disappear(uint playerNetId = 0, string itemId = null)
     {
         gameObject.SetActive(false);
         Debug.Log($"Prop '{gameObject.name}' has immediately disappeared.");
 
-        // 发布物品拾取事件
         var evt = new ItemPickedUpEvent
         {
             playerNetId = playerNetId,
@@ -25,11 +47,8 @@ public class prop : Interaction
         EventBus.Instance.Publish(evt);
     }
 
-    // 覆盖交互：按 F 拾取后立刻消失
-    public override void OnInteract(PlayerController player)
+    public void ResetInteraction()
     {
-        uint pid = player != null ? player.netId : 0u;
-        DisappearImmediately(pid, gameObject.name);
+        gameObject.SetActive(true);
     }
-    
 }
