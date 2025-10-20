@@ -26,6 +26,9 @@ public abstract class Inventory : MonoBehaviour
     protected static CluePanel s_cluePanel;
     protected static bool s_isOpen;
 
+    // 新增：背包状态变化事件（通知玩家控制器）
+    public static event System.Action<bool> OnBackpackStateChanged;
+
     protected virtual void Awake()
     {
         // 只要有一个背包面板 Awake，就初始化静态根节点和面板引用
@@ -49,6 +52,8 @@ public abstract class Inventory : MonoBehaviour
         s_isOpen = !s_isOpen;
         s_root.SetActive(s_isOpen);
         if (s_isOpen) SwitchToProps();
+
+        OnBackpackStateChanged?.Invoke(s_isOpen);
     }
 
     public static void OpenBackpack()
@@ -57,6 +62,7 @@ public abstract class Inventory : MonoBehaviour
         s_isOpen = true;
         s_root.SetActive(true);
         SwitchToProps();
+        OnBackpackStateChanged?.Invoke(true);
     }
 
     public static void CloseBackpack()
@@ -64,6 +70,7 @@ public abstract class Inventory : MonoBehaviour
         if (s_root == null) return;
         s_isOpen = false;
         s_root.SetActive(false);
+        OnBackpackStateChanged?.Invoke(false);
     }
 
     // 切换背包栏目

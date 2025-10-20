@@ -1,22 +1,4 @@
-/*
- * PlayerController.cs
- *
- * Mirror 网络玩家控制器。
- * 负责本地玩家输入、移动、物理同步，支持多实例联机。
- *
- * 主要功能：
- * - 仅本地玩家处理输入与物理（isLocalPlayer）
- * - 服务器权威位置，客户端预测移动
- * - 支持刚体/非刚体移动
- * - 通过 NetworkTransform 实现位置/旋转同步
- *
- * 使用说明：
- * - Prefab 必须挂载 NetworkIdentity、NetworkTransform、Rigidbody、Collider
- * - PlayerPrefab 设置到 NetworkManager 后自动生成
- * - 场景中不要直接放玩家对象
- */
 using UnityEngine;
-// using Gameplay.Puzzle; // 如果 prop.cs 使用了命名空间，请在此添加
 using Mirror;
 
 /// <summary>
@@ -25,10 +7,10 @@ using Mirror;
 public class PlayerController : NetworkBehaviour
 {
     [Tooltip("移动速度（单位：米/秒)")]
-    public float moveSpeed = 5f; // 玩家移动速度
+    public float moveSpeed = 5f;
 
     [Tooltip("旋转速度（度/秒)，面向移动方向时使用")]
-    public float rotationSpeed = 720f; // 玩家旋转速度
+    public float rotationSpeed = 720f;
 
     [Header("交互设置")]
     [Tooltip("交互的最大范围半径（米）。不再使用方向限制。")]
@@ -48,151 +30,137 @@ public class PlayerController : NetworkBehaviour
     [Range(0.01f, 1f)]
     public float cameraSmoothSpeed = 0.125f;
 
-    Rigidbody rb; // 刚体组件
-    bool initialized; // 权限初始化标记
+    Rigidbody rb;
+    bool initialized;
 
-    /// <summary>
-    /// Unity生命周期：获取刚体并冻结旋转。
-    /// </summary>
+    // 新增：背包打开时禁用游戏输入
+    bool isBackpackOpen;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
         if (rb != null)
         {
-            // 推荐在带刚体的对象上冻结旋转，由脚本控制朝向
             rb.freezeRotation = true;
         }
 
         if (cameraTransform == null)
         {
-            if (Camera.main != null) {
+            if (Camera.main != null)
+            {
                 cameraTransform = Camera.main.transform;
             }
-            else {
-                Debug.LogWarning("PlayerController: 未指定 cameraTransform，且场景中没有 Main Camera。请手动设置相机引用。");
+            else
+            {
+                Debug.LogWarning("PlayerController: 未找到 Main Camera，相机跟随功能将不可用。");
             }
         }
     }
 
-    /// <summary>
-    /// Mirror回调：本地玩家获得控制权时允许物理模拟。
-    /// </summary>
     public override void OnStartAuthority()
     {
         base.OnStartAuthority();
-        // 本地玩家获取控制权时，允许物理模拟
-        if (rb != null)
-        {
-            rb.isKinematic = false;
-        }
+        if (rb != null) rb.isKinematic = false;
         initialized = true;
     }
 
-    /// <summary>
-    /// Mirror回调：所有客户端实例初始化，非本地玩家刚体设为Kinematic。
-    /// </summary>
     public override void OnStartClient()
     {
         base.OnStartClient();
-        // 非本地玩家在本机不进行物理模拟，位置由 NetworkTransform 同步
         if (!isLocalPlayer && rb != null)
         {
             rb.isKinematic = true;
         }
     }
 
-    /// <summary>
-    /// Unity帧更新：仅本地玩家处理输入与移动。
-    /// </summary>
+    // 新增：本地玩家启动时订阅背包事件
+    public override void OnStartLocalPlayer()
+    {
+        base.OnStartLocalPlayer();
+        Inventory.OnBackpackStateChanged += OnBackpackStateChanged;
+    }
+
+    // 新增：销毁时取消订阅
+    void OnDestroy()
+    {
+        if (isLocalPlayer)
+        {
+            Inventory.OnBackpackStateChanged -= OnBackpackStateChanged;
+        }
+    }
+
+    // 新增：背包状态变化回调
+    void OnBackpackStateChanged(bool isOpen)
+    {
+        isBackpackOpen = isOpen;
+        Debug.Log($"[PlayerController] 背包状态变化: {(isOpen ? "打开" : "关闭")}，游戏输入: {(isOpen ? "禁用" : "启用")}");
+    }
+
     void Update()
     {
-        // 仅本地玩家处理输入
         if (!isLocalPlayer) return;
 
-        // 读取输入（Horizontal: A/D or ←/→, Vertical: W/S or ↑/↓）
+        // B 键始终可用（用于开关背包）
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            Inventory.ToggleBackpack();
+        }
+
+        // 背包打开时，禁用游戏输入（移动、交互等）
+        if (isBackpackOpen) return;
+
+        // 以下是原有的游戏输入逻辑
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
         Vector3 input = new Vector3(h, 0f, v).normalized;
 
-        // 平滑朝向移动方向
         if (input.sqrMagnitude > 0.0001f)
         {
             Quaternion target = Quaternion.LookRotation(input);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, target, rotationSpeed * Time.deltaTime);
         }
 
-        // 如果没有刚体，直接用 Transform 移动（在 Update 中）
         if (rb == null)
         {
             transform.Translate(input * moveSpeed * Time.deltaTime, Space.World);
         }
 
-        // ------------------------
-        // 交互输入检测
-        // ------------------------
         if (Input.GetKeyDown(KeyCode.F))
         {
             TryInteract();
         }
-
-        // 背包开关 - 添加详细调试
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            Debug.Log($"[PlayerController] B 键被按下！isLocalPlayer={isLocalPlayer}");
-            Inventory.ToggleBackpack();
-            Debug.Log("[PlayerController] Inventory.ToggleBackpack() 调用完毕");
-        }
-
-        // 每帧检测一次（仅用于调试，确认 Update 在运行）
-        if (Time.frameCount % 60 == 0) // 每60帧（约1秒）输出一次
-        {
-            Debug.Log($"[PlayerController] Update 正在运行，isLocalPlayer={isLocalPlayer}");
-        }
     }
 
-    /// <summary>
-    /// Unity物理帧：仅本地玩家驱动物理移动。
-    /// </summary>
     void FixedUpdate()
     {
-        // 仅本地玩家进行物理移动
         if (!isLocalPlayer) return;
+        
+        // 背包打开时，禁用物理移动
+        if (isBackpackOpen) return;
 
-        // 如果有刚体，使用物理移动（MovePosition）
         if (rb != null)
         {
             float h = Input.GetAxisRaw("Horizontal");
             float v = Input.GetAxisRaw("Vertical");
             Vector3 input = new Vector3(h, 0f, v).normalized;
-            Vector3 targetPos = rb.position + input * moveSpeed * Time.fixedDeltaTime;
-            rb.MovePosition(targetPos);
+            Vector3 velocity = input * moveSpeed;
+            velocity.y = rb.linearVelocity.y;
+            rb.linearVelocity = velocity;
         }
     }
 
     void LateUpdate()
     {
         if (!isLocalPlayer) return;
+
         if (cameraTransform != null)
         {
-            // 1. 计算目标位置 (玩家位置 + 偏移量)
-            Vector3 targetPosition = transform.position + cameraOffset;
-
-            // 2. 使用 Lerp 进行平滑插值移动
-            // Time.deltaTime / cameraSmoothSpeed 决定了平滑度，值越小越平滑
-            cameraTransform.position = Vector3.Lerp(
-                cameraTransform.position, 
-                targetPosition, 
-                Time.deltaTime * (1f / cameraSmoothSpeed)
-            );
-            
-            // 3. (可选) 让相机始终面向玩家
-            // cameraTransform.LookAt(transform.position); 
+            Vector3 desiredPosition = transform.position + cameraOffset;
+            Vector3 smoothedPosition = Vector3.Lerp(cameraTransform.position, desiredPosition, cameraSmoothSpeed);
+            cameraTransform.position = smoothedPosition;
         }
     }
 
-    /// <summary>
-    /// 尝试与玩家附近的 prop.cs 物体进行交互（范围检测，不限方向）
-    /// </summary>
     private void TryInteract()
     {
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, interactionRange, interactableLayer);
@@ -205,7 +173,6 @@ public class PlayerController : NetworkBehaviour
 
             foreach (var hitCollider in hitColliders)
             {
-                // 优先找任意 Interaction 子类
                 Interaction current = hitCollider.GetComponent<Interaction>();
                 if (current != null)
                 {
@@ -225,7 +192,6 @@ public class PlayerController : NetworkBehaviour
                 return;
             }
 
-            // 兼容：若未找到 Interaction，再尝试老的 prop 逻辑
             prop fallback = null;
             float closestProp = float.MaxValue;
             foreach (var hitCollider in hitColliders)
@@ -253,12 +219,10 @@ public class PlayerController : NetworkBehaviour
             }
         }
     }
-    
-    // 可选：在 Scene 视图中绘制交互范围，便于调试
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        // 绘制一个球体来表示交互范围
         Gizmos.DrawWireSphere(transform.position, interactionRange);
     }
 }
