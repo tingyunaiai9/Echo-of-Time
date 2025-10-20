@@ -34,13 +34,13 @@ namespace Events
         public Vector3 respawnPosition;
     }
 
-    /*
-     * 物品/交互相关事件
-     */
+    // 道具拾取事件
+    [System.Serializable]
     public class ItemPickedUpEvent
     {
         public uint playerNetId;
         public string itemId;
+        public string itemName;
     }
 
     public class InventoryUpdatedEvent
@@ -49,11 +49,13 @@ namespace Events
         public string[] inventoryItems;
     }
 
-    public class PuzzleInteractedEvent
+    // 线索被发现时发布
+    [System.Serializable]
+    public class ClueDiscoveredEvent
     {
         public uint playerNetId;
-        public string puzzleId;
-        public string action;
+        public string clueId;
+        public string clueText;
     }
 
     // 背包状态变化事件

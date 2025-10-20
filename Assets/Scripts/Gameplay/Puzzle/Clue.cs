@@ -1,17 +1,5 @@
 using UnityEngine;
 using Events;
-namespace Events
-{
-    // 线索被发现时发布
-    public class ClueDiscoveredEvent
-    {
-        public uint playerNetId;
-        public string clueId;
-        public string clueText;
-    }
-
-    // 备注：prop.cs 已使用的 ItemPickedUpEvent 与 EventBus 已存在于工程中，无需重复定义
-}
 
 /*
  * 调查类：调查线索，仅反馈信息，不会消失
