@@ -3,6 +3,7 @@
  */
 using System.Collections.Generic;
 using UnityEngine;
+using Events;
 
 public class InventoryItem
 {
@@ -25,9 +26,6 @@ public abstract class Inventory : MonoBehaviour
     protected static PropBackpack s_propPanel;
     protected static CluePanel s_cluePanel;
     protected static bool s_isOpen;
-
-    // 新增：背包状态变化事件（通知玩家控制器）
-    public static event System.Action<bool> OnBackpackStateChanged;
 
     protected virtual void Awake()
     {
@@ -53,7 +51,8 @@ public abstract class Inventory : MonoBehaviour
         s_root.SetActive(s_isOpen);
         if (s_isOpen) SwitchToProps();
 
-        OnBackpackStateChanged?.Invoke(s_isOpen);
+        // 使用 EventBus 发布事件（替代原有的事件触发）
+        EventBus.Instance.Publish(new BackpackStateChangedEvent { isOpen = s_isOpen });
     }
 
     public static void OpenBackpack()
@@ -62,7 +61,8 @@ public abstract class Inventory : MonoBehaviour
         s_isOpen = true;
         s_root.SetActive(true);
         SwitchToProps();
-        OnBackpackStateChanged?.Invoke(true);
+        
+        EventBus.Instance.Publish(new BackpackStateChangedEvent { isOpen = true });
     }
 
     public static void CloseBackpack()
@@ -70,7 +70,8 @@ public abstract class Inventory : MonoBehaviour
         if (s_root == null) return;
         s_isOpen = false;
         s_root.SetActive(false);
-        OnBackpackStateChanged?.Invoke(false);
+
+        EventBus.Instance.Publish(new BackpackStateChangedEvent { isOpen = false });
     }
 
     // 切换背包栏目

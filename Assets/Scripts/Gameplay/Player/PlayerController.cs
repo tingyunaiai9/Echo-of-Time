@@ -1,5 +1,6 @@
 using UnityEngine;
 using Mirror;
+using Events;
 
 /// <summary>
 /// Mirror 网络玩家控制器，仅本地玩家处理输入与物理。
@@ -77,7 +78,8 @@ public class PlayerController : NetworkBehaviour
     public override void OnStartLocalPlayer()
     {
         base.OnStartLocalPlayer();
-        Inventory.OnBackpackStateChanged += OnBackpackStateChanged;
+        // 使用 EventBus 订阅事件（替代原有的 += 订阅）
+        EventBus.Instance.Subscribe<BackpackStateChangedEvent>(OnBackpackStateChanged);
     }
 
     // 新增：销毁时取消订阅
@@ -85,15 +87,16 @@ public class PlayerController : NetworkBehaviour
     {
         if (isLocalPlayer)
         {
-            Inventory.OnBackpackStateChanged -= OnBackpackStateChanged;
+            // 使用 EventBus 取消订阅
+            EventBus.Instance.Unsubscribe<BackpackStateChangedEvent>(OnBackpackStateChanged);
         }
     }
 
     // 新增：背包状态变化回调
-    void OnBackpackStateChanged(bool isOpen)
+    void OnBackpackStateChanged(BackpackStateChangedEvent e)
     {
-        isBackpackOpen = isOpen;
-        Debug.Log($"[PlayerController] 背包状态变化: {(isOpen ? "打开" : "关闭")}，游戏输入: {(isOpen ? "禁用" : "启用")}");
+        isBackpackOpen = e.isOpen;
+        Debug.Log($"[PlayerController] 背包状态变化: {(e.isOpen ? "打开" : "关闭")}，游戏输入: {(e.isOpen ? "禁用" : "启用")}");
     }
 
     void Update()

@@ -56,6 +56,13 @@ namespace Events
         public string action;
     }
 
+    // 背包状态变化事件
+    [System.Serializable]
+    public class BackpackStateChangedEvent
+    {
+        public bool isOpen; // 背包是否打开
+    }
+
     /*
      * 谜题与进度相关事件
      */
