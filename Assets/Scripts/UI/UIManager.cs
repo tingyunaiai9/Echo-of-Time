@@ -57,7 +57,6 @@ public class UIManager : Singleton<UIManager>
         Debug.Log($"[UIManager] 玩家 {evt.playerNetId} 拾取了物品 {evt.itemId}，弹窗提醒！");
     }
 
-    /* 初始化所有UI系统 */
     public void InitializeAllUI()
     {
         // 按顺序初始化UI组件
@@ -65,7 +64,6 @@ public class UIManager : Singleton<UIManager>
         // 设置UI层级管理
     }
 
-    /* 管理UI层级显示 */
     public void ManageUILayers(UIPanel panel, UILayer layer)
     {
         // 验证层级权限
@@ -73,7 +71,6 @@ public class UIManager : Singleton<UIManager>
         // 处理层级冲突
     }
 
-    /* 处理UI模式切换 */
     public void SwitchUIMode(UIMode newMode)
     {
         // 保存当前模式状态
@@ -81,7 +78,6 @@ public class UIManager : Singleton<UIManager>
         // 更新输入处理逻辑
     }
 
-    /* 协调跨时间线UI同步 */
     public void SyncUITimelineState(int timelineId)
     {
         // 更新时间线相关UI
