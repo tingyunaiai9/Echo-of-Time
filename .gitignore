@@ -10,9 +10,11 @@
 /[Bb]uilds/
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
+# 忽略插件生成的文件夹
 /Assets/Mirror/
 /Assets/UOSLauncherEncrypt/
 /Assets/ParrelSync/
+/Assets/TextMesh Pro/
 /Assets/Plugins/ParrelSync/
 *.log
 
