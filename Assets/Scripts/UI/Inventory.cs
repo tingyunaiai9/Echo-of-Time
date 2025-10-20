@@ -1,6 +1,7 @@
 /* Gameplay/Player/PlayerInventory.cs
  * 玩家背包/面板基类：提供开关面板、切换栏目、静态添加接口
  */
+using System.Collections.Generic;
 using UnityEngine;
 
 public class InventoryItem
@@ -53,20 +54,9 @@ public abstract class Inventory : MonoBehaviour
     public static void OpenBackpack()
     {
         if (s_root == null) return;
-        
         s_isOpen = true;
         s_root.SetActive(true);
-        EnsurePanelsFromRoot();
-        
-        if (s_propPanel != null)
-        {
-            s_propPanel.gameObject.SetActive(true);
-            if (s_cluePanel != null) s_cluePanel.gameObject.SetActive(false);
-        }
-        else if (s_cluePanel != null)
-        {
-            s_cluePanel.gameObject.SetActive(true);
-        }
+        SwitchToProps();
     }
 
     public static void CloseBackpack()
@@ -79,16 +69,12 @@ public abstract class Inventory : MonoBehaviour
     // 切换背包栏目
     public static void SwitchToProps()
     {
-        EnsureRoot();
-        EnsurePanelsFromRoot();
         if (s_propPanel != null) s_propPanel.gameObject.SetActive(true);
         if (s_cluePanel != null) s_cluePanel.gameObject.SetActive(false);
     }
 
     public static void SwitchToClues()
     {
-        EnsureRoot();
-        EnsurePanelsFromRoot();
         if (s_propPanel != null) s_propPanel.gameObject.SetActive(false);
         if (s_cluePanel != null) s_cluePanel.gameObject.SetActive(true);
     }
@@ -96,14 +82,12 @@ public abstract class Inventory : MonoBehaviour
     // 静态接口：添加物品和线索
     public static void AddPropItem(InventoryItem item)
     {
-        EnsurePanelsFromRoot();
         if (s_propPanel == null) return;
         s_propPanel.AddOrUpdateItem(item);
     }
 
     public static void AddClue(string clueId, string clueText)
     {
-        EnsurePanelsFromRoot();
         if (s_cluePanel == null) return;
         s_cluePanel.AddClue(clueId, clueText);
     }
