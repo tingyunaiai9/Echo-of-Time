@@ -16,7 +16,7 @@ public class Clue : Interaction
     [Tooltip("是否已被调查过")]
     public bool discovered;
 
-    // 按 F 调查，不消失
+    /* 覆盖交互：调查线索，发布线索发现事件 */
     public override void OnInteract(PlayerController player)
     {
         if (!CheckPuzzleConditions()) return;

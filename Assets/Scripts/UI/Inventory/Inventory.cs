@@ -12,7 +12,7 @@ public class InventoryItem
     public string itemName;
     public string description;
     public int quantity;
-    public Sprite icon; // 新增：物品图标
+    public Sprite icon;
 }
 
 /*
@@ -41,31 +41,29 @@ public abstract class Inventory : MonoBehaviour
     // 存储 UI 条目的字典（itemId -> GameObject）
     protected Dictionary<string, GameObject> itemEntries = new Dictionary<string, GameObject>();
 
+    /* 初始化：设置静态引用 */
     protected virtual void Awake()
     {
-        // 只要有一个背包面板 Awake，就初始化静态根节点和面板引用
         if (backpackRoot != null && s_root == null)
         {
             s_root = backpackRoot;
-            // if (s_root.activeSelf) s_root.SetActive(false);
         }
         if (this is PropBackpack prop) s_propPanel = prop;
         if (this is CluePanel clue) s_cluePanel = clue;
     }
 
-    // 所有面板初始化完成后关闭根节点
+    /* 所有面板初始化完成后关闭根节点 */
     protected virtual void Start()
     {
         if (!s_initialized && s_root != null && s_propPanel != null && s_cluePanel != null)
         {
             s_initialized = true;
-            // 确保两个面板都初始化完成
             Debug.Log($"[{GetType().Name}.Start] 两个面板都已初始化，关闭背包");
             s_root.SetActive(false);
         }
     }
 
-    // 创建或更新 UI 条目（统一方法名）
+    /* 创建或更新 UI 条目 */
     protected void CreateOrUpdateItemUI(InventoryItem item)
     {
         if (itemListContainer == null || itemEntryPrefab == null)
@@ -90,11 +88,9 @@ public abstract class Inventory : MonoBehaviour
         }
     }
 
-    // 更新条目 UI（图标 + 名称 + 数量）
+    /* 更新条目 UI */
     protected virtual void UpdateEntryUI(GameObject entry, InventoryItem item)
     {
-        Debug.Log($"[{GetType().Name}.UpdateEntryUI] 开始更新 - item: {item.itemName}");
-
         // 严格查找 Icon（只查直接子对象）
         Transform iconTransform = entry.transform.Find("Icon");
         if (iconTransform != null)
@@ -150,7 +146,7 @@ public abstract class Inventory : MonoBehaviour
         }
     }
 
-    // 清空所有 UI 条目
+    /* 清空所有 UI 条目 */
     protected void ClearAllEntries()
     {
         foreach (var entry in itemEntries.Values)
@@ -160,7 +156,7 @@ public abstract class Inventory : MonoBehaviour
         itemEntries.Clear();
     }
 
-    // 开关背包（由 PlayerController B 键调用）
+    /* 开关背包 */
     public static void ToggleBackpack()
     {
         if (s_root == null)
@@ -172,56 +168,39 @@ public abstract class Inventory : MonoBehaviour
         s_root.SetActive(s_isOpen);
         if (s_isOpen) SwitchToProps();
 
-        // 使用 EventBus 发布事件
+        // 发布事件
         EventBus.Instance.Publish(new BackpackStateChangedEvent { isOpen = s_isOpen });
     }
 
-    public static void OpenBackpack()
-    {
-        if (s_root == null) return;
-        s_isOpen = true;
-        s_root.SetActive(true);
-        SwitchToProps();
-        
-        EventBus.Instance.Publish(new BackpackStateChangedEvent { isOpen = true });
-    }
-
-    public static void CloseBackpack()
-    {
-        if (s_root == null) return;
-        s_isOpen = false;
-        s_root.SetActive(false);
-
-        EventBus.Instance.Publish(new BackpackStateChangedEvent { isOpen = false });
-    }
-
-    // 切换背包栏目
+    /* 切换背包栏目 */
     public static void SwitchToProps()
     {
         if (s_propPanel != null) s_propPanel.gameObject.SetActive(true);
         if (s_cluePanel != null) s_cluePanel.gameObject.SetActive(false);
     }
 
+    /* 切换到线索栏目 */
     public static void SwitchToClues()
     {
         if (s_propPanel != null) s_propPanel.gameObject.SetActive(false);
         if (s_cluePanel != null) s_cluePanel.gameObject.SetActive(true);
     }
 
-    // 静态接口：添加物品和线索
+    /* 静态接口：添加物品和线索 */
     public static void AddPropItem(InventoryItem item)
     {
         if (s_propPanel == null) return;
         s_propPanel.AddOrUpdateItem(item);
     }
 
-    public static void AddClue(string clueId, string clueText)
+    /* 静态接口：添加线索 */
+    public static void AddClue(string clueId, string clueText, Sprite icon = null)
     {
         if (s_cluePanel == null) return;
-        s_cluePanel.AddClue(clueId, clueText);
+        s_cluePanel.AddClue(clueId, clueText, icon);
     }
 
-    // 按钮回调
+    /* 按钮回调 */
     public void OnClickPropTab() => SwitchToProps();
     public void OnClickClueTab() => SwitchToClues();
 }
