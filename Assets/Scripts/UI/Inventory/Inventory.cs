@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using Events;
+using TMPro;
 
 public class InventoryItem
 {
@@ -75,6 +76,7 @@ public abstract class Inventory : MonoBehaviour
         GameObject entry;
         if (itemEntries.TryGetValue(item.itemId, out entry))
         {
+            Debug.Log($"[{GetType().Name}.CreateOrUpdateItemUI] 更新现有物品条目: {item.itemName}");
             // 更新现有条目
             UpdateEntryUI(entry, item);
         }
@@ -117,7 +119,7 @@ public abstract class Inventory : MonoBehaviour
         Transform nameTransform = entry.transform.Find("Name");
         if (nameTransform != null)
         {
-            var nameText = nameTransform.GetComponent<Text>();
+            var nameText = nameTransform.GetComponent<TextMeshProUGUI>();
             if (nameText != null)
             {
                 nameText.text = item.itemName;

@@ -17,7 +17,6 @@ public class prop : Interaction
     }
 
     /* 在销毁时取消订阅 */
-
     void OnDestroy()
     {
         EventBus.Instance.Unsubscribe<ItemPickedUpEvent>(OnItemPickedUpEvent);
