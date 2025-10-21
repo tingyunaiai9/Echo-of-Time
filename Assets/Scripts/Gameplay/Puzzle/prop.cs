@@ -49,6 +49,7 @@ public class prop : Interaction
             itemId = displayId,
             icon = itemIcon
         };
+        EventBus.Instance.LocalPublish(evt);
         EventBus.Instance.Publish(evt);
         Debug.Log($"[prop.OnInteract] 已发布 ItemPickedUpEvent - itemId: {evt.itemId}, icon: {(evt.icon != null ? evt.icon.name : "null")}");
     }
