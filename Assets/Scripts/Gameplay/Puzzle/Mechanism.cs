@@ -11,7 +11,7 @@ public class Mechanism : Interaction
     [Tooltip("可选：机关名称/ID")]
     public string mechanismId;
 
-    // 按 F 触发/切换机关，不消失
+    /* 按 F 触发/切换机关，不消失 */
     public override void OnInteract(PlayerController player)
     {
         if (!CheckPuzzleConditions()) return;

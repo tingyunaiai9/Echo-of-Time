@@ -7,10 +7,9 @@ using Events;
  */
 public class PropBackpack : Inventory
 {
-    // 物品存储
     readonly Dictionary<string, InventoryItem> _items = new Dictionary<string, InventoryItem>();
 
-    /* 外部调用：添加或更新道具 */
+    /* 添加或更新道具 */
     public void AddOrUpdateItem(InventoryItem item)
     {
         if (item == null || string.IsNullOrEmpty(item.itemId))
@@ -42,8 +41,6 @@ public class PropBackpack : Inventory
             Debug.Log($"[PropBackpack.AddOrUpdateItem] 添加新物品: {newItem.itemName}, 数量: {newItem.quantity}");
             CreateOrUpdateItemUI(newItem);
         }
-
-        Debug.Log($"PropBackpack: 获得道具 [{item.itemId}] x{Mathf.Max(1, item.quantity)}，当前数量 {_items[item.itemId].quantity}");
     }
 
     /* 使用静态构造函数确保在场景加载前就订阅 */
@@ -51,27 +48,25 @@ public class PropBackpack : Inventory
     static void EarlySubscribe()
     {
         Debug.Log("[PropBackpack] 静态初始化：准备订阅事件");
-        // 等待场景加载完成后再订阅
     }
 
     /* 订阅拾取事件（来自 prop.cs 的 ItemPickedUpEvent） */
     protected override void Awake()
     {
         base.Awake();
-        Debug.Log($"[PropBackpack.Awake] 开始 - gameObject: {gameObject.name}, activeSelf: {gameObject.activeSelf}, activeInHierarchy: {gameObject.activeInHierarchy}");
-        
-        // 关键修复：在 Awake 就订阅事件，无论面板是否激活
+        // 在 Awake 就订阅事件，无论面板是否激活
         EventBus.Instance.Subscribe<ItemPickedUpEvent>(OnItemPickedUp);
         Debug.Log("[PropBackpack.Awake] 已订阅 ItemPickedUpEvent");
     }
 
+    /* 在销毁时取消订阅 */
     void OnDestroy()
     {
-        // 在销毁时取消订阅
         EventBus.Instance.Unsubscribe<ItemPickedUpEvent>(OnItemPickedUp);
         Debug.Log("[PropBackpack.OnDestroy] 已取消订阅 ItemPickedUpEvent");
     }
 
+    /* 处理物品拾取事件 */
     void OnItemPickedUp(ItemPickedUpEvent e)
     {
         Debug.Log($"[PropBackpack.OnItemPickedUp] 收到事件 - itemId: {e.itemId}, icon: {(e.icon != null ? e.icon.name : "null")}");
