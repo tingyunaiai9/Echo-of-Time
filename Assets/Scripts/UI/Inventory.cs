@@ -1,8 +1,9 @@
 /* Gameplay/Player/PlayerInventory.cs
  * 玩家背包/面板基类：提供开关面板、切换栏目、静态添加接口
  */
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using System.Collections.Generic;
 using Events;
 
 public class InventoryItem
@@ -11,6 +12,7 @@ public class InventoryItem
     public string itemName;
     public string description;
     public int quantity;
+    public Sprite icon; // 新增：物品图标
 }
 
 /*
@@ -22,10 +24,22 @@ public abstract class Inventory : MonoBehaviour
     [Header("Backpack Root (两个子面板的共同父节点)")]
     [SerializeField] protected GameObject backpackRoot;
 
+    [Header("UI 显示设置")]
+    [Tooltip("物品条目的预制体，需包含 Image(Icon) 和 Text(Name) 组件")]
+    [SerializeField] protected GameObject itemEntryPrefab;
+
+    [Tooltip("物品列表的容器（如 ScrollView 的 Content）")]
+    [SerializeField] protected Transform itemListContainer;
+
+    // 静态引用
     protected static GameObject s_root;
     protected static PropBackpack s_propPanel;
     protected static CluePanel s_cluePanel;
     protected static bool s_isOpen;
+    protected static bool s_initialized = false;
+
+    // 存储 UI 条目的字典（itemId -> GameObject）
+    protected Dictionary<string, GameObject> itemEntries = new Dictionary<string, GameObject>();
 
     protected virtual void Awake()
     {
@@ -33,13 +47,120 @@ public abstract class Inventory : MonoBehaviour
         if (backpackRoot != null && s_root == null)
         {
             s_root = backpackRoot;
-            if (s_root.activeSelf) s_root.SetActive(false);
+            // if (s_root.activeSelf) s_root.SetActive(false);
         }
-        if (this is PropBackpack prop && s_propPanel == null) s_propPanel = prop;
-        if (this is CluePanel clue && s_cluePanel == null) s_cluePanel = clue;
+        if (this is PropBackpack prop) s_propPanel = prop;
+        if (this is CluePanel clue) s_cluePanel = clue;
     }
 
-    // 开关背包
+    // 所有面板初始化完成后关闭根节点
+    protected virtual void Start()
+    {
+        if (!s_initialized && s_root != null && s_propPanel != null && s_cluePanel != null)
+        {
+            s_initialized = true;
+            // 确保两个面板都初始化完成
+            Debug.Log($"[{GetType().Name}.Start] 两个面板都已初始化，关闭背包");
+            s_root.SetActive(false);
+        }
+    }
+
+    // 创建或更新 UI 条目（统一方法名）
+    protected void CreateOrUpdateItemUI(InventoryItem item)
+    {
+        if (itemListContainer == null || itemEntryPrefab == null)
+        {
+            Debug.LogWarning($"{GetType().Name}: itemListContainer 或 itemEntryPrefab 未设置，无法显示 UI");
+            return;
+        }
+
+        GameObject entry;
+        if (itemEntries.TryGetValue(item.itemId, out entry))
+        {
+            // 更新现有条目
+            UpdateEntryUI(entry, item);
+        }
+        else
+        {
+            // 创建新条目
+            entry = Instantiate(itemEntryPrefab, itemListContainer);
+            entry.name = $"Item_{item.itemId}";
+            itemEntries[item.itemId] = entry;
+            UpdateEntryUI(entry, item);
+        }
+    }
+
+    // 更新条目 UI（图标 + 名称 + 数量）
+    protected virtual void UpdateEntryUI(GameObject entry, InventoryItem item)
+    {
+        Debug.Log($"[{GetType().Name}.UpdateEntryUI] 开始更新 - item: {item.itemName}");
+
+        // 严格查找 Icon（只查直接子对象）
+        Transform iconTransform = entry.transform.Find("Icon");
+        if (iconTransform != null)
+        {
+            var icon = iconTransform.GetComponent<Image>();
+            if (icon != null && item.icon != null)
+            {
+                icon.sprite = item.icon;
+                icon.enabled = true;
+                Debug.Log($"[{GetType().Name}.UpdateEntryUI] 图标已设置: {item.icon.name}");
+            }
+            else if (icon != null)
+            {
+                icon.enabled = false;
+                Debug.Log($"[{GetType().Name}.UpdateEntryUI] 无图标，隐藏 Image");
+            }
+        }
+        else
+        {
+            Debug.LogWarning($"[{GetType().Name}.UpdateEntryUI] 未找到名为 'Icon' 的子对象！");
+        }
+
+        // 严格查找 Name（只查直接子对象）
+        Transform nameTransform = entry.transform.Find("Name");
+        if (nameTransform != null)
+        {
+            var nameText = nameTransform.GetComponent<Text>();
+            if (nameText != null)
+            {
+                nameText.text = item.itemName;
+                Debug.Log($"[{GetType().Name}.UpdateEntryUI] 名称已设置: {item.itemName}");
+            }
+        }
+        else
+        {
+            Debug.LogWarning($"[{GetType().Name}.UpdateEntryUI] 未找到名为 'Name' 的子对象！");
+        }
+
+        // 查找 Quantity（可选）
+        Transform quantityTransform = entry.transform.Find("Quantity");
+        if (quantityTransform != null)
+        {
+            var quantityText = quantityTransform.GetComponent<Text>();
+            if (quantityText != null && item.quantity > 1)
+            {
+                quantityText.text = $"x{item.quantity}";
+                quantityText.enabled = true;
+            }
+            else if (quantityText != null)
+            {
+                quantityText.enabled = false;
+            }
+        }
+    }
+
+    // 清空所有 UI 条目
+    protected void ClearAllEntries()
+    {
+        foreach (var entry in itemEntries.Values)
+        {
+            if (entry != null) Destroy(entry);
+        }
+        itemEntries.Clear();
+    }
+
+    // 开关背包（由 PlayerController B 键调用）
     public static void ToggleBackpack()
     {
         if (s_root == null)
@@ -51,7 +172,7 @@ public abstract class Inventory : MonoBehaviour
         s_root.SetActive(s_isOpen);
         if (s_isOpen) SwitchToProps();
 
-        // 使用 EventBus 发布事件（替代原有的事件触发）
+        // 使用 EventBus 发布事件
         EventBus.Instance.Publish(new BackpackStateChangedEvent { isOpen = s_isOpen });
     }
 

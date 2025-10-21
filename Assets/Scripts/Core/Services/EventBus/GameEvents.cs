@@ -41,6 +41,7 @@ namespace Events
         public uint playerNetId;
         public string itemId;
         public string itemName;
+        public Sprite icon;
     }
 
     public class InventoryUpdatedEvent
@@ -56,6 +57,7 @@ namespace Events
         public uint playerNetId;
         public string clueId;
         public string clueText;
+        public Sprite icon;
     }
 
     // 背包状态变化事件

@@ -14,13 +14,29 @@ public class CluePanel : Inventory
     readonly HashSet<string> _clueIds = new HashSet<string>();
 
     /* 添加线索（只加入一次） */
-    public new void AddClue(string clueId, string clueText)
+    public void AddClue(string clueId, string clueText, Sprite icon = null)
     {
         if (string.IsNullOrEmpty(clueId)) return;
         if (!_clueIds.Add(clueId)) return; // 已存在则忽略
 
-        // TODO: 在此生成/更新 UI 元素（例如实例化一条列表项，显示 clueText）
+        Debug.Log($"[CluePanel.AddClue] 添加新线索: {clueId}, text: {clueText}, icon: {(icon != null ? icon.name : "null")}");
+        // 创建 UI 条目
+        var item = new InventoryItem
+        {
+            itemId = clueId,
+            itemName = clueText,
+            description = clueText,
+            quantity = 1,
+            icon = icon
+        };
+        CreateOrUpdateItemUI(item);
         Debug.Log($"CluePanel: 添加线索 [{clueId}] {clueText}");
+    }
+
+    /* 重载：兼容旧接口 */
+    public void AddClue(string clueId, string clueText)
+    {
+        AddClue(clueId, clueText, null);
     }
 
     /* 订阅线索发现事件 */
@@ -28,23 +44,35 @@ public class CluePanel : Inventory
     {
         base.Awake();
         Debug.Log($"[CluePanel.Awake] gameObject.activeSelf={gameObject.activeSelf}");
-    }
 
-    protected virtual void OnEnable()
-    {
-        Debug.Log($"[CluePanel.OnEnable] 被调用");
+        // 关键修复：在 Awake 就订阅事件，无论面板是否激活
         EventBus.Instance.Subscribe<ClueDiscoveredEvent>(OnClueDiscovered);
+        Debug.Log("[CluePanel.Awake] 已订阅 ClueDiscoveredEvent");
     }
 
-    protected virtual void OnDisable()
+    void OnDestroy()
     {
-        Debug.Log($"[CluePanel.OnDisable] 被调用");
+        // 在销毁时取消订阅
         EventBus.Instance.Unsubscribe<ClueDiscoveredEvent>(OnClueDiscovered);
+        Debug.Log("[CluePanel.OnDestroy] 已取消订阅 ClueDiscoveredEvent");
     }
+
+    // protected virtual void OnEnable()
+    // {
+    //     Debug.Log($"[CluePanel.OnEnable] 被调用");
+    //     EventBus.Instance.Subscribe<ClueDiscoveredEvent>(OnClueDiscovered);
+    // }
+
+    // protected virtual void OnDisable()
+    // {
+    //     Debug.Log($"[CluePanel.OnDisable] 被调用");
+    //     EventBus.Instance.Unsubscribe<ClueDiscoveredEvent>(OnClueDiscovered);
+    // }
 
     void OnClueDiscovered(ClueDiscoveredEvent e)
     {
-        AddClue(e.clueId, e.clueText);
+        Debug.Log($"[CluePanel.OnClueDiscovered] 收到事件 - clueId: {e.clueId}, text: {e.clueText}, icon: {(e.icon != null ? e.icon.name : "null")}");
+        AddClue(e.clueId, e.clueText, e.icon);
     }
 
     /* 线索详细信息展示（可选） */

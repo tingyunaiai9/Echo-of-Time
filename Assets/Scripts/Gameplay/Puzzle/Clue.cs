@@ -10,6 +10,9 @@ public class Clue : Interaction
     [TextArea]
     public string clueText;
 
+    [Tooltip("线索图标，用于背包 UI 显示")]
+    public Sprite clueIcon;
+
     [Tooltip("是否已被调查过")]
     public bool discovered;
 
@@ -31,7 +34,8 @@ public class Clue : Interaction
             {
                 playerNetId = pid,
                 clueId = gameObject.name, // 以物体名作为唯一ID
-                clueText = clueText
+                clueText = clueText,
+                icon = clueIcon
             });
         }
 
