@@ -26,7 +26,7 @@ public class NetworkEventRelay : Singleton<NetworkEventRelay>
     
                 EventBus.Instance.PublishDynamic(type, eventObj);
     
-                // 服务器广播到其它客户端（不回发给发送者）
+                // 服务器广播到其它客户端
                 foreach (var c in NetworkServer.connections)
                 {
                     c.Value.Send(msg);
@@ -64,12 +64,16 @@ public class NetworkEventRelay : Singleton<NetworkEventRelay>
     public void RelayGameEvent<T>(T eventData)
     {
         var type = typeof(T);
-
+    
         if (NetworkServer.active)
         {
             // 服务器：本地分发并广播到所有客户端
-            EventBus.Instance.LocalPublish(eventData);
-            BroadcastToClients(eventData, 0); // 0为示例timelineId
+            // 为本地事件生成唯一eventGuid，并加入去重集
+            string eventGuid = Guid.NewGuid().ToString();
+            processedEventGuids.Add(eventGuid);
+    
+            // EventBus.Instance.LocalPublish(eventData);
+            BroadcastToClients(eventData, 0, eventGuid); // 传递eventGuid
         }
         else if (NetworkClient.active)
         {
@@ -84,7 +88,7 @@ public class NetworkEventRelay : Singleton<NetworkEventRelay>
     }
 
     // 服务器广播到所有客户端
-    private void BroadcastToClients<T>(T eventData, int sourceID)
+    private void BroadcastToClients<T>(T eventData, int sourceID, string eventGuid)
     {
         string eventType = typeof(T).FullName;
         byte[] data = SerializeEvent(eventData);
@@ -93,13 +97,14 @@ public class NetworkEventRelay : Singleton<NetworkEventRelay>
         {
             eventType = eventType,
             eventData = data,
-            sourceID = sourceID
+            sourceID = sourceID,
+            eventGuid = eventGuid
         };
 
         if (NetworkServer.active)
         {
             NetworkServer.SendToAll(msg);
-            Debug.Log($"[NetworkEventRelay] Mirror广播事件: {eventType} from Timeline {sourceID}");
+            Debug.Log($"[NetworkEventRelay] Mirror广播事件: {eventType} from Timeline {sourceID}, guid={eventGuid}");
         }
         else
         {

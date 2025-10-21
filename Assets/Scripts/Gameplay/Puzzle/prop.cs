@@ -41,7 +41,7 @@ public class prop : Interaction
 
         uint pid = player != null ? player.netId : 0u;
         string displayId = string.IsNullOrEmpty(itemDisplayName) ? gameObject.name : itemDisplayName;
-
+        // gameObject.SetActive(false); // 立即消失
         // 先发布事件（让所有客户端的背包添加物品）
         var evt = new ItemPickedUpEvent
         {
@@ -49,6 +49,7 @@ public class prop : Interaction
             itemId = displayId,
             icon = itemIcon
         };
+        EventBus.Instance.LocalPublish(evt); // 本地先发布，确保自己也收到
         EventBus.Instance.Publish(evt);
         Debug.Log($"[prop.OnInteract] 已发布 ItemPickedUpEvent - itemId: {evt.itemId}, icon: {(evt.icon != null ? evt.icon.name : "null")}");
     }
