@@ -214,7 +214,7 @@ public class PlayerController : NetworkBehaviour
             if (fallback != null)
             {
                 Debug.Log($"在范围内找到 prop: {fallback.gameObject.name}, 尝试交互（拾取）。");
-                fallback.OnInteract(this);
+                fallback.Disappear(this.netId, fallback.gameObject.name);
             }
             else
             {
