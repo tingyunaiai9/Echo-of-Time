@@ -24,7 +24,7 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     // 私有静态实例与锁对象，用于线程安全
     private static T _instance;
     private static readonly object _lock = new object();
-    
+
     // 控制单例是否在场景切换时持久化
     [Tooltip("如果勾选，该单例将在场景加载时保留。")]
     [SerializeField]
@@ -73,7 +73,7 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 
                 // 这个动态创建的实例默认是持久化的
                 DontDestroyOnLoad(singletonObject);
-                
+
                 Debug.Log($"[{typeof(T).Name}]: 实例被创建。");
 
                 return _instance;
@@ -105,6 +105,19 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
             // 销毁当前这个重复的 GameObject，以保证单例的唯一性。
             Debug.LogWarning($"场景中已存在 {typeof(T).Name} 的实例。销毁重复的 '{gameObject.name}'。");
             Destroy(gameObject);
+        }
+    }
+
+
+    /// <summary>
+    /// 应用退出时自动销毁单例对象，防止残留。
+    /// </summary>
+    protected virtual void OnApplicationQuit()
+    {
+        if (_instance != null && _instance.gameObject != null)
+        {
+            Destroy(_instance.gameObject);
+            _instance = null;
         }
     }
 }
