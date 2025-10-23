@@ -80,7 +80,7 @@ public class PlayerController : NetworkBehaviour
     public override void OnStartLocalPlayer()
     {
         base.OnStartLocalPlayer();
-        EventBus.Instance.Subscribe<BackpackStateChangedEvent>(OnBackpackStateChanged);
+        EventBus.Instance.Subscribe<FreezeEvent>(OnBackpackStateChanged);
     }
 
     /* 销毁时取消订阅 */
@@ -88,12 +88,12 @@ public class PlayerController : NetworkBehaviour
     {
         if (isLocalPlayer)
         {
-            EventBus.Instance.Unsubscribe<BackpackStateChangedEvent>(OnBackpackStateChanged);
+            EventBus.Instance.Unsubscribe<FreezeEvent>(OnBackpackStateChanged);
         }
     }
 
     /* 背包状态变化回调 */
-    void OnBackpackStateChanged(BackpackStateChangedEvent e)
+    void OnBackpackStateChanged(FreezeEvent e)
     {
         isBackpackOpen = e.isOpen;
     }
