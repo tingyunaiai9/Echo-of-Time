@@ -103,6 +103,7 @@ public class PlayerController : NetworkBehaviour
     {
         if (!isLocalPlayer) return;
 
+        // 背包开关
         if (Input.GetKeyDown(KeyCode.B))
         {
             Inventory.ToggleBackpack();

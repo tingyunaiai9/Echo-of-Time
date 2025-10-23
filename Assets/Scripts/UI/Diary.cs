@@ -32,6 +32,7 @@ public class Diary : MonoBehaviour
     // 静态切换方法
     public static void ToggleDiary()
     {
+        Debug.Log("[Diary] ToggleDiary 调用");
         if (s_isOpen)
             CloseDiary();
         else
@@ -40,12 +41,13 @@ public class Diary : MonoBehaviour
 
     public static void OpenDiary()
     {
+        Debug.Log("[Diary] OpenDiary 调用");
         if (s_root == null || s_instance == null) return;
         s_isOpen = true;
         s_root.SetActive(true);
 
-        // 禁用玩家移动（通过背包事件实现，PlayerController 已支持此事件）
-        EventBus.Instance.Publish(new BackpackStateChangedEvent { isOpen = true });
+        // 禁用玩家移动
+        EventBus.Instance.Publish(new FreezeEvent { isOpen = true });
 
         // 示例内容
         if (s_instance.diaryText != null)
@@ -59,6 +61,6 @@ public class Diary : MonoBehaviour
         s_root.SetActive(false);
 
         // 恢复玩家移动
-        EventBus.Instance.Publish(new BackpackStateChangedEvent { isOpen = false });
+        EventBus.Instance.Publish(new FreezeEvent { isOpen = false });
     }
 }
