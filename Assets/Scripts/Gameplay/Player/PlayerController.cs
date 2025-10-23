@@ -1,10 +1,9 @@
 using UnityEngine;
 using Mirror;
 using Events;
-
-/// <summary>
-/// Mirror 网络玩家控制器，仅本地玩家处理输入与物理。
-/// </summary>
+/*
+ * 玩家控制器：处理玩家输入、移动、交互等功能
+ */
 public class PlayerController : NetworkBehaviour
 {
     [Tooltip("移动速度（单位：米/秒)")]
@@ -34,9 +33,10 @@ public class PlayerController : NetworkBehaviour
     Rigidbody rb;
     bool initialized;
 
-    // 新增：背包打开时禁用游戏输入
+    /* 背包打开时禁用游戏输入 */
     bool isBackpackOpen;
 
+    /* 初始化刚体和相机 */
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -58,6 +58,7 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
+    /* 权限启动时设置刚体 */
     public override void OnStartAuthority()
     {
         base.OnStartAuthority();
@@ -65,6 +66,7 @@ public class PlayerController : NetworkBehaviour
         initialized = true;
     }
 
+    /* 非本地玩家启动时设置刚体 */
     public override void OnStartClient()
     {
         base.OnStartClient();
@@ -74,36 +76,33 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
-    // 新增：本地玩家启动时订阅背包事件
+    /* 本地玩家启动时订阅背包事件 */
     public override void OnStartLocalPlayer()
     {
         base.OnStartLocalPlayer();
-        // 使用 EventBus 订阅事件（替代原有的 += 订阅）
         EventBus.Instance.Subscribe<BackpackStateChangedEvent>(OnBackpackStateChanged);
     }
 
-    // 新增：销毁时取消订阅
+    /* 销毁时取消订阅 */
     void OnDestroy()
     {
         if (isLocalPlayer)
         {
-            // 使用 EventBus 取消订阅
             EventBus.Instance.Unsubscribe<BackpackStateChangedEvent>(OnBackpackStateChanged);
         }
     }
 
-    // 新增：背包状态变化回调
+    /* 背包状态变化回调 */
     void OnBackpackStateChanged(BackpackStateChangedEvent e)
     {
         isBackpackOpen = e.isOpen;
-        Debug.Log($"[PlayerController] 背包状态变化: {(e.isOpen ? "打开" : "关闭")}，游戏输入: {(e.isOpen ? "禁用" : "启用")}");
     }
 
+    /* 处理非刚体的输入和移动 */
     void Update()
     {
         if (!isLocalPlayer) return;
 
-        // B 键始终可用（用于开关背包）
         if (Input.GetKeyDown(KeyCode.B))
         {
             Inventory.ToggleBackpack();
@@ -112,7 +111,7 @@ public class PlayerController : NetworkBehaviour
         // 背包打开时，禁用游戏输入（移动、交互等）
         if (isBackpackOpen) return;
 
-        // 以下是原有的游戏输入逻辑
+        // 游戏输入逻辑
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
         Vector3 input = new Vector3(h, 0f, v).normalized;
@@ -134,6 +133,7 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
+    /* 物理更新：处理刚体移动 */
     void FixedUpdate()
     {
         if (!isLocalPlayer) return;
@@ -152,6 +152,7 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
+    /* 相机跟随 */
     void LateUpdate()
     {
         if (!isLocalPlayer) return;
@@ -164,6 +165,7 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
+    /* 尝试与最近的交互物体互动 */
     private void TryInteract()
     {
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, interactionRange, interactableLayer);
@@ -194,35 +196,10 @@ public class PlayerController : NetworkBehaviour
                 best.OnInteract(this);
                 return;
             }
-
-            prop fallback = null;
-            float closestProp = float.MaxValue;
-            foreach (var hitCollider in hitColliders)
-            {
-                var p = hitCollider.GetComponent<prop>();
-                if (p != null)
-                {
-                    float distSqr = (hitCollider.transform.position - playerPosition).sqrMagnitude;
-                    if (distSqr < closestProp)
-                    {
-                        closestProp = distSqr;
-                        fallback = p;
-                    }
-                }
-            }
-
-            if (fallback != null)
-            {
-                Debug.Log($"在范围内找到 prop: {fallback.gameObject.name}, 尝试交互（拾取）。");
-                fallback.OnInteract(this);
-            }
-            else
-            {
-                Debug.Log("在范围内检测到 Collider，但没有找到可交互对象。");
-            }
         }
     }
 
+    /* 在编辑器中绘制交互范围 */
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
