@@ -2,9 +2,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using Events;
 
-/* 
+/*
  控制日记页面的显示与隐藏，并通过事件禁用玩家移动
- 挂载于 Canvas/DiaryPanel 
+ 挂载于 Canvas/DiaryPanel
 */
 public class Diary : MonoBehaviour
 {
@@ -27,16 +27,6 @@ public class Diary : MonoBehaviour
         s_root = panelRoot;
         s_instance = this;
         CloseDiary();
-    }
-
-    protected virtual void Update()
-    {
-        // F1 键切换日记页面
-        if (Input.GetKeyDown(KeyCode.F1))
-        {
-            Debug.Log("[Diary] F1键按下，切换日记页面。");
-            ToggleDiary();
-        }
     }
 
     // 静态切换方法

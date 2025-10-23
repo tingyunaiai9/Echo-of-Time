@@ -108,6 +108,13 @@ public class PlayerController : NetworkBehaviour
             Inventory.ToggleBackpack();
         }
 
+        // 日记页面切换
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            Diary.ToggleDiary();
+            Debug.Log("[PlayerController] F1键按下，切换日记页面。");
+        }
+
         // 背包打开时，禁用游戏输入（移动、交互等）
         if (isBackpackOpen) return;
 
