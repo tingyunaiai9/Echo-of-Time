@@ -35,7 +35,12 @@ public class LobbyPanel : MonoBehaviour
 
     public void OnClickJoinByCode()
     {
-        var code = roomCodeInput.text.Trim();
+        string originalInput = roomCodeInput.text;
+        Debug.Log($"[Debug] Original input from roomCodeInput: '{originalInput}' (Length: {originalInput.Length})");
+
+        var code = originalInput.Trim();
+        Debug.Log($"[Debug] Input after Trim(): '{code}' (Length: {code.Length})");
+        
         if (string.IsNullOrEmpty(code))
         {
             Debug.LogWarning("房间码为空");

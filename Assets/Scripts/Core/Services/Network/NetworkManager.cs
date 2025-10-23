@@ -330,20 +330,56 @@ public class EchoNetworkManager : Mirror.NetworkManager
     private IEnumerator JoinRoomByCodeCoroutine(string roomCode, Action<bool, string> callback)
     {
         Debug.Log($"Joining room by code: {roomCode}");
-        
-        yield return LobbyService.AsyncQueryRoomByRoomCode(roomCode, (resp) =>
+        yield return QueryAndJoinRoomByCodeCoroutine(roomCode, callback);
+    }
+
+    /// <summary>
+    /// 协程：轮询查询房间状态，直到房间就绪或超时。
+    /// </summary>
+    private IEnumerator QueryAndJoinRoomByCodeCoroutine(string roomCode, Action<bool, string> callback, int timeoutSeconds = 10)
+    {
+        float time = 0;
+        bool joined = false;
+
+        while (time < timeoutSeconds && !joined)
         {
-            if (resp.Code == (uint)RelayCode.OK)
+            yield return LobbyService.AsyncQueryRoomByRoomCode(roomCode, (resp) =>
             {
-                relayTransport.SetRoomData(resp);
-                StartClient();
-                callback?.Invoke(true, $"Joined room: {resp.Name}");
-            }
-            else
+                if (resp.Code == (uint)RelayCode.OK)
+                {
+                    // 检查房间状态是否已就绪
+                    if (resp.Status == LobbyRoomStatus.ServerAllocated || resp.Status == LobbyRoomStatus.Ready)
+                    {
+                        Debug.Log($"Room '{resp.Name}' is ready. Joining...");
+                        relayTransport.SetRoomData(resp);
+                        StartClient();
+                        callback?.Invoke(true, $"Joined room: {resp.Name}");
+                        joined = true;
+                    }
+                    else
+                    {
+                        Debug.Log($"Waiting for room to be ready... Current status: {resp.Status}");
+                    }
+                }
+                else
+                {
+                    // 如果查询失败，则直接中止
+                    callback?.Invoke(false, $"Failed to query room: {resp.ErrorMessage}");
+                    joined = true; // 标记为true以跳出循环
+                }
+            });
+
+            if (!joined)
             {
-                callback?.Invoke(false, $"Failed to join room: {resp.ErrorMessage}");
+                yield return new WaitForSeconds(1);
+                time += 1;
             }
-        });
+        }
+
+        if (!joined)
+        {
+            callback?.Invoke(false, "Join room timed out. The room was not ready in time.");
+        }
     }
     
     /// <summary>
