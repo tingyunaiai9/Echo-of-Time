@@ -171,7 +171,7 @@ public abstract class Inventory : MonoBehaviour
         if (s_isOpen) SwitchToProps();
 
         // 发布事件
-        EventBus.Instance.Publish(new BackpackStateChangedEvent { isOpen = s_isOpen });
+        EventBus.Instance.LocalPublish(new FreezeEvent { isOpen = s_isOpen });
     }
 
     /* 切换背包栏目 */

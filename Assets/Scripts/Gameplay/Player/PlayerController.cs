@@ -80,7 +80,7 @@ public class PlayerController : NetworkBehaviour
     public override void OnStartLocalPlayer()
     {
         base.OnStartLocalPlayer();
-        EventBus.Instance.Subscribe<BackpackStateChangedEvent>(OnBackpackStateChanged);
+        EventBus.Instance.Subscribe<FreezeEvent>(OnBackpackStateChanged);
     }
 
     /* 销毁时取消订阅 */
@@ -88,12 +88,12 @@ public class PlayerController : NetworkBehaviour
     {
         if (isLocalPlayer)
         {
-            EventBus.Instance.Unsubscribe<BackpackStateChangedEvent>(OnBackpackStateChanged);
+            EventBus.Instance.Unsubscribe<FreezeEvent>(OnBackpackStateChanged);
         }
     }
 
     /* 背包状态变化回调 */
-    void OnBackpackStateChanged(BackpackStateChangedEvent e)
+    void OnBackpackStateChanged(FreezeEvent e)
     {
         isBackpackOpen = e.isOpen;
     }
@@ -103,9 +103,17 @@ public class PlayerController : NetworkBehaviour
     {
         if (!isLocalPlayer) return;
 
+        // 背包开关
         if (Input.GetKeyDown(KeyCode.B))
         {
             Inventory.ToggleBackpack();
+        }
+
+        // 日记页面切换
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            Diary.ToggleDiary();
+            Debug.Log("[PlayerController] F1键按下，切换日记页面。");
         }
 
         // 背包打开时，禁用游戏输入（移动、交互等）
