@@ -96,7 +96,7 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
             // 根据 _persistent 字段决定是否在加载新场景时保留此对象
             if (_persistent)
             {
-                DontDestroyOnLoad(gameObject);
+                DontDestroyOnLoad(transform.root.gameObject);
             }
         }
         else if (_instance != this)

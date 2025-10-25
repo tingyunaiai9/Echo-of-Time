@@ -8,17 +8,22 @@ public class RoleSelectPanel : MonoBehaviour
     public UnityEngine.UI.Button startButton;
 
     private PlayerRole localRole;
+    private TimelinePlayer localTimeline;
 
     void Awake() { TryBindLocal(); }
     void OnEnable() { TryBindLocal(); StartCoroutine(WaitAndBind()); }
 
     void TryBindLocal()
     {
-        if (localRole != null) return;
         if (NetworkClient.active && NetworkClient.localPlayer != null)
         {
-            localRole = NetworkClient.localPlayer.GetComponent<PlayerRole>();
-            if (localRole != null) Debug.Log("[RoleSelect] 绑定本地玩家成功");
+            if (localRole == null)
+                localRole = NetworkClient.localPlayer.GetComponent<PlayerRole>();
+            if (localTimeline == null)
+                localTimeline = NetworkClient.localPlayer.GetComponent<TimelinePlayer>();
+
+            if (localRole != null || localTimeline != null)
+                Debug.Log("[RoleSelect] 绑定本地玩家成功");
         }
     }
 
@@ -44,8 +49,13 @@ public class RoleSelectPanel : MonoBehaviour
         if (localRole == null) { TryBindLocal(); }
         if (localRole == null) { Debug.LogWarning("本地玩家未就绪，稍等 NetworkClient 生成"); return; }
 
-        localRole.ChooseRole(r);
-        localRole.SetReady(true);
+        if (localRole != null)
+        {
+            localRole.ChooseRole(r);
+            localRole.SetReady(true);
+        }
+        int tl = r == RoleType.Ancient ? 0 : r == RoleType.Modern ? 1 : 2;
+        localTimeline.CmdChooseRole(tl);
         Debug.Log("已选择角色：" + r);
     }
 

@@ -10,13 +10,29 @@ public class TimelinePlayer : NetworkBehaviour
     [Header("时间线设置")]
     [SyncVar(hook = nameof(OnTimelineChanged))]
     public int timeline = -1;
-    
+
     [SyncVar]
     public string playerName = "";
-    
+
     [SyncVar]
     public uint transportId = 0;
-    
+
+    [Server]
+    public void ServerSetTimeline(int tl)
+    {
+        timeline = tl;  // Mirror 会把 SyncVar 同步回该玩家的客户端
+    }
+
+    [Command]
+    public void CmdChooseRole(int roleIndex)
+    {
+        // TODO: 这里可做席位校验/冲突检测
+        ServerSetTimeline(roleIndex);
+
+        var nm = (EchoNetworkManager)NetworkManager.singleton;
+        nm.ServerRememberTimeline(connectionToClient, roleIndex);
+    }
+
     [Header("玩家信息")]
     private Color[] timelineColors = new Color[]
     {
@@ -95,6 +111,8 @@ public class TimelinePlayer : NetworkBehaviour
     {
         Debug.Log($"[TimelinePlayer] Timeline changed from {oldTimeline} to {newTimeline}");
         ApplyTimelineColor();
+
+        SceneDirector.Instance?.TryLoadTimelineNow();
     }
     
     private void ApplyTimelineColor()

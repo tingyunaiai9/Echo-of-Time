@@ -16,7 +16,13 @@ public class LobbyPanel : MonoBehaviour
 
     public void OnClickCreate()
     {
-        string roomName = string.IsNullOrEmpty(roomNameInput.text) ? "Room-" + Random.Range(1000, 9999) : roomNameInput.text;
+        Debug.Log($"[LobbyPanel] flow={flow}, nm={nm}, roomNameInput={(roomNameInput ? roomNameInput.name : "null")}");
+
+        if (flow == null) { Debug.LogError("[LobbyPanel] StartMenuController (flow) 未赋值"); return; }
+        if (nm == null) { Debug.LogError("[LobbyPanel] EchoNetworkManager 未找到（Boot里是否挂了 EchoNetworkManager 组件？）"); return; }
+        if (roomNameInput == null) { Debug.LogError("[LobbyPanel] roomNameInput 未赋值"); return; }
+
+        var roomName = string.IsNullOrWhiteSpace(roomNameInput.text) ? "Room" : roomNameInput.text.Trim();
         nm.CreateRoom(roomName, (ok, msg) =>
         {
             Debug.Log(msg);

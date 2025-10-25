@@ -48,9 +48,9 @@ public class EchoNetworkManager : Mirror.NetworkManager
     [Header("房间信息")]
     private RelayRoom currentRoom; // 当前房间信息（Relay同步）
     private Dictionary<uint, int> playerTimelineMap = new Dictionary<uint, int>(); // 玩家时间线分配表（TransportId -> Timeline）
+    private readonly Dictionary<int, int> _timelineByConnectionId = new Dictionary<int, int>(); // 连接ID -> 时间线映射（用于断线重连恢复）
 
     private RelayTransportMirror relayTransport; // Relay传输组件（Mirror Transport）
-    
     /// <summary>
     /// Unity生命周期：启动时初始化Relay、注册回调、设置玩家信息。
     /// </summary>
@@ -490,6 +490,30 @@ public class EchoNetworkManager : Mirror.NetworkManager
     {
         return relayTransport?.GetCurrentPlayer();
     }
+
+    /// <summary>
+    /// 服务器记录连接ID与时间线的映射关系（用于断线重连恢复）。
+    /// </summary>
+    /// <param name="conn">网络连接</param>
+    /// <param name="timeline">时间线编号</param>
+    [Server]
+    public void ServerRememberTimeline(NetworkConnectionToClient conn, int timeline)
+    {
+        if (conn == null)
+        {
+            Debug.LogWarning("Cannot remember timeline: connection is null");
+            return;
+        }
+
+        if (timeline < 0 || timeline >= maxPlayers)
+        {
+            Debug.LogError($"Invalid timeline {timeline} for connection {conn.connectionId}");
+            return;
+        }
+
+        _timelineByConnectionId[conn.connectionId] = timeline;
+        Debug.Log($"Server remembered: Connection {conn.connectionId} -> Timeline {timeline}");
+    }
     
     #endregion
     
@@ -604,6 +628,31 @@ public class EchoNetworkManager : Mirror.NetworkManager
         base.OnServerConnect(conn);
         Debug.Log($"Client connected to server: {conn.connectionId}");
     }
+
+    /// <summary>
+    /// Mirror服务器为客户端添加玩家对象时调用（包括断线重连）。
+    /// 如果该连接之前选择过时间线，会自动恢复。
+    /// </summary>
+    /// <param name="conn">连接对象</param>
+    public override void OnServerAddPlayer(NetworkConnectionToClient conn)
+    {
+        base.OnServerAddPlayer(conn);
+
+        if (conn.identity != null)
+        {
+            var tp = conn.identity.GetComponent<TimelinePlayer>();
+            if (tp != null && _timelineByConnectionId.TryGetValue(conn.connectionId, out var timeline))
+            {
+                // 恢复之前选择的时间线（适用于断线重连场景）
+                tp.ServerSetTimeline(timeline);
+                Debug.Log($"Restored timeline {timeline} for reconnected player (Connection {conn.connectionId})");
+            }
+            else
+            {
+                Debug.Log($"New player added (Connection {conn.connectionId}), waiting for role selection...");
+            }
+        }
+    }
     
     /// <summary>
     /// Mirror服务器收到客户端断开回调。
@@ -620,6 +669,10 @@ public class EchoNetworkManager : Mirror.NetworkManager
             playerTimelineMap.Remove(connId);
             Debug.Log($"Client disconnected from server: {connId}");
         }
+
+        // 注意：我们保留 _timelineByConnectionId 中的记录，以便断线重连时恢复
+        // 如果需要彻底清理，可以在这里添加：
+        // _timelineByConnectionId.Remove(conn.connectionId);
     }
     
     /// <summary>
