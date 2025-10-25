@@ -7,6 +7,11 @@ using UnityEngine;
 
 namespace Events
 {
+    public class GameStartedEvent
+    {
+        
+    }
+
     /*     
      * 玩家状态相关事件
      */
