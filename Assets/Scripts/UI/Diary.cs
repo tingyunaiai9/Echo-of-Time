@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using Events;
 using UnityEditor.EditorTools;
+using Mirror;
 
 /*
  控制日记页面的显示与隐藏，并通过事件禁用玩家移动
@@ -24,7 +25,8 @@ public class Diary : MonoBehaviour
     private static Diary s_instance;
     private static bool s_isOpen;
 
-    protected virtual void Awake()
+    /* 初始化 */
+    void Awake()
     {
         Debug.Log("[Diary] Awake 执行");
         if (panelRoot == null)
@@ -38,11 +40,33 @@ public class Diary : MonoBehaviour
             // 根据你的层级结构自动查找
             contentParent = transform.Find("DiaryScrollView/Viewport/Content")?.GetComponent<Transform>();
         }
-
+        EventBus.Instance.Subscribe<DiaryUpdatedEvent>(OnDiaryUpdatedEvent);
         CloseDiary();
     }
 
-    // 静态切换方法
+    /* 在销毁时取消订阅 */
+    void OnDestroy()
+    {
+        EventBus.Instance.Unsubscribe<DiaryUpdatedEvent>(OnDiaryUpdatedEvent);
+    }
+
+    /* 处理日记更新事件，添加新条目 */
+    void OnDiaryUpdatedEvent(DiaryUpdatedEvent evt)
+    {
+        Debug.Log($"[Diary] 收到 DiaryUpdatedEvent，来源 playerNetId={evt.playerNetId}, 内容: {evt.diaryEntry}");
+
+        // 如果事件来自本地玩家，则忽略（本地已经创建并发布过）
+        if (NetworkClient.localPlayer != null && evt.playerNetId == NetworkClient.localPlayer.netId)
+        {
+            Debug.Log("[Diary] 忽略来自本地的 DiaryUpdatedEvent");
+            return;
+        }
+
+        // 来自其它客户端或服务器的事件，添加但不再发布（避免循环）
+        AddDiaryEntry(evt.diaryEntry, publish: false);
+    }
+
+    /* 静态切换方法 */
     public static void ToggleDiary()
     {
         Debug.Log("[Diary] ToggleDiary 调用");
@@ -52,6 +76,7 @@ public class Diary : MonoBehaviour
             OpenDiary();
     }
 
+    /* 打开日记面板 */
     public static void OpenDiary()
     {
         Debug.Log("[Diary] OpenDiary 调用");
@@ -61,12 +86,9 @@ public class Diary : MonoBehaviour
 
         // 禁用玩家移动
         EventBus.Instance.LocalPublish(new FreezeEvent { isOpen = true });
-
-        // 清空现有条目并重新生成
-        s_instance.ClearDiaryEntries();
-        TestDiaryEntries();
     }
 
+    /* 关闭日记面板 */
     public static void CloseDiary()
     {
         if (s_root == null) return;
@@ -77,14 +99,33 @@ public class Diary : MonoBehaviour
         EventBus.Instance.LocalPublish(new FreezeEvent { isOpen = false });
     }
 
-    // 添加新的日记条目
-    public static void AddDiaryEntry(string content)
+    /* 添加新的日记条目 */
+    public static void AddDiaryEntry(string content, bool publish = true)
     {
         if (s_instance == null) return;
         s_instance.CreateDiaryEntry(System.DateTime.Now, content);
-    }
 
-    // 清空所有日记条目
+        if (publish)
+        {
+            // 仅当明确需要时才发布事件（避免收到事件后再发布导致循环）
+            uint localNetId = 0;
+            if (NetworkClient.localPlayer != null)
+                localNetId = NetworkClient.localPlayer.netId;
+
+            EventBus.Instance.Publish(new DiaryUpdatedEvent
+            {
+                playerNetId = localNetId,
+                diaryEntry = content
+            });
+            Debug.Log($"[Diary] 已添加新日记条目并发布事件: {content}");
+        }
+        else
+        {
+            Debug.Log($"[Diary] 已添加新日记条目（未发布事件）: {content}");
+        }
+    }
+    
+    /* 清空所有日记条目 */
     private void ClearDiaryEntries()
     {
         if (contentParent == null) return;
@@ -96,18 +137,17 @@ public class Diary : MonoBehaviour
         }
     }
 
-    // 生成日记条目（示例数据）
+    /* 生成日记条目（示例数据） */
     public static void TestDiaryEntries()
     {
         if (s_instance == null) return;
         // 示例数据 - 在实际项目中可以从存档或数据库读取
-        s_instance.CreateDiaryEntry(System.DateTime.Now.AddDays(-2), "发现了时间回声的秘密，这个世界比想象中更加复杂。");
-        s_instance.CreateDiaryEntry(System.DateTime.Now.AddDays(-1), "遇到了神秘的NPC，他告诉我关于时空裂缝的传说。");
-        s_instance.CreateDiaryEntry(System.DateTime.Now, "今天是个新的开始，继续我的冒险旅程！");
+        AddDiaryEntry("今天我发现了一个神秘的线索，似乎与古老的传说有关。");
+        AddDiaryEntry("我遇到了一个陌生人，他给了我一些有用的信息。");
+        AddDiaryEntry("解开了一个谜题，感觉离真相更近了一步。");
     }
-    
-    
-    // 创建单个日记条目
+
+    /* 创建单个日记条目 */
     private void CreateDiaryEntry(System.DateTime date, string content)
     {
         if (contentParent == null) return;
@@ -146,7 +186,7 @@ public class Diary : MonoBehaviour
         newEntry.transform.SetAsFirstSibling();
     }
     
-    // 批量添加日记条目（可选方法）
+    /* 批量添加日记条目 */
     public static void AddDiaryEntries(System.Collections.Generic.List<DiaryEntryData> entries)
     {
         if (s_instance == null || entries == null) return;
@@ -158,7 +198,7 @@ public class Diary : MonoBehaviour
     }
 }
 
-// 日记条目数据结构（可选，用于更好的数据管理）
+/* 日记条目数据结构（可选，用于更好的数据管理） */
 [System.Serializable]
 public class DiaryEntryData
 {
