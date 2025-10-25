@@ -1906,7 +1906,7 @@ MonoBehaviour:
     m_Top: 40
     m_Bottom: 10
   m_ChildAlignment: 0
-  m_Spacing: 50
+  m_Spacing: 100
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
@@ -1928,6 +1928,63 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ContentSizeFitter
   m_HorizontalFit: 0
   m_VerticalFit: 2
+--- !u!1001 &302345621
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1912752295026979152, guid: e4b804991dd07e24cbfa8d9623e12a3f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.597
+      objectReference: {fileID: 0}
+    - target: {fileID: 1912752295026979152, guid: e4b804991dd07e24cbfa8d9623e12a3f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.005
+      objectReference: {fileID: 0}
+    - target: {fileID: 1912752295026979152, guid: e4b804991dd07e24cbfa8d9623e12a3f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -3.12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1912752295026979152, guid: e4b804991dd07e24cbfa8d9623e12a3f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1912752295026979152, guid: e4b804991dd07e24cbfa8d9623e12a3f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1912752295026979152, guid: e4b804991dd07e24cbfa8d9623e12a3f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1912752295026979152, guid: e4b804991dd07e24cbfa8d9623e12a3f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1912752295026979152, guid: e4b804991dd07e24cbfa8d9623e12a3f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1912752295026979152, guid: e4b804991dd07e24cbfa8d9623e12a3f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1912752295026979152, guid: e4b804991dd07e24cbfa8d9623e12a3f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5884914264643792146, guid: e4b804991dd07e24cbfa8d9623e12a3f, type: 3}
+      propertyPath: m_Name
+      value: Clue (2)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e4b804991dd07e24cbfa8d9623e12a3f, type: 3}
 --- !u!1 &329508254
 GameObject:
   m_ObjectHideFlags: 0
@@ -2794,8 +2851,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -0.000030517578, y: 0}
+  m_SizeDelta: {x: -24.376724, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &551307159
 MonoBehaviour:
@@ -2826,7 +2883,7 @@ MonoBehaviour:
   m_Padding:
     m_Left: 10
     m_Right: 10
-    m_Top: 10
+    m_Top: 40
     m_Bottom: 10
   m_ChildAlignment: 0
   m_Spacing: 50
@@ -6016,6 +6073,63 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::prop
   itemIcon: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
   itemDisplayName: Cube
+--- !u!1001 &1430663949
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1912752295026979152, guid: e4b804991dd07e24cbfa8d9623e12a3f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.425
+      objectReference: {fileID: 0}
+    - target: {fileID: 1912752295026979152, guid: e4b804991dd07e24cbfa8d9623e12a3f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.034
+      objectReference: {fileID: 0}
+    - target: {fileID: 1912752295026979152, guid: e4b804991dd07e24cbfa8d9623e12a3f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -3.12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1912752295026979152, guid: e4b804991dd07e24cbfa8d9623e12a3f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1912752295026979152, guid: e4b804991dd07e24cbfa8d9623e12a3f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1912752295026979152, guid: e4b804991dd07e24cbfa8d9623e12a3f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1912752295026979152, guid: e4b804991dd07e24cbfa8d9623e12a3f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1912752295026979152, guid: e4b804991dd07e24cbfa8d9623e12a3f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1912752295026979152, guid: e4b804991dd07e24cbfa8d9623e12a3f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1912752295026979152, guid: e4b804991dd07e24cbfa8d9623e12a3f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5884914264643792146, guid: e4b804991dd07e24cbfa8d9623e12a3f, type: 3}
+      propertyPath: m_Name
+      value: Clue (3)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e4b804991dd07e24cbfa8d9623e12a3f, type: 3}
 --- !u!1 &1516224616
 GameObject:
   m_ObjectHideFlags: 0
@@ -6502,7 +6616,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77a1946da1e4a4068972024b7485178d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Diary
-  diaryText: {fileID: 0}
+  diaryEntryPrefab: {fileID: 0}
+  contentParent: {fileID: 0}
   panelRoot: {fileID: 1937329966}
 --- !u!1 &1674248526
 GameObject:
@@ -7786,4 +7901,6 @@ SceneRoots:
   - {fileID: 329508257}
   - {fileID: 74449549}
   - {fileID: 571972929}
+  - {fileID: 1430663949}
+  - {fileID: 302345621}
   - {fileID: 1841506017}
