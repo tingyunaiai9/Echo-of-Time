@@ -49,6 +49,13 @@ namespace Events
         public Sprite icon;
     }
 
+    [System.Serializable]
+    public class DiaryUpdatedEvent
+    {
+        public uint playerNetId;
+        public string diaryEntry;
+    }
+
     public class InventoryUpdatedEvent
     {
         public uint playerNetId;
