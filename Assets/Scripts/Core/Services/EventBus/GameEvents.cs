@@ -67,7 +67,7 @@ namespace Events
 
     // 背包状态变化事件
     [System.Serializable]
-    public class BackpackStateChangedEvent
+    public class FreezeEvent
     {
         public bool isOpen; // 背包是否打开
     }

@@ -16,7 +16,7 @@ public class Clue : Interaction
     [Tooltip("是否已被调查过")]
     public bool discovered;
 
-    // 按 F 调查，不消失
+    /* 覆盖交互：调查线索，发布线索发现事件 */
     public override void OnInteract(PlayerController player)
     {
         if (!CheckPuzzleConditions()) return;
@@ -29,14 +29,23 @@ public class Clue : Interaction
         {
             discovered = true;
 
-            // 发布“线索发现”事件（UI 将去重接收）
-            EventBus.Instance.Publish(new ClueDiscoveredEvent
+            EventBus.Instance.LocalPublish(new ClueDiscoveredEvent
             {
                 playerNetId = pid,
                 clueId = gameObject.name, // 以物体名作为唯一ID
                 clueText = clueText,
                 icon = clueIcon
             });
+            // 发布“线索发现”事件（UI 将去重接收）
+            // EventBus.Instance.Publish(new ClueDiscoveredEvent
+            // {
+            //     playerNetId = pid,
+            //     clueId = gameObject.name, // 以物体名作为唯一ID
+            //     clueText = clueText,
+            //     icon = clueIcon
+            // });
+
+
         }
 
         Debug.Log($"调查线索 -> 对象: {gameObject.name}, 玩家: {who}\n内容: {clueText}");

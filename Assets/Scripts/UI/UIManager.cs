@@ -41,6 +41,7 @@ public class UIManager : Singleton<UIManager>
         base.Awake();
         // 订阅物品拾取事件
         EventBus.Instance.Subscribe<ItemPickedUpEvent>(OnItemPickedUp);
+        InitializeAllUI();
     }
 
     void OnDestroy()
@@ -57,13 +58,12 @@ public class UIManager : Singleton<UIManager>
         Debug.Log($"[UIManager] 玩家 {evt.playerNetId} 拾取了物品 {evt.itemId}，弹窗提醒！");
     }
 
+    
     public void InitializeAllUI()
     {
-        // 按顺序初始化UI组件
-        // 建立UI事件总线
-        // 设置UI层级管理
+        // 初始化 UI 面板...
     }
-
+    
     public void ManageUILayers(UIPanel panel, UILayer layer)
     {
         // 验证层级权限
