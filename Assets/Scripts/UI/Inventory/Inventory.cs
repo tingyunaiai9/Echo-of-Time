@@ -76,13 +76,14 @@ public abstract class Inventory : MonoBehaviour
         GameObject entry;
         if (itemEntries.TryGetValue(item.itemId, out entry))
         {
+            // Item 已存在，更新数量等信息
             Debug.Log($"[{GetType().Name}.CreateOrUpdateItemUI] 更新现有物品条目: {item.itemName}");
             // 更新现有条目
             UpdateEntryUI(entry, item);
         }
         else
         {
-            // 创建新条目
+            // Item不存在，创建新条目
             entry = Instantiate(itemEntryPrefab, itemListContainer);
             entry.name = $"Item_{item.itemId}";
             itemEntries[item.itemId] = entry;
