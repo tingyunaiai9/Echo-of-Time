@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Events;
+using UnityEditor.EditorTools;
 
 /*
  控制日记页面的显示与隐藏，并通过事件禁用玩家移动
@@ -9,7 +10,7 @@ using Events;
 */
 public class Diary : MonoBehaviour
 {
-    [Tooltip("日记条目预制体")]
+    [Tooltip("日记条目预制体（包含日期和内容文本）")]
     public GameObject diaryEntryPrefab;
 
     [Tooltip("日记条目容器（Vertical Layout Group）")]
@@ -63,7 +64,7 @@ public class Diary : MonoBehaviour
 
         // 清空现有条目并重新生成
         s_instance.ClearDiaryEntries();
-        s_instance.GenerateDiaryEntries();
+        TestDiaryEntries();
     }
 
     public static void CloseDiary()
@@ -96,26 +97,28 @@ public class Diary : MonoBehaviour
     }
 
     // 生成日记条目（示例数据）
-    private void GenerateDiaryEntries()
+    public static void TestDiaryEntries()
     {
-        if (diaryEntryPrefab == null || contentParent == null)
-        {
-            Debug.LogWarning("[Diary] 预制体或容器未设置");
-            return;
-        }
-
+        if (s_instance == null) return;
         // 示例数据 - 在实际项目中可以从存档或数据库读取
-        CreateDiaryEntry(System.DateTime.Now.AddDays(-2), "发现了时间回声的秘密，这个世界比想象中更加复杂。");
-        CreateDiaryEntry(System.DateTime.Now.AddDays(-1), "遇到了神秘的NPC，他告诉我关于时空裂缝的传说。");
-        CreateDiaryEntry(System.DateTime.Now, "今天是个新的开始，继续我的冒险旅程！");
+        s_instance.CreateDiaryEntry(System.DateTime.Now.AddDays(-2), "发现了时间回声的秘密，这个世界比想象中更加复杂。");
+        s_instance.CreateDiaryEntry(System.DateTime.Now.AddDays(-1), "遇到了神秘的NPC，他告诉我关于时空裂缝的传说。");
+        s_instance.CreateDiaryEntry(System.DateTime.Now, "今天是个新的开始，继续我的冒险旅程！");
     }
-
+    
+    
     // 创建单个日记条目
     private void CreateDiaryEntry(System.DateTime date, string content)
     {
-        if (diaryEntryPrefab == null || contentParent == null) return;
+        if (contentParent == null) return;
 
-        // 实例化预制体
+        // 使用 Inspector 赋值的预制体
+        if (diaryEntryPrefab == null)
+        {
+            Debug.LogWarning("[Diary] diaryEntryPrefab 未赋值！");
+            return;
+        }
+
         GameObject newEntry = Instantiate(diaryEntryPrefab, contentParent);
 
         // 设置日期文本
@@ -140,10 +143,9 @@ public class Diary : MonoBehaviour
             }
         }
 
-        // 确保新条目在顶部（最新的在最上面）
         newEntry.transform.SetAsFirstSibling();
     }
-
+    
     // 批量添加日记条目（可选方法）
     public static void AddDiaryEntries(System.Collections.Generic.List<DiaryEntryData> entries)
     {
