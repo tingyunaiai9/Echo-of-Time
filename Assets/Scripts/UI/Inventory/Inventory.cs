@@ -45,7 +45,6 @@ public abstract class Inventory : MonoBehaviour
     /* 初始化：设置静态引用 */
     protected virtual void Awake()
     {
-        s_isOpen = false;
         
         // 记录静态引用
         if (this is PropBackpack prop) s_propPanel = prop;
@@ -58,7 +57,7 @@ public abstract class Inventory : MonoBehaviour
             {
                 s_root = backpackRoot;
                 s_initialized = false;       // 让 Start 有机会走初始化流程
-                s_root.SetActive(false);     // 实物状态 = 关闭
+                s_isOpen = false;   // 实物状态 = 关闭
 
                 //EventBus.Instance?.LocalPublish(new FreezeEvent { isOpen = false });
             }
@@ -72,6 +71,7 @@ public abstract class Inventory : MonoBehaviour
         if (!s_initialized && s_root != null && s_propPanel != null && s_cluePanel != null)
         {
             s_initialized = true;
+            s_root.SetActive(false);
             Debug.Log($"[{GetType().Name}.Start] 两个面板都已初始化，关闭背包");
         }
     }
@@ -231,13 +231,4 @@ public abstract class Inventory : MonoBehaviour
         }
     }
 
-    void EnsurePanelsBound()
-    {
-        if (s_root == null) return;
-
-        if (s_propPanel == null)
-            s_propPanel = s_root.GetComponentInChildren<PropBackpack>(true);
-        if (s_cluePanel == null)
-            s_cluePanel = s_root.GetComponentInChildren<CluePanel>(true);
-    }
 }
