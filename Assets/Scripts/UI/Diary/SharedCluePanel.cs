@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 /*
  控制线索条目的添加与显示
- 挂载于 Canvas/DiaryPanel
 */
 public class SharedCluePanel : MonoBehaviour
 {

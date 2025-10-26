@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using Events;
 
-public class DiaryController : Singleton<DiaryController>
+public class DiaryController : MonoBehaviour
 {
     [Tooltip("线索面板根对象（用于显示/隐藏）")]
     public GameObject cluePanelRoot;
@@ -10,9 +10,8 @@ public class DiaryController : Singleton<DiaryController>
     private static DiaryController s_instance;
     private static bool s_isOpen;
 
-    protected override void Awake()
+    protected void Awake()
     {
-        base.Awake();
         s_instance = this;
         if (cluePanelRoot == null)
             cluePanelRoot = gameObject;
