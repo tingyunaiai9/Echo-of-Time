@@ -4,10 +4,8 @@ using Mirror;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneDirector : MonoBehaviour
+public class SceneDirector : Singleton<SceneDirector>
 {
-    public static SceneDirector Instance { get; private set; }
-
     private bool timelineLoaded = false;
 
     [Header("Scene Names")]
@@ -18,17 +16,6 @@ public class SceneDirector : MonoBehaviour
 
     [Header("Options")]
     [SerializeField] private bool loadStartPageOnBoot = true;
-
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-        DontDestroyOnLoad(transform.root.gameObject);
-    }
 
     private void Start()
     {
