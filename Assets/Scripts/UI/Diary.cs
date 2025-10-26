@@ -38,7 +38,7 @@ public class Diary : MonoBehaviour
         if (contentParent == null)
         {
             // 根据你的层级结构自动查找
-            contentParent = transform.Find("DiaryScrollView/Viewport/Content")?.GetComponent<Transform>();
+            contentParent = transform.Find("Viewport/Content")?.GetComponent<Transform>();
         }
         EventBus.Instance.Subscribe<DiaryUpdatedEvent>(OnDiaryUpdatedEvent);
         CloseDiary();
