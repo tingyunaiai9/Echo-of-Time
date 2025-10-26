@@ -49,11 +49,12 @@ namespace Events
         public Sprite icon;
     }
 
+    // 线索更新事件
     [System.Serializable]
-    public class DiaryUpdatedEvent
+    public class ClueUpdatedEvent
     {
         public uint playerNetId;
-        public string diaryEntry;
+        public string ClueEntry;
     }
 
     public class InventoryUpdatedEvent
