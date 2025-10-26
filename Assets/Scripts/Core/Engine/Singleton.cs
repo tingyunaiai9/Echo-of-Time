@@ -107,17 +107,4 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
-
-    /// <summary>
-    /// 应用退出时自动销毁单例对象，防止残留。
-    /// </summary>
-    protected virtual void OnApplicationQuit()
-    {
-        if (_instance != null && _instance.gameObject != null)
-        {
-            Destroy(_instance.gameObject);
-            _instance = null;
-        }
-    }
 }
