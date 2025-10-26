@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
+using Events;
 
 /*
  控制线索条目的添加与显示
@@ -22,13 +23,29 @@ public class SharedCluePanel : MonoBehaviour
         {
             contentParent = transform.Find("Viewport/Content");
         }
+        EventBus.Instance.Subscribe<ClueUpdatedEvent>(OnClueUpdated);
+    }
+
+    void OnDestroy()
+    {
+        EventBus.Instance.Unsubscribe<ClueUpdatedEvent>(OnClueUpdated);
+    }
+
+    /* 线索更新事件回调 */
+    void OnClueUpdated(ClueUpdatedEvent e)
+    {
+        AddClueEntry(e.ClueEntry, publish: false);
     }
 
     /* 添加新的线索条目 */
-    public static void AddClueEntry(string content)
+    public static void AddClueEntry(string content, bool publish = true)
     {
         if (s_instance == null) return;
         s_instance.CreateClueEntry(System.DateTime.Now, content);
+        if (publish)
+        {
+            EventBus.Instance.Publish(new ClueUpdatedEvent { ClueEntry = content });
+        }
     }
 
     /* 批量添加线索条目 */

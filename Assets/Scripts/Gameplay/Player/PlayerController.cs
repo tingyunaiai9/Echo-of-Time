@@ -118,7 +118,8 @@ public class PlayerController : NetworkBehaviour
 
         if (Input.GetKeyDown(KeyCode.T))
         {
-            // DiaryController.TestDiaryEntries();
+            SharedCluePanel.AddClueEntry("这是一个测试线索条目，记录玩家的发现。");
+            Debug.Log("[PlayerController] T键按下，添加测试线索条目。");
         }
 
         // 背包打开时，禁用游戏输入（移动、交互等）
