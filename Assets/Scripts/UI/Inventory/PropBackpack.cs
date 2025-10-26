@@ -33,7 +33,7 @@ public class PropBackpack : Inventory
             {
                 itemId = item.itemId,
                 itemName = string.IsNullOrEmpty(item.itemName) ? item.itemId : item.itemName,
-                description = item.description,
+                description = item.description,  // ✅ 保存描述
                 quantity = Mathf.Max(1, item.quantity),
                 icon = item.icon
             };
@@ -76,7 +76,7 @@ public class PropBackpack : Inventory
         {
             itemId = e.itemId,
             itemName = e.itemId,
-            description = "",
+            description = e.description,
             quantity = 1,
             icon = e.icon
         };

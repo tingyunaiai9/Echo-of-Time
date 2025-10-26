@@ -14,7 +14,7 @@ public class CluePanel : Inventory
     readonly HashSet<string> _clueIds = new HashSet<string>();
 
     /* 添加线索 */
-    public new void AddClue(string clueId, string clueText, Sprite icon = null)
+    public new void AddClue(string clueId, string clueText, string clueDescription = "", Sprite icon = null)
     {
         if (string.IsNullOrEmpty(clueId)) return;
         if (!_clueIds.Add(clueId)) return; // 已存在则忽略
@@ -25,7 +25,7 @@ public class CluePanel : Inventory
         {
             itemId = clueId,
             itemName = clueText,
-            description = clueText,
+            description = clueDescription,
             quantity = 1,
             icon = icon
         };
@@ -51,7 +51,7 @@ public class CluePanel : Inventory
     void OnClueDiscovered(ClueDiscoveredEvent e)
     {
         Debug.Log($"[CluePanel.OnClueDiscovered] 收到事件 - clueId: {e.clueId}, text: {e.clueText}, icon: {(e.icon != null ? e.icon.name : "null")}");
-        AddClue(e.clueId, e.clueText, e.icon);
+        AddClue(e.clueId, e.clueText, e.clueDescription, e.icon);
     }
 
     /* 线索详细信息展示*/

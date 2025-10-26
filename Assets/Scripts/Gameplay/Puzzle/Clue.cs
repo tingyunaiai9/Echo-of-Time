@@ -7,8 +7,14 @@ using Events;
 public class Clue : Interaction
 {
     [Header("线索内容")]
-    [TextArea]
+    [TextArea(2, 4)]
+    [Tooltip("线索简短文本，显示在物品栏")]
     public string clueText;
+
+    [Header("线索详细描述")]
+    [TextArea(4, 8)]
+    [Tooltip("线索详细描述，显示在右侧详情栏")]
+    public string clueDescription = "这是一条重要的线索...";
 
     [Tooltip("线索图标，用于背包 UI 显示")]
     public Sprite clueIcon;
@@ -32,20 +38,11 @@ public class Clue : Interaction
             EventBus.Instance.LocalPublish(new ClueDiscoveredEvent
             {
                 playerNetId = pid,
-                clueId = gameObject.name, // 以物体名作为唯一ID
+                clueId = gameObject.name,
                 clueText = clueText,
+                clueDescription = clueDescription,  // ✅ 添加详细描述
                 icon = clueIcon
             });
-            // 发布“线索发现”事件（UI 将去重接收）
-            // EventBus.Instance.Publish(new ClueDiscoveredEvent
-            // {
-            //     playerNetId = pid,
-            //     clueId = gameObject.name, // 以物体名作为唯一ID
-            //     clueText = clueText,
-            //     icon = clueIcon
-            // });
-
-
         }
 
         Debug.Log($"调查线索 -> 对象: {gameObject.name}, 玩家: {who}\n内容: {clueText}");

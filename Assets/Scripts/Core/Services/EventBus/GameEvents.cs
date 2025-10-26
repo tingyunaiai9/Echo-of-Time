@@ -46,6 +46,7 @@ namespace Events
         public uint playerNetId;
         public string itemId;
         public string itemName;
+        public string description;
         public Sprite icon;
     }
 
@@ -69,6 +70,7 @@ namespace Events
         public uint playerNetId;
         public string clueId;
         public string clueText;
+        public string clueDescription;
         public Sprite icon;
     }
 

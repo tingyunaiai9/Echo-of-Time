@@ -32,6 +32,19 @@ public abstract class Inventory : MonoBehaviour
     [Tooltip("物品列表的容器（如 ScrollView 的 Content）")]
     [SerializeField] protected Transform itemListContainer;
 
+    [Header("详情侧边栏")]
+    [Tooltip("DetailSideBar GameObject，用于显示物品详细信息")]
+    [SerializeField] protected GameObject detailSideBar;
+
+    [Tooltip("侧边栏中显示图标的 Image 组件")]
+    [SerializeField] protected Image detailIcon;
+
+    [Tooltip("侧边栏中显示名称的 Text 组件")]
+    [SerializeField] protected TextMeshProUGUI detailName;
+
+    [Tooltip("侧边栏中显示描述的 Text 组件")]
+    [SerializeField] protected TextMeshProUGUI detailDescription;
+
     // 静态引用
     protected static GameObject s_root;
     protected static PropBackpack s_propPanel;
@@ -41,6 +54,9 @@ public abstract class Inventory : MonoBehaviour
 
     // 存储 UI 条目的字典（itemId -> GameObject）
     protected Dictionary<string, GameObject> itemEntries = new Dictionary<string, GameObject>();
+
+    // 存储物品数据的字典（itemId -> InventoryItem）
+    protected Dictionary<string, InventoryItem> itemData = new Dictionary<string, InventoryItem>();
 
     /* 初始化：设置静态引用 */
     protected virtual void Awake()
@@ -73,12 +89,14 @@ public abstract class Inventory : MonoBehaviour
             return;
         }
 
+        // 保存物品数据
+        itemData[item.itemId] = item;
+
         GameObject entry;
         if (itemEntries.TryGetValue(item.itemId, out entry))
         {
             // Item 已存在，更新数量等信息
             Debug.Log($"[{GetType().Name}.CreateOrUpdateItemUI] 更新现有物品条目: {item.itemName}");
-            // 更新现有条目
             UpdateEntryUI(entry, item);
         }
         else
@@ -87,7 +105,84 @@ public abstract class Inventory : MonoBehaviour
             entry = Instantiate(itemEntryPrefab, itemListContainer);
             entry.name = $"Item_{item.itemId}";
             itemEntries[item.itemId] = entry;
+
+            // 添加点击事件
+            var button = entry.GetComponent<Button>();
+            if (button == null)
+            {
+                button = entry.AddComponent<Button>();
+            }
+            
+            // 使用局部变量捕获 itemId，避免闭包问题
+            string capturedItemId = item.itemId;
+            button.onClick.AddListener(() => OnItemClicked(capturedItemId));
+
             UpdateEntryUI(entry, item);
+        }
+    }
+
+    /* 点击物品/线索时调用 */
+    protected virtual void OnItemClicked(string itemId)
+    {
+        if (!itemData.TryGetValue(itemId, out var item))
+        {
+            Debug.LogWarning($"[{GetType().Name}.OnItemClicked] 未找到物品数据: {itemId}");
+            return;
+        }
+
+        Debug.Log($"[{GetType().Name}.OnItemClicked] 点击了物品: {item.itemName}");
+        ShowDetail(item);
+    }
+
+    /* 在右侧详情栏显示物品信息 */
+    protected void ShowDetail(InventoryItem item)
+    {
+        if (detailSideBar == null)
+        {
+            Debug.LogWarning($"[{GetType().Name}.ShowDetail] DetailSideBar 未设置");
+            return;
+        }
+
+        // 显示侧边栏
+        detailSideBar.SetActive(true);
+
+        // 设置图标
+        if (detailIcon != null)
+        {
+            if (item.icon != null)
+            {
+                detailIcon.sprite = item.icon;
+                detailIcon.enabled = true;
+            }
+            else
+            {
+                detailIcon.enabled = false;
+            }
+        }
+
+        // 设置名称
+        if (detailName != null)
+        {
+            detailName.text = item.itemName;
+        }
+
+        // 设置描述
+        if (detailDescription != null)
+        {
+            detailDescription.text = string.IsNullOrEmpty(item.description) 
+                ? "暂无描述..." 
+                : item.description;
+        }
+
+        Debug.Log($"[{GetType().Name}.ShowDetail] 已显示详情: {item.itemName}");
+    }
+
+    /* 隐藏详情栏 */
+    public void HideDetail()
+    {
+        if (detailSideBar != null)
+        {
+            detailSideBar.SetActive(false);
         }
     }
 
@@ -157,6 +252,7 @@ public abstract class Inventory : MonoBehaviour
             if (entry != null) Destroy(entry);
         }
         itemEntries.Clear();
+        itemData.Clear();
     }
 
     /* 开关背包 */
@@ -200,7 +296,7 @@ public abstract class Inventory : MonoBehaviour
     public static void AddClue(string clueId, string clueText, Sprite icon = null)
     {
         if (s_cluePanel == null) return;
-        s_cluePanel.AddClue(clueId, clueText, icon);
+        s_cluePanel.AddClue(clueId, clueText, "", icon);
     }
 
     /* 按钮回调 */

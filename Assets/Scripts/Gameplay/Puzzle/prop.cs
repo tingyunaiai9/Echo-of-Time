@@ -10,6 +10,11 @@ public class prop : Interaction
     [Tooltip("物品显示名称，留空则使用 GameObject 名称")]
     public string itemDisplayName;
 
+    [Header("物品描述")]
+    [TextArea(3, 6)]
+    [Tooltip("物品详细描述，显示在右侧详情栏")]
+    public string itemDescription = "this is a magic prop...";
+
     /* 订阅拾取事件 */
     void Awake()
     {
@@ -35,7 +40,6 @@ public class prop : Interaction
         }
     }
 
-
     /* 覆盖交互：按 F 拾取后立刻消失并发布事件 */
     public override void OnInteract(PlayerController player)
     {
@@ -49,7 +53,8 @@ public class prop : Interaction
         {
             playerNetId = pid,
             itemId = displayId,
-            icon = itemIcon
+            icon = itemIcon,
+            description = itemDescription
         };
         EventBus.Instance.LocalPublish(evt);
         EventBus.Instance.Publish(evt);
