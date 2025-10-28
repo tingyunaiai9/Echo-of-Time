@@ -69,7 +69,7 @@ public abstract class Inventory : MonoBehaviour
         if (backpackRoot != null)
         {
             // 如果是新的根（切场后新 UI 实例），重绑并同步为“关闭”
-            if (s_root != backpackRoot)
+            if (s_root != backpackRoot || s_root == null)
             {
                 s_root = backpackRoot;
                 s_initialized = false;       // 让 Start 有机会走初始化流程
