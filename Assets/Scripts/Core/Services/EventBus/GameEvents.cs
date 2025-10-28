@@ -58,6 +58,13 @@ namespace Events
         public string ClueEntry;
     }
 
+    // 聊天消息更新事件
+    public class ChatMessageUpdatedEvent
+    {
+        public string MessageContent;
+        public Sprite MessageImage;
+    }
+
     public class InventoryUpdatedEvent
     {
         public uint playerNetId;

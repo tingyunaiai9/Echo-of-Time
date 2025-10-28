@@ -122,6 +122,12 @@ public class PlayerController : NetworkBehaviour
             Debug.Log("[PlayerController] T键按下，添加测试线索条目。");
         }
 
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            ChatPanel.AddChatMessage("这是一个测试聊天消息，来自玩家的输入。");
+            Debug.Log("[PlayerController] Y键按下，添加测试聊天消息。");
+        }
+
         // 背包打开时，禁用游戏输入（移动、交互等）
         if (isBackpackOpen) return;
 

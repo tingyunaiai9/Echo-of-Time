@@ -34,7 +34,7 @@ public class ChatPanel : MonoBehaviour
     /* 聊天消息更新事件回调 */
     void OnChatMessageUpdated(ChatMessageUpdatedEvent e)
     {
-        AddChatMessage(e.MessageContent, e.MessageImage, publish: false);
+        CreateChatMessage(e.MessageContent, e.MessageImage);
     }
 
     /* 添加新的聊天消息 */
@@ -95,19 +95,6 @@ public class ChatPanel : MonoBehaviour
 
         // 可选：自动滚动到最新消息
         // ScrollToBottom();
-    }
-
-    /* 添加测试聊天消息 */
-    [ContextMenu("Test Add Chat Messages")]
-    public void TestChatMessages()
-    {
-        var testMessages = new List<ChatMessageData>
-        {
-            new ChatMessageData("你好，我发现了一个重要的线索！", null),
-            new ChatMessageData("看看这张图片，你觉得这是什么？", Resources.Load<Sprite>("TestImage")),
-            new ChatMessageData("我们需要尽快讨论下一步计划。", null)
-        };
-        AddChatMessages(testMessages);
     }
 
     /* 可选：滚动到底部方法 */
