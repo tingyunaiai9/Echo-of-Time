@@ -19,6 +19,10 @@ public class PlayerRole : NetworkBehaviour
     [SyncVar]
     public bool isReady = false;
 
+    [Tooltip("是否已选择并确认角色（服务器同步）")]
+    [SyncVar]
+    public bool isRoleSelected = false;
+
     /// <summary>
     /// 客户端请求选择角色（发往服务器）。
     /// </summary>
@@ -36,6 +40,16 @@ public class PlayerRole : NetworkBehaviour
     {
         if (!isLocalPlayer) return;
         CmdSetReady(ready);
+    }
+
+    /// <summary>
+    /// 客户端请求切换角色选择确认状态。
+    /// </summary>
+    /// <param name="selected">目标选择状态</param>
+    public void SetRoleSelected(bool selected)
+    {
+        if (!isLocalPlayer) return;
+        CmdSetRoleSelected(selected);
     }
 
     /// <summary>
@@ -69,6 +83,12 @@ public class PlayerRole : NetworkBehaviour
     void CmdSetReady(bool ready)
     {
         isReady = ready;
+    }
+
+    [Command]
+    void CmdSetRoleSelected(bool selected)
+    {
+        isRoleSelected = selected;
     }
 
     /// <summary>

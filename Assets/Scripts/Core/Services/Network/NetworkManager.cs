@@ -514,6 +514,44 @@ public class EchoNetworkManager : Mirror.NetworkManager
         _timelineByConnectionId[conn.connectionId] = timeline;
         Debug.Log($"Server remembered: Connection {conn.connectionId} -> Timeline {timeline}");
     }
+
+    /// <summary>
+    /// 检查所有玩家是否准备就绪（仅服务器调用）。
+    /// </summary>
+    /// <returns>如果所有玩家都已准备返回true，否则返回false</returns>
+    [Server]
+    public bool CheckAllPlayersReady()
+    {
+        if (!NetworkServer.active)
+        {
+            Debug.LogWarning("CheckAllPlayersReady can only be called on server");
+            return false;
+        }
+
+        int totalPlayers = 0;
+        int selectedPlayers = 0;
+
+        // 遍历所有连接的玩家
+        foreach (var conn in NetworkServer.connections)
+        {
+            if (conn.Value == null) continue;
+            var identity = conn.Value.identity;
+            if (identity == null) continue;
+
+            var playerRole = identity.GetComponent<PlayerRole>();
+            if (playerRole != null)
+            {
+                totalPlayers++;
+                if (playerRole.isRoleSelected)
+                {
+                    selectedPlayers++;
+                }
+            }
+        }
+
+        // 至少需要1个玩家，且所有玩家都已选择角色
+        return totalPlayers > 0 && selectedPlayers == totalPlayers;
+    }
     
     #endregion
     
