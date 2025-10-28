@@ -173,35 +173,6 @@ public class QuickNetworkTest : MonoBehaviour
     
     void OnGUI()
     {
-        GUILayout.BeginArea(new Rect(10, Screen.height - 180, 300, 170));
-        GUILayout.Box("快速网络测试");
-        
-        GUILayout.Label("按键说明:");
-        GUILayout.Label("H - 创建房间 (Host)");
-        GUILayout.Label("C - 快速加入房间 (Client)");
-        GUILayout.Label("J - 通过房间代码加入");
-        GUILayout.Label("L - 离开房间");
-        GUILayout.Label("R - 显示房间信息");
-        
-        string status = "";
-        if (NetworkServer.active && NetworkClient.isConnected)
-            status = "状态: Host";
-        else if (NetworkClient.isConnected)
-            status = "状态: Client";
-        else if (NetworkServer.active)
-            status = "状态: Server";
-        else
-            status = "状态: 离线";
-            
-        GUILayout.Label(status);
-        
-        if (isConnecting)
-        {
-            GUILayout.Label("连接中...");
-        }
-        
-        GUILayout.EndArea();
-        
         // 显示房间代码（如果在房间中）
         if (NetworkClient.isConnected || NetworkServer.active)
         {
