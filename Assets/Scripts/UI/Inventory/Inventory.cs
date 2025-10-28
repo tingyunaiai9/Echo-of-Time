@@ -163,8 +163,10 @@ public abstract class Inventory : MonoBehaviour
         {
             if (item.icon != null)
             {
+                detailIcon.color = Color.white;  // 确保图标不透明
                 detailIcon.sprite = item.icon;
                 detailIcon.enabled = true;
+
             }
             else
             {

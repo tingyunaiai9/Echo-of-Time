@@ -125,4 +125,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::prop
   itemIcon: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
-  itemDisplayName: Prop
+  itemDisplayName: prop
+  itemDescription: this is a magic prop...
