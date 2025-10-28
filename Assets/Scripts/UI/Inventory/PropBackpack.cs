@@ -60,10 +60,11 @@ public class PropBackpack : Inventory
     }
 
     /* 在销毁时取消订阅 */
-    void OnDestroy()
+    protected override void OnDestroy()
     {
         EventBus.Instance.Unsubscribe<ItemPickedUpEvent>(OnItemPickedUp);
         Debug.Log("[PropBackpack.OnDestroy] 已取消订阅 ItemPickedUpEvent");
+        base.OnDestroy();
     }
 
     /* 处理物品拾取事件 */

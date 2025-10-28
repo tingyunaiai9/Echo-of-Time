@@ -112,13 +112,14 @@ public class PlayerController : NetworkBehaviour
         // 日记页面切换及创建条目
         if (Input.GetKeyDown(KeyCode.F1))
         {
-            Diary.ToggleDiary();
+            DiaryController.TogglePanel();
             Debug.Log("[PlayerController] F1键按下，切换日记页面。");
         }
 
         if (Input.GetKeyDown(KeyCode.T))
         {
-            Diary.TestDiaryEntries();
+            SharedCluePanel.AddClueEntry("这是一个测试线索条目，记录玩家的发现。");
+            Debug.Log("[PlayerController] T键按下，添加测试线索条目。");
         }
 
         // 背包打开时，禁用游戏输入（移动、交互等）

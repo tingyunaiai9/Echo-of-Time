@@ -41,10 +41,11 @@ public class CluePanel : Inventory
     }
 
     /* 在销毁时取消订阅 */
-    void OnDestroy()
+    protected override void OnDestroy()
     {
         EventBus.Instance.Unsubscribe<ClueDiscoveredEvent>(OnClueDiscovered);
         Debug.Log("[CluePanel.OnDestroy] 已取消订阅 ClueDiscoveredEvent");
+        base.OnDestroy();
     }
 
     /* 处理线索发现事件 */

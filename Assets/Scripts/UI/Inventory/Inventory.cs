@@ -61,22 +61,34 @@ public abstract class Inventory : MonoBehaviour
     /* 初始化：设置静态引用 */
     protected virtual void Awake()
     {
-        if (backpackRoot != null && s_root == null)
-        {
-            s_root = backpackRoot;
-        }
+        
+        // 记录静态引用
         if (this is PropBackpack prop) s_propPanel = prop;
         if (this is CluePanel clue) s_cluePanel = clue;
+
+        if (backpackRoot != null)
+        {
+            // 如果是新的根（切场后新 UI 实例），重绑并同步为“关闭”
+            if (s_root != backpackRoot)
+            {
+                s_root = backpackRoot;
+                s_initialized = false;       // 让 Start 有机会走初始化流程
+                s_isOpen = false;   // 实物状态 = 关闭
+
+                //EventBus.Instance?.LocalPublish(new FreezeEvent { isOpen = false });
+            }
+        }
     }
 
     /* 所有面板初始化完成后关闭根节点 */
     protected virtual void Start()
     {
+        // 然后再做你原来“两个子面板就绪后”的初始化标记
         if (!s_initialized && s_root != null && s_propPanel != null && s_cluePanel != null)
         {
             s_initialized = true;
-            Debug.Log($"[{GetType().Name}.Start] 两个面板都已初始化，关闭背包");
             s_root.SetActive(false);
+            Debug.Log($"[{GetType().Name}.Start] 两个面板都已初始化，关闭背包");
         }
     }
 
@@ -268,7 +280,7 @@ public abstract class Inventory : MonoBehaviour
         if (s_isOpen) SwitchToProps();
 
         // 发布事件
-        EventBus.Instance.LocalPublish(new FreezeEvent { isOpen = s_isOpen });
+        EventBus.Instance?.LocalPublish(new FreezeEvent { isOpen = s_isOpen });
     }
 
     /* 切换背包栏目 */
@@ -302,4 +314,17 @@ public abstract class Inventory : MonoBehaviour
     /* 按钮回调 */
     public void OnClickPropTab() => SwitchToProps();
     public void OnClickClueTab() => SwitchToClues();
+
+    protected virtual void OnDestroy()
+    {
+        if (backpackRoot != null && s_root == backpackRoot)
+        {
+            s_root = null;
+            s_propPanel = null;
+            s_cluePanel = null;
+            s_isOpen = false;
+            s_initialized = false;
+        }
+    }
+
 }
