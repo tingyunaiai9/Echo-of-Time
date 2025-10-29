@@ -3,12 +3,9 @@ using TMPro;
 using System.Collections.Generic;
 using Events;
 
-/*
- 控制聊天消息的添加与显示
-*/
 public class ChatPanel : MonoBehaviour
 {
-    [Tooltip("聊天消息预制体（包含Image和MessageText两个子对象）")]
+    [Tooltip("聊天消息预制体（包含MessageText和TypeText两个子对象）")]
     public GameObject chatMessagePrefab;
 
     [Tooltip("聊天消息容器（Vertical Layout Group）")]
@@ -34,20 +31,20 @@ public class ChatPanel : MonoBehaviour
     /* 聊天消息更新事件回调 */
     void OnChatMessageUpdated(ChatMessageUpdatedEvent e)
     {
-        CreateChatMessage(e.MessageContent, e.MessageImage);
+        CreateChatMessage(e.MessageContent, e.MessageType);
     }
 
     /* 添加新的聊天消息 */
-    public static void AddChatMessage(string content, Sprite image = null, bool publish = true)
+    public static void AddChatMessage(string content, MessageType type, bool publish = true)
     {
         if (s_instance == null) return;
-        s_instance.CreateChatMessage(content, image);
+        s_instance.CreateChatMessage(content, type);
         if (publish)
         {
             EventBus.Instance.Publish(new ChatMessageUpdatedEvent
             {
                 MessageContent = content,
-                MessageImage = image
+                MessageType = type
             });
         }
     }
@@ -58,27 +55,15 @@ public class ChatPanel : MonoBehaviour
         if (s_instance == null || messages == null) return;
         foreach (var messageData in messages)
         {
-            s_instance.CreateChatMessage(messageData.content, messageData.image);
+            s_instance.CreateChatMessage(messageData.content, messageData.type);
         }
     }
 
     /* 创建单个聊天消息 */
-    private void CreateChatMessage(string content, Sprite image)
+    private void CreateChatMessage(string content, MessageType type)
     {
         if (contentParent == null || chatMessagePrefab == null) return;
         GameObject newMessage = Instantiate(chatMessagePrefab, contentParent);
-
-        // 设置消息图像
-        Transform imageTransform = newMessage.transform.Find("Image");
-        if (imageTransform != null)
-        {
-            UnityEngine.UI.Image messageImage = imageTransform.GetComponent<UnityEngine.UI.Image>();
-            if (messageImage != null && image != null)
-            {
-                messageImage.sprite = image;
-                messageImage.preserveAspect = true;
-            }
-        }
 
         // 设置消息文本
         Transform messageTextTransform = newMessage.transform.Find("MessageText");
@@ -91,18 +76,19 @@ public class ChatPanel : MonoBehaviour
             }
         }
 
+        // 设置消息类型文本
+        Transform typeTextTransform = newMessage.transform.Find("TypeText");
+        if (typeTextTransform != null)
+        {
+            TMP_Text typeText = typeTextTransform.GetComponent<TMP_Text>();
+            if (typeText != null)
+            {
+                typeText.text = type.ToString(); // 显示消息类型
+            }
+        }
+
         newMessage.transform.SetAsLastSibling();
 
-        // 可选：自动滚动到最新消息
-        // ScrollToBottom();
-    }
-
-    /* 可选：滚动到底部方法 */
-    private void ScrollToBottom()
-    {
-        // 如果需要实现自动滚动，可以在这里添加ScrollRect的相关代码
-        // Canvas.ForceUpdateCanvases();
-        // scrollRect.verticalNormalizedPosition = 0f;
     }
 }
 
@@ -111,18 +97,11 @@ public class ChatPanel : MonoBehaviour
 public class ChatMessageData
 {
     public string content;
-    public Sprite image;
+    public MessageType type;
 
-    public ChatMessageData(string content, Sprite image)
+    public ChatMessageData(string content, MessageType type)
     {
         this.content = content;
-        this.image = image;
+        this.type = type;
     }
-}
-
-/* 聊天消息更新事件 */
-public class ChatMessageUpdatedEvent
-{
-    public string MessageContent { get; set; }
-    public Sprite MessageImage { get; set; }
 }

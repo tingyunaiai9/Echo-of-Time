@@ -49,8 +49,8 @@ public class EventBus : Singleton<EventBus>
         }
         else
         {
-            // 非GameEvent，直接本地分发
-            LocalPublish(eventData);
+            // LocalPublish(eventData);
+            Debug.LogWarning($"EventBus: 事件类型 {type} 非游戏事件，未进行网络同步。");
         }
     }
 

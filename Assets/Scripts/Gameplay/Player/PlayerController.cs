@@ -124,7 +124,7 @@ public class PlayerController : NetworkBehaviour
 
         if (Input.GetKeyDown(KeyCode.Y))
         {
-            ChatPanel.AddChatMessage("这是一个测试聊天消息，来自玩家的输入。");
+            ChatPanel.AddChatMessage("这是一个测试聊天消息，来自玩家的输入。", MessageType.Modern);
             Debug.Log("[PlayerController] Y键按下，添加测试聊天消息。");
         }
 
