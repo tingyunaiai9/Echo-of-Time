@@ -2769,7 +2769,7 @@ GameObject:
   - component: {fileID: 642185369}
   - component: {fileID: 642185368}
   m_Layer: 5
-  m_Name: InputField (TMP)
+  m_Name: InputField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4702,6 +4702,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DialogPanel
   chatMessagePrefab: {fileID: 1568691845952435987, guid: fadf74954cb214fac850b0902b404f97, type: 3}
   contentParent: {fileID: 0}
+  inputField: {fileID: 0}
+  sendButton: {fileID: 0}
 --- !u!1 &1091718526
 GameObject:
   m_ObjectHideFlags: 0
@@ -9108,7 +9110,7 @@ GameObject:
   - component: {fileID: 2126578566}
   - component: {fileID: 2126578567}
   m_Layer: 5
-  m_Name: Text Area
+  m_Name: TextArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
