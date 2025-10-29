@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Events;
 
-public class DiaryController : MonoBehaviour
+public class Diary : MonoBehaviour
 {
     [Tooltip("根对象（用于显示/隐藏）")]
     public GameObject PanelRoot;
@@ -16,7 +16,7 @@ public class DiaryController : MonoBehaviour
     public Button sharedButton;      // SharedButton
     public Button clueButton;        // ClueButton
 
-    private static DiaryController s_instance;
+    private static Diary s_instance;
     private static bool s_isOpen;
 
     // 静态根与子面板引用（用于跨实例管理）
@@ -60,7 +60,7 @@ public class DiaryController : MonoBehaviour
         }
 
         // 初始关闭面板，Start 会在所有实例就绪后真正关闭 root
-        ClosePanel();
+        // ClosePanel();
     }
 
     protected virtual void Start()
@@ -119,6 +119,7 @@ public class DiaryController : MonoBehaviour
         if (s_root == null) return;
         s_isOpen = true;
         s_root.SetActive(true);
+        SwitchToShared();
         // 禁用玩家移动
         EventBus.Instance.LocalPublish(new FreezeEvent { isOpen = true });
     }

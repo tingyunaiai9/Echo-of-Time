@@ -18,7 +18,7 @@ public class DialogPanel : MonoBehaviour
         s_instance = this;
         if (contentParent == null)
         {
-            contentParent = transform.Find("Viewport/Content");
+            contentParent = transform.Find("Panel/LeftPanel/ChatScrollView/Viewport/Content");
         }
         EventBus.Instance.Subscribe<ChatMessageUpdatedEvent>(OnChatMessageUpdated);
     }

@@ -500,7 +500,6 @@ GameObject:
   - component: {fileID: 86982341}
   - component: {fileID: 86982340}
   - component: {fileID: 86982339}
-  - component: {fileID: 86982342}
   - component: {fileID: 86982343}
   m_Layer: 5
   m_Name: ClueScrollView
@@ -598,20 +597,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 86982337}
   m_CullTransparentMesh: 1
---- !u!114 &86982342
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 86982337}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77a1946da1e4a4068972024b7485178d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Diary
-  clueEntryPrefab: {fileID: 7348651457501190784, guid: 3bd71fcb8a1f340aa9bde5146ad3be93, type: 3}
-  contentParent: {fileID: 0}
 --- !u!114 &86982343
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1685,7 +1670,6 @@ GameObject:
   - component: {fileID: 285926263}
   - component: {fileID: 285926262}
   - component: {fileID: 285926261}
-  - component: {fileID: 285926264}
   - component: {fileID: 285926265}
   m_Layer: 5
   m_Name: ChatScrollView
@@ -1783,20 +1767,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 285926259}
   m_CullTransparentMesh: 1
---- !u!114 &285926264
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 285926259}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7068a3898ace46b49908ecb287a6ede, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ChatPanel
-  chatMessagePrefab: {fileID: 1568691845952435987, guid: fadf74954cb214fac850b0902b404f97, type: 3}
-  contentParent: {fileID: 0}
 --- !u!114 &285926265
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2158,6 +2128,7 @@ GameObject:
   - component: {fileID: 470147371}
   - component: {fileID: 470147370}
   - component: {fileID: 470147372}
+  - component: {fileID: 470147373}
   m_Layer: 5
   m_Name: ClueBoard
   m_TagString: Untagged
@@ -2250,6 +2221,20 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &470147373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 470147368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77a1946da1e4a4068972024b7485178d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClueBoard
+  clueEntryPrefab: {fileID: 7348651457501190784, guid: 3bd71fcb8a1f340aa9bde5146ad3be93, type: 3}
+  contentParent: {fileID: 0}
 --- !u!1 &533373183
 GameObject:
   m_ObjectHideFlags: 0
@@ -4648,6 +4633,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1032553297}
   - component: {fileID: 1032553299}
+  - component: {fileID: 1032553300}
   m_Layer: 5
   m_Name: DialogPanel
   m_TagString: Untagged
@@ -4702,6 +4688,20 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &1032553300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1032553296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7068a3898ace46b49908ecb287a6ede, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DialogPanel
+  chatMessagePrefab: {fileID: 1568691845952435987, guid: fadf74954cb214fac850b0902b404f97, type: 3}
+  contentParent: {fileID: 0}
 --- !u!1 &1091718526
 GameObject:
   m_ObjectHideFlags: 0

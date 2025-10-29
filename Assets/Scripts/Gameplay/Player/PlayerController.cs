@@ -112,7 +112,7 @@ public class PlayerController : NetworkBehaviour
         // 日记页面切换及创建条目
         if (Input.GetKeyDown(KeyCode.F1))
         {
-            DiaryController.TogglePanel();
+            Diary.TogglePanel();
             Debug.Log("[PlayerController] F1键按下，切换日记页面。");
         }
 
