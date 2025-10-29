@@ -22,6 +22,7 @@ public class DialogPanel : MonoBehaviour
 
     private static DialogPanel s_instance;
 
+    // TODO: 替换为实际的 DeepSeek API URL
     private const string DeepSeekApiUrl = "https://api.deepseek.com/generate"; // 替换为实际的 DeepSeek API URL
 
     void Awake()
@@ -98,6 +99,7 @@ public class DialogPanel : MonoBehaviour
     /* 调用 DeepSeek API */
     private async Task<string> CallDeepSeekApi(string prompt)
     {
+        // TODO: 实现实际的 API 调用逻辑，此处仅为示例代码
         using (HttpClient client = new HttpClient())
         {
             try
