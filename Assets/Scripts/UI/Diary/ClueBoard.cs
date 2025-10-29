@@ -6,7 +6,7 @@ using Events;
 /*
  控制线索条目的添加与显示
 */
-public class SharedCluePanel : MonoBehaviour
+public class ClueBoard : MonoBehaviour
 {
     [Tooltip("线索条目预制体（包含日期和内容文本）")]
     public GameObject clueEntryPrefab;
@@ -14,14 +14,14 @@ public class SharedCluePanel : MonoBehaviour
     [Tooltip("线索条目容器（Vertical Layout Group）")]
     public Transform contentParent;
 
-    private static SharedCluePanel s_instance;
+    private static ClueBoard s_instance;
 
     void Awake()
     {
         s_instance = this;
         if (contentParent == null)
         {
-            contentParent = transform.Find("Viewport/Content");
+            contentParent = transform.Find("LeftPanel/ClueScrollView/Viewport/Content");
         }
         EventBus.Instance.Subscribe<ClueUpdatedEvent>(OnClueUpdated);
     }

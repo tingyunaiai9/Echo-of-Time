@@ -3,7 +3,7 @@ using TMPro;
 using System.Collections.Generic;
 using Events;
 
-public class ChatPanel : MonoBehaviour
+public class DialogPanel : MonoBehaviour
 {
     [Tooltip("聊天消息预制体（包含MessageText和TypeText两个子对象）")]
     public GameObject chatMessagePrefab;
@@ -11,7 +11,7 @@ public class ChatPanel : MonoBehaviour
     [Tooltip("聊天消息容器（Vertical Layout Group）")]
     public Transform contentParent;
 
-    private static ChatPanel s_instance;
+    private static DialogPanel s_instance;
 
     void Awake()
     {

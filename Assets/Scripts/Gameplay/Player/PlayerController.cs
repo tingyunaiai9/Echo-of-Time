@@ -118,13 +118,13 @@ public class PlayerController : NetworkBehaviour
 
         if (Input.GetKeyDown(KeyCode.T))
         {
-            SharedCluePanel.AddClueEntry("这是一个测试线索条目，记录玩家的发现。");
+            ClueBoard.AddClueEntry("这是一个测试线索条目，记录玩家的发现。");
             Debug.Log("[PlayerController] T键按下，添加测试线索条目。");
         }
 
         if (Input.GetKeyDown(KeyCode.Y))
         {
-            ChatPanel.AddChatMessage("这是一个测试聊天消息，来自玩家的输入。", MessageType.Modern);
+            DialogPanel.AddChatMessage("这是一个测试聊天消息，来自玩家。", MessageType.Modern);
             Debug.Log("[PlayerController] Y键按下，添加测试聊天消息。");
         }
 
