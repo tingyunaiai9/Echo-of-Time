@@ -4,6 +4,8 @@ using TMPro;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Text;
+using Newtonsoft.Json;
 using Events;
 
 public class DialogPanel : MonoBehaviour
@@ -22,8 +24,9 @@ public class DialogPanel : MonoBehaviour
 
     private static DialogPanel s_instance;
 
-    // TODO: 替换为实际的 DeepSeek API URL
-    private const string DeepSeekApiUrl = "https://api.deepseek.com/generate"; // 替换为实际的 DeepSeek API URL
+    // DeepSeek API 配置
+    private const string DeepSeekApiUrl = "https://api.deepseek.com/v1/chat/completions";
+    private const string ApiKey = "sk-c05934a1774344c29ca7be049fb92741"; // TODO: 替换为你的 DeepSeek API Key
 
     void Awake()
     {
@@ -99,17 +102,29 @@ public class DialogPanel : MonoBehaviour
     /* 调用 DeepSeek API */
     private async Task<string> CallDeepSeekApi(string prompt)
     {
-        // TODO: 实现实际的 API 调用逻辑，此处仅为示例代码
         using (HttpClient client = new HttpClient())
         {
             try
             {
-                // 构造请求内容
-                var requestData = new Dictionary<string, string>
+                // 设置授权头
+                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {ApiKey}");
+
+                // 构造请求体
+                var requestBody = new
                 {
-                    { "prompt", prompt }
+                    model = "deepseek-chat",
+                    messages = new[]
+                    {
+                        new { role = "system", content = "你是一个友好的 AI 助手，帮助用户解答问题。" },
+                        new { role = "user", content = prompt }
+                    },
+                    temperature = 0.7,
+                    max_tokens = 1000
                 };
-                var content = new FormUrlEncodedContent(requestData);
+
+                // 序列化为 JSON
+                string jsonBody = JsonConvert.SerializeObject(requestBody);
+                var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
 
                 // 发送 POST 请求
                 HttpResponseMessage response = await client.PostAsync(DeepSeekApiUrl, content);
@@ -117,20 +132,33 @@ public class DialogPanel : MonoBehaviour
                 if (response.IsSuccessStatusCode)
                 {
                     string responseBody = await response.Content.ReadAsStringAsync();
-                    return responseBody; // 假设 API 返回的是纯文本
+                    
+                    // 解析响应
+                    var responseObj = JsonConvert.DeserializeObject<DeepSeekResponse>(responseBody);
+                    
+                    if (responseObj?.choices != null && responseObj.choices.Length > 0)
+                    {
+                        return responseObj.choices[0].message.content;
+                    }
+                    else
+                    {
+                        Debug.LogWarning("[DialogPanel] DeepSeek API 返回的响应格式不正确");
+                        return "抱歉，无法获取有效的响应。";
+                    }
                 }
                 else
                 {
-                    Debug.LogError($"[DialogPanel] DeepSeek API 请求失败，状态码: {response.StatusCode}");
+                    string errorBody = await response.Content.ReadAsStringAsync();
+                    Debug.LogError($"[DialogPanel] DeepSeek API 请求失败，状态码: {response.StatusCode}, 错误信息: {errorBody}");
+                    return "抱歉，AI 服务暂时不可用。";
                 }
             }
             catch (System.Exception ex)
             {
                 Debug.LogError($"[DialogPanel] 调用 DeepSeek API 时发生异常: {ex.Message}");
+                return "抱歉，发生了错误。";
             }
         }
-
-        return null;
     }
 
     /* 添加新的聊天消息 */
@@ -202,4 +230,39 @@ public class ChatMessageData
         this.content = content;
         this.type = type;
     }
+}
+
+/* DeepSeek API 响应数据结构 */
+[System.Serializable]
+public class DeepSeekResponse
+{
+    public string id;
+    public string @object;
+    public long created;
+    public string model;
+    public Choice[] choices;
+    public Usage usage;
+}
+
+[System.Serializable]
+public class Choice
+{
+    public int index;
+    public Message message;
+    public string finish_reason;
+}
+
+[System.Serializable]
+public class Message
+{
+    public string role;
+    public string content;
+}
+
+[System.Serializable]
+public class Usage
+{
+    public int prompt_tokens;
+    public int completion_tokens;
+    public int total_tokens;
 }
