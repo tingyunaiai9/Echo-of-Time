@@ -18,13 +18,13 @@ public class prop : Interaction
     /* 订阅拾取事件 */
     void Awake()
     {
-        EventBus.Instance.Subscribe<ItemPickedUpEvent>(OnItemPickedUpEvent);
+        EventBus.SafeSubscribe<ItemPickedUpEvent>(OnItemPickedUpEvent);
     }
 
     /* 在销毁时取消订阅 */
     void OnDestroy()
     {
-        EventBus.Instance.Unsubscribe<ItemPickedUpEvent>(OnItemPickedUpEvent);
+        EventBus.SafeUnsubscribe<ItemPickedUpEvent>(OnItemPickedUpEvent);
     }
 
     /* 处理拾取事件：如果是自己被拾取则隐藏物体 */

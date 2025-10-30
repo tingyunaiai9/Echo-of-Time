@@ -59,7 +59,7 @@ public class DialogPanel : MonoBehaviour
             sendButton.onClick.AddListener(OnSendButtonClicked);
         }
 
-        EventBus.Instance.Subscribe<ChatMessageUpdatedEvent>(OnChatMessageUpdated);
+        EventBus.SafeSubscribe<ChatMessageUpdatedEvent>(OnChatMessageUpdated);
     }
 
     void OnDestroy()
@@ -69,7 +69,7 @@ public class DialogPanel : MonoBehaviour
             sendButton.onClick.RemoveListener(OnSendButtonClicked);
         }
 
-        EventBus.Instance.Unsubscribe<ChatMessageUpdatedEvent>(OnChatMessageUpdated);
+        EventBus.SafeUnsubscribe<ChatMessageUpdatedEvent>(OnChatMessageUpdated);
     }
 
     /* 聊天消息更新事件回调 */

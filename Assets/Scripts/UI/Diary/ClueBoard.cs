@@ -23,12 +23,12 @@ public class ClueBoard : MonoBehaviour
         {
             contentParent = transform.Find("LeftPanel/ClueScrollView/Viewport/Content");
         }
-        EventBus.Instance.Subscribe<ClueUpdatedEvent>(OnClueUpdated);
+        EventBus.SafeSubscribe<ClueUpdatedEvent>(OnClueUpdated);
     }
 
     void OnDestroy()
     {
-        EventBus.Instance.Unsubscribe<ClueUpdatedEvent>(OnClueUpdated);
+        EventBus.SafeUnsubscribe<ClueUpdatedEvent>(OnClueUpdated);
     }
 
     /* 线索更新事件回调 */

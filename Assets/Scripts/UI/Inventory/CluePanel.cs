@@ -36,14 +36,14 @@ public class CluePanel : Inventory
     protected override void Awake()
     {
         base.Awake();
-        EventBus.Instance.Subscribe<ClueDiscoveredEvent>(OnClueDiscovered);
+        EventBus.SafeSubscribe<ClueDiscoveredEvent>(OnClueDiscovered);
         Debug.Log("[CluePanel.Awake] 已订阅 ClueDiscoveredEvent");
     }
 
     /* 在销毁时取消订阅 */
     protected override void OnDestroy()
     {
-        EventBus.Instance.Unsubscribe<ClueDiscoveredEvent>(OnClueDiscovered);
+        EventBus.SafeUnsubscribe<ClueDiscoveredEvent>(OnClueDiscovered);
         Debug.Log("[CluePanel.OnDestroy] 已取消订阅 ClueDiscoveredEvent");
         base.OnDestroy();
     }

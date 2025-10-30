@@ -94,4 +94,54 @@ public class EventBus : Singleton<EventBus>
             }
         }
     }
+
+    // -------------------------------------------------------------------
+    // --- STATIC (静态) 安全包装方法 ---
+    // -------------------------------------------------------------------
+
+    /// <summary>
+    /// [静态安全] 订阅事件。
+    /// 自动处理实例为 null 的情况。
+    /// </summary>
+    public static void SafeSubscribe<T>(Action<T> handler)
+    {
+        if (Instance != null)
+        {
+            Instance.Subscribe(handler);
+        }
+    }
+
+    /// <summary>
+    /// [静态安全] 取消订阅事件。
+    /// 这将自动处理在 OnDestroy() 中调用时 Instance 为 null 的情况。
+    /// </summary>
+    public static void SafeUnsubscribe<T>(Action<T> handler)
+    {
+        if (Instance != null)
+        {
+            Instance.Unsubscribe(handler);
+        }
+    }
+
+    /// <summary>
+    /// [静态安全] 发布网络事件。
+    /// </summary>
+    public static void SafePublish<T>(T eventData)
+    {
+        if (Instance != null)
+        {
+            Instance.Publish(eventData);
+        }
+    }
+
+    /// <summary>
+    /// [静态安全] 发布本地事件。
+    /// </summary>
+    public static void SafeLocalPublish<T>(T eventData)
+    {
+        if (Instance != null)
+        {
+            Instance.LocalPublish(eventData);
+        }
+    }
 }
