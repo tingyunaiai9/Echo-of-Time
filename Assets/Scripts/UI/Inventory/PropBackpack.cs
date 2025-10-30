@@ -55,14 +55,14 @@ public class PropBackpack : Inventory
     {
         base.Awake();
         // 在 Awake 就订阅事件，无论面板是否激活
-        EventBus.Instance.Subscribe<ItemPickedUpEvent>(OnItemPickedUp);
+        EventBus.SafeSubscribe<ItemPickedUpEvent>(OnItemPickedUp);
         Debug.Log("[PropBackpack.Awake] 已订阅 ItemPickedUpEvent");
     }
 
     /* 在销毁时取消订阅 */
     protected override void OnDestroy()
     {
-        EventBus.Instance.Unsubscribe<ItemPickedUpEvent>(OnItemPickedUp);
+        EventBus.SafeUnsubscribe<ItemPickedUpEvent>(OnItemPickedUp);
         Debug.Log("[PropBackpack.OnDestroy] 已取消订阅 ItemPickedUpEvent");
         base.OnDestroy();
     }

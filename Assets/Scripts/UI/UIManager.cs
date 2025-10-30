@@ -40,7 +40,7 @@ public class UIManager : Singleton<UIManager>
     {
         base.Awake();
         // 订阅物品拾取事件
-        EventBus.Instance.Subscribe<ItemPickedUpEvent>(OnItemPickedUp);
+        EventBus.SafeSubscribe<ItemPickedUpEvent>(OnItemPickedUp);
         InitializeAllUI();
     }
 
