@@ -11,11 +11,14 @@ public class SceneDirector : Singleton<SceneDirector>
     [Header("Scene Names")]
     [SerializeField] private string bootScene = "Boot";
     [SerializeField] private string startPageScene = "StartPage";
-    [SerializeField] private string onlineMainScene = "Boot";
+    [SerializeField] private string onlineMainScene = "GameBase";
     [SerializeField] private string[] timelineToScene = new string[] { "Ancient", "Modern", "Future" };
 
     [Header("Options")]
     [SerializeField] private bool loadStartPageOnBoot = true;
+    [SerializeField] private bool autoLoadTimelineOnSceneLoaded = true;
+    [Tooltip("如果为 true，在本地测试模式（skipRelay）下不自动加载时间线场景，由 LocalTestLauncher 负责")]
+    [SerializeField] private bool skipAutoLoadInLocalTest = true;
 
     private void Start()
     {
@@ -81,11 +84,24 @@ public class SceneDirector : Singleton<SceneDirector>
         // 当在线主场景加载完成时（所有端都会走到这里）
         if (scene.name == onlineMainScene)
         {
+            // 检查是否为本地测试模式
+            if (skipAutoLoadInLocalTest)
+            {
+                var nm = FindFirstObjectByType<EchoNetworkManager>();
+                if (nm != null && nm.skipRelay)
+                {
+                    Debug.Log("[SceneDirector] 本地测试模式：跳过自动加载时间线场景，由 LocalTestLauncher 负责");
+                    // 仍然卸载 StartPage（如果需要）
+                    UnloadSceneIfLoaded(startPageScene);
+                    return;
+                }
+            }
+
             // 卸载 StartPage（如果还在）
             UnloadSceneIfLoaded(startPageScene);
 
             // 在每个客户端本地，按本地玩家的 timeline 加载对应时间线场景
-            if (NetworkClient.isConnected)
+            if (NetworkClient.isConnected && autoLoadTimelineOnSceneLoaded)
             {
                 TryLoadTimelineNow();
                 StartCoroutine(WaitAndLoadTimelineScene());

@@ -153,6 +153,7 @@ Transform:
   - {fileID: 688525140}
   - {fileID: 611270532}
   - {fileID: 1895287909}
+  - {fileID: 167098160}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &54185988
@@ -167,6 +168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2a766944dc14b94bb0e6adefa591253, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneDirector
+  _persistent: 1
   bootScene: Boot
   startPageScene: StartPage
   onlineMainScene: GameBase
@@ -175,6 +177,8 @@ MonoBehaviour:
   - Modern
   - Future
   loadStartPageOnBoot: 1
+  autoLoadTimelineOnSceneLoaded: 1
+  skipAutoLoadInLocalTest: 1
 --- !u!1 &123294566
 GameObject:
   m_ObjectHideFlags: 0
@@ -205,7 +209,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 54185987}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &123294568
 MonoBehaviour:
@@ -220,6 +224,52 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EventBus
   _persistent: 1
+--- !u!1 &167098159
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 167098160}
+  - component: {fileID: 167098161}
+  m_Layer: 0
+  m_Name: '@TestManager'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &167098160
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 167098159}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 54185987}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &167098161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 167098159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c274c87d7863dc241bba83886be0bbdd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LocalTestLauncher
+  enableLocalTestMode: 1
+  testTimelineIndex: 1
 --- !u!1 &611270528
 GameObject:
   m_ObjectHideFlags: 0
@@ -232,6 +282,7 @@ GameObject:
   - component: {fileID: 611270531}
   - component: {fileID: 611270530}
   - component: {fileID: 611270529}
+  - component: {fileID: 611270533}
   m_Layer: 0
   m_Name: '@NetworkManager'
   m_TagString: Untagged
@@ -314,6 +365,7 @@ MonoBehaviour:
   evaluationMethod: 0
   evaluationInterval: 3
   timeInterpolationGui: 0
+  skipRelay: 1
   maxPlayers: 3
   roomNamespace: EchoOfTime
 --- !u!4 &611270532
@@ -331,6 +383,35 @@ Transform:
   m_Children: []
   m_Father: {fileID: 54185987}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &611270533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 611270528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b0fecffa3f624585964b0d0eb21b18e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Mirror.Transports::kcp2k.KcpTransport
+  port: 7777
+  DualMode: 1
+  NoDelay: 1
+  Interval: 10
+  Timeout: 10000
+  RecvBufferSize: 7361536
+  SendBufferSize: 7361536
+  FastResend: 2
+  ReceiveWindowSize: 4096
+  SendWindowSize: 4096
+  MaxRetransmit: 40
+  MaximizeSocketBuffers: 1
+  ReliableMaxMessageSize: 297433
+  UnreliableMaxMessageSize: 1194
+  debugLog: 0
+  statisticsGUI: 0
+  statisticsLog: 0
 --- !u!1 &688525139
 GameObject:
   m_ObjectHideFlags: 0
@@ -361,7 +442,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 54185987}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &688525141
 MonoBehaviour:
@@ -553,6 +634,4 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1503321816}
-  - {fileID: 123294567}
-  - {fileID: 688525140}
   - {fileID: 54185987}

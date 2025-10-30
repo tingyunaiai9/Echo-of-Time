@@ -37,6 +37,9 @@ using UnityEngine;
 /// </summary>
 public class EchoNetworkManager : Mirror.NetworkManager
 {
+    [Header("开发测试选项")]
+    public bool skipRelay = false;
+
     [Header("三人联机房间设置")]
     [SerializeField] private int maxPlayers = 3; // 房间最大玩家数
     [SerializeField] private string roomNamespace = "EchoOfTime"; // Relay房间命名空间
@@ -57,7 +60,21 @@ public class EchoNetworkManager : Mirror.NetworkManager
     public override void Start()
     {
         base.Start();
+        
+        // 无论是否跳过 Relay，都需要注册网络事件处理器
         NetworkEventRelay.Instance.RegisterMessageHandlers();
+        
+        if (skipRelay)
+        {
+            Debug.Log("[EchoNetworkManager] 本地测试模式：跳过 Relay 初始化");
+            // 本地测试模式下仍需要设置基本玩家信息（用于本地显示）
+            playerUuid = Guid.NewGuid().ToString();
+            playerName = "LocalPlayer-" + playerUuid.Substring(0, 8);
+            Debug.Log($"[EchoNetworkManager] 本地测试玩家信息 - UUID: {playerUuid}, Name: {playerName}");
+            return;
+        }
+
+        // 仅在联网模式下初始化 Relay 相关组件
         InitializeRelayTransport();
         RegisterRelayCallbacks();
         SetupPlayerInfo();
@@ -173,6 +190,13 @@ public class EchoNetworkManager : Mirror.NetworkManager
     /// <param name="callback">结果回调</param>
     public void CreateRoom(string roomName, Action<bool, string> callback = null)
     {
+        if (skipRelay)
+        {
+            Debug.LogWarning("[EchoNetworkManager] 本地测试模式下不支持创建 Relay 房间，请使用 StartHost() 直接启动");
+            callback?.Invoke(false, "本地测试模式不支持 Relay 房间");
+            return;
+        }
+        
         if (relayTransport == null)
         {
             callback?.Invoke(false, "RelayTransport not initialized");
@@ -234,6 +258,13 @@ public class EchoNetworkManager : Mirror.NetworkManager
     /// <param name="callback">结果回调</param>
     public void JoinRoom(Action<bool, string> callback = null)
     {
+        if (skipRelay)
+        {
+            Debug.LogWarning("[EchoNetworkManager] 本地测试模式下不支持加入 Relay 房间，请使用 StartClient() 或 StartHost()");
+            callback?.Invoke(false, "本地测试模式不支持 Relay 房间");
+            return;
+        }
+        
         if (relayTransport == null)
         {
             callback?.Invoke(false, "RelayTransport not initialized");
@@ -321,6 +352,13 @@ public class EchoNetworkManager : Mirror.NetworkManager
     /// <param name="callback">结果回调</param>
     public void JoinRoomByCode(string roomCode, Action<bool, string> callback = null)
     {
+        if (skipRelay)
+        {
+            Debug.LogWarning("[EchoNetworkManager] 本地测试模式下不支持通过房间码加入 Relay 房间");
+            callback?.Invoke(false, "本地测试模式不支持 Relay 房间");
+            return;
+        }
+        
         StartCoroutine(JoinRoomByCodeCoroutine(roomCode, callback));
     }
     
