@@ -58,6 +58,21 @@ namespace Events
         public string ClueEntry;
     }
 
+    // 聊天消息更新事件
+    public class ChatMessageUpdatedEvent
+    {
+        public string MessageContent; // 消息内容
+        public MessageType MessageType; // 消息类型（Ancient, Modern, Future）
+    }
+
+    // 消息类型枚举
+    public enum MessageType
+    {
+        Ancient, // 古代
+        Modern,  // 现代
+        Future   // 未来
+    }
+
     public class InventoryUpdatedEvent
     {
         public uint playerNetId;
