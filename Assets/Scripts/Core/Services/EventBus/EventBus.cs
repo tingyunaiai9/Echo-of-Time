@@ -94,4 +94,16 @@ public class EventBus : Singleton<EventBus>
             }
         }
     }
+
+    /// <summary>
+    /// [静态安全] 取消订阅事件。
+    /// 这将自动处理在 OnDestroy() 中调用时 Instance 为 null 的情况。
+    /// </summary>
+    public static void SafeUnsubscribe<T>(Action<T> handler)
+    {
+        if (Instance != null)
+        {
+            Instance.Unsubscribe(handler);
+        }
+    }
 }
