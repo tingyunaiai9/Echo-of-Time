@@ -95,6 +95,22 @@ public class EventBus : Singleton<EventBus>
         }
     }
 
+    // -------------------------------------------------------------------
+    // --- STATIC (静态) 安全包装方法 ---
+    // -------------------------------------------------------------------
+
+    /// <summary>
+    /// [静态安全] 订阅事件。
+    /// 自动处理实例为 null 的情况。
+    /// </summary>
+    public static void SafeSubscribe<T>(Action<T> handler)
+    {
+        if (Instance != null)
+        {
+            Instance.Subscribe(handler);
+        }
+    }
+
     /// <summary>
     /// [静态安全] 取消订阅事件。
     /// 这将自动处理在 OnDestroy() 中调用时 Instance 为 null 的情况。
