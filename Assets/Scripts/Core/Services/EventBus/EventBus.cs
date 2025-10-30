@@ -122,4 +122,26 @@ public class EventBus : Singleton<EventBus>
             Instance.Unsubscribe(handler);
         }
     }
+
+    /// <summary>
+    /// [静态安全] 发布网络事件。
+    /// </summary>
+    public static void SafePublish<T>(T eventData)
+    {
+        if (Instance != null)
+        {
+            Instance.Publish(eventData);
+        }
+    }
+
+    /// <summary>
+    /// [静态安全] 发布本地事件。
+    /// </summary>
+    public static void SafeLocalPublish<T>(T eventData)
+    {
+        if (Instance != null)
+        {
+            Instance.LocalPublish(eventData);
+        }
+    }
 }
