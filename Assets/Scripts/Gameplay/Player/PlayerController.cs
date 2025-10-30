@@ -98,7 +98,7 @@ public class PlayerController : NetworkBehaviour
         isBackpackOpen = e.isOpen;
     }
 
-    /* 处理非刚体的输入和移动 */
+    /* 处理玩家输入和移动 */
     void Update()
     {
         if (!isLocalPlayer) return;
@@ -124,7 +124,7 @@ public class PlayerController : NetworkBehaviour
 
         if (Input.GetKeyDown(KeyCode.Y))
         {
-            DialogPanel.AddChatMessage("这是一个测试聊天消息，来自玩家。", MessageType.Modern);
+            DialogPanel.AddChatMessage("这是第一行消息。\n这是第二行消息。\n这是第三行消息。\n这是第四行消息。", MessageType.Modern);
             Debug.Log("[PlayerController] Y键按下，添加测试聊天消息。");
         }
 
