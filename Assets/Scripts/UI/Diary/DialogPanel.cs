@@ -102,6 +102,7 @@ public class DialogPanel : MonoBehaviour
     /* 调用 DeepSeek API */
     private async Task<string> CallDeepSeekApi(string prompt)
     {
+        // TODO: 实现DeepSeek流式输出功能
         using (HttpClient client = new HttpClient())
         {
             try
