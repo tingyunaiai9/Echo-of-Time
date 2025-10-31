@@ -1,0 +1,149 @@
+/* DeepSeekService.cs
+ * 独立负责处理 DeepSeek Chat API 的所有网络请求
+ * 包含连接预热、流式请求和错误处理
+ */
+using System;
+using System.IO;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+using AI.Models; // 引入新的模型命名空间
+using Newtonsoft.Json;
+using UnityEngine;
+
+public static class DeepSeekService
+{
+    // API 配置
+    private const string DeepSeekApiUrl = "https://api.deepseek.com/v1/chat/completions";
+    private const string ApiKey = "sk-c05934a1774344c29ca7be049fb92741"; // 您的密钥
+
+    // 静态共享的 HttpClient 实例
+    private static readonly HttpClient s_sharedClient;
+
+    // 静态构造函数，在类首次被访问时自动调用
+    static DeepSeekService()
+    {
+        s_sharedClient = new HttpClient();
+        s_sharedClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {ApiKey}");
+        s_sharedClient.Timeout = System.TimeSpan.FromMinutes(2);
+
+        // 预热连接 (在后台线程启动，不阻塞主线程)
+        Task.Run(async () =>
+        {
+            try
+            {
+                Debug.Log("[DeepSeekService] 开始预热连接...");
+                var warmupBody = new
+                {
+                    model = "deepseek-chat",
+                    messages = new[] { new { role = "user", content = "hi" } },
+                    max_tokens = 1,
+                    stream = false
+                };
+                string jsonBody = JsonConvert.SerializeObject(warmupBody);
+                var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+                await s_sharedClient.PostAsync(DeepSeekApiUrl, content);
+                Debug.Log("[DeepSeekService] 连接预热完成");
+            }
+            catch (Exception ex)
+            {
+                Debug.LogWarning($"[DeepSeekService] 连接预热失败: {ex.Message}");
+            }
+        });
+    }
+
+    /// <summary>
+    /// 调用 DeepSeek API，通过回调函数返回流式数据
+    /// </summary>
+    /// <param name="prompt">用户输入的提示词</param>
+    /// <param name="onChunkReceived">每收到一个数据块时调用 (string: deltaContent)</param>
+    /// <param name="onStreamEnd">流式传输正常结束时调用</param>
+    /// <param name="onError">发生错误时调用 (string: errorMessage)</param>
+    public static async Task GetChatCompletionStreaming(
+        string prompt,
+        Action<string> onChunkReceived,
+        Action onStreamEnd,
+        Action<string> onError)
+    {
+        try
+        {
+            var requestBody = new
+            {
+                model = "deepseek-chat",
+                messages = new[]
+                {
+                    new { role = "system", content = "你是一个友好的 AI 助手，帮助用户解答问题。" },
+                    new { role = "user", content = prompt }
+                },
+                temperature = 0.7,
+                max_tokens = 1000,
+                stream = true
+            };
+
+            string jsonBody = JsonConvert.SerializeObject(requestBody);
+            var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+
+            Debug.Log($"[{System.DateTime.Now:HH:mm:ss.fff}] [DeepSeekService] 开始发送 API 请求");
+
+            // 使用共享的 s_sharedClient 实例
+            HttpResponseMessage response = await s_sharedClient.PostAsync(DeepSeekApiUrl, content);
+
+            Debug.Log($"[{System.DateTime.Now:HH:mm:ss.fff}] [DeepSeekService] 收到响应头，状态码: {response.StatusCode}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                using (Stream stream = await response.Content.ReadAsStreamAsync())
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    Debug.Log($"[{System.DateTime.Now:HH:mm:ss.fff}] [DeepSeekService] 开始读取流式数据");
+                    while (!reader.EndOfStream)
+                    {
+                        string line = await reader.ReadLineAsync();
+                        if (string.IsNullOrWhiteSpace(line) || !line.StartsWith("data: ")) continue;
+
+                        string jsonData = line.Substring(6);
+                        if (jsonData.Trim() == "[DONE]")
+                        {
+                            Debug.Log("[DeepSeekService] 流式输出完成");
+                            break;
+                        }
+
+                        try
+                        {
+                            var chunk = JsonConvert.DeserializeObject<StreamChunk>(jsonData);
+                            if (chunk?.choices != null && chunk.choices.Length > 0)
+                            {
+                                string deltaContent = chunk.choices[0].delta?.content;
+                                if (!string.IsNullOrEmpty(deltaContent))
+                                {
+                                    // 通过回调将数据块传递出去
+                                    onChunkReceived?.Invoke(deltaContent);
+                                }
+                            }
+                        }
+                        catch (JsonException ex)
+                        {
+                            Debug.LogWarning($"[DeepSeekService] 解析失败: {ex.Message}");
+                        }
+                    }
+                }
+            }
+            else
+            {
+                string errorBody = await response.Content.ReadAsStringAsync();
+                Debug.LogError($"[DeepSeekService] API 请求失败: {response.StatusCode}, 错误: {errorBody}");
+                onError?.Invoke($"抱歉，AI 服务暂时不可用 ({response.StatusCode})。");
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[DeepSeekService] 调用 API 异常: {ex.Message}");
+            onError?.Invoke("抱歉，发生了网络错误。");
+        }
+        finally
+        {
+            // 标记流式输出结束
+            onStreamEnd?.Invoke();
+        }
+    }
+}
