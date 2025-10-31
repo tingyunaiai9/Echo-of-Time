@@ -35,6 +35,9 @@ public class DialogPanel : MonoBehaviour
     private Queue<string> streamQueue = new Queue<string>(); // 使用队列存储流式数据
     private bool isStreaming = false;
 
+    // 静态共享的 HttpClient 实例
+    private static HttpClient s_sharedClient;
+
     void Awake()
     {
         s_instance = this;
@@ -67,6 +70,42 @@ public class DialogPanel : MonoBehaviour
         }
 
         EventBus.SafeSubscribe<ChatMessageUpdatedEvent>(OnChatMessageUpdated);
+
+        // 初始化 HttpClient
+        if (s_sharedClient == null)
+        {
+            s_sharedClient = new HttpClient();
+            s_sharedClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {ApiKey}");
+            s_sharedClient.Timeout = System.TimeSpan.FromMinutes(2);
+
+            // 预热连接，在后台发送一个测试请求
+            Task.Run(async () =>
+            {
+                try
+                {
+                    Debug.Log("[DialogPanel] 开始预热连接...");
+                    // 发送简单的请求
+                    var warmupBody = new
+                    {
+                        model = "deepseek-chat",
+                        messages = new[] { new { role = "user", content = "hi" } },
+                        max_tokens = 1,
+                        stream = false
+                    };
+
+                    string jsonBody = JsonConvert.SerializeObject(warmupBody);
+                    var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+
+                    await s_sharedClient.PostAsync(DeepSeekApiUrl, content);
+
+                    Debug.Log("[DialogPanel] 连接预热完成");
+                }
+                catch (System.Exception ex)
+                {
+                    Debug.LogWarning($"[DialogPanel] 连接预热失败: {ex.Message}");
+                }
+            });
+        }
     }
 
     void OnDestroy()
@@ -181,7 +220,7 @@ public class DialogPanel : MonoBehaviour
         isStreaming = true;
     }
 
-    /* 调用 DeepSeek API（流式输出，在后台线程执行） */
+    /* 调用 DeepSeek API，在后台线程执行 */
     private async Task CallDeepSeekApiStreaming(string prompt)
     {
         using (HttpClient client = new HttpClient())
@@ -207,13 +246,18 @@ public class DialogPanel : MonoBehaviour
                 string jsonBody = JsonConvert.SerializeObject(requestBody);
                 var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
 
+                Debug.Log($"[{System.DateTime.Now:HH:mm:ss.fff}] 开始发送 API 请求");
+
                 HttpResponseMessage response = await client.PostAsync(DeepSeekApiUrl, content);
+
+                Debug.Log($"[{System.DateTime.Now:HH:mm:ss.fff}] 收到响应头，状态码: {response.StatusCode}");
 
                 if (response.IsSuccessStatusCode)
                 {
                     using (Stream stream = await response.Content.ReadAsStreamAsync())
                     using (StreamReader reader = new StreamReader(stream))
                     {
+                        Debug.Log($"[{System.DateTime.Now:HH:mm:ss.fff}] 开始读取流式数据");
                         while (!reader.EndOfStream)
                         {
                             string line = await reader.ReadLineAsync();
