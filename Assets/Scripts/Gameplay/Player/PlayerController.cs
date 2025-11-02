@@ -80,7 +80,7 @@ public class PlayerController : NetworkBehaviour
     public override void OnStartLocalPlayer()
     {
         base.OnStartLocalPlayer();
-        EventBus.SafeSubscribe<FreezeEvent>(OnBackpackStateChanged);
+        EventBus.Subscribe<FreezeEvent>(OnBackpackStateChanged);
     }
 
     /* 销毁时取消订阅 */
@@ -88,7 +88,7 @@ public class PlayerController : NetworkBehaviour
     {
         if (isLocalPlayer)
         {
-            EventBus.SafeUnsubscribe<FreezeEvent>(OnBackpackStateChanged);
+            EventBus.Unsubscribe<FreezeEvent>(OnBackpackStateChanged);
         }
     }
 

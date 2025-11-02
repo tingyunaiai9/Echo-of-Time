@@ -55,7 +55,7 @@ public class DialogPanel : MonoBehaviour
             sendButton.onClick.AddListener(OnSendButtonClicked);
         }
 
-        EventBus.SafeSubscribe<ChatMessageUpdatedEvent>(OnChatMessageUpdated);
+        EventBus.Subscribe<ChatMessageUpdatedEvent>(OnChatMessageUpdated);
     }
 
     void OnDestroy()
@@ -64,7 +64,7 @@ public class DialogPanel : MonoBehaviour
         {
             sendButton.onClick.RemoveListener(OnSendButtonClicked);
         }
-        EventBus.SafeUnsubscribe<ChatMessageUpdatedEvent>(OnChatMessageUpdated);
+        EventBus.Unsubscribe<ChatMessageUpdatedEvent>(OnChatMessageUpdated);
     }
 
     /* 聊天消息更新事件回调 */
@@ -153,7 +153,7 @@ public class DialogPanel : MonoBehaviour
         string finalContent = fullResponse.ToString();
         if (!string.IsNullOrEmpty(finalContent))
         {
-            EventBus.Instance.Publish(new ChatMessageUpdatedEvent
+            EventBus.Publish(new ChatMessageUpdatedEvent
             {
                 MessageContent = finalContent,
                 MessageType = MessageType.Future
@@ -202,7 +202,7 @@ public class DialogPanel : MonoBehaviour
         s_instance.CreateChatMessage(content, type);
         if (publish)
         {
-            EventBus.Instance.Publish(new ChatMessageUpdatedEvent
+            EventBus.Publish(new ChatMessageUpdatedEvent
             {
                 MessageContent = content,
                 MessageType = type
