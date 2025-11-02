@@ -39,6 +39,8 @@ public class DialogPanel : MonoBehaviour
     private Queue<string> streamQueue = new Queue<string>(); // 存储流式数据
     private bool isStreaming = false;
     private TMP_Text confirmButtonText; // 存储按钮文字组件
+    private bool isConfirmButtonCooldown = false; // 按钮冷却状态
+
 
     void Awake()
     {
@@ -106,20 +108,45 @@ public class DialogPanel : MonoBehaviour
     private void OnConfirmButtonClicked()
     {
         Debug.Log("[DialogPanel] 确认按钮被点击");
+
+        // 如果在冷却期间，直接返回
+        if (isConfirmButtonCooldown)
+        {
+            Debug.Log("[DialogPanel] 按钮冷却中，忽略点击");
+            return;
+        }
+
         if (resultContent == null) return;
 
         string userAnswer = resultContent.text.Trim();
-        
         // 检查答案是否正确
         if (userAnswer == correctAnswer)
         {
             confirmButtonText.text = "正确！";
+            confirmButtonText.color = Color.green;
+            confirmButton.interactable = false; // 禁用按钮
             Debug.Log("[DialogPanel] 答案正确！");
         }
         else
         {
             Debug.Log($"[DialogPanel] 答案错误。输入: '{userAnswer}', 正确答案: '{correctAnswer}'");
-            confirmButtonText.text = "确认"; // 重置为原始文字
+            // 启动冷却协程
+            StartCoroutine(ErrorCooldownCoroutine());
+        }
+
+        // 匿名协程函数
+        IEnumerator ErrorCooldownCoroutine()
+        {
+            isConfirmButtonCooldown = true;
+            confirmButtonText.text = "错误！";
+            confirmButtonText.color = Color.red;
+
+            yield return new WaitForSeconds(1f);
+
+            confirmButtonText.text = "确认";
+            confirmButtonText.color = Color.black;
+            isConfirmButtonCooldown = false;
+            Debug.Log("[DialogPanel] 按钮文字已重置");
         }
     }
 
