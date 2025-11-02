@@ -28,12 +28,17 @@ public class DialogPanel : MonoBehaviour
     [Tooltip("确认按钮")]
     public Button confirmButton;
 
+    [Header("正确答案配置")]
+    [Tooltip("需要匹配的正确答案")]
+    public string correctAnswer = "南山";
+
     private static DialogPanel s_instance;
 
     // --- UI 状态变量 ---
     private TMP_Text currentStreamingText;
     private Queue<string> streamQueue = new Queue<string>(); // 存储流式数据
     private bool isStreaming = false;
+    private TMP_Text confirmButtonText; // 存储按钮文字组件
 
     void Awake()
     {
@@ -46,14 +51,16 @@ public class DialogPanel : MonoBehaviour
         if (sendButton == null)
             sendButton = transform.Find("Panel/LeftPanel/InputPanel/InputField/SendButton").GetComponent<Button>();
         if (resultContent == null)
-            resultContent = transform.Find("Panel/RightPanel/ResultPanel/Background/InputField").GetComponent<TMP_InputField>();
+            resultContent = transform.Find("Panel/RightPanel/ResultPanel/BackGround/InputField").GetComponent<TMP_InputField>();
         if (confirmButton == null)
-            confirmButton = transform.Find("Panel/RightPanel/ResultPanel/Background/ConfirmButton").GetComponent<Button>();
-
-        if (sendButton != null)
-        {
-            sendButton.onClick.AddListener(OnSendButtonClicked);
-        }
+            confirmButton = transform.Find("Panel/RightPanel/ResultPanel/BackGround/ConfirmButton").GetComponent<Button>();
+        
+        // 获取确认按钮的文字组件
+        confirmButtonText = confirmButton.GetComponentInChildren<TMP_Text>();
+        
+        // 绑定按钮事件
+        sendButton.onClick.AddListener(OnSendButtonClicked);
+        confirmButton.onClick.AddListener(OnConfirmButtonClicked);
 
         EventBus.Subscribe<ChatMessageUpdatedEvent>(OnChatMessageUpdated);
     }
@@ -63,6 +70,10 @@ public class DialogPanel : MonoBehaviour
         if (sendButton != null)
         {
             sendButton.onClick.RemoveListener(OnSendButtonClicked);
+        }
+        if (confirmButton != null)
+        {
+            confirmButton.onClick.RemoveListener(OnConfirmButtonClicked);
         }
         EventBus.Unsubscribe<ChatMessageUpdatedEvent>(OnChatMessageUpdated);
     }
@@ -90,6 +101,28 @@ public class DialogPanel : MonoBehaviour
         // 启动协程处理流式输出
         StartCoroutine(StreamingCoroutine(userInput));
     }
+
+    /* 确认按钮点击事件 */
+    private void OnConfirmButtonClicked()
+    {
+        Debug.Log("[DialogPanel] 确认按钮被点击");
+        if (resultContent == null) return;
+
+        string userAnswer = resultContent.text.Trim();
+        
+        // 检查答案是否正确
+        if (userAnswer == correctAnswer)
+        {
+            confirmButtonText.text = "正确！";
+            Debug.Log("[DialogPanel] 答案正确！");
+        }
+        else
+        {
+            Debug.Log($"[DialogPanel] 答案错误。输入: '{userAnswer}', 正确答案: '{correctAnswer}'");
+            confirmButtonText.text = "确认"; // 重置为原始文字
+        }
+    }
+
 
     /* 流式输出协程（在主线程执行）*/
     private IEnumerator StreamingCoroutine(string prompt)
