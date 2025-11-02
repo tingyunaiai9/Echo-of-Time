@@ -18,13 +18,13 @@ public class prop : Interaction
     /* 订阅拾取事件 */
     void Awake()
     {
-        EventBus.SafeSubscribe<ItemPickedUpEvent>(OnItemPickedUpEvent);
+        EventBus.Subscribe<ItemPickedUpEvent>(OnItemPickedUpEvent);
     }
 
     /* 在销毁时取消订阅 */
     void OnDestroy()
     {
-        EventBus.SafeUnsubscribe<ItemPickedUpEvent>(OnItemPickedUpEvent);
+        EventBus.Unsubscribe<ItemPickedUpEvent>(OnItemPickedUpEvent);
     }
 
     /* 处理拾取事件：如果是自己被拾取则隐藏物体 */
@@ -56,8 +56,8 @@ public class prop : Interaction
             icon = itemIcon,
             description = itemDescription
         };
-        EventBus.Instance.LocalPublish(evt);
-        EventBus.Instance.Publish(evt);
+        EventBus.LocalPublish(evt);
+        EventBus.Publish(evt);
         Debug.Log($"[prop.OnInteract] 已发布 ItemPickedUpEvent - itemId: {evt.itemId}, icon: {(evt.icon != null ? evt.icon.name : "null")}");
     }
 }

@@ -121,7 +121,7 @@ public class Diary : MonoBehaviour
         s_root.SetActive(true);
         SwitchToShared();
         // 禁用玩家移动
-        EventBus.Instance.LocalPublish(new FreezeEvent { isOpen = true });
+        EventBus.LocalPublish(new FreezeEvent { isOpen = true });
     }
 
     public static void ClosePanel()
@@ -130,7 +130,7 @@ public class Diary : MonoBehaviour
         s_isOpen = false;
         s_root.SetActive(false);
         // 恢复玩家移动
-        EventBus.Instance.LocalPublish(new FreezeEvent { isOpen = false });
+        EventBus.LocalPublish(new FreezeEvent { isOpen = false });
     }
 
     /* 切换到 Shared 子面板（显示 sharedPanel，隐藏 cluePanel） */

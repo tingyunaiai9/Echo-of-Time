@@ -24,7 +24,7 @@ public class NetworkEventRelay : Singleton<NetworkEventRelay>
                 string json = Encoding.UTF8.GetString(msg.eventData);
                 object eventObj = JsonUtility.FromJson(json, type);
     
-                EventBus.Instance.PublishDynamic(type, eventObj);
+                EventBus.PublishDynamic(type, eventObj);
     
                 // 服务器广播到其它客户端
                 foreach (var c in NetworkServer.connections)
@@ -51,7 +51,7 @@ public class NetworkEventRelay : Singleton<NetworkEventRelay>
             {
                 string json = Encoding.UTF8.GetString(msg.eventData);
                 object eventObj = JsonUtility.FromJson(json, type);
-                EventBus.Instance.PublishDynamic(type, eventObj);
+                EventBus.PublishDynamic(type, eventObj);
             }
             else
             {
@@ -72,7 +72,7 @@ public class NetworkEventRelay : Singleton<NetworkEventRelay>
             string eventGuid = Guid.NewGuid().ToString();
             processedEventGuids.Add(eventGuid);
     
-            // EventBus.Instance.LocalPublish(eventData);
+            // EventBus.LocalPublish(eventData);
             BroadcastToClients(eventData, 0, eventGuid); // 传递eventGuid
         }
         else if (NetworkClient.active)
@@ -83,7 +83,7 @@ public class NetworkEventRelay : Singleton<NetworkEventRelay>
         else
         {
             // 单机或未联网，直接本地分发
-            EventBus.Instance.LocalPublish(eventData);
+            EventBus.LocalPublish(eventData);
         }
     }
 

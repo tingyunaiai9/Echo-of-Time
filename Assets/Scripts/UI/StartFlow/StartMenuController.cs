@@ -9,12 +9,12 @@ public class StartMenuController : MonoBehaviour
 
     void OnEnable()
     {
-        EventBus.SafeSubscribe<GameStartedEvent>(OnGameStarted);
+        EventBus.Subscribe<GameStartedEvent>(OnGameStarted);
     }
 
     void OnDisable()
     {
-        EventBus.SafeUnsubscribe<GameStartedEvent>(OnGameStarted);
+        EventBus.Unsubscribe<GameStartedEvent>(OnGameStarted);
     }
 
     void Start()
