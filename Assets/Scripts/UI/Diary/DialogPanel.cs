@@ -79,6 +79,7 @@ public class DialogPanel : MonoBehaviour
             confirmButton.onClick.RemoveListener(OnConfirmButtonClicked);
         }
         EventBus.Unsubscribe<ChatMessageUpdatedEvent>(OnChatMessageUpdated);
+        EventBus.Unsubscribe<AnswerCorrectEvent>(OnReceiveAnswerCorrectEvent);
     }
 
     /* 聊天消息更新事件回调 */
