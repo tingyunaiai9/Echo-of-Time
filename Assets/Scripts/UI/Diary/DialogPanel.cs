@@ -14,13 +14,19 @@ public class DialogPanel : MonoBehaviour
     public GameObject chatMessagePrefab;
 
     [Tooltip("聊天消息容器（Vertical Layout Group）")]
-    public Transform contentParent;
+    public Transform chatContent;
 
     [Tooltip("输入框组件")]
     public TMP_InputField inputField;
 
     [Tooltip("发送按钮")]
     public Button sendButton;
+
+    [Tooltip("结果输入组件")]
+    public TMP_InputField resultContent;
+
+    [Tooltip("确认按钮")]
+    public Button confirmButton;
 
     private static DialogPanel s_instance;
 
@@ -33,12 +39,16 @@ public class DialogPanel : MonoBehaviour
     {
         s_instance = this;
         // 查找 UI 元素
-        if (contentParent == null)
-            contentParent = transform.Find("Panel/LeftPanel/ChatScrollView/Viewport/Content");
+        if (chatContent == null)
+            chatContent = transform.Find("Panel/LeftPanel/ChatScrollView/Viewport/Content");
         if (inputField == null)
             inputField = transform.Find("Panel/LeftPanel/InputPanel/InputField").GetComponent<TMP_InputField>();
         if (sendButton == null)
             sendButton = transform.Find("Panel/LeftPanel/InputPanel/InputField/SendButton").GetComponent<Button>();
+        if (resultContent == null)
+            resultContent = transform.Find("Panel/RightPanel/ResultPanel/Background/InputField").GetComponent<TMP_InputField>();
+        if (confirmButton == null)
+            confirmButton = transform.Find("Panel/RightPanel/ResultPanel/Background/ConfirmButton").GetComponent<Button>();
 
         if (sendButton != null)
         {
@@ -156,9 +166,9 @@ public class DialogPanel : MonoBehaviour
     /* 创建流式输出的消息容器 */
     private void CreateStreamingMessage(MessageType type)
     {
-        if (contentParent == null || chatMessagePrefab == null) return;
+        if (chatContent == null || chatMessagePrefab == null) return;
 
-        GameObject currentStreamingMessage = Instantiate(chatMessagePrefab, contentParent);
+        GameObject currentStreamingMessage = Instantiate(chatMessagePrefab, chatContent);
         currentStreamingMessage.transform.SetAsLastSibling();
 
         Transform messageTextTransform = currentStreamingMessage.transform.Find("MessageText");
@@ -213,8 +223,8 @@ public class DialogPanel : MonoBehaviour
     /* 创建单个聊天消息 */
     private void CreateChatMessage(string content, MessageType type)
     {
-        if (contentParent == null || chatMessagePrefab == null) return;
-        GameObject newMessage = Instantiate(chatMessagePrefab, contentParent);
+        if (chatContent == null || chatMessagePrefab == null) return;
+        GameObject newMessage = Instantiate(chatMessagePrefab, chatContent);
 
         Transform messageTextTransform = newMessage.transform.Find("MessageText");
         if (messageTextTransform != null)
