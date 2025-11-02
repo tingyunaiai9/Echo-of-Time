@@ -8,7 +8,7 @@ using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using AI.Models; // 引入新的模型命名空间
+using AI.DTOs; // 引入新的模型命名空间
 using Newtonsoft.Json;
 using UnityEngine;
 

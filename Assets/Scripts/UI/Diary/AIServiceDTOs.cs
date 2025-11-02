@@ -1,11 +1,11 @@
-/* UI/Diary/AIServiceModels.cs
- * AI服务数据模型定义文件
+/* UI/Diary/AIServiceDTOs.cs
+ * AI服务数据传输对象定义文件
  * 存放所有 AI API (DeepSeek, DALL-E, etc.) 的 JSON 响应/请求数据结构
  * 提供序列化和反序列化支持，用于网络通信和数据解析
  */
 using System;
 
-namespace AI.Models
+namespace AI.DTOs
 {
     /*
      * DeepSeek 流式响应数据结构
