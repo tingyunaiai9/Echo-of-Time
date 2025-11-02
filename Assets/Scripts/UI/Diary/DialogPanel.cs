@@ -40,7 +40,7 @@ public class DialogPanel : MonoBehaviour
     private bool isStreaming = false;
     private TMP_Text confirmButtonText; // 存储按钮文字组件
     private bool isConfirmButtonCooldown = false; // 按钮冷却状态
-
+    private HashSet<uint> answeredPlayers = new HashSet<uint>(); // 已回答正确的玩家列表
 
     void Awake()
     {
@@ -65,6 +65,7 @@ public class DialogPanel : MonoBehaviour
         confirmButton.onClick.AddListener(OnConfirmButtonClicked);
 
         EventBus.Subscribe<ChatMessageUpdatedEvent>(OnChatMessageUpdated);
+        EventBus.Subscribe<AnswerCorrectEvent>(OnReceiveAnswerCorrectEvent);
     }
 
     void OnDestroy()
@@ -86,6 +87,24 @@ public class DialogPanel : MonoBehaviour
         CreateChatMessage(e.MessageContent, e.MessageType);
     }
 
+    /* 接收答案正确事件回调 */
+    void OnReceiveAnswerCorrectEvent(AnswerCorrectEvent e)
+    {
+        // 如果该玩家已经回答过，忽略重复事件
+        if (!answeredPlayers.Add(e.playerNetId))
+        {
+            Debug.Log($"[DialogPanel] 玩家 {e.playerNetId} 重复回答，已忽略");
+            return;
+        }
+
+        Debug.Log($"[DialogPanel] 收到答案正确事件，玩家: {e.playerNetId}，当前正确计数: {answeredPlayers.Count}");
+
+        if (answeredPlayers.Count >= 3)
+        {
+            Debug.Log("[DialogPanel] 全部玩家解答正确");
+        }
+    }
+    
     /* 发送按钮点击事件 */
     private void OnSendButtonClicked()
     {
@@ -126,6 +145,15 @@ public class DialogPanel : MonoBehaviour
             confirmButtonText.color = Color.green;
             confirmButton.interactable = false; // 禁用按钮
             Debug.Log("[DialogPanel] 答案正确！");
+            // 发布答案正确事件
+            var localPlayer = Mirror.NetworkClient.localPlayer;
+            if (localPlayer != null)
+            {
+                EventBus.Publish(new AnswerCorrectEvent { playerNetId = localPlayer.netId });
+                Debug.Log("[DialogPanel] 已发布 AnswerCorrectEvent");
+            }
+            else
+                Debug.LogWarning("[DialogPanel] 无法获取本地玩家，未发布 AnswerCorrectEvent");
         }
         else
         {
