@@ -1,6 +1,7 @@
-/* DeepSeekService.cs
+/* UI/Diary/DeepSeekService.cs
  * 独立负责处理 DeepSeek Chat API 的所有网络请求
  * 包含连接预热、流式请求和错误处理
+ * 提供静态方法调用AI服务，支持流式响应回调机制
  */
 using System;
 using System.IO;
@@ -11,6 +12,10 @@ using AI.Models; // 引入新的模型命名空间
 using Newtonsoft.Json;
 using UnityEngine;
 
+/*
+ * DeepSeek AI服务静态类
+ * 提供流式聊天API调用功能，包含连接预热和错误处理
+ */
 public static class DeepSeekService
 {
     // API 配置
@@ -20,7 +25,10 @@ public static class DeepSeekService
     // 静态共享的 HttpClient 实例
     private static readonly HttpClient s_sharedClient;
 
-    // 静态构造函数，在类首次被访问时自动调用
+    /*
+     * 静态构造函数，在类首次被访问时自动调用
+     * 初始化HttpClient并进行连接预热
+     */
     static DeepSeekService()
     {
         s_sharedClient = new HttpClient();
@@ -52,13 +60,14 @@ public static class DeepSeekService
         });
     }
 
-    /// <summary>
-    /// 调用 DeepSeek API，通过回调函数返回流式数据
-    /// </summary>
-    /// <param name="prompt">用户输入的提示词</param>
-    /// <param name="onChunkReceived">每收到一个数据块时调用 (string: deltaContent)</param>
-    /// <param name="onStreamEnd">流式传输正常结束时调用</param>
-    /// <param name="onError">发生错误时调用 (string: errorMessage)</param>
+    /*
+     * 调用 DeepSeek API，通过回调函数返回流式数据
+     * 支持实时接收AI响应内容，适用于聊天对话场景
+     * @param name="prompt">用户输入的提示词</param>
+     * @param name="onChunkReceived">每收到一个数据块时调用 (string: deltaContent)</param>
+     * @param name="onStreamEnd">流式传输正常结束时调用</param>
+     * @param name="onError">发生错误时调用 (string: errorMessage)</param>
+     */
     public static async Task GetChatCompletionStreaming(
         string prompt,
         Action<string> onChunkReceived,
