@@ -11,88 +11,71 @@ using System.Collections.Generic;
 [RequireComponent(typeof(CanvasGroup))]
 public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    // 配置
     [Header("配置")]
-    // 该小纸条对应的正确大纸条ID
     public string correctLargeNoteId;
 
-    // 引用
     [Header("引用")]
-    // 小纸条上的诗句文本组件
     public TMP_Text poemText;
 
-    // 私有变量
+    [Header("检测配置")]
+    [Tooltip("最大检测距离（像素）")]
+    public float maxDetectionDistance = 150f;
+
     private Canvas canvas;
     private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
     private Vector2 originalPosition;
     private Transform originalParent;
 
+    // ⭐ 记录当前高亮的大纸条
+    private LargeNoteSlot currentHighlightedSlot = null;
+
     void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
         canvasGroup = GetComponent<CanvasGroup>();
         canvas = GetComponentInParent<Canvas>();
-
-        // 自动查找子对象中的文本组件
-        if (poemText == null)
-        {
-            poemText = GetComponentInChildren<TMP_Text>();
-        }
-
-        // 保存初始位置和父对象
+        poemText = GetComponentInChildren<TMP_Text>();
+        
         originalPosition = rectTransform.anchoredPosition;
         originalParent = transform.parent;
     }
 
-    /*
-     * 开始拖拽时调用
-     */
     public void OnBeginDrag(PointerEventData eventData)
     {
         Debug.Log($"[DragHandler] 开始拖拽: {gameObject.name}");
 
-        // 保存当前位置
         originalPosition = rectTransform.anchoredPosition;
         originalParent = transform.parent;
 
-        // 设置为半透明并禁用射线检测（让小纸条可以穿透到大纸条）
         canvasGroup.alpha = 0.6f;
         canvasGroup.blocksRaycasts = false;
     }
 
-    /*
-     * 拖拽过程中持续调用
-     */
     public void OnDrag(PointerEventData eventData)
     {
-        // 根据鼠标位置移动小纸条
+        // 移动小纸条
         rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
+
+        // ⭐ 实时检测最近的大纸条并高亮
+        UpdateNearestSlotHighlight();
     }
 
-    /*
-     * 结束拖拽时调用，检测放置位置
-     */
     public void OnEndDrag(PointerEventData eventData)
     {
-        // 恢复透明度和射线检测
         canvasGroup.alpha = 1f;
         canvasGroup.blocksRaycasts = true;
 
+        // ⭐ 清除所有高亮
+        ClearAllHighlights();
+
         // 检测放置位置
-        LargeNoteSlot targetSlot = null;
+        LargeNoteSlot targetSlot = FindNearestLargeNote();
 
-        if (targetSlot == null)
-        {
-            targetSlot = FindNearestLargeNote();
-        }
-
-        // 处理检测结果
         if (targetSlot != null)
         {
             Debug.Log($"[DragHandler] 最终检测到大纸条: {targetSlot.noteId}");
             
-            // 检查是否匹配
             if (targetSlot.noteId == correctLargeNoteId)
             {
                 Debug.Log($"[DragHandler] 匹配成功！");
@@ -100,7 +83,7 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             }
             else
             {
-                Debug.Log($"[DragHandler] 匹配失败，期望: {correctLargeNoteId}, 实际: {targetSlot.noteId}");
+                Debug.Log($"[DragHandler] 匹配失败");
                 ReturnToOriginalPosition();
             }
         }
@@ -112,16 +95,56 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     }
 
     /*
-     * 通过距离检测查找最近的大纸条
+     * ⭐ 实时更新最近大纸条的高亮状态
      */
+    private void UpdateNearestSlotHighlight()
+    {
+        LargeNoteSlot nearestSlot = FindNearestLargeNote();
+
+        // 如果检测到的最近纸条发生变化
+        if (nearestSlot != currentHighlightedSlot)
+        {
+            // 清除之前的高亮
+            if (currentHighlightedSlot != null)
+            {
+                currentHighlightedSlot.ResetBorder();
+            }
+
+            // 高亮新的最近纸条
+            if (nearestSlot != null)
+            {
+                nearestSlot.HighlightBorder();
+            }
+
+            currentHighlightedSlot = nearestSlot;
+        }
+    }
+
+    /*
+     * ⭐ 清除所有大纸条的高亮状态
+     */
+    private void ClearAllHighlights()
+    {
+        LargeNoteSlot[] allSlots = FindObjectsByType<LargeNoteSlot>(FindObjectsSortMode.None);
+        foreach (LargeNoteSlot slot in allSlots)
+        {
+            slot.ResetBorder();
+        }
+        currentHighlightedSlot = null;
+    }
+
     private LargeNoteSlot FindNearestLargeNote()
     {
         LargeNoteSlot[] allSlots = FindObjectsByType<LargeNoteSlot>(FindObjectsSortMode.None);
         LargeNoteSlot nearest = null;
-        float minDistance = 150f; // 最大检测距离
+        float minDistance = maxDetectionDistance;
 
         foreach (LargeNoteSlot slot in allSlots)
         {
+            // ⭐ 跳过已填充的大纸条
+            if (slot.IsFilled())
+                continue;
+
             float distance = Vector2.Distance(rectTransform.position, slot.GetComponent<RectTransform>().position);
 
             if (distance < minDistance)
@@ -131,19 +154,14 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             }
         }
 
-        if (nearest != null)
-        {
-            Debug.Log($"[DragHandler] 距离检测到最近的大纸条: {nearest.noteId}, 距离: {minDistance}");
-        }
-
         return nearest;
     }
-    
-    /*
-     * 匹配成功时的处理
-     */
+
     private void OnCorrectMatch(LargeNoteSlot largeNote)
     {
+        // ⭐ 设置匹配成功的绿色边框
+        largeNote.SetMatchedBorder();
+
         // 将诗句文本传递给大纸条
         largeNote.SetPoemText(poemText.text);
 
@@ -158,13 +176,17 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         }
     }
 
-    /*
-     * 返回原始位置
-     */
     private void ReturnToOriginalPosition()
     {
-        rectTransform.anchoredPosition = originalPosition;
-        // 可选：添加回弹动画
-        LeanTween.move(rectTransform, originalPosition, 0.3f).setEase(LeanTweenType.easeOutBack);
+        LeanTween.value(gameObject, rectTransform.anchoredPosition, originalPosition, 0.3f)
+            .setOnUpdate((Vector2 val) => {
+                rectTransform.anchoredPosition = val;
+            })
+            .setEase(LeanTweenType.easeOutBack);
+    }
+
+    public string GetPoemText()
+    {
+        return poemText != null ? poemText.text : "";
     }
 }
