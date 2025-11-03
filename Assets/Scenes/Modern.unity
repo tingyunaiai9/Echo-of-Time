@@ -3709,6 +3709,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PoemManager
   totalNotesRequired: 5
   PanelRoot: {fileID: 0}
+  DrawerPanel: {fileID: 0}
+  animationDuration: 1
+  easeType: 4
 --- !u!1 &709304945
 GameObject:
   m_ObjectHideFlags: 0

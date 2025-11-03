@@ -15,6 +15,7 @@
 /Assets/UOSLauncherEncrypt/
 /Assets/ParrelSync/
 /Assets/Plugins/ParrelSync/
+/Assets/LeanTween/
 *.log
 
 # By default unity supports Blender asset imports, *.blend1 blender files do not need to be commited to version control.

@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using Events;
+using System.Collections; // ⭐ 新增
 
 /*
  * 诗词谜题管理器
@@ -14,6 +15,16 @@ public class PoemManager : MonoBehaviour
 
     [Tooltip("根对象（用于显示/隐藏）")]
     public GameObject PanelRoot;
+
+    [Header("动画配置")]
+    [Tooltip("完成后的目标面板（DrawerPanel）")]
+    public GameObject DrawerPanel;
+
+    [Tooltip("向上移动的动画时长（秒）")]
+    public float animationDuration = 1f;
+
+    [Tooltip("动画缓动类型")]
+    public LeanTweenType easeType = LeanTweenType.easeInOutQuad;
 
     private int matchedCount = 0;
 
@@ -38,6 +49,12 @@ public class PoemManager : MonoBehaviour
             s_initialized = false;
             s_isOpen = false;
         }
+
+        // 确保 DrawerPanel 初始时关闭
+        if (DrawerPanel != null)
+        {
+            DrawerPanel.SetActive(false);
+        }
     }
 
     void Start()
@@ -61,6 +78,9 @@ public class PoemManager : MonoBehaviour
             s_initialized = false;
             s_instance = null;
         }
+
+        // 取消所有LeanTween动画
+        LeanTween.cancel(PanelRoot);
     }
 
     /*
@@ -83,9 +103,52 @@ public class PoemManager : MonoBehaviour
      */
     private void OnPuzzleCompleted()
     {
-        Debug.Log("[PoemManager] 谜题完成！");
-        
-        // 触发完成事件
+        Debug.Log("[PoemManager] 谜题完成！开始播放动画");
+
+        // 获取 PoemPanel 的 RectTransform
+        RectTransform poemRect = PanelRoot.GetComponent<RectTransform>();
+        if (poemRect == null)
+        {
+            Debug.LogError("[PoemManager] PoemPanel 缺少 RectTransform 组件！");
+            return;
+        }
+
+        // 计算向上移动的距离（2/3的高度）
+        float moveDistance = poemRect.rect.height * 2f / 3f;
+        Vector2 targetPosition = poemRect.anchoredPosition + new Vector2(0, moveDistance);
+
+        Debug.Log($"[PoemManager] 移动距离: {moveDistance}, 目标位置: {targetPosition}");
+
+        // 使用 LeanTween 播放向上移动动画
+        LeanTween.value(PanelRoot, poemRect.anchoredPosition, targetPosition, animationDuration)
+            .setOnUpdate((Vector2 val) => {
+                poemRect.anchoredPosition = val;
+            })
+            .setEase(easeType)
+            .setOnComplete(() => {
+                // 动画完成后的回调
+                OnAnimationComplete();
+            });
+    }
+
+    /*
+     * 动画完成后的回调
+     */
+    private void OnAnimationComplete()
+    {
+        Debug.Log("[PoemManager] 动画完成，激活 DrawerPanel");
+
+        // 激活 DrawerPanel
+        if (DrawerPanel != null)
+        {
+            DrawerPanel.SetActive(true);
+        }
+        else
+        {
+            Debug.LogWarning("[PoemManager] DrawerPanel 未配置！");
+        }
+
+        // 触发完成事件（可选）
         // EventBus.Publish(new PuzzleCompletedEvent { puzzleId = "poem_puzzle" });
     }
 
