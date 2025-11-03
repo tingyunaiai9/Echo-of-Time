@@ -2,10 +2,10 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-/// <summary>
-/// 大纸条插槽组件
-/// 接收小纸条并显示诗句
-/// </summary>
+/*
+ * 大纸条插槽组件
+ * 接收小纸条并显示诗句
+ */
 public class LargeNoteSlot : MonoBehaviour
 {
     [Header("配置")]
@@ -33,9 +33,9 @@ public class LargeNoteSlot : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 设置诗句文本
-    /// </summary>
+    /*
+     * 设置诗句文本
+     */
     public void SetPoemText(string text)
     {
         if (poemText != null && !isFilled)
@@ -46,9 +46,9 @@ public class LargeNoteSlot : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 检查是否已填充
-    /// </summary>
+    /*
+     * 检查是否已填充
+     */
     public bool IsFilled()
     {
         return isFilled;

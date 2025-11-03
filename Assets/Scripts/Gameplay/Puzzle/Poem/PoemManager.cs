@@ -52,8 +52,6 @@ public class PoemManager : MonoBehaviour
             s_root.SetActive(false);
             Debug.Log("[PoemManager.Start] 诗词面板已初始化并关闭");
         }
-
-        UpdateHintText();
     }
 
     void OnDestroy()
@@ -75,8 +73,6 @@ public class PoemManager : MonoBehaviour
     {
         matchedCount++;
         Debug.Log($"[PoemManager] 已匹配: {matchedCount}/{totalNotesRequired}");
-
-        UpdateHintText();
 
         // 检查是否完成
         if (matchedCount >= totalNotesRequired)
@@ -100,17 +96,6 @@ public class PoemManager : MonoBehaviour
 
         // 触发完成事件
         // EventBus.Publish(new PuzzleCompletedEvent { puzzleId = "poem_puzzle" });
-    }
-
-    /*
-     * 更新提示文本
-     */
-    private void UpdateHintText()
-    {
-        if (hintText != null)
-        {
-            hintText.text = $"请将诗句拖拽到正确位置 ({matchedCount}/{totalNotesRequired})";
-        }
     }
 
     // ============ 静态面板控制方法 ============
@@ -180,7 +165,6 @@ public class PoemManager : MonoBehaviour
         if (s_instance != null)
         {
             s_instance.matchedCount = 0;
-            s_instance.UpdateHintText();
             Debug.Log("[PoemManager] 谜题已重置");
         }
     }

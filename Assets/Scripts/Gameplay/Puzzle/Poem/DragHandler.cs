@@ -3,19 +3,21 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 
-/// <summary>
-/// 小纸条拖拽处理脚本
-/// 实现拖拽功能，并在放置到正确的大纸条时触发匹配逻辑
-/// </summary>
+/*
+ * 小纸条拖拽处理脚本
+ * 实现拖拽功能，并在放置到正确的大纸条时触发匹配逻辑
+ */
 [RequireComponent(typeof(CanvasGroup))]
 public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
+    // 配置
     [Header("配置")]
-    [Tooltip("该小纸条对应的正确大纸条ID（LargeNote1, LargeNote2等）")]
+    // 该小纸条对应的正确大纸条ID（LargeNote1, LargeNote2等）
     public string correctLargeNoteId;
 
+    // 引用
     [Header("引用")]
-    [Tooltip("小纸条上的诗句文本组件")]
+    // 小纸条上的诗句文本组件
     public TMP_Text poemText;
 
     // 私有变量
@@ -42,9 +44,9 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         originalParent = transform.parent;
     }
 
-    /// <summary>
-    /// 开始拖拽时调用
-    /// </summary>
+    /*
+     * 开始拖拽时调用
+     */
     public void OnBeginDrag(PointerEventData eventData)
     {
         Debug.Log($"[DragHandler] 开始拖拽: {gameObject.name}");
@@ -58,18 +60,18 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         canvasGroup.blocksRaycasts = false;
     }
 
-    /// <summary>
-    /// 拖拽过程中持续调用
-    /// </summary>
+    /*
+     * 拖拽过程中持续调用
+     */
     public void OnDrag(PointerEventData eventData)
     {
         // 根据鼠标位置移动小纸条
         rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
     }
 
-    /// <summary>
-    /// 结束拖拽时调用
-    /// </summary>
+    /*
+     * 结束拖拽时调用
+     */
     public void OnEndDrag(PointerEventData eventData)
     {
         Debug.Log($"[DragHandler] 结束拖拽: {gameObject.name}");
@@ -115,9 +117,9 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         }
     }
 
-    /// <summary>
-    /// 匹配成功时的处理
-    /// </summary>
+    /*
+     * 匹配成功时的处理
+     */
     private void OnCorrectMatch(LargeNoteSlot largeNote)
     {
         // 将诗句文本传递给大纸条
@@ -138,9 +140,9 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         }
     }
 
-    /// <summary>
-    /// 返回原始位置
-    /// </summary>
+    /*
+     * 返回原始位置
+     */
     private void ReturnToOriginalPosition()
     {
         rectTransform.anchoredPosition = originalPosition;
@@ -149,9 +151,9 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         // LeanTween.move(rectTransform, originalPosition, 0.3f).setEase(LeanTweenType.easeOutBack);
     }
 
-    /// <summary>
-    /// 获取诗句文本
-    /// </summary>
+    /*
+     * 获取诗句文本
+     */
     public string GetPoemText()
     {
         return poemText != null ? poemText.text : "";
