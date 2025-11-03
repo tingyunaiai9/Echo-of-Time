@@ -45,12 +45,4 @@ public class LargeNoteSlot : MonoBehaviour
             Debug.Log($"[LargeNoteSlot] {noteId} 已填充: {text}");
         }
     }
-
-    /*
-     * 检查是否已填充
-     */
-    public bool IsFilled()
-    {
-        return isFilled;
-    }
 }

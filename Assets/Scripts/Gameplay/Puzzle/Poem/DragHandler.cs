@@ -70,12 +70,10 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     }
 
     /*
-     * 结束拖拽时调用
+     * 结束拖拽时调用，检测放置位置
      */
     public void OnEndDrag(PointerEventData eventData)
     {
-        Debug.Log($"[DragHandler] 结束拖拽: {gameObject.name}");
-
         // 恢复透明度和射线检测
         canvasGroup.alpha = 1f;
         canvasGroup.blocksRaycasts = true;
@@ -91,7 +89,6 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             if (largeNote != null)
             {
                 Debug.Log($"[DragHandler] 检测到大纸条: {largeNote.noteId}");
-
                 // 检查是否匹配
                 if (largeNote.noteId == correctLargeNoteId)
                 {
@@ -125,12 +122,8 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         // 将诗句文本传递给大纸条
         largeNote.SetPoemText(poemText.text);
 
-        // 隐藏/销毁小纸条
+        // 隐藏小纸条
         gameObject.SetActive(false);
-        // 或者使用: Destroy(gameObject);
-
-        // 可选：播放音效
-        // AudioManager.Instance.PlaySound("match_success");
 
         // 通知谜题管理器
         PoemManager puzzleManager = FindFirstObjectByType<PoemManager>();
@@ -146,16 +139,7 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     private void ReturnToOriginalPosition()
     {
         rectTransform.anchoredPosition = originalPosition;
-
         // 可选：添加回弹动画
         // LeanTween.move(rectTransform, originalPosition, 0.3f).setEase(LeanTweenType.easeOutBack);
-    }
-
-    /*
-     * 获取诗句文本
-     */
-    public string GetPoemText()
-    {
-        return poemText != null ? poemText.text : "";
     }
 }

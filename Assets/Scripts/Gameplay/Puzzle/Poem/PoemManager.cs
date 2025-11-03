@@ -15,9 +15,6 @@ public class PoemManager : MonoBehaviour
     [Tooltip("根对象（用于显示/隐藏）")]
     public GameObject PanelRoot;
 
-    [Header("UI引用")]
-    public TMP_Text hintText;
-
     private int matchedCount = 0;
 
     // 静态变量
@@ -88,12 +85,6 @@ public class PoemManager : MonoBehaviour
     {
         Debug.Log("[PoemManager] 谜题完成！");
         
-        if (hintText != null)
-        {
-            hintText.text = "恭喜！诗词拼接完成！";
-            hintText.color = Color.green;
-        }
-
         // 触发完成事件
         // EventBus.Publish(new PuzzleCompletedEvent { puzzleId = "poem_puzzle" });
     }
@@ -124,7 +115,6 @@ public class PoemManager : MonoBehaviour
 
         s_isOpen = true;
         s_root.SetActive(true);
-        Debug.Log("[PoemManager] 诗词面板已打开");
 
         // 禁用玩家移动
         EventBus.LocalPublish(new FreezeEvent { isOpen = true });
@@ -140,32 +130,10 @@ public class PoemManager : MonoBehaviour
             Debug.LogWarning("[PoemManager] 无法关闭面板：根对象为空");
             return;
         }
-
         s_isOpen = false;
         s_root.SetActive(false);
-        Debug.Log("[PoemManager] 诗词面板已关闭");
 
         // 恢复玩家移动
         EventBus.LocalPublish(new FreezeEvent { isOpen = false });
-    }
-
-    /*
-     * 获取面板开启状态
-     */
-    public static bool IsOpen()
-    {
-        return s_isOpen;
-    }
-
-    /*
-     * 重置谜题进度（用于重新开始）
-     */
-    public static void ResetPuzzle()
-    {
-        if (s_instance != null)
-        {
-            s_instance.matchedCount = 0;
-            Debug.Log("[PoemManager] 谜题已重置");
-        }
     }
 }
