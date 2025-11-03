@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
 using Events;
-using System.Collections; // ⭐ 新增
+using System.Collections;
 
 /*
  * 诗词谜题管理器
@@ -33,6 +33,9 @@ public class PoemManager : MonoBehaviour
     private static bool s_isOpen;
     private static GameObject s_root;
     private static bool s_initialized = false;
+    
+    // ⭐ 谜题完成标志
+    private static bool s_isPuzzleCompleted = false;
 
     void Awake()
     {
@@ -48,6 +51,7 @@ public class PoemManager : MonoBehaviour
             s_root = PanelRoot;
             s_initialized = false;
             s_isOpen = false;
+            s_isPuzzleCompleted = false; // ⭐ 重置完成标志
         }
 
         // 确保 DrawerPanel 初始时关闭
@@ -77,6 +81,7 @@ public class PoemManager : MonoBehaviour
             s_isOpen = false;
             s_initialized = false;
             s_instance = null;
+            s_isPuzzleCompleted = false; // ⭐ 清理完成标志
         }
 
         // 取消所有LeanTween动画
@@ -105,6 +110,9 @@ public class PoemManager : MonoBehaviour
     {
         Debug.Log("[PoemManager] 谜题完成！开始播放动画");
 
+        // ⭐ 设置完成标志
+        s_isPuzzleCompleted = true;
+
         // 获取 PoemPanel 的 RectTransform
         RectTransform poemRect = PanelRoot.GetComponent<RectTransform>();
 
@@ -112,14 +120,23 @@ public class PoemManager : MonoBehaviour
         float moveDistance = poemRect.rect.height * 2f / 3f;
         Vector2 targetPosition = poemRect.anchoredPosition + new Vector2(0, moveDistance);
 
+        // 激活 DrawerPanel
+        if (DrawerPanel != null)
+        {
+            DrawerPanel.SetActive(true);
+        }
+
         // 使用 LeanTween 播放向上移动动画
-        DrawerPanel.SetActive(true);
         LeanTween.value(PanelRoot, poemRect.anchoredPosition, targetPosition, animationDuration)
             .setOnUpdate((Vector2 val) =>
             {
                 poemRect.anchoredPosition = val;
             })
-            .setEase(easeType);
+            .setEase(easeType)
+            .setOnComplete(() =>
+            {
+                Debug.Log("[PoemManager] 动画完成");
+            });
     }
 
     // ============ 静态面板控制方法 ============
@@ -149,6 +166,13 @@ public class PoemManager : MonoBehaviour
         s_isOpen = true;
         s_root.SetActive(true);
 
+        // ⭐ 如果谜题已完成，同时打开 DrawerPanel
+        if (s_isPuzzleCompleted && s_instance != null && s_instance.DrawerPanel != null)
+        {
+            s_instance.DrawerPanel.SetActive(true);
+            Debug.Log("[PoemManager] 谜题已完成，同时打开 DrawerPanel");
+        }
+
         // 禁用玩家移动
         EventBus.LocalPublish(new FreezeEvent { isOpen = true });
     }
@@ -163,10 +187,26 @@ public class PoemManager : MonoBehaviour
             Debug.LogWarning("[PoemManager] 无法关闭面板：根对象为空");
             return;
         }
+        
         s_isOpen = false;
         s_root.SetActive(false);
 
+        // ⭐ 如果谜题已完成，同时关闭 DrawerPanel
+        if (s_isPuzzleCompleted && s_instance != null && s_instance.DrawerPanel != null)
+        {
+            s_instance.DrawerPanel.SetActive(false);
+            Debug.Log("[PoemManager] 谜题已完成，同时关闭 DrawerPanel");
+        }
+
         // 恢复玩家移动
         EventBus.LocalPublish(new FreezeEvent { isOpen = false });
+    }
+
+    /*
+     * 获取谜题是否已完成
+     */
+    public static bool IsPuzzleCompleted()
+    {
+        return s_isPuzzleCompleted;
     }
 }
