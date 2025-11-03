@@ -107,49 +107,19 @@ public class PoemManager : MonoBehaviour
 
         // 获取 PoemPanel 的 RectTransform
         RectTransform poemRect = PanelRoot.GetComponent<RectTransform>();
-        if (poemRect == null)
-        {
-            Debug.LogError("[PoemManager] PoemPanel 缺少 RectTransform 组件！");
-            return;
-        }
 
         // 计算向上移动的距离（2/3的高度）
         float moveDistance = poemRect.rect.height * 2f / 3f;
         Vector2 targetPosition = poemRect.anchoredPosition + new Vector2(0, moveDistance);
 
-        Debug.Log($"[PoemManager] 移动距离: {moveDistance}, 目标位置: {targetPosition}");
-
         // 使用 LeanTween 播放向上移动动画
+        DrawerPanel.SetActive(true);
         LeanTween.value(PanelRoot, poemRect.anchoredPosition, targetPosition, animationDuration)
-            .setOnUpdate((Vector2 val) => {
+            .setOnUpdate((Vector2 val) =>
+            {
                 poemRect.anchoredPosition = val;
             })
-            .setEase(easeType)
-            .setOnComplete(() => {
-                // 动画完成后的回调
-                OnAnimationComplete();
-            });
-    }
-
-    /*
-     * 动画完成后的回调
-     */
-    private void OnAnimationComplete()
-    {
-        Debug.Log("[PoemManager] 动画完成，激活 DrawerPanel");
-
-        // 激活 DrawerPanel
-        if (DrawerPanel != null)
-        {
-            DrawerPanel.SetActive(true);
-        }
-        else
-        {
-            Debug.LogWarning("[PoemManager] DrawerPanel 未配置！");
-        }
-
-        // 触发完成事件（可选）
-        // EventBus.Publish(new PuzzleCompletedEvent { puzzleId = "poem_puzzle" });
+            .setEase(easeType);
     }
 
     // ============ 静态面板控制方法 ============

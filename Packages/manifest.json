@@ -4,6 +4,7 @@
     "cn.unity.uos.launcher": "https://cnb.cool/unity/uos/UOSLauncher.git",
     "cn.unity.uos.sync.relay": "https://cnb.cool/unity/uos/SyncRelaySDK.git",
     "cn.unity.uos.transport.kcp2k": "https://cnb.cool/unity/uos/Transport.git?path=/kcp2k",
+    "com.unity.2d.sprite": "1.0.0",
     "com.unity.ai.navigation": "2.0.9",
     "com.unity.collab-proxy": "2.10.0",
     "com.unity.ide.rider": "3.0.38",
