@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
 
 /*
  * 小纸条拖拽处理脚本
@@ -78,42 +79,66 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         canvasGroup.alpha = 1f;
         canvasGroup.blocksRaycasts = true;
 
-        // 检测放置目标
-        GameObject dropTarget = eventData.pointerEnter;
+        // 检测放置位置
+        LargeNoteSlot targetSlot = null;
 
-        if (dropTarget != null)
+        if (targetSlot == null)
         {
-            // 向上查找是否有大纸条组件
-            LargeNoteSlot largeNote = dropTarget.GetComponentInParent<LargeNoteSlot>();
+            targetSlot = FindNearestLargeNote();
+        }
 
-            if (largeNote != null)
+        // 处理检测结果
+        if (targetSlot != null)
+        {
+            Debug.Log($"[DragHandler] 最终检测到大纸条: {targetSlot.noteId}");
+            
+            // 检查是否匹配
+            if (targetSlot.noteId == correctLargeNoteId)
             {
-                Debug.Log($"[DragHandler] 检测到大纸条: {largeNote.noteId}");
-                // 检查是否匹配
-                if (largeNote.noteId == correctLargeNoteId)
-                {
-                    Debug.Log($"[DragHandler] 匹配成功！");
-                    OnCorrectMatch(largeNote);
-                }
-                else
-                {
-                    Debug.Log($"[DragHandler] 匹配失败，期望: {correctLargeNoteId}, 实际: {largeNote.noteId}");
-                    ReturnToOriginalPosition();
-                }
+                Debug.Log($"[DragHandler] 匹配成功！");
+                OnCorrectMatch(targetSlot);
             }
             else
             {
-                Debug.Log("[DragHandler] 未检测到有效的大纸条");
+                Debug.Log($"[DragHandler] 匹配失败，期望: {correctLargeNoteId}, 实际: {targetSlot.noteId}");
                 ReturnToOriginalPosition();
             }
         }
         else
         {
-            Debug.Log("[DragHandler] 未检测到任何目标");
+            Debug.Log("[DragHandler] 未检测到任何大纸条");
             ReturnToOriginalPosition();
         }
     }
 
+    /*
+     * 通过距离检测查找最近的大纸条
+     */
+    private LargeNoteSlot FindNearestLargeNote()
+    {
+        LargeNoteSlot[] allSlots = FindObjectsByType<LargeNoteSlot>(FindObjectsSortMode.None);
+        LargeNoteSlot nearest = null;
+        float minDistance = 150f; // 最大检测距离
+
+        foreach (LargeNoteSlot slot in allSlots)
+        {
+            float distance = Vector2.Distance(rectTransform.position, slot.GetComponent<RectTransform>().position);
+
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                nearest = slot;
+            }
+        }
+
+        if (nearest != null)
+        {
+            Debug.Log($"[DragHandler] 距离检测到最近的大纸条: {nearest.noteId}, 距离: {minDistance}");
+        }
+
+        return nearest;
+    }
+    
     /*
      * 匹配成功时的处理
      */
