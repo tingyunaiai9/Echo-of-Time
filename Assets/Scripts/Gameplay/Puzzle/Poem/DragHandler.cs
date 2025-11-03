@@ -131,7 +131,7 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         // AudioManager.Instance.PlaySound("match_success");
 
         // 通知谜题管理器
-        PoemPuzzleManager puzzleManager = FindFirstObjectByType<PoemPuzzleManager>();
+        PoemManager puzzleManager = FindFirstObjectByType<PoemManager>();
         if (puzzleManager != null)
         {
             puzzleManager.OnNoteMatched();

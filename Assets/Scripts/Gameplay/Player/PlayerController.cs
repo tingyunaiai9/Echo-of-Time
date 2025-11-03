@@ -129,6 +129,12 @@ public class PlayerController : NetworkBehaviour
             Debug.Log("[PlayerController] F3键按下，添加测试线索条目。");
         }
 
+        if (Input.GetKeyDown(KeyCode.F4))
+        {
+            PoemManager.TogglePanel();
+            Debug.Log("[PlayerController] F4键按下，切换诗词谜题页面。");
+        }
+
         // 背包打开时，禁用游戏输入（移动、交互等）
         if (isBackpackOpen) return;
 
