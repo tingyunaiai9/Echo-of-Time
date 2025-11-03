@@ -12,7 +12,7 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 {
     // 配置
     [Header("配置")]
-    // 该小纸条对应的正确大纸条ID（LargeNote1, LargeNote2等）
+    // 该小纸条对应的正确大纸条ID
     public string correctLargeNoteId;
 
     // 引用

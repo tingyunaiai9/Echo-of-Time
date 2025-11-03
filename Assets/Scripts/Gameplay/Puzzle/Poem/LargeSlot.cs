@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class LargeNoteSlot : MonoBehaviour
 {
     [Header("配置")]
-    [Tooltip("该大纸条的唯一ID（LargeNote1, LargeNote2等）")]
+    [Tooltip("该大纸条的唯一ID")]
     public string noteId;
 
     [Header("引用")]
