@@ -105,21 +105,26 @@ public class LightPanel : MonoBehaviour
     }
 
     /*
-     * 随机初始化 MirrorSlots
+     * 初始化 MirrorSlots
      */
     private void InitializeMirrorSlots()
     {
-        for (int i = 0; i < mirrorSlots.Length; i++)
+        // 指定 10 个的镜槽值
+        mirrorSlots = new MirrorSlot[]
         {
-            mirrorSlots[i] = new MirrorSlot
-            {
-                xindex = Random.Range(0, columns),
-                yindex = Random.Range(0, rows),
-                rotation = Random.Range(0, 4) * 90 // 随机选择0, 90, 180, 270
-            };
-        }
-
-        Debug.Log("[LightPanel] MirrorSlots 详情：");
+            new MirrorSlot { xindex = 0, yindex = 0, rotation = 0 },
+            new MirrorSlot { xindex = 3, yindex = 2, rotation = 45 },
+            new MirrorSlot { xindex = 5, yindex = 4, rotation = 90 },
+            new MirrorSlot { xindex = 7, yindex = 6, rotation = 135 },
+            new MirrorSlot { xindex = 10, yindex = 8, rotation = 0 },
+            new MirrorSlot { xindex = 12, yindex = 1, rotation = 45 },
+            new MirrorSlot { xindex = 14, yindex = 3, rotation = 90 },
+            new MirrorSlot { xindex = 1, yindex = 5, rotation = 135 },
+            new MirrorSlot { xindex = 8, yindex = 7, rotation = 0 },
+            new MirrorSlot { xindex = 11, yindex = 2, rotation = 45 }
+        };
+    
+        Debug.Log("[LightPanel] MirrorSlots 已初始化为具体值：");
         for (int i = 0; i < mirrorSlots.Length; i++)
         {
             Debug.Log($"  槽位 {i}: (x: {mirrorSlots[i].xindex}, y: {mirrorSlots[i].yindex}, rotation: {mirrorSlots[i].rotation})");
@@ -196,10 +201,20 @@ public class LightPanel : MonoBehaviour
 
             // 设置线段的RectTransform
             RectTransform lineRect = line.GetComponent<RectTransform>();
-            lineRect.anchorMin = new Vector2(0.5f, 0f);
-            lineRect.anchorMax = new Vector2(0.5f, 1f);
             lineRect.pivot = new Vector2(0.5f, 0.5f);
-            lineRect.sizeDelta = new Vector2(5, 89); // 线段宽度为5，高度为89
+
+            // 根据角度调整线段的长度和方向
+            if (slot.rotation == 0 || slot.rotation == 90)
+            {
+                // 垂直或水平线段，充满格子
+                lineRect.sizeDelta = new Vector2(5, 89); // 宽度为5，高度为89
+            }
+            else if (slot.rotation == 45 || slot.rotation == 135)
+            {
+                // 对角线段，长度为格子的对角线
+                float diagonalLength = Mathf.Sqrt(89 * 89 + 89 * 89); // 对角线长度
+                lineRect.sizeDelta = new Vector2(5, diagonalLength);
+            }
 
             // 设置旋转角度
             line.transform.localRotation = Quaternion.Euler(0, 0, slot.rotation);
