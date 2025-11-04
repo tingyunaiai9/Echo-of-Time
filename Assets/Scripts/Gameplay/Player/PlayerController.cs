@@ -116,23 +116,29 @@ public class PlayerController : NetworkBehaviour
             Debug.Log("[PlayerController] F1键按下，切换日记页面。");
         }
 
-        if (Input.GetKeyDown(KeyCode.F2))
+        if (Input.GetKeyDown(KeyCode.Plus))
         {
             DialogPanel.AddChatMessage(
                 "托马斯·库恩在《科学革命的结构》中提出的范式理论，深刻重构了科学演进的理解框架。本书第三章《常规科学的本质》与第九章《科学革命的本质与必然性》分别从科学实践的稳定性和变革性两个维度展开论述，系统揭示了范式在科学活动中的核心作用。", MessageType.Modern);
-            Debug.Log("[PlayerController] F2键按下，添加测试聊天消息。");
+            Debug.Log("[PlayerController] Plus键按下，添加测试聊天消息。");
+        }
+
+        if (Input.GetKeyDown(KeyCode.Minus))
+        {
+            ClueBoard.AddClueEntry("这是一个测试线索条目，记录玩家的发现。");
+            Debug.Log("[PlayerController] Minus键按下，添加测试线索条目。");
+        }
+
+        if (Input.GetKeyDown(KeyCode.F2))
+        {
+            PoemManager.TogglePanel();
+            Debug.Log("[PlayerController] F4键按下，切换诗词谜题页面。");
         }
 
         if (Input.GetKeyDown(KeyCode.F3))
         {
-            ClueBoard.AddClueEntry("这是一个测试线索条目，记录玩家的发现。");
-            Debug.Log("[PlayerController] F3键按下，添加测试线索条目。");
-        }
-
-        if (Input.GetKeyDown(KeyCode.F4))
-        {
-            PoemManager.TogglePanel();
-            Debug.Log("[PlayerController] F4键按下，切换诗词谜题页面。");
+            LightPanel.TogglePanel();
+            Debug.Log("[PlayerController] F3键按下，切换光线谜题页面。");
         }
 
         // 背包打开时，禁用游戏输入（移动、交互等）

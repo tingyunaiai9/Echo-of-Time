@@ -34,7 +34,7 @@ public class PoemManager : MonoBehaviour
     private static GameObject s_root;
     private static bool s_initialized = false;
     
-    // ⭐ 谜题完成标志
+    // 谜题完成标志
     private static bool s_isPuzzleCompleted = false;
 
     void Awake()
@@ -51,7 +51,7 @@ public class PoemManager : MonoBehaviour
             s_root = PanelRoot;
             s_initialized = false;
             s_isOpen = false;
-            s_isPuzzleCompleted = false; // ⭐ 重置完成标志
+            s_isPuzzleCompleted = false; // 重置完成标志
         }
 
         // 确保 DrawerPanel 初始时关闭
@@ -81,7 +81,7 @@ public class PoemManager : MonoBehaviour
             s_isOpen = false;
             s_initialized = false;
             s_instance = null;
-            s_isPuzzleCompleted = false; // ⭐ 清理完成标志
+            s_isPuzzleCompleted = false; 
         }
 
         // 取消所有LeanTween动画
@@ -110,7 +110,7 @@ public class PoemManager : MonoBehaviour
     {
         Debug.Log("[PoemManager] 谜题完成！开始播放动画");
 
-        // ⭐ 设置完成标志
+        // 设置完成标志
         s_isPuzzleCompleted = true;
 
         // 获取 PoemPanel 的 RectTransform
@@ -166,7 +166,7 @@ public class PoemManager : MonoBehaviour
         s_isOpen = true;
         s_root.SetActive(true);
 
-        // ⭐ 如果谜题已完成，同时打开 DrawerPanel
+        // 如果谜题已完成，同时打开 DrawerPanel
         if (s_isPuzzleCompleted && s_instance != null && s_instance.DrawerPanel != null)
         {
             s_instance.DrawerPanel.SetActive(true);
@@ -191,7 +191,7 @@ public class PoemManager : MonoBehaviour
         s_isOpen = false;
         s_root.SetActive(false);
 
-        // ⭐ 如果谜题已完成，同时关闭 DrawerPanel
+        // 如果谜题已完成，同时关闭 DrawerPanel
         if (s_isPuzzleCompleted && s_instance != null && s_instance.DrawerPanel != null)
         {
             s_instance.DrawerPanel.SetActive(false);
