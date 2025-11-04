@@ -5360,8 +5360,8 @@ MonoBehaviour:
   m_ChildAlignment: 4
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 89, y: 89}
-  m_Spacing: {x: 2, y: 2}
+  m_CellSize: {x: 88, y: 88}
+  m_Spacing: {x: 4, y: 4}
   m_Constraint: 1
   m_ConstraintCount: 16
 --- !u!1 &835239534
@@ -7447,6 +7447,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LightPanel
   PanelRoot: {fileID: 0}
+  CellPrefab: {fileID: 0}
+  columns: 16
+  rows: 9
+  cellColor: {r: 1, g: 1, b: 1, a: 1}
+  ContentContainer: {fileID: 0}
 --- !u!1 &1196057147
 GameObject:
   m_ObjectHideFlags: 0

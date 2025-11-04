@@ -1,5 +1,7 @@
 using UnityEngine;
+using UnityEngine.UI;
 using Events;
+using JetBrains.Annotations;
 
 /*
  * 光线谜题管理器
@@ -11,14 +13,31 @@ public class LightPanel : MonoBehaviour
     [Tooltip("根对象（用于显示/隐藏）")]
     public GameObject PanelRoot;
 
+    [Tooltip("格子预制体（如果为空则动态创建）")]
+    public GameObject CellPrefab;
+
+    [Tooltip("格子数量 - 列")]
+    public int columns = 16;
+
+    [Tooltip("格子数量 - 行")]
+    public int rows = 9;
+
+    [Tooltip("格子颜色")]
+    public Color cellColor = Color.white;
+
     // 静态变量
     private static LightPanel s_instance;
     private static bool s_isOpen;
     private static GameObject s_root;
     private static bool s_initialized = false;
-    
+
     // 谜题完成标志
     private static bool s_isPuzzleCompleted = false;
+
+    // 存储生成的格子
+    public Transform ContentContainer;
+    private GameObject[] cells;
+    private bool cellsGenerated = false;
 
     void Awake()
     {
@@ -36,6 +55,8 @@ public class LightPanel : MonoBehaviour
             s_isOpen = false;
             s_isPuzzleCompleted = false; // 重置完成标志
         }
+        ContentContainer = transform.Find("Background/Content");
+        GenerateCells();  
     }
 
     void Start()
@@ -60,6 +81,67 @@ public class LightPanel : MonoBehaviour
             s_instance = null;
             s_isPuzzleCompleted = false; // 清理完成标志
         }
+    }
+
+    /*
+     * 生成格子
+     */
+    private void GenerateCells()
+    {
+        if (cellsGenerated || ContentContainer == null)
+            return;
+
+        int totalCells = columns * rows;
+        cells = new GameObject[totalCells];
+
+        for (int i = 0; i < totalCells; i++)
+        {
+            GameObject cell;
+
+            if (CellPrefab != null)
+            {
+                // 使用预制体
+                cell = Instantiate(CellPrefab, ContentContainer);
+            }
+            else
+            {
+                // 动态创建格子
+                cell = new GameObject($"Cell_{i}");
+                cell.transform.SetParent(ContentContainer, false);
+
+                // 添加Image组件
+                Image image = cell.AddComponent<Image>();
+                image.color = cellColor;
+
+                // 设置RectTransform
+                RectTransform rectTransform = cell.GetComponent<RectTransform>();
+                rectTransform.sizeDelta = new Vector2(89, 89);
+            }
+
+            cells[i] = cell;
+        }
+
+        cellsGenerated = true;
+        Debug.Log($"[LightPanel] 已生成 {totalCells} 个格子（{columns}×{rows}）");
+    }
+
+    /*
+     * 清除所有格子
+     */
+    private void ClearCells()
+    {
+        if (ContentContainer == null || cells == null)
+            return;
+
+        foreach (GameObject cell in cells)
+        {
+            if (cell != null)
+                Destroy(cell);
+        }
+
+        cells = null;
+        cellsGenerated = false;
+        Debug.Log("[LightPanel] 已清除所有格子");
     }
 
     /*
@@ -135,10 +217,25 @@ public class LightPanel : MonoBehaviour
     }
 
     /*
-     * 获取面板是否打开
+     * 获取指定位置的格子
      */
-    public static bool IsOpen()
+    public GameObject GetCell(int row, int col)
     {
-        return s_isOpen;
+        if (cells == null || row < 0 || row >= rows || col < 0 || col >= columns)
+            return null;
+
+        int index = row * columns + col;
+        return cells[index];
+    }
+
+    /*
+     * 获取指定索引的格子
+     */
+    public GameObject GetCell(int index)
+    {
+        if (cells == null || index < 0 || index >= cells.Length)
+            return null;
+
+        return cells[index];
     }
 }
