@@ -1,7 +1,16 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Events;
-using JetBrains.Annotations;
+
+/* 镜槽（MirrorSlot)结构体
+ * 用于存储镜槽信息
+ */
+public struct MirrorSlot
+{
+    public int xindex;
+    public int yindex;
+    public float rotation; // 只能是0,90,180,270
+}
 
 /*
  * 光线谜题管理器
@@ -25,6 +34,12 @@ public class LightPanel : MonoBehaviour
     [Tooltip("格子颜色")]
     public Color cellColor = Color.white;
 
+    [Tooltip("镜槽数组配置")]
+    public MirrorSlot[] mirrorSlots = new MirrorSlot[10];
+
+    [Tooltip("镜槽线段颜色")]
+    public Color mirrorLineColor = Color.gray;
+
     // 静态变量
     private static LightPanel s_instance;
     private static bool s_isOpen;
@@ -42,7 +57,7 @@ public class LightPanel : MonoBehaviour
     void Awake()
     {
         s_instance = this;
-        
+
         // 如果未指定根对象,使用当前GameObject
         if (PanelRoot == null)
             PanelRoot = gameObject;
@@ -55,8 +70,14 @@ public class LightPanel : MonoBehaviour
             s_isOpen = false;
             s_isPuzzleCompleted = false; // 重置完成标志
         }
+
         ContentContainer = transform.Find("Background/Content");
-        GenerateCells();  
+
+        // 随机初始化 MirrorSlots
+        InitializeMirrorSlots();
+
+        // 生成格子
+        GenerateCells();
     }
 
     void Start()
@@ -80,6 +101,28 @@ public class LightPanel : MonoBehaviour
             s_initialized = false;
             s_instance = null;
             s_isPuzzleCompleted = false; // 清理完成标志
+        }
+    }
+
+    /*
+     * 随机初始化 MirrorSlots
+     */
+    private void InitializeMirrorSlots()
+    {
+        for (int i = 0; i < mirrorSlots.Length; i++)
+        {
+            mirrorSlots[i] = new MirrorSlot
+            {
+                xindex = Random.Range(0, columns),
+                yindex = Random.Range(0, rows),
+                rotation = Random.Range(0, 4) * 90 // 随机选择0, 90, 180, 270
+            };
+        }
+
+        Debug.Log("[LightPanel] MirrorSlots 详情：");
+        for (int i = 0; i < mirrorSlots.Length; i++)
+        {
+            Debug.Log($"  槽位 {i}: (x: {mirrorSlots[i].xindex}, y: {mirrorSlots[i].yindex}, rotation: {mirrorSlots[i].rotation})");
         }
     }
 
@@ -121,8 +164,48 @@ public class LightPanel : MonoBehaviour
             cells[i] = cell;
         }
 
+        // 绘制镜槽
+        DrawMirrorSlots();
+
         cellsGenerated = true;
         Debug.Log($"[LightPanel] 已生成 {totalCells} 个格子（{columns}×{rows}）");
+    }
+
+    /*
+     * 绘制镜槽
+     */
+    private void DrawMirrorSlots()
+    {
+        foreach (var slot in mirrorSlots)
+        {
+            int index = slot.yindex * columns + slot.xindex;
+            if (index < 0 || index >= cells.Length)
+                continue;
+
+            GameObject cell = cells[index];
+            if (cell == null)
+                continue;
+
+            // 在格子上绘制线段
+            GameObject line = new GameObject("MirrorLine");
+            line.transform.SetParent(cell.transform, false);
+
+            // 添加Image组件作为线段
+            Image lineImage = line.AddComponent<Image>();
+            lineImage.color = mirrorLineColor;
+
+            // 设置线段的RectTransform
+            RectTransform lineRect = line.GetComponent<RectTransform>();
+            lineRect.anchorMin = new Vector2(0.5f, 0f);
+            lineRect.anchorMax = new Vector2(0.5f, 1f);
+            lineRect.pivot = new Vector2(0.5f, 0.5f);
+            lineRect.sizeDelta = new Vector2(5, 89); // 线段宽度为5，高度为89
+
+            // 设置旋转角度
+            line.transform.localRotation = Quaternion.Euler(0, 0, slot.rotation);
+        }
+
+        Debug.Log("[LightPanel] 已绘制所有镜槽");
     }
 
     /*
@@ -199,7 +282,7 @@ public class LightPanel : MonoBehaviour
             Debug.LogWarning("[LightPanel] 无法关闭面板：根对象为空");
             return;
         }
-        
+
         s_isOpen = false;
         s_root.SetActive(false);
         Debug.Log("[LightPanel] 面板已关闭");
