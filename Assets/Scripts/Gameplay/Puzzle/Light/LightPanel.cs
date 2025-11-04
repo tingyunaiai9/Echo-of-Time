@@ -10,6 +10,7 @@ public struct MirrorSlot
     public int xindex;
     public int yindex;
     public float rotation; // 只能是0,90,180,270
+    public bool active;
 }
 
 /*
@@ -112,16 +113,16 @@ public class LightPanel : MonoBehaviour
         // 指定 10 个的镜槽值
         mirrorSlots = new MirrorSlot[]
         {
-            new MirrorSlot { xindex = 0, yindex = 0, rotation = 0 },
-            new MirrorSlot { xindex = 3, yindex = 2, rotation = 45 },
-            new MirrorSlot { xindex = 5, yindex = 4, rotation = 90 },
-            new MirrorSlot { xindex = 7, yindex = 6, rotation = 135 },
-            new MirrorSlot { xindex = 10, yindex = 8, rotation = 0 },
-            new MirrorSlot { xindex = 12, yindex = 1, rotation = 45 },
-            new MirrorSlot { xindex = 14, yindex = 3, rotation = 90 },
-            new MirrorSlot { xindex = 1, yindex = 5, rotation = 135 },
-            new MirrorSlot { xindex = 8, yindex = 7, rotation = 0 },
-            new MirrorSlot { xindex = 11, yindex = 2, rotation = 45 }
+            new MirrorSlot { xindex = 0, yindex = 0, rotation = 0, active = true},
+            new MirrorSlot { xindex = 3, yindex = 2, rotation = 45, active = true},
+            new MirrorSlot { xindex = 5, yindex = 4, rotation = 90, active = true},
+            new MirrorSlot { xindex = 7, yindex = 6, rotation = 135, active = true},
+            new MirrorSlot { xindex = 10, yindex = 8, rotation = 0, active = true},
+            new MirrorSlot { xindex = 12, yindex = 1, rotation = 45, active = true},
+            new MirrorSlot { xindex = 14, yindex = 3, rotation = 90, active = true},
+            new MirrorSlot { xindex = 1, yindex = 5, rotation = 135, active = true},
+            new MirrorSlot { xindex = 8, yindex = 7, rotation = 0, active = true},
+            new MirrorSlot { xindex = 11, yindex = 2, rotation = 45, active = true}
         };
     
         Debug.Log("[LightPanel] MirrorSlots 已初始化为具体值：");
@@ -312,28 +313,5 @@ public class LightPanel : MonoBehaviour
     public static bool IsPuzzleCompleted()
     {
         return s_isPuzzleCompleted;
-    }
-
-    /*
-     * 获取指定位置的格子
-     */
-    public GameObject GetCell(int row, int col)
-    {
-        if (cells == null || row < 0 || row >= rows || col < 0 || col >= columns)
-            return null;
-
-        int index = row * columns + col;
-        return cells[index];
-    }
-
-    /*
-     * 获取指定索引的格子
-     */
-    public GameObject GetCell(int index)
-    {
-        if (cells == null || index < 0 || index >= cells.Length)
-            return null;
-
-        return cells[index];
     }
 }
