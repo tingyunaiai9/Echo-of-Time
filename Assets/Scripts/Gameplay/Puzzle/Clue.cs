@@ -35,7 +35,7 @@ public class Clue : Interaction
         {
             discovered = true;
 
-            EventBus.Instance.LocalPublish(new ClueDiscoveredEvent
+            EventBus.LocalPublish(new ClueDiscoveredEvent
             {
                 playerNetId = pid,
                 clueId = gameObject.name,

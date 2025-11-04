@@ -34,22 +34,18 @@ public enum UIMode
  */
 public class UIManager : Singleton<UIManager>
 {
-    private EventBus eventBus;
-
     protected override void Awake()
     {
         base.Awake();
         // 订阅物品拾取事件
-        EventBus.SafeSubscribe<ItemPickedUpEvent>(OnItemPickedUp);
+        EventBus.Subscribe<ItemPickedUpEvent>(OnItemPickedUp);
         InitializeAllUI();
     }
 
-    void OnDestroy()
+    protected override void OnDestroy()
     {
-        if (eventBus != null)
-        {
-            eventBus.Unsubscribe<ItemPickedUpEvent>(OnItemPickedUp);
-        }
+        EventBus.Unsubscribe<ItemPickedUpEvent>(OnItemPickedUp);
+        base.OnDestroy();
     }
 
     // 监听物品拾取事件，Debug.Log模拟弹窗

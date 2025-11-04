@@ -23,12 +23,12 @@ public class ClueBoard : MonoBehaviour
         {
             contentParent = transform.Find("LeftPanel/ClueScrollView/Viewport/Content");
         }
-        EventBus.SafeSubscribe<ClueUpdatedEvent>(OnClueUpdated);
+        EventBus.Subscribe<ClueUpdatedEvent>(OnClueUpdated);
     }
 
     void OnDestroy()
     {
-        EventBus.SafeUnsubscribe<ClueUpdatedEvent>(OnClueUpdated);
+        EventBus.Unsubscribe<ClueUpdatedEvent>(OnClueUpdated);
     }
 
     /* 线索更新事件回调 */
@@ -44,7 +44,7 @@ public class ClueBoard : MonoBehaviour
         s_instance.CreateClueEntry(System.DateTime.Now, content);
         if (publish)
         {
-            EventBus.Instance.Publish(new ClueUpdatedEvent { ClueEntry = content });
+            EventBus.Publish(new ClueUpdatedEvent { ClueEntry = content });
         }
     }
 

@@ -2,11 +2,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading.Tasks;
+using System.Threading.Tasks; // 仅用于启动 Task
 using System.Text;
-using Newtonsoft.Json;
 using Events;
+using System.Collections; // 用于协程
+using System;
 
 public class DialogPanel : MonoBehaviour
 {
@@ -14,7 +14,7 @@ public class DialogPanel : MonoBehaviour
     public GameObject chatMessagePrefab;
 
     [Tooltip("聊天消息容器（Vertical Layout Group）")]
-    public Transform contentParent;
+    public Transform chatContent;
 
     [Tooltip("输入框组件")]
     public TMP_InputField inputField;
@@ -22,44 +22,50 @@ public class DialogPanel : MonoBehaviour
     [Tooltip("发送按钮")]
     public Button sendButton;
 
+    [Tooltip("结果输入组件")]
+    public TMP_InputField resultContent;
+
+    [Tooltip("确认按钮")]
+    public Button confirmButton;
+
+    [Header("正确答案配置")]
+    [Tooltip("需要匹配的正确答案")]
+    public string correctAnswer = "南山";
+
     private static DialogPanel s_instance;
 
-    // DeepSeek API 配置
-    private const string DeepSeekApiUrl = "https://api.deepseek.com/v1/chat/completions";
-    private const string ApiKey = "sk-c05934a1774344c29ca7be049fb92741"; // TODO: 替换为你的 DeepSeek API Key
+    // --- UI 状态变量 ---
+    private TMP_Text currentStreamingText;
+    private Queue<string> streamQueue = new Queue<string>(); // 存储流式数据
+    private bool isStreaming = false;
+    private TMP_Text confirmButtonText; // 存储按钮文字组件
+    private bool isConfirmButtonCooldown = false; // 按钮冷却状态
+    private HashSet<uint> answeredPlayers = new HashSet<uint>(); // 已回答正确的玩家列表
 
     void Awake()
     {
         s_instance = this;
-        if (contentParent == null)
-        {
-            contentParent = transform.Find("Panel/LeftPanel/ChatScrollView/Viewport/Content");
-        }
-
+        // 查找 UI 元素
+        if (chatContent == null)
+            chatContent = transform.Find("Panel/LeftPanel/ChatScrollView/Viewport/Content");
         if (inputField == null)
-        {
             inputField = transform.Find("Panel/LeftPanel/InputPanel/InputField").GetComponent<TMP_InputField>();
-            if (inputField == null)
-            {
-                Debug.LogWarning("[DialogPanel.Awake] 未找到输入框组件");
-            }
-        }
-
         if (sendButton == null)
-        {
             sendButton = transform.Find("Panel/LeftPanel/InputPanel/InputField/SendButton").GetComponent<Button>();
-            if (sendButton == null)
-            {
-                Debug.LogWarning("[DialogPanel.Awake] 未找到发送按钮组件");
-            }
-        }
+        if (resultContent == null)
+            resultContent = transform.Find("Panel/RightPanel/ResultPanel/BackGround/InputField").GetComponent<TMP_InputField>();
+        if (confirmButton == null)
+            confirmButton = transform.Find("Panel/RightPanel/ResultPanel/BackGround/ConfirmButton").GetComponent<Button>();
+        
+        // 获取确认按钮的文字组件
+        confirmButtonText = confirmButton.GetComponentInChildren<TMP_Text>();
+        
+        // 绑定按钮事件
+        sendButton.onClick.AddListener(OnSendButtonClicked);
+        confirmButton.onClick.AddListener(OnConfirmButtonClicked);
 
-        if (sendButton != null)
-        {
-            sendButton.onClick.AddListener(OnSendButtonClicked);
-        }
-
-        EventBus.SafeSubscribe<ChatMessageUpdatedEvent>(OnChatMessageUpdated);
+        EventBus.Subscribe<ChatMessageUpdatedEvent>(OnChatMessageUpdated);
+        EventBus.Subscribe<AnswerCorrectEvent>(OnReceiveAnswerCorrectEvent);
     }
 
     void OnDestroy()
@@ -68,8 +74,12 @@ public class DialogPanel : MonoBehaviour
         {
             sendButton.onClick.RemoveListener(OnSendButtonClicked);
         }
-
-        EventBus.SafeUnsubscribe<ChatMessageUpdatedEvent>(OnChatMessageUpdated);
+        if (confirmButton != null)
+        {
+            confirmButton.onClick.RemoveListener(OnConfirmButtonClicked);
+        }
+        EventBus.Unsubscribe<ChatMessageUpdatedEvent>(OnChatMessageUpdated);
+        EventBus.Unsubscribe<AnswerCorrectEvent>(OnReceiveAnswerCorrectEvent);
     }
 
     /* 聊天消息更新事件回调 */
@@ -78,88 +88,200 @@ public class DialogPanel : MonoBehaviour
         CreateChatMessage(e.MessageContent, e.MessageType);
     }
 
+    /* 接收答案正确事件回调 */
+    void OnReceiveAnswerCorrectEvent(AnswerCorrectEvent e)
+    {
+        // 如果该玩家已经回答过，忽略重复事件
+        if (!answeredPlayers.Add(e.playerNetId))
+        {
+            Debug.Log($"[DialogPanel] 玩家 {e.playerNetId} 重复回答，已忽略");
+            return;
+        }
+
+        Debug.Log($"[DialogPanel] 收到答案正确事件，玩家: {e.playerNetId}，当前正确计数: {answeredPlayers.Count}");
+
+        if (answeredPlayers.Count >= 3)
+        {
+            Debug.Log("[DialogPanel] 全部玩家解答正确");
+        }
+    }
+    
     /* 发送按钮点击事件 */
-    private async void OnSendButtonClicked()
+    private void OnSendButtonClicked()
     {
         if (inputField == null || string.IsNullOrWhiteSpace(inputField.text)) return;
 
         string userInput = inputField.text.Trim();
-        inputField.text = ""; // 清空输入框
+        inputField.text = "";
 
-        // 添加用户输入的消息到聊天面板
+        // 添加用户输入的消息 (本地显示)
         AddChatMessage(userInput, MessageType.Modern, publish: false);
 
-        // 调用 DeepSeek API 获取响应
-        string deepSeekResponse = await CallDeepSeekApi(userInput);
+        // 预创建 AI 响应的消息框 (本地显示)
+        CreateStreamingMessage(MessageType.Future);
 
-        if (!string.IsNullOrEmpty(deepSeekResponse))
+        // 启动协程处理流式输出
+        StartCoroutine(StreamingCoroutine(userInput));
+    }
+
+    /* 确认按钮点击事件 */
+    private void OnConfirmButtonClicked()
+    {
+        Debug.Log("[DialogPanel] 确认按钮被点击");
+
+        // 如果在冷却期间，直接返回
+        if (isConfirmButtonCooldown)
         {
-            // 添加 DeepSeek 的响应到聊天面板
-            AddChatMessage(deepSeekResponse, MessageType.Future, publish: true);
+            Debug.Log("[DialogPanel] 按钮冷却中，忽略点击");
+            return;
+        }
+
+        if (resultContent == null) return;
+
+        string userAnswer = resultContent.text.Trim();
+        // 检查答案是否正确
+        if (userAnswer == correctAnswer)
+        {
+            confirmButtonText.text = "正确！";
+            confirmButtonText.color = Color.green;
+            confirmButton.interactable = false; // 禁用按钮
+            Debug.Log("[DialogPanel] 答案正确！");
+            // 发布答案正确事件
+            var localPlayer = Mirror.NetworkClient.localPlayer;
+            if (localPlayer != null)
+            {
+                EventBus.Publish(new AnswerCorrectEvent { playerNetId = localPlayer.netId });
+                Debug.Log("[DialogPanel] 已发布 AnswerCorrectEvent");
+            }
+            else
+                Debug.LogWarning("[DialogPanel] 无法获取本地玩家，未发布 AnswerCorrectEvent");
+        }
+        else
+        {
+            Debug.Log($"[DialogPanel] 答案错误。输入: '{userAnswer}', 正确答案: '{correctAnswer}'");
+            // 启动冷却协程
+            StartCoroutine(ErrorCooldownCoroutine());
+        }
+
+        // 匿名协程函数
+        IEnumerator ErrorCooldownCoroutine()
+        {
+            isConfirmButtonCooldown = true;
+            confirmButtonText.text = "错误！";
+            confirmButtonText.color = Color.red;
+
+            yield return new WaitForSeconds(1f);
+
+            confirmButtonText.text = "确认";
+            confirmButtonText.color = Color.black;
+            isConfirmButtonCooldown = false;
+            Debug.Log("[DialogPanel] 按钮文字已重置");
         }
     }
 
-    /* 调用 DeepSeek API */
-    private async Task<string> CallDeepSeekApi(string prompt)
+
+    /* 流式输出协程（在主线程执行）*/
+    private IEnumerator StreamingCoroutine(string prompt)
     {
-        // TODO: 实现DeepSeek流式输出功能
-        using (HttpClient client = new HttpClient())
+        isStreaming = true;
+        StringBuilder fullResponse = new StringBuilder();
+
+        // 1. 定义回调函数，用于处理来自服务的数据
+        Action<string> onChunkReceived = (chunk) =>
         {
-            try
+            // (运行在后台线程) 将数据块放入队列
+            streamQueue.Enqueue(chunk);
+        };
+
+        Action onStreamEnd = () =>
+        {
+            // (运行在后台线程) 标记流式传输结束
+            isStreaming = false;
+        };
+        
+        Action<string> onError = (errorMessage) =>
+        {
+            // (运行在后台线程) 将错误信息放入队列
+            streamQueue.Enqueue(errorMessage);
+            isStreaming = false;
+        };
+
+        // 2. 在后台线程启动 API 调用
+        //    现在改为调用新拆分出去的 DeepSeekService
+        Task.Run(async () =>
+        {
+            // 调用独立的静态服务
+            await DeepSeekService.GetChatCompletionStreaming(
+                prompt,
+                onChunkReceived,
+                onStreamEnd,
+                onError
+            );
+        });
+
+        // 3. 在主线程处理队列中的流式数据
+        while (isStreaming || streamQueue.Count > 0)
+        {
+            if (streamQueue.Count > 0)
             {
-                // 设置授权头
-                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {ApiKey}");
+                string deltaContent = streamQueue.Dequeue();
+                fullResponse.Append(deltaContent);
 
-                // 构造请求体
-                var requestBody = new
+                // 实时更新 UI
+                if (currentStreamingText != null)
                 {
-                    model = "deepseek-chat",
-                    messages = new[]
-                    {
-                        new { role = "system", content = "你是一个友好的 AI 助手，帮助用户解答问题。" },
-                        new { role = "user", content = prompt }
-                    },
-                    temperature = 0.7,
-                    max_tokens = 1000
-                };
-
-                // 序列化为 JSON
-                string jsonBody = JsonConvert.SerializeObject(requestBody);
-                var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
-
-                // 发送 POST 请求
-                HttpResponseMessage response = await client.PostAsync(DeepSeekApiUrl, content);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    string responseBody = await response.Content.ReadAsStringAsync();
-                    
-                    // 解析响应
-                    var responseObj = JsonConvert.DeserializeObject<DeepSeekResponse>(responseBody);
-                    
-                    if (responseObj?.choices != null && responseObj.choices.Length > 0)
-                    {
-                        return responseObj.choices[0].message.content;
-                    }
-                    else
-                    {
-                        Debug.LogWarning("[DialogPanel] DeepSeek API 返回的响应格式不正确");
-                        return "抱歉，无法获取有效的响应。";
-                    }
-                }
-                else
-                {
-                    string errorBody = await response.Content.ReadAsStringAsync();
-                    Debug.LogError($"[DialogPanel] DeepSeek API 请求失败，状态码: {response.StatusCode}, 错误信息: {errorBody}");
-                    return "抱歉，AI 服务暂时不可用。";
+                    currentStreamingText.text = fullResponse.ToString();
                 }
             }
-            catch (System.Exception ex)
+
+            yield return null; // 等待下一帧
+        }
+
+        // 4. 发布完成事件
+        //    这会将最终结果通过 EventBus 同步给所有玩家
+        string finalContent = fullResponse.ToString();
+        if (!string.IsNullOrEmpty(finalContent))
+        {
+            EventBus.Publish(new ChatMessageUpdatedEvent
             {
-                Debug.LogError($"[DialogPanel] 调用 DeepSeek API 时发生异常: {ex.Message}");
-                return "抱歉，发生了错误。";
+                MessageContent = finalContent,
+                MessageType = MessageType.Future
+            });
+        }
+
+        Debug.Log("[DialogPanel] 流式输出协程结束");
+    }
+
+    /* 创建流式输出的消息容器 */
+    private void CreateStreamingMessage(MessageType type)
+    {
+        if (chatContent == null || chatMessagePrefab == null) return;
+
+        GameObject currentStreamingMessage = Instantiate(chatMessagePrefab, chatContent);
+        currentStreamingMessage.transform.SetAsLastSibling();
+
+        Transform messageTextTransform = currentStreamingMessage.transform.Find("MessageText");
+        if (messageTextTransform != null)
+        {
+            currentStreamingText = messageTextTransform.GetComponent<TMP_Text>();
+            if (currentStreamingText != null)
+            {
+                currentStreamingText.text = "俺在思考……";
             }
         }
+
+        Transform typeTextTransform = currentStreamingMessage.transform.Find("TypeText");
+        if (typeTextTransform != null)
+        {
+            TMP_Text typeText = typeTextTransform.GetComponent<TMP_Text>();
+            if (typeText != null)
+            {
+                typeText.text = type.ToString();
+            }
+        }
+
+        streamQueue.Clear();
+        isStreaming = true;
     }
 
     /* 添加新的聊天消息 */
@@ -169,7 +291,7 @@ public class DialogPanel : MonoBehaviour
         s_instance.CreateChatMessage(content, type);
         if (publish)
         {
-            EventBus.Instance.Publish(new ChatMessageUpdatedEvent
+            EventBus.Publish(new ChatMessageUpdatedEvent
             {
                 MessageContent = content,
                 MessageType = type
@@ -190,10 +312,9 @@ public class DialogPanel : MonoBehaviour
     /* 创建单个聊天消息 */
     private void CreateChatMessage(string content, MessageType type)
     {
-        if (contentParent == null || chatMessagePrefab == null) return;
-        GameObject newMessage = Instantiate(chatMessagePrefab, contentParent);
+        if (chatContent == null || chatMessagePrefab == null) return;
+        GameObject newMessage = Instantiate(chatMessagePrefab, chatContent);
 
-        // 设置消息文本
         Transform messageTextTransform = newMessage.transform.Find("MessageText");
         if (messageTextTransform != null)
         {
@@ -204,14 +325,13 @@ public class DialogPanel : MonoBehaviour
             }
         }
 
-        // 设置消息类型文本
         Transform typeTextTransform = newMessage.transform.Find("TypeText");
         if (typeTextTransform != null)
         {
             TMP_Text typeText = typeTextTransform.GetComponent<TMP_Text>();
             if (typeText != null)
             {
-                typeText.text = type.ToString(); // 显示消息类型
+                typeText.text = type.ToString();
             }
         }
 
@@ -231,39 +351,4 @@ public class ChatMessageData
         this.content = content;
         this.type = type;
     }
-}
-
-/* DeepSeek API 响应数据结构 */
-[System.Serializable]
-public class DeepSeekResponse
-{
-    public string id;
-    public string @object;
-    public long created;
-    public string model;
-    public Choice[] choices;
-    public Usage usage;
-}
-
-[System.Serializable]
-public class Choice
-{
-    public int index;
-    public Message message;
-    public string finish_reason;
-}
-
-[System.Serializable]
-public class Message
-{
-    public string role;
-    public string content;
-}
-
-[System.Serializable]
-public class Usage
-{
-    public int prompt_tokens;
-    public int completion_tokens;
-    public int total_tokens;
 }

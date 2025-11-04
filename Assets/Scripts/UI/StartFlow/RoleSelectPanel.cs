@@ -238,7 +238,7 @@ public class RoleSelectPanel : MonoBehaviour
         if (flow != null) flow.HideRolePanelImmediate();
 
         // 2) 再广播事件（让其他系统/客户端有机会响应）
-        EventBus.Instance.Publish(new GameStartedEvent());
+        EventBus.Publish(new GameStartedEvent());
     }
 
     /// <summary>

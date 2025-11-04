@@ -7,37 +7,45 @@ public class EventBus : Singleton<EventBus>
     // 存储所有事件类型的订阅者列表
     private readonly Dictionary<Type, List<Delegate>> _subscribers = new Dictionary<Type, List<Delegate>>();
 
-    /* 订阅特定类型的事件 */
-    public void Subscribe<T>(Action<T> handler)
+    /* 订阅特定类型的事件（静态安全） */
+    public static void Subscribe<T>(Action<T> handler)
     {
+        if (Instance == null) return;
+
         var type = typeof(T);
-        if (!_subscribers.ContainsKey(type))
+        var subs = Instance._subscribers;
+        if (!subs.ContainsKey(type))
         {
-            _subscribers[type] = new List<Delegate>();
+            subs[type] = new List<Delegate>();
         }
-        if (!_subscribers[type].Contains(handler))
+        if (!subs[type].Contains(handler))
         {
-            _subscribers[type].Add(handler);
+            subs[type].Add(handler);
         }
     }
 
-    /* 取消事件订阅 */
-    public void Unsubscribe<T>(Action<T> handler)
+    /* 取消事件订阅（静态安全） */
+    public static void Unsubscribe<T>(Action<T> handler)
     {
+        if (Instance == null) return;
+
         var type = typeof(T);
-        if (_subscribers.ContainsKey(type))
+        var subs = Instance._subscribers;
+        if (subs.ContainsKey(type))
         {
-            _subscribers[type].Remove(handler);
-            if (_subscribers[type].Count == 0)
+            subs[type].Remove(handler);
+            if (subs[type].Count == 0)
             {
-                _subscribers.Remove(type);
+                subs.Remove(type);
             }
         }
     }
 
-    /* 发布事件到所有订阅者，并进行网络同步 */
-    public void Publish<T>(T eventData)
+    /* 发布事件到所有订阅者，并进行网络同步（静态安全） */
+    public static void Publish<T>(T eventData)
     {
+        if (Instance == null) return;
+
         var type = typeof(T);
 
         // 判断是否为GameEvent（可根据实际需求调整类型判断）
@@ -54,13 +62,16 @@ public class EventBus : Singleton<EventBus>
         }
     }
 
-    // 本地分发事件
-    public void LocalPublish<T>(T eventData)
+    // 本地分发事件（静态安全）
+    public static void LocalPublish<T>(T eventData)
     {
+        if (Instance == null) return;
+
         var type = typeof(T);
-        if (_subscribers.ContainsKey(type))
+        var subs = Instance._subscribers;
+        if (subs.ContainsKey(type))
         {
-            var handlers = new List<Delegate>(_subscribers[type]);
+            var handlers = new List<Delegate>(subs[type]);
             foreach (var handler in handlers)
             {
                 try
@@ -75,12 +86,15 @@ public class EventBus : Singleton<EventBus>
         }
     }
 
-    /* 动态分发（用于网络反序列化后分发） */
-    public void PublishDynamic(Type type, object eventObj)
+    /* 动态分发（用于网络反序列化后分发，静态安全） */
+    public static void PublishDynamic(Type type, object eventObj)
     {
-        if (_subscribers.ContainsKey(type))
+        if (Instance == null) return;
+
+        var subs = Instance._subscribers;
+        if (subs.ContainsKey(type))
         {
-            var handlers = new List<Delegate>(_subscribers[type]);
+            var handlers = new List<Delegate>(subs[type]);
             foreach (var handler in handlers)
             {
                 try
@@ -103,45 +117,45 @@ public class EventBus : Singleton<EventBus>
     /// [静态安全] 订阅事件。
     /// 自动处理实例为 null 的情况。
     /// </summary>
-    public static void SafeSubscribe<T>(Action<T> handler)
-    {
-        if (Instance != null)
-        {
-            Instance.Subscribe(handler);
-        }
-    }
+    // public static void SafeSubscribe<T>(Action<T> handler)
+    // {
+    //     if (Instance != null)
+    //     {
+    //         Instance.Subscribe(handler);
+    //     }
+    // }
 
-    /// <summary>
-    /// [静态安全] 取消订阅事件。
-    /// 这将自动处理在 OnDestroy() 中调用时 Instance 为 null 的情况。
-    /// </summary>
-    public static void SafeUnsubscribe<T>(Action<T> handler)
-    {
-        if (Instance != null)
-        {
-            Instance.Unsubscribe(handler);
-        }
-    }
+    // /// <summary>
+    // /// [静态安全] 取消订阅事件。
+    // /// 这将自动处理在 OnDestroy() 中调用时 Instance 为 null 的情况。
+    // /// </summary>
+    // public static void SafeUnsubscribe<T>(Action<T> handler)
+    // {
+    //     if (Instance != null)
+    //     {
+    //         Instance.Unsubscribe(handler);
+    //     }
+    // }
 
-    /// <summary>
-    /// [静态安全] 发布网络事件。
-    /// </summary>
-    public static void SafePublish<T>(T eventData)
-    {
-        if (Instance != null)
-        {
-            Instance.Publish(eventData);
-        }
-    }
+    // /// <summary>
+    // /// [静态安全] 发布网络事件。
+    // /// </summary>
+    // public static void SafePublish<T>(T eventData)
+    // {
+    //     if (Instance != null)
+    //     {
+    //         Instance.Publish(eventData);
+    //     }
+    // }
 
-    /// <summary>
-    /// [静态安全] 发布本地事件。
-    /// </summary>
-    public static void SafeLocalPublish<T>(T eventData)
-    {
-        if (Instance != null)
-        {
-            Instance.LocalPublish(eventData);
-        }
-    }
+    // /// <summary>
+    // /// [静态安全] 发布本地事件。
+    // /// </summary>
+    // public static void SafeLocalPublish<T>(T eventData)
+    // {
+    //     if (Instance != null)
+    //     {
+    //         Instance.LocalPublish(eventData);
+    //     }
+    // }
 }
