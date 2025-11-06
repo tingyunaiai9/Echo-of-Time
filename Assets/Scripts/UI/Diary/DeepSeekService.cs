@@ -70,18 +70,35 @@ public static class DeepSeekService
      */
     public static async Task GetChatCompletionStreaming(
         string prompt,
+        int timeline,
         Action<string> onChunkReceived,
         Action onStreamEnd,
         Action<string> onError)
     {
         try
         {
+            string systemPrompt;
+            switch (timeline)
+            {
+                case 0:
+                    systemPrompt = "你是一位才华横溢的诗人，请根据用户的输入创作一首优美的诗。";
+                    break;
+                case 2:
+                    systemPrompt = "你是一个严谨的数据分析师，请根据用户的输入，以JSON格式输出。";
+                    break;
+                default:
+                    systemPrompt = "你是一个友好的 AI 助手，帮助用户解答问题。";
+                    break;
+            }
+            
+            Debug.Log($"[DeepSeekService] 使用的 System Prompt: {systemPrompt}");
+
             var requestBody = new
             {
                 model = "deepseek-chat",
                 messages = new[]
                 {
-                    new { role = "system", content = "你是一个友好的 AI 助手，帮助用户解答问题。" },
+                    new { role = "system", content = systemPrompt },
                     new { role = "user", content = prompt }
                 },
                 temperature = 0.7,
