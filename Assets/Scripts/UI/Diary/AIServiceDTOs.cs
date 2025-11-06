@@ -93,4 +93,57 @@ namespace AI.DTOs
         public int completion_tokens;
         public int total_tokens;
     }
+
+    /*
+     * =======================================================
+     * 即梦 AI (Jimeng AI) / 火山引擎 (VolcEngine)
+     * =======================================================
+     */
+
+    /* 即梦 AI 请求体 (Body) */
+    [Serializable]
+    public class JimengRequestBody
+    {
+        public string req_key;
+        public string prompt;
+        public bool return_url;
+        public int width;
+        public int height;
+        public bool use_pre_llm;
+        public bool use_sr;
+        public LogoInfo logo_info;
+        public AIGCMeta aigc_meta;
+    }
+
+    [Serializable]
+    public class LogoInfo
+    {
+        public bool add_logo;
+        public int position;
+        public int language;
+        public float opacity;
+    }
+
+    [Serializable]
+    public class AIGCMeta
+    {
+        public string producer_id;
+    }
+
+    /* 即梦 AI 响应体 (Response) */
+    [Serializable]
+    public class JimengResponse
+    {
+        public int code;
+        public JimengData data;
+        public string message;
+        public string request_id;
+    }
+
+    [Serializable]
+    public class JimengData
+    {
+        public List<string> image_urls;
+        // public List<string> binary_data_base64; // 我们优先使用 image_urls
+    }
 }
