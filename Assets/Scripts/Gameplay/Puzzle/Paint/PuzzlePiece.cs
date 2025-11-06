@@ -59,7 +59,13 @@ public class PuzzlePiece : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         // 检查是否靠近对应遮罩
         if (targetMask != null)
         {
-            float distance = Vector2.Distance(rectTransform.position, targetMask.GetComponent<RectTransform>().position);
+            // 使用屏幕坐标（统一坐标系）
+            Vector2 pieceScreenPos = RectTransformUtility.WorldToScreenPoint(canvas.worldCamera, rectTransform.position);
+            Vector2 maskScreenPos = RectTransformUtility.WorldToScreenPoint(canvas.worldCamera, targetMask.GetComponent<RectTransform>().position);
+            
+            float distance = Vector2.Distance(pieceScreenPos, maskScreenPos);
+
+            Debug.Log($"[PuzzlePiece] 碎片 {pieceId} 位置: {pieceScreenPos}, 遮罩位置: {maskScreenPos}, 距离: {distance}");
 
             if (distance < snapThreshold)
             {
