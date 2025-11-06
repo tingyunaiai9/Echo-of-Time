@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using TMPro;
 
 [RequireComponent(typeof(CanvasGroup))]
 public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
@@ -45,6 +46,24 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     // ===== 静态字典：管理所有镜槽的占用状态 =====
     // Key: 镜槽GameObject, Value: 占用该镜槽的MirrorObject实例
     private static Dictionary<GameObject, MirrorObject> slotOccupancy = new Dictionary<GameObject, MirrorObject>();
+    
+    // ===== 镜子计数管理 =====
+    [Header("UI引用")]
+    [Tooltip("镜子计数文本")]
+    private TextMeshProUGUI mirrorCountText;
+    
+    [Tooltip("重置按钮")]
+    private Button resetButton;
+    
+    [Tooltip("镜像图片(MirrorImage)")]
+    private GameObject mirrorImage;
+    
+    // 静态变量：镜子计数
+    private static int mirrorCount = 6;
+    private const int MAX_MIRROR_COUNT = 6;
+    
+    // 静态列表：记录所有MirrorObject实例
+    private static List<MirrorObject> allMirrorObjects = new List<MirrorObject>();
 
     void Awake()
     {
@@ -56,12 +75,177 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         // 记录原始信息
         originalPosition = rectTransform.anchoredPosition;
         originalParent = transform.parent;
+        
+        // 注册到静态列表
+        if (!allMirrorObjects.Contains(this))
+        {
+            allMirrorObjects.Add(this);
+        }
+        
+        // 查找UI组件(在同级Hierarchy下)
+        FindUIComponents();
+    }
+    
+    void Start()
+    {
+        // 初始化镜子计数显示
+        UpdateMirrorCountDisplay();
+        
+        // 添加重置按钮监听
+        if (resetButton != null)
+        {
+            resetButton.onClick.AddListener(OnResetButtonClicked);
+        }
+    }
+    
+    /*
+     * 查找UI组件
+     */
+    private void FindUIComponents()
+    {
+        // 获取父对象
+        Transform parent = transform.parent;
+        if (parent == null) return;
+        
+        // 查找 MirrorCount (TextMeshProUGUI)
+        Transform mirrorCountTransform = parent.Find("MirrorCount");
+        if (mirrorCountTransform != null)
+        {
+            mirrorCountText = mirrorCountTransform.GetComponent<TextMeshProUGUI>();
+            if (mirrorCountText != null)
+            {
+                Debug.Log("[MirrorObject] 找到 MirrorCount 文本组件");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("[MirrorObject] 未找到 MirrorCount 对象");
+        }
+        
+        // 查找 ResetButton
+        Transform resetButtonTransform = parent.Find("ResetButton");
+        if (resetButtonTransform != null)
+        {
+            resetButton = resetButtonTransform.GetComponent<Button>();
+            if (resetButton != null)
+            {
+                Debug.Log("[MirrorObject] 找到 ResetButton 组件");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("[MirrorObject] 未找到 ResetButton 对象");
+        }
+        
+        // 查找 MirrorImage (本脚本挂载的对象)
+        mirrorImage = gameObject;
+    }
+    
+    /*
+     * 更新镜子计数显示
+     */
+    private void UpdateMirrorCountDisplay()
+    {
+        if (mirrorCountText != null)
+        {
+            mirrorCountText.text = mirrorCount.ToString();
+        }
+        
+        // 检查是否需要禁用拖拽
+        UpdateDragEnabled();
+    }
+    
+    /*
+     * 更新拖拽启用状态
+     */
+    private void UpdateDragEnabled()
+    {
+        bool canDrag = mirrorCount > 0;
+        
+        // 更新所有 MirrorObject 实例的拖拽状态
+        foreach (var mirrorObj in allMirrorObjects)
+        {
+            if (mirrorObj != null && mirrorObj.canvasGroup != null)
+            {
+                mirrorObj.canvasGroup.blocksRaycasts = canDrag;
+                mirrorObj.canvasGroup.interactable = canDrag;
+            }
+        }
+        
+        if (!canDrag)
+        {
+            Debug.Log("[MirrorObject] 镜子计数为0，已禁用拖拽");
+        }
+    }
+    
+    /*
+     * 重置按钮点击事件
+     */
+    private void OnResetButtonClicked()
+    {
+        Debug.Log("[MirrorObject] 重置按钮被点击");
+        
+        // 重置镜子计数
+        mirrorCount = MAX_MIRROR_COUNT;
+        UpdateMirrorCountDisplay();
+        
+        // 重置所有镜槽状态
+        ResetAllMirrorSlots();
+        
+        // 移除所有镜子的占用状态
+        foreach (var mirrorObj in allMirrorObjects)
+        {
+            if (mirrorObj != null)
+            {
+                mirrorObj.RemoveFromMirrorSlot();
+            }
+        }
+        
+        Debug.Log("[MirrorObject] 所有镜槽已重置，镜子计数已恢复为6");
+    }
+    
+    /*
+     * 重置所有镜槽状态
+     */
+    private void ResetAllMirrorSlots()
+    {
+        // 获取所有镜槽对象
+        GameObject[] allObjects = FindObjectsByType<GameObject>(FindObjectsSortMode.None);
+        foreach (GameObject obj in allObjects)
+        {
+            if (obj.name == "MirrorLine" && obj.layer == LayerMask.NameToLayer("Light"))
+            {
+                // 禁用碰撞器
+                BoxCollider2D collider = obj.GetComponent<BoxCollider2D>();
+                if (collider != null)
+                {
+                    collider.enabled = false;
+                }
+                
+                // 恢复原始颜色
+                Image mirrorImage = obj.GetComponent<Image>();
+                if (mirrorImage != null)
+                {
+                    mirrorImage.color = originalMirrorColor;
+                }
+            }
+        }
+        
+        // 清空占用字典
+        slotOccupancy.Clear();
     }
     
     // ======拖拽事件实现======
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        // 检查是否还有可用的镜子计数
+        if (mirrorCount <= 0)
+        {
+            Debug.Log("[MirrorObject] 镜子计数为0，无法拖拽");
+            return;
+        }
+        
         Debug.Log("[MirrorObject] 开始拖拽镜子");
                 
         // 记录当前位置用于返回
@@ -343,9 +527,15 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             mirrorImage.color = activeMirrorColor;
             Debug.Log($"[MirrorObject] 镜槽 {mirrorSlot.name} 的颜色已改为蓝色");
         }
-        
+
         // 记录当前占用的镜槽
         currentMirrorSlot = mirrorSlot;
+        
+        // 镜槽激活后减少镜子计数
+        mirrorCount--;
+        UpdateMirrorCountDisplay();
+        Debug.Log($"[MirrorObject] 镜子计数减1，当前计数: {mirrorCount}");
+        
     }
 
     /*
@@ -387,6 +577,18 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
     void OnDestroy()
     {
+        // 从静态列表中移除
+        if (allMirrorObjects.Contains(this))
+        {
+            allMirrorObjects.Remove(this);
+        }
+        
+        // 移除重置按钮监听
+        if (resetButton != null)
+        {
+            resetButton.onClick.RemoveListener(OnResetButtonClicked);
+        }
+        
         // 销毁时移除镜子占用和拖拽克隆
         RemoveFromMirrorSlot();
         DestroyDraggedClone();
