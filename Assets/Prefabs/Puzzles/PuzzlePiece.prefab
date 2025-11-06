@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 3524108354001986323}
   - component: {fileID: 991823835647246281}
   - component: {fileID: 8805131540750251730}
+  - component: {fileID: 64835011771514437}
+  - component: {fileID: 4316962118648111145}
   m_Layer: 5
   m_Name: PuzzlePiece
   m_TagString: Untagged
@@ -75,3 +77,30 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &64835011771514437
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8157246295664100834}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &4316962118648111145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8157246295664100834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 181cc8577e2663d4e8ccaadb2d1ac92c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PuzzlePiece
+  pieceId: 0
+  correctPosition: {x: 0, y: 0}
+  snapThreshold: 50
