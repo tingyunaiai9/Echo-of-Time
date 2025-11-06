@@ -15,10 +15,20 @@ public class PuzzlePanel : MonoBehaviour
     void Awake()
     {
         s_instance = this;
+        Debug.Log("拼画面板管理器已初始化");
 
         if (puzzlePanel != null)
         {
             puzzlePanel.SetActive(false);
+            Debug.Log("拼画面板已初始化为关闭状态");
+        }
+    }
+
+    void OnDestroy() 
+    {
+        if (s_instance == this)
+        {
+            s_instance = null;
         }
     }
 
