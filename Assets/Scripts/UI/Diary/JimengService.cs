@@ -238,11 +238,20 @@ public static class JimengService
             string signedHeaders = string.Join(";", headers.Keys.Select(k => k.ToLower()));
 
             // 规范化 Query (必须按key排序)
-            var queryParams = System.Web.HttpUtility.ParseQueryString(uri.Query);
+            // (使用手动解析器替换 System.Web.HttpUtility)
             var sortedQuery = new SortedDictionary<string, string>();
-            foreach (var k in queryParams.AllKeys)
+            if (uri.Query.Length > 1) // 确保有Query (忽略 '?')
             {
-                sortedQuery[k] = queryParams[k];
+                string query = uri.Query.Substring(1);
+                foreach (var pair in query.Split('&'))
+                {
+                    var parts = pair.Split('=');
+                    if (parts.Length == 2)
+                    {
+                        // Note: 不处理 URL 解码，因为我们的 Action/Version 不包含特殊字符
+                        sortedQuery[parts[0]] = parts[1];
+                    }
+                }
             }
             string canonicalQuery = string.Join("&", sortedQuery.Select(kv => $"{kv.Key}={kv.Value}"));
 
