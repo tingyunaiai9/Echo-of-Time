@@ -30,7 +30,9 @@ public class DialogPanel : MonoBehaviour
 
     [Header("正确答案配置")]
     [Tooltip("需要匹配的正确答案")]
-    public string correctAnswer = "南山";
+    public string correctAnswer = "";
+    [Tooltip("按层数配置的正确答案列表，第1层索引0，第2层索引1，以此类推")]
+    public List<string> levelAnswers = new List<string>() { "南山", "归去" }; // 初始第一层答案
 
     private static DialogPanel s_instance;
 
@@ -65,7 +67,7 @@ public class DialogPanel : MonoBehaviour
         confirmButton.onClick.AddListener(OnConfirmButtonClicked);
 
         EventBus.Subscribe<ChatMessageUpdatedEvent>(OnChatMessageUpdated);
-        EventBus.Subscribe<AnswerCorrectEvent>(OnReceiveAnswerCorrectEvent);
+        //EventBus.Subscribe<AnswerCorrectEvent>(OnReceiveAnswerCorrectEvent);
     }
 
     void OnDestroy()
@@ -79,7 +81,7 @@ public class DialogPanel : MonoBehaviour
             confirmButton.onClick.RemoveListener(OnConfirmButtonClicked);
         }
         EventBus.Unsubscribe<ChatMessageUpdatedEvent>(OnChatMessageUpdated);
-        EventBus.Unsubscribe<AnswerCorrectEvent>(OnReceiveAnswerCorrectEvent);
+        //EventBus.Unsubscribe<AnswerCorrectEvent>(OnReceiveAnswerCorrectEvent);
     }
 
     /* 聊天消息更新事件回调 */
@@ -89,6 +91,7 @@ public class DialogPanel : MonoBehaviour
     }
 
     /* 接收答案正确事件回调 */
+    /*
     void OnReceiveAnswerCorrectEvent(AnswerCorrectEvent e)
     {
         // 如果该玩家已经回答过，忽略重复事件
@@ -105,6 +108,7 @@ public class DialogPanel : MonoBehaviour
             Debug.Log("[DialogPanel] 全部玩家解答正确");
         }
     }
+    */
     
     /* 发送按钮点击事件 */
     private void OnSendButtonClicked()
@@ -144,26 +148,34 @@ public class DialogPanel : MonoBehaviour
         if (resultContent == null) return;
 
         string userAnswer = resultContent.text.Trim();
-        // 检查答案是否正确
-        if (userAnswer == correctAnswer)
+
+        // 获取当前层级 & 动态正确答案
+        var localPlayer = Mirror.NetworkClient.localPlayer?.GetComponent<TimelinePlayer>();
+        int currentLevel = localPlayer != null ? localPlayer.currentLevel : 1;
+        string expectedAnswer = GetCorrectAnswerForLevel(currentLevel);
+        Debug.Log($"[DialogPanel] 当前层数: {currentLevel}, 期望答案: '{expectedAnswer}', 玩家输入: '{userAnswer}'");
+
+        // 检查答案是否正确（忽略前后空白, 支持完全匹配，可扩展为模糊匹配）
+        if (string.Equals(userAnswer, expectedAnswer, StringComparison.Ordinal))
         {
             confirmButtonText.text = "正确！";
             confirmButtonText.color = Color.green;
             confirmButton.interactable = false; // 禁用按钮
             Debug.Log("[DialogPanel] 答案正确！");
-            // 发布答案正确事件
-            var localPlayer = Mirror.NetworkClient.localPlayer;
             if (localPlayer != null)
             {
-                EventBus.Publish(new AnswerCorrectEvent { playerNetId = localPlayer.netId });
-                Debug.Log("[DialogPanel] 已发布 AnswerCorrectEvent");
+                // 调用服务器上报（层数推进在 NetworkManager 中处理）
+                localPlayer.CmdReportedCorrectAnswer();
+                Debug.Log("[DialogPanel] 已调用 CmdReportedCorrectAnswer() 上报服务器");
             }
             else
-                Debug.LogWarning("[DialogPanel] 无法获取本地玩家，未发布 AnswerCorrectEvent");
+            {
+                Debug.LogWarning("[DialogPanel] 未找到 TimelinePlayer，无法上报答案正确");
+            }
         }
         else
         {
-            Debug.Log($"[DialogPanel] 答案错误。输入: '{userAnswer}', 正确答案: '{correctAnswer}'");
+            Debug.Log($"[DialogPanel] 答案错误。输入: '{userAnswer}', 正确答案应为: '{expectedAnswer}'");
             // 启动冷却协程
             StartCoroutine(ErrorCooldownCoroutine());
         }
@@ -182,6 +194,27 @@ public class DialogPanel : MonoBehaviour
             isConfirmButtonCooldown = false;
             Debug.Log("[DialogPanel] 按钮文字已重置");
         }
+    }
+
+    // 根据层数获取正确答案（层数从1开始，列表索引从0开始）
+    private string GetCorrectAnswerForLevel(int level)
+    {
+        if (level <= 0)
+        {
+            return correctAnswer; // 容错：非法层数返回默认答案
+        }
+        int index = level - 1;
+        if (index < levelAnswers.Count)
+        {
+            var ans = levelAnswers[index];
+            if (!string.IsNullOrWhiteSpace(ans)) return ans.Trim();
+        }
+        // 若该层未配置，返回最后一个已配置答案或默认
+        if (levelAnswers.Count > 0 && !string.IsNullOrWhiteSpace(levelAnswers[levelAnswers.Count - 1]))
+        {
+            return levelAnswers[levelAnswers.Count - 1].Trim();
+        }
+        return correctAnswer;
     }
 
 
