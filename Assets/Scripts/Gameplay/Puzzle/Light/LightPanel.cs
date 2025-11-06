@@ -5,17 +5,18 @@ using Events;
 /* 镜槽（MirrorSlot)结构体
  * 用于存储镜槽信息
  */
+[System.Serializable]
 public struct MirrorSlot
 {
     public int xindex;
     public int yindex;
-    public float rotation; // 只能是0,90,180,270
+    public float rotation; // 只能是0,45,90,135
     public bool active;
 }
 
 /*
  * 光线谜题管理器
- * 管理游戏进度和完成检测，支持静态方法控制面板开关
+ * 管理游戏进度和完成检测,支持静态方法控制面板开关
  */
 public class LightPanel : MonoBehaviour
 {
@@ -35,6 +36,7 @@ public class LightPanel : MonoBehaviour
     [Tooltip("格子颜色")]
     public Color cellColor = Color.white;
 
+    [Header("镜槽配置（索引从0开始）")]
     [Tooltip("镜槽数组配置")]
     public MirrorSlot[] mirrorSlots = new MirrorSlot[10];
 
@@ -74,9 +76,6 @@ public class LightPanel : MonoBehaviour
 
         ContentContainer = transform.Find("Background/Content");
 
-        // 随机初始化 MirrorSlots
-        InitializeMirrorSlots();
-
         // 生成格子
         GenerateCells();
     }
@@ -102,33 +101,6 @@ public class LightPanel : MonoBehaviour
             s_initialized = false;
             s_instance = null;
             s_isPuzzleCompleted = false; // 清理完成标志
-        }
-    }
-
-    /*
-     * 初始化 MirrorSlots
-     */
-    private void InitializeMirrorSlots()
-    {
-        // 指定 10 个的镜槽值
-        mirrorSlots = new MirrorSlot[]
-        {
-            new MirrorSlot { xindex = 0, yindex = 0, rotation = 0, active = true},
-            new MirrorSlot { xindex = 3, yindex = 2, rotation = 45, active = true},
-            new MirrorSlot { xindex = 5, yindex = 4, rotation = 90, active = true},
-            new MirrorSlot { xindex = 7, yindex = 6, rotation = 135, active = true},
-            new MirrorSlot { xindex = 10, yindex = 8, rotation = 0, active = true},
-            new MirrorSlot { xindex = 12, yindex = 1, rotation = 45, active = true},
-            new MirrorSlot { xindex = 14, yindex = 3, rotation = 90, active = true},
-            new MirrorSlot { xindex = 1, yindex = 5, rotation = 135, active = true},
-            new MirrorSlot { xindex = 8, yindex = 7, rotation = 0, active = true},
-            new MirrorSlot { xindex = 11, yindex = 2, rotation = 45, active = true}
-        };
-    
-        Debug.Log("[LightPanel] MirrorSlots 已初始化为具体值：");
-        for (int i = 0; i < mirrorSlots.Length; i++)
-        {
-            Debug.Log($"  槽位 {i}: (x: {mirrorSlots[i].xindex}, y: {mirrorSlots[i].yindex}, rotation: {mirrorSlots[i].rotation})");
         }
     }
 
@@ -184,6 +156,9 @@ public class LightPanel : MonoBehaviour
     {
         foreach (var slot in mirrorSlots)
         {
+            if (!slot.active)
+                continue;
+
             int index = slot.yindex * columns + slot.xindex;
             if (index < 0 || index >= cells.Length)
                 continue;
