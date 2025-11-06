@@ -1,7 +1,8 @@
 /* JimengService.cs
+ * (已更新，包含完整的火山引擎 v3.1 签名认证)
+ *
  * 独立负责处理 即梦 AI v3.1 图像生成 API
  * 包含：1. 提交任务 -> 2. 轮询结果
- * 警告：仍需实现火山引擎（VolcEngine）签名认证
  */
 using System;
 using System.Net.Http;
@@ -11,15 +12,17 @@ using AI.DTOs; // 引入 DTO
 using Newtonsoft.Json;
 using UnityEngine;
 using System.Collections.Generic; // 用于 Dictionary
+using System.Linq; // 用于 OrderBy
 
 public static class JimengService
 {
     // API 配置
+    private const string Host = "visual.volcengineapi.com";
     private const string SubmitTaskUrl = "https://visual.volcengineapi.com?Action=CVSync2AsyncSubmitTask&Version=2022-08-31";
     private const string QueryTaskUrl = "https://visual.volcengineapi.com?Action=CVSync2AsyncGetResult&Version=2022-08-31";
     private const string ReqKey = "jimeng_t2i_v31"; // v3.1 的固定值
 
-    // !! 火山引擎的鉴权密钥 (!!不要硬编码, 应从安全位置读取!!)
+    // !! 鉴权密钥 (!!不要硬编码, 应从安全位置读取!!)
     private const string VolcAccessKey = "YOUR_ACCESS_KEY"; // TODO: 替换
     private const string VolcSecretKey = "YOUR_SECRET_KEY"; // TODO: 替换
     private const string VolcRegion = "cn-north-1";
@@ -31,18 +34,15 @@ public static class JimengService
     private const int PollIntervalMs = 2000; // 轮询间隔 (2秒)
     private const int PollTimeoutSeconds = 60; // 总超时 (60秒)
 
-
     /// <summary>
-    /// 调用 即梦 AI v3.1 API 生成图像 (包含提交 + 轮询)
+    /// (公共) 调用 即梦 AI v3.1 API 生成图像 (包含提交 + 轮询)
     /// </summary>
-    /// <param name="prompt">用户输入的提示词</param>
-    /// <param name="onSuccess">成功时调用 (string: imageUrl)</param>
-    /// <param name="onError">发生错误时调用 (string: errorMessage)</param>
     public static async Task GenerateImage(
         string prompt,
         Action<string> onSuccess,
         Action<string> onError)
     {
+        // (此方法与上一版回复完全相同，它调用下面的内部方法)
         try
         {
             // 1. 提交任务
@@ -63,9 +63,23 @@ public static class JimengService
             {
                 var queryResponse = await QueryTaskInternal(taskId);
 
-                if (queryResponse == null || queryResponse.code != 10000)
+                if (queryResponse == null)
                 {
-                    onError?.Invoke($"查询失败: {queryResponse?.message ?? "未知错误"}");
+                    onError?.Invoke("查询失败: 未知错误");
+                    return;
+                }
+                
+                if (queryResponse.code != 10000) // 10000 = Success
+                {
+                    // 检查是否是 'ResponseMetadata' 风格的错误
+                    if (queryResponse.ResponseMetadata?.Error != null)
+                    {
+                        onError?.Invoke($"查询失败: {queryResponse.ResponseMetadata.Error.Message} (Code: {queryResponse.ResponseMetadata.Error.Code})");
+                    }
+                    else
+                    {
+                        onError?.Invoke($"查询失败: {queryResponse.message ?? "未知错误"}");
+                    }
                     return;
                 }
 
@@ -120,14 +134,14 @@ public static class JimengService
         {
             req_key = ReqKey,
             prompt = prompt,
-            use_pre_llm = true, // 开启文本扩写
+            use_pre_llm = true,
             seed = -1,
-            width = 1328, // 标清 1:1
+            width = 1328,
             height = 1328
         };
         string jsonBody = JsonConvert.SerializeObject(requestBody);
         
-        // 签名
+        // (调用包含签名的完整请求)
         var request = await CreateSignedRequest(SubmitTaskUrl, jsonBody);
         if (request == null) return null; // 签名失败
 
@@ -174,7 +188,7 @@ public static class JimengService
         };
         string jsonBody = JsonConvert.SerializeObject(requestBody);
 
-        // 签名
+        // (调用包含签名的完整请求)
         var request = await CreateSignedRequest(QueryTaskUrl, jsonBody);
         if (request == null) return null; // 签名失败
 
@@ -187,35 +201,85 @@ public static class JimengService
             return null;
         }
 
-        return JsonConvert.DeserializeObject<JimengQueryResponse>(responseBody);
+        // 同时反序列化为 JimengQueryResponse 和 通用错误
+        var queryResponse = JsonConvert.DeserializeObject<JimengQueryResponse>(responseBody);
+        queryResponse.ResponseMetadata = JsonConvert.DeserializeObject<VolcErrorResponse>(responseBody).ResponseMetadata;
+        
+        return queryResponse;
     }
 
     /// <summary>
-    /// (私有) 构造已签名的 HttpRequestMessage (占位符)
+    /// (私有) 核心鉴权：创建已签名的 HttpRequestMessage
     /// </summary>
     private static async Task<HttpRequestMessage> CreateSignedRequest(string url, string jsonBody)
     {
-        var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
-        var request = new HttpRequestMessage(HttpMethod.Post, url);
-        request.Content = content;
-
-        // 3. !! 关键：火山引擎签名认证 !!
-        //    您必须实现 GetVolcEngineAuthHeaders
-        //    这需要您查阅火山引擎的 "公共参数 - 签名参数" 文档
         try
         {
-            // Dictionary<string, string> authHeaders = await GetVolcEngineAuthHeaders(
-            //     VolcAccessKey, VolcSecretKey, VolcRegion, VolcService, jsonBody
-            // );
-            //
-            // foreach (var header in authHeaders)
-            // {
-            //     request.Headers.Add(header.Key, header.Value);
-            // }
+            var uri = new Uri(url);
+            var request = new HttpRequestMessage(HttpMethod.Post, uri);
+            request.Content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
 
-            // 【【临时占位符，请删除】】
-            request.Headers.Add("X-Temp-Auth-Placeholder", "Implement VolcEngine Signature");
+            // --- 步骤 1 & 2: 准备基础数据 ---
+            DateTime utcNow = DateTime.UtcNow;
+            string xDate = utcNow.ToString("yyyyMMdd'T'HHmmss'Z'");
+            string shortDate = utcNow.ToString("yyyyMMdd");
+            string payloadHash = VolcSigner.HashSHA256(jsonBody);
+
+            // 规范化 Headers (必须按key排序)
+            var headers = new SortedDictionary<string, string>
+            {
+                { "host", Host },
+                { "x-date", xDate },
+                { "x-content-sha256", payloadHash },
+                { "content-type", "application/json" }
+            };
             
+            string canonicalHeaders = string.Join("\n", headers.Select(kv => $"{kv.Key.ToLower()}:{kv.Value.Trim()}")) + "\n";
+            string signedHeaders = string.Join(";", headers.Keys.Select(k => k.ToLower()));
+
+            // 规范化 Query (必须按key排序)
+            var queryParams = System.Web.HttpUtility.ParseQueryString(uri.Query);
+            var sortedQuery = new SortedDictionary<string, string>();
+            foreach (var k in queryParams.AllKeys)
+            {
+                sortedQuery[k] = queryParams[k];
+            }
+            string canonicalQuery = string.Join("&", sortedQuery.Select(kv => $"{kv.Key}={kv.Value}"));
+
+            // --- 步骤 2: 创建规范请求 (CanonicalRequest) ---
+            string canonicalRequest =
+                "POST" + "\n" +         // HTTPRequestMethod
+                uri.AbsolutePath + "\n" + // CanonicalURI (e.g., "/")
+                canonicalQuery + "\n" +   // CanonicalQueryString
+                canonicalHeaders + "\n" + // CanonicalHeaders
+                signedHeaders + "\n" +    // SignedHeaders
+                payloadHash;              // HexEncode(Hash(RequestPayload))
+
+            // --- 步骤 3: 创建待签名字符串 (StringToSign) ---
+            string credentialScope = $"{shortDate}/{VolcRegion}/{VolcService}/request";
+            string stringToSign =
+                "HMAC-SHA256" + "\n" +          // Algorithm
+                xDate + "\n" +                  // RequestDate
+                credentialScope + "\n" +        // CredentialScope
+                VolcSigner.HashSHA256(canonicalRequest); // HexEncode(Hash(CanonicalRequest))
+
+            // --- 步骤 4: 派生签名密钥 (kSigning) ---
+            byte[] kSigning = VolcSigner.GenSigningSecretKeyV4(VolcSecretKey, shortDate, VolcRegion, VolcService);
+
+            // --- 步骤 5: 计算签名 (Signature) ---
+            byte[] signatureBytes = VolcSigner.HmacSHA256(kSigning, stringToSign);
+            string signature = VolcSigner.ToHexString(signatureBytes);
+
+            // --- 步骤 6: 构建 Authorization 标头 ---
+            string authorization = $"HMAC-SHA256 Credential={VolcAccessKey}/{credentialScope}, SignedHeaders={signedHeaders}, Signature={signature}";
+
+            // --- 7. 将所有标头添加到实际请求中 ---
+            request.Headers.Host = Host;
+            request.Headers.Add("X-Date", xDate);
+            request.Headers.Add("X-Content-Sha256", payloadHash); // 这是一个非标准但常用的 SigV4 标头
+            request.Headers.Add("Authorization", authorization);
+            // (Content-Type 已在 Content 属性中设置)
+
             return request;
         }
         catch (Exception authEx)
@@ -224,17 +288,25 @@ public static class JimengService
             return null;
         }
     }
+}
 
-    // TODO: 您必须实现这个方法
-    // private static async Task<Dictionary<string, string>> GetVolcEngineAuthHeaders(...)
-    // {
-    //    // 1. 获取当前时间戳 (ISO8601 格式)
-    //    // 2. 构造规范请求 (Canonical Request)
-    //    // 3. 构造签名字符串 (String to Sign)
-    //    // 4. 计算签名 (HMAC-SHA256)
-    //    // 5. 构造 Authorization 标头
-    //
-    //    // 返回包含 'Authorization', 'X-Date', 'X-Content-Sha256' 等的字典
-    //    throw new NotImplementedException("请根据火山引擎文档实现签名算法");
-    // }
+
+/*
+ * (辅助类) 用于反序列化火山引擎的通用错误响应
+ */
+[Serializable]
+public class VolcErrorResponse
+{
+    public ResponseMetadata ResponseMetadata { get; set; }
+}
+[Serializable]
+public class ResponseMetadata
+{
+    public VolcError Error { get; set; }
+}
+[Serializable]
+public class VolcError
+{
+    public string Code { get; set; }
+    public string Message { get; set; }
 }
