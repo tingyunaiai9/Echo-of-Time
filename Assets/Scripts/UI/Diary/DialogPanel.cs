@@ -382,6 +382,34 @@ public class DialogPanel : MonoBehaviour
 
         newMessage.transform.SetAsLastSibling();
     }
+
+    // 进入新的一层时重置“提交”按钮状态（从“正确！”恢复为“提交”并可点击）
+    public static void ResetConfirmButtonForNewLevel()
+    {
+        if (s_instance == null) return;
+        try
+        {
+            if (s_instance.confirmButtonText != null)
+            {
+                s_instance.confirmButtonText.text = "提交";
+                s_instance.confirmButtonText.color = Color.black;
+            }
+            if (s_instance.confirmButton != null)
+            {
+                s_instance.confirmButton.interactable = true;
+            }
+            if (s_instance.resultContent != null)
+            {
+                s_instance.resultContent.text = string.Empty;
+            }
+            s_instance.isConfirmButtonCooldown = false;
+            Debug.Log("[DialogPanel] 已因层数提升重置提交按钮为 '提交'");
+        }
+        catch (Exception ex)
+        {
+            Debug.LogWarning($"[DialogPanel] 重置提交按钮失败: {ex.Message}");
+        }
+    }
 }
 
 /* 聊天消息数据结构 */

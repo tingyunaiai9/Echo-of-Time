@@ -47,7 +47,11 @@ public class TimelinePlayer : NetworkBehaviour
     private void OnLevelChanged(int oldLevel, int newLevel)
     {
         Debug.Log($"[TimelinePlayer] {playerName} 的层数从 {oldLevel} 变为 {newLevel}");
-        // TODO: 在这里可以添加层数变化后的客户端逻辑，例如重置谜题、播放特效等
+        // 仅在本地玩家上重置本地UI（提交按钮从“正确！”恢复为“提交”）
+        if (isLocalPlayer)
+        {
+            DialogPanel.ResetConfirmButtonForNewLevel();
+        }
     }
 
     [Header("玩家信息")]
