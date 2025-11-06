@@ -1,22 +1,23 @@
-/*
- * EchoNetworkManager.cs
- *
- * Mirror + Sync Relay 三人联机房间管理器。
- * 负责房间创建、加入、离开、玩家时间线分配、Relay回调注册与处理。
- * 通过 RelayTransportMirror 实现跨网络连接，支持 ParrelSync 多实例测试。
+/* Core/Services/Network/NetworkManager.cs
+ * 
+ * Mirror + Sync Relay 三人联机房间管理器
+ * 负责房间创建、加入、离开、玩家时间线分配、Relay回调注册与处理
+ * 通过 RelayTransportMirror 实现跨网络连接，支持 ParrelSync 多实例测试
  *
  * 主要职责：
- * - 创建/加入/离开房间（Host/Client流程）
+ * - 创建/加入/离开房间（Host/Client 流程）
  * - 维护当前房间与玩家信息
  * - 注册并处理 Relay 回调（房间、玩家、主机迁移等）
  * - Mirror 生命周期钩子（OnStartServer/Client/Connect/Disconnect）
  * - 时间线分配与查询（3人合作场景）
+ * - 支持本地测试模式和联网模式自动切换
  *
  * 使用说明：
  * - 挂载于场景唯一 NetworkManager 物体
  * - 配置 RelayTransportMirror 并粘贴 Room Profile UUID
  * - 设置 PlayerPrefab 后自动生成玩家对象
  * - 支持 ParrelSync 多实例本地测试
+ * - 本地测试时设置 skipRelay = true
  */
 
 using System;
@@ -30,33 +31,33 @@ using Unity.Sync.Relay.Transport.Mirror;
 using UnityEngine;
 
 /*
- * 网络管理器，基于Mirror扩展的跨时空合作网络逻辑
+ * Echo 网络管理器，基于 Mirror 扩展的跨时空合作网络逻辑
+ * 集成 Sync Relay 实现三人联机房间管理和时间线分配
  */
-/// <summary>
-/// Mirror 网络管理器，集成 Sync Relay 房间与玩家管理。
-/// </summary>
 public class EchoNetworkManager : Mirror.NetworkManager
 {
     [Header("开发测试选项")]
-    public bool skipRelay = false;
+    public bool skipRelay = false; // 本地测试模式开关，true=跳过 Relay 初始化
 
     [Header("三人联机房间设置")]
     [SerializeField] private int maxPlayers = 3; // 房间最大玩家数
-    [SerializeField] private string roomNamespace = "EchoOfTime"; // Relay房间命名空间
+    [SerializeField] private string roomNamespace = "EchoOfTime"; // Relay 房间命名空间
 
     [Header("玩家信息")]
     private string playerUuid; // 当前玩家唯一标识
     private string playerName; // 当前玩家显示名
 
     [Header("房间信息")]
-    private RelayRoom currentRoom; // 当前房间信息（Relay同步）
+    private RelayRoom currentRoom; // 当前房间信息（Relay 同步）
     private Dictionary<uint, int> playerTimelineMap = new Dictionary<uint, int>(); // 玩家时间线分配表（TransportId -> Timeline）
     private readonly Dictionary<int, int> _timelineByConnectionId = new Dictionary<int, int>(); // 连接ID -> 时间线映射（用于断线重连恢复）
 
-    private RelayTransportMirror relayTransport; // Relay传输组件（Mirror Transport）
-    /// <summary>
-    /// Unity生命周期：启动时初始化Relay、注册回调、设置玩家信息。
-    /// </summary>
+    private RelayTransportMirror relayTransport; // Relay 传输组件（Mirror Transport）
+    
+    /*
+     * Unity 生命周期：启动时初始化网络事件、Relay、注册回调、设置玩家信息
+     * 支持本地测试模式和联网模式的自动切换
+     */
     public override void Start()
     {
         base.Start();
@@ -80,12 +81,10 @@ public class EchoNetworkManager : Mirror.NetworkManager
         SetupPlayerInfo();
     }
     
-    /// <summary>
-    /// 初始化 Relay Transport
-    /// </summary>
-    /// <summary>
-    /// 获取并初始化 RelayTransportMirror。
-    /// </summary>
+    /*
+     * 获取并初始化 RelayTransportMirror 组件
+     * 联网模式必须组件，用于 Relay 通信
+     */
     private void InitializeRelayTransport()
     {
         relayTransport = GetComponent<RelayTransportMirror>();
@@ -95,12 +94,10 @@ public class EchoNetworkManager : Mirror.NetworkManager
         }
     }
     
-    /// <summary>
-    /// 设置玩家信息
-    /// </summary>
-    /// <summary>
-    /// 生成玩家唯一ID与显示名，并设置到Relay。
-    /// </summary>
+    /*
+     * 生成玩家唯一 ID 与显示名，并设置到 Relay
+     * UUID 用于 Relay 服务器识别，Name 用于显示
+     */
     private void SetupPlayerInfo()
     {
         playerUuid = Guid.NewGuid().ToString();
@@ -113,12 +110,10 @@ public class EchoNetworkManager : Mirror.NetworkManager
         }
     }
     
-    /// <summary>
-    /// 注册 Relay 回调函数
-    /// </summary>
-    /// <summary>
-    /// 注册所有 Relay 回调（连接、玩家进出、房间信息、主机迁移等）。
-    /// </summary>
+    /*
+     * 注册所有 Relay 回调（连接、玩家进出、房间信息、主机迁移等）
+     * 通过 RelayCallbacks 监听 Relay 服务器事件
+     */
     private void RegisterRelayCallbacks()
     {
         if (relayTransport == null)
@@ -129,7 +124,7 @@ public class EchoNetworkManager : Mirror.NetworkManager
         
         RelayCallbacks callbacks = new RelayCallbacks();
         
-    // 连接到Relay服务器的回调（房间信息同步，成功后 currentRoom 有效）
+        // 连接到 Relay 服务器的回调（房间信息同步，成功后 currentRoom 有效）
         callbacks.RegisterConnectToRelayServer((code, room) =>
         {
             if (code == (uint)RelayCode.OK)
@@ -144,34 +139,34 @@ public class EchoNetworkManager : Mirror.NetworkManager
             }
         });
         
-    // 玩家进入房间的回调（用于分配时间线、更新玩家列表）
+        // 玩家进入房间的回调（用于分配时间线、更新玩家列表）
         callbacks.RegisterPlayerEnterRoom((player) =>
         {
             Debug.Log($"Player entered room - ID: {player.ID}, Name: {player.Name}, TransportId: {player.TransportId}");
             OnPlayerJoinedRoom(player);
         });
         
-    // 玩家离开房间的回调（清理时间线分配）
+        // 玩家离开房间的回调（清理时间线分配）
         callbacks.RegisterPlayerLeaveRoom((player) =>
         {
             Debug.Log($"Player left room - ID: {player.ID}, Name: {player.Name}");
             OnPlayerLeftRoom(player);
         });
         
-    // 房间信息更新的回调（玩家列表、状态变更等）
+        // 房间信息更新的回调（玩家列表、状态变更等）
         callbacks.RegisterRoomInfoUpdate((room) =>
         {
             currentRoom = room;
             Debug.Log($"Room info updated - Players: {room.Players.Count}/{maxPlayers}");
         });
         
-    // 玩家被踢出的回调（异常处理）
+        // 玩家被踢出的回调（异常处理）
         callbacks.RegisterPlayerKicked((code, reason) =>
         {
             Debug.LogWarning($"Player kicked - Code: {code}, Reason: {reason}");
         });
         
-    // MasterClient迁移的回调（主机变更，通常用于断线重连场景）
+        // MasterClient 迁移的回调（主机变更，通常用于断线重连场景）
         callbacks.RegisterMasterClientMigrate((newMasterClientID) =>
         {
             Debug.Log($"Master client migrated to: {newMasterClientID}");
@@ -180,14 +175,11 @@ public class EchoNetworkManager : Mirror.NetworkManager
         relayTransport.SetCallbacks(callbacks);
     }
     
-    /// <summary>
-    /// 创建房间（作为 Host）
-    /// </summary>
-    /// <summary>
-    /// 创建房间（Host流程，成功后自动 StartHost）。
-    /// </summary>
-    /// <param name="roomName">房间名</param>
-    /// <param name="callback">结果回调</param>
+    /*
+     * 创建房间（Host 流程，成功后自动 StartHost）
+     * @param roomName 房间名称
+     * @param callback 结果回调 (success, message)
+     */
     public void CreateRoom(string roomName, Action<bool, string> callback = null)
     {
         if (skipRelay)
@@ -206,9 +198,10 @@ public class EchoNetworkManager : Mirror.NetworkManager
         StartCoroutine(CreateRoomCoroutine(roomName, callback));
     }
     
-    /// <summary>
-    /// 协程：异步创建房间并处理结果。
-    /// </summary>
+    /*
+     * 协程：异步创建房间并处理结果
+     * 创建成功后自动启动 Host，房间状态必须为 ServerAllocated
+     */
     private IEnumerator CreateRoomCoroutine(string roomName, Action<bool, string> callback)
     {
         Debug.Log($"Creating room: {roomName}");
@@ -249,13 +242,10 @@ public class EchoNetworkManager : Mirror.NetworkManager
         });
     }
     
-    /// <summary>
-    /// 查询并加入房间（作为 Client）
-    /// </summary>
-    /// <summary>
-    /// 查询并加入可用房间（Client流程，自动 StartClient）。
-    /// </summary>
-    /// <param name="callback">结果回调</param>
+    /*
+     * 查询并加入可用房间（Client 流程，自动 StartClient）
+     * @param callback 结果回调 (success, message)
+     */
     public void JoinRoom(Action<bool, string> callback = null)
     {
         if (skipRelay)
@@ -274,9 +264,10 @@ public class EchoNetworkManager : Mirror.NetworkManager
         StartCoroutine(JoinRoomCoroutine(callback));
     }
     
-    /// <summary>
-    /// 协程：异步查询房间列表并尝试加入第一个可用房间。
-    /// </summary>
+    /*
+     * 协程：异步查询房间列表并尝试加入第一个可用房间
+     * 查找 ServerAllocated 和 Ready 状态的房间
+     */
     private IEnumerator JoinRoomCoroutine(Action<bool, string> callback)
     {
         Debug.Log("Searching for available rooms...");
@@ -316,9 +307,11 @@ public class EchoNetworkManager : Mirror.NetworkManager
         });
     }
     
-    /// <summary>
-    /// 协程：通过房间UUID查询并加入房间。
-    /// </summary>
+    /*
+     * 协程：通过房间 UUID 查询并加入房间
+     * @param roomUuid 房间唯一标识符
+     * @param callback 结果回调 (success, message)
+     */
     private IEnumerator QueryAndJoinRoom(string roomUuid, Action<bool, string> callback)
     {
         Debug.Log($"Querying room: {roomUuid}");
@@ -342,14 +335,11 @@ public class EchoNetworkManager : Mirror.NetworkManager
         });
     }
     
-    /// <summary>
-    /// 通过房间代码加入房间
-    /// </summary>
-    /// <summary>
-    /// 通过房间码加入房间（适合 ParrelSync 多实例测试）。
-    /// </summary>
-    /// <param name="roomCode">房间码</param>
-    /// <param name="callback">结果回调</param>
+    /*
+     * 通过房间码加入房间（适合 ParrelSync 多实例测试）
+     * @param roomCode 房间码
+     * @param callback 结果回调 (success, message)
+     */
     public void JoinRoomByCode(string roomCode, Action<bool, string> callback = null)
     {
         if (skipRelay)
@@ -362,18 +352,23 @@ public class EchoNetworkManager : Mirror.NetworkManager
         StartCoroutine(JoinRoomByCodeCoroutine(roomCode, callback));
     }
     
-    /// <summary>
-    /// 协程：通过房间码异步查询并加入房间。
-    /// </summary>
+    /*
+     * 协程：通过房间码异步查询并加入房间
+     * @param roomCode 房间码
+     * @param callback 结果回调 (success, message)
+     */
     private IEnumerator JoinRoomByCodeCoroutine(string roomCode, Action<bool, string> callback)
     {
         Debug.Log($"Joining room by code: {roomCode}");
         yield return QueryAndJoinRoomByCodeCoroutine(roomCode, callback);
     }
 
-    /// <summary>
-    /// 协程：轮询查询房间状态，直到房间就绪或超时。
-    /// </summary>
+    /*
+     * 协程：轮询查询房间状态，直到房间就绪或超时
+     * @param roomCode 房间码
+     * @param callback 结果回调 (success, message)
+     * @param timeoutSeconds 超时时间（秒），默认 10 秒
+     */
     private IEnumerator QueryAndJoinRoomByCodeCoroutine(string roomCode, Action<bool, string> callback, int timeoutSeconds = 10)
     {
         float time = 0;
@@ -420,12 +415,10 @@ public class EchoNetworkManager : Mirror.NetworkManager
         }
     }
     
-    /// <summary>
-    /// 离开房间
-    /// </summary>
-    /// <summary>
-    /// 离开房间（Host/Client/Server均可调用，清理状态）。
-    /// </summary>
+    /*
+     * 离开房间（Host/Client/Server 均可调用，清理状态）
+     * 根据当前角色停止相应的网络服务并清理数据
+     */
     public void LeaveRoom()
     {
         if (NetworkServer.active && NetworkClient.isConnected)
@@ -448,12 +441,10 @@ public class EchoNetworkManager : Mirror.NetworkManager
     
     #region 时间线相关功能
     
-    /// <summary>
-    /// 初始化跨时空合作房间（3玩家不同时间线）
-    /// </summary>
-    /// <summary>
-    /// 初始化三人时间线合作房间（仅服务器调用）。
-    /// </summary>
+    /*
+     * 初始化三人时间线合作房间（仅服务器调用）
+     * 清空时间线分配表，准备为新玩家分配时间线
+     */
     public void InitializeCoopSession()
     {
         if (!NetworkServer.active)
@@ -466,14 +457,11 @@ public class EchoNetworkManager : Mirror.NetworkManager
         playerTimelineMap.Clear();
     }
     
-    /// <summary>
-    /// 分配玩家到不同时间线
-    /// </summary>
-    /// <summary>
-    /// 分配指定玩家到某个时间线（仅服务器调用）。
-    /// </summary>
-    /// <param name="transportId">玩家TransportId</param>
-    /// <param name="timeline">时间线编号</param>
+    /*
+     * 分配指定玩家到某个时间线（仅服务器调用）
+     * @param transportId 玩家 TransportId
+     * @param timeline 时间线编号（0=Ancient, 1=Modern, 2=Future）
+     */
     public void AssignPlayerToTimeline(uint transportId, int timeline)
     {
         if (!NetworkServer.active) return;
@@ -494,46 +482,39 @@ public class EchoNetworkManager : Mirror.NetworkManager
         Debug.Log($"Assigned player {transportId} to timeline {timeline}");
     }
     
-    /// <summary>
-    /// 获取玩家的时间线
-    /// </summary>
-    /// <summary>
-    /// 查询玩家所属时间线。
-    /// </summary>
-    /// <param name="transportId">玩家TransportId</param>
-    /// <returns>时间线编号，未分配返回-1</returns>
+    /*
+     * 获取玩家所属时间线
+     * @param transportId 玩家 TransportId
+     * @returns 时间线编号（0=Ancient, 1=Modern, 2=Future），未分配返回 -1
+     */
     public int GetPlayerTimeline(uint transportId)
     {
         return playerTimelineMap.TryGetValue(transportId, out int timeline) ? timeline : -1;
     }
     
-    /// <summary>
-    /// 获取当前房间信息
-    /// </summary>
-    /// <summary>
-    /// 获取当前房间信息（Relay同步）。
-    /// </summary>
+    /*
+     * 获取当前房间信息（Relay 同步）
+     * @returns 当前房间对象，未加入返回 null
+     */
     public RelayRoom GetCurrentRoom()
     {
         return currentRoom;
     }
     
-    /// <summary>
-    /// 获取当前玩家信息
-    /// </summary>
-    /// <summary>
-    /// 获取当前玩家信息（Relay同步）。
-    /// </summary>
+    /*
+     * 获取当前玩家信息（Relay 同步）
+     * @returns 当前玩家对象，未连接返回 null
+     */
     public RelayPlayer GetCurrentPlayer()
     {
         return relayTransport?.GetCurrentPlayer();
     }
 
-    /// <summary>
-    /// 服务器记录连接ID与时间线的映射关系（用于断线重连恢复）。
-    /// </summary>
-    /// <param name="conn">网络连接</param>
-    /// <param name="timeline">时间线编号</param>
+    /*
+     * 服务器记录连接 ID 与时间线的映射关系（用于断线重连恢复）
+     * @param conn 网络连接
+     * @param timeline 时间线编号（0=Ancient, 1=Modern, 2=Future）
+     */
     [Server]
     public void ServerRememberTimeline(NetworkConnectionToClient conn, int timeline)
     {
@@ -553,10 +534,10 @@ public class EchoNetworkManager : Mirror.NetworkManager
         Debug.Log($"Server remembered: Connection {conn.connectionId} -> Timeline {timeline}");
     }
 
-    /// <summary>
-    /// 检查所有玩家是否准备就绪（仅服务器调用）。
-    /// </summary>
-    /// <returns>如果所有玩家都已准备返回true，否则返回false</returns>
+    /*
+     * 检查所有玩家是否准备就绪（仅服务器调用）
+     * @returns 如果所有玩家都已准备返回 true，否则返回 false
+     */
     [Server]
     public bool CheckAllPlayersReady()
     {
@@ -595,20 +576,20 @@ public class EchoNetworkManager : Mirror.NetworkManager
     
     #region Relay 回调处理
     
-    /// <summary>
-    /// Relay连接成功回调（房间信息同步）。
-    /// </summary>
-    /// <param name="room">房间信息</param>
+    /*
+     * Relay 连接成功回调（房间信息同步）
+     * @param room 房间信息对象
+     */
     private void OnRelayConnected(RelayRoom room)
     {
         Debug.Log($"Room Code: {room.RoomCode}");
         Debug.Log($"Players in room: {room.Players.Count}");
     }
     
-    /// <summary>
-    /// 玩家进入房间回调（自动分配时间线）。
-    /// </summary>
-    /// <param name="player">玩家信息</param>
+    /*
+     * 玩家进入房间回调（自动分配时间线）
+     * @param player 玩家信息对象
+     */
     private void OnPlayerJoinedRoom(RelayPlayer player)
     {
         // 当新玩家加入时，如果是服务器，自动分配时间线
@@ -623,10 +604,10 @@ public class EchoNetworkManager : Mirror.NetworkManager
         }
     }
     
-    /// <summary>
-    /// 玩家离开房间回调（清理时间线分配）。
-    /// </summary>
-    /// <param name="player">玩家信息</param>
+    /*
+     * 玩家离开房间回调（清理时间线分配）
+     * @param player 玩家信息对象
+     */
     private void OnPlayerLeftRoom(RelayPlayer player)
     {
         // 玩家离开时清理时间线分配
@@ -638,10 +619,10 @@ public class EchoNetworkManager : Mirror.NetworkManager
         }
     }
     
-    /// <summary>
-    /// 查找下一个可用时间线编号（0~maxPlayers-1）。
-    /// </summary>
-    /// <returns>可用时间线编号，无则-1</returns>
+    /*
+     * 查找下一个可用时间线编号（0~maxPlayers-1）
+     * @returns 可用时间线编号，无可用返回 -1
+     */
     private int FindNextAvailableTimeline()
     {
         for (int i = 0; i < maxPlayers; i++)
@@ -658,9 +639,9 @@ public class EchoNetworkManager : Mirror.NetworkManager
     
     #region Mirror 重写方法
     
-    /// <summary>
-    /// Mirror服务器启动回调。
-    /// </summary>
+    /*
+     * Mirror 服务器启动回调
+     */
     public override void OnStartServer()
     {
         base.OnStartServer();
@@ -668,48 +649,48 @@ public class EchoNetworkManager : Mirror.NetworkManager
         InitializeCoopSession();
     }
     
-    /// <summary>
-    /// Mirror服务器停止回调。
-    /// </summary>
+    /*
+     * Mirror 服务器停止回调
+     */
     public override void OnStopServer()
     {
         base.OnStopServer();
         Debug.Log("Server stopped");
     }
     
-    /// <summary>
-    /// Mirror客户端启动回调。
-    /// </summary>
+    /*
+     * Mirror 客户端启动回调
+     */
     public override void OnStartClient()
     {
         base.OnStartClient();
         Debug.Log("Client started");
     }
     
-    /// <summary>
-    /// Mirror客户端停止回调。
-    /// </summary>
+    /*
+     * Mirror 客户端停止回调
+     */
     public override void OnStopClient()
     {
         base.OnStopClient();
         Debug.Log("Client stopped");
     }
     
-    /// <summary>
-    /// Mirror服务器收到客户端连接回调。
-    /// </summary>
-    /// <param name="conn">连接对象</param>
+    /*
+     * Mirror 服务器收到客户端连接回调
+     * @param conn 客户端连接对象
+     */
     public override void OnServerConnect(NetworkConnectionToClient conn)
     {
         base.OnServerConnect(conn);
         Debug.Log($"Client connected to server: {conn.connectionId}");
     }
 
-    /// <summary>
-    /// Mirror服务器为客户端添加玩家对象时调用（包括断线重连）。
-    /// 如果该连接之前选择过时间线，会自动恢复。
-    /// </summary>
-    /// <param name="conn">连接对象</param>
+    /*
+     * Mirror 服务器为客户端添加玩家对象时调用（包括断线重连）
+     * 如果该连接之前选择过时间线，会自动恢复
+     * @param conn 客户端连接对象
+     */
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
         base.OnServerAddPlayer(conn);
@@ -730,10 +711,10 @@ public class EchoNetworkManager : Mirror.NetworkManager
         }
     }
     
-    /// <summary>
-    /// Mirror服务器收到客户端断开回调。
-    /// </summary>
-    /// <param name="conn">连接对象</param>
+    /*
+     * Mirror 服务器收到客户端断开回调
+     * @param conn 客户端连接对象
+     */
     public override void OnServerDisconnect(NetworkConnectionToClient conn)
     {
         base.OnServerDisconnect(conn);
@@ -751,18 +732,18 @@ public class EchoNetworkManager : Mirror.NetworkManager
         // _timelineByConnectionId.Remove(conn.connectionId);
     }
     
-    /// <summary>
-    /// Mirror客户端连接服务器回调。
-    /// </summary>
+    /*
+     * Mirror 客户端连接服务器回调
+     */
     public override void OnClientConnect()
     {
         base.OnClientConnect();
         Debug.Log("Connected to server");
     }
     
-    /// <summary>
-    /// Mirror客户端断开服务器回调。
-    /// </summary>
+    /*
+     * Mirror 客户端断开服务器回调
+     */
     public override void OnClientDisconnect()
     {
         base.OnClientDisconnect();
