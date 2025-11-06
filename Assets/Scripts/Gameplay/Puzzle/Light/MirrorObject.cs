@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(CanvasGroup))]
 public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
@@ -40,6 +41,10 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     
     // 记录当前高亮的镜槽
     private GameObject currentHighlightedSlot = null;
+    
+    // ===== 静态字典：管理所有镜槽的占用状态 =====
+    // Key: 镜槽GameObject, Value: 占用该镜槽的MirrorObject实例
+    private static Dictionary<GameObject, MirrorObject> slotOccupancy = new Dictionary<GameObject, MirrorObject>();
 
     void Awake()
     {
@@ -47,24 +52,19 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         rectTransform = GetComponent<RectTransform>();
         canvasGroup = GetComponent<CanvasGroup>();
         canvas = GetComponentInParent<Canvas>();
-        
+
         // 记录原始信息
         originalPosition = rectTransform.anchoredPosition;
         originalParent = transform.parent;
     }
+    
+    // ======拖拽事件实现======
 
     public void OnBeginDrag(PointerEventData eventData)
     {
         Debug.Log("[MirrorObject] 开始拖拽镜子");
-        
-        // 如果之前占用了镜槽，先恢复其状态
-        if (currentMirrorSlot != null)
-        {
-            DeactivateMirrorSlot(currentMirrorSlot);
-            currentMirrorSlot = null;
-        }
-        
-        // 记录当前位置
+                
+        // 记录当前位置用于返回
         originalPosition = rectTransform.anchoredPosition;
         originalParent = transform.parent;
         
@@ -115,6 +115,41 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         DestroyDraggedClone();
     }
 
+    // ===== 镜槽占用管理方法 =====
+    
+    /*
+     * 检查镜槽是否被其他镜子占用
+     */
+    private bool IsSlotOccupiedByOther(GameObject slot)
+    {
+        if (!slotOccupancy.ContainsKey(slot))
+            return false;
+        
+        // 如果是当前镜子占用的，返回false（允许重复选择）
+        return slotOccupancy[slot] != this;
+    }
+    
+    /*
+     * 占用镜槽
+     */
+    private void OccupySlot(GameObject slot)
+    {
+        slotOccupancy[slot] = this;
+        Debug.Log($"[MirrorObject] 镜槽 {slot.name} 被镜子 {gameObject.name} 占用");
+    }
+    
+    /*
+     * 释放镜槽
+     */
+    private void ReleaseSlot(GameObject slot)
+    {
+        if (slotOccupancy.ContainsKey(slot) && slotOccupancy[slot] == this)
+        {
+            slotOccupancy.Remove(slot);
+            Debug.Log($"[MirrorObject] 镜槽 {slot.name} 已被镜子 {gameObject.name} 释放");
+        }
+    }
+
     /*
      * 创建拖拽时的克隆对象
      */
@@ -154,7 +189,7 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             cloneImage.raycastTarget = false;
         }
     }
-    
+
     /*
      * 销毁拖拽克隆
      */
@@ -167,6 +202,8 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         }
     }
     
+    
+    // =====高亮镜槽实现======
     /*
      * 实时更新最近镜槽的高亮状态
      */
@@ -230,8 +267,8 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         Image mirrorImage = mirrorSlot.GetComponent<Image>();
         if (mirrorImage != null)
         {
-            // 检查是否是当前激活的镜槽
-            if (currentMirrorSlot == mirrorSlot)
+            // 检查是否是被占用的镜槽
+            if (slotOccupancy.ContainsKey(mirrorSlot))
             {
                 mirrorImage.color = activeMirrorColor;
             }
@@ -242,34 +279,35 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         }
     }
 
+    // =====镜槽检测与激活实现======
     /*
      * 查找最近的镜槽
      */
     private GameObject FindNearestMirrorSlot()
     {
         if (draggedClone == null) return null;
-        
+
         RectTransform cloneRect = draggedClone.GetComponent<RectTransform>();
         GameObject[] allObjects = FindObjectsByType<GameObject>(FindObjectsSortMode.None);
         GameObject nearest = null;
         float minDistance = maxDetectionDistance;
-        
+
         foreach (GameObject obj in allObjects)
         {
             if (obj.name == "MirrorLine" && obj.layer == LayerMask.NameToLayer("Light"))
             {
-                // 跳过已被其他镜子占用的镜槽（除非是当前镜子占用的）
-                BoxCollider2D collider = obj.GetComponent<BoxCollider2D>();
-                if (collider != null && collider.enabled && obj != currentMirrorSlot)
+                // 使用字典检查镜槽是否被其他镜子占用
+                if (IsSlotOccupiedByOther(obj))
                 {
+                    Debug.Log($"[MirrorObject] 镜槽 {obj.name} 已被其他镜子占用，跳过");
                     continue;
                 }
-                
+
                 RectTransform slotRect = obj.GetComponent<RectTransform>();
                 if (slotRect != null)
                 {
                     float distance = Vector2.Distance(cloneRect.position, slotRect.position);
-                    
+
                     if (distance < minDistance)
                     {
                         minDistance = distance;
@@ -278,49 +316,19 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
                 }
             }
         }
-        
-        return nearest;
-    }
 
-    /*
-     * 查找鼠标下的镜槽（保留作为备用方法）
-     */
-    private GameObject FindMirrorSlotUnderMouse()
-    {
-        // 使用射线检测所有在鼠标位置的对象
-        PointerEventData pointerData = new PointerEventData(EventSystem.current)
-        {
-            position = Input.mousePosition
-        };
-        
-        var results = new System.Collections.Generic.List<RaycastResult>();
-        EventSystem.current.RaycastAll(pointerData, results);
-        
-        // 查找名为 "MirrorLine" 的对象
-        foreach (var result in results)
-        {
-            if (result.gameObject.name == "MirrorLine" && 
-                result.gameObject.layer == LayerMask.NameToLayer("Light"))
-            {
-                return result.gameObject;
-            }
-        }
-        
-        return null;
+        return nearest;
     }
 
     /*
      * 激活镜槽
      */
     private void ActivateMirrorSlot(GameObject mirrorSlot)
-    {
-        // 如果之前占用了其他镜槽，先恢复其状态
-        if (currentMirrorSlot != null && currentMirrorSlot != mirrorSlot)
-        {
-            DeactivateMirrorSlot(currentMirrorSlot);
-        }
+    {        
+        // 占用镜槽
+        OccupySlot(mirrorSlot);
         
-        // 启用镜槽的 BoxCollider2D
+        // 启用新镜槽的 BoxCollider2D
         BoxCollider2D collider = mirrorSlot.GetComponent<BoxCollider2D>();
         if (collider != null)
         {
@@ -332,11 +340,6 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         Image mirrorImage = mirrorSlot.GetComponent<Image>();
         if (mirrorImage != null)
         {
-            // 保存原始颜色
-            if (currentMirrorSlot != mirrorSlot)
-            {
-                originalMirrorColor = mirrorImage.color;
-            }
             mirrorImage.color = activeMirrorColor;
             Debug.Log($"[MirrorObject] 镜槽 {mirrorSlot.name} 的颜色已改为蓝色");
         }
@@ -370,25 +373,13 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     }
 
     /*
-     * 返回到原始位置（已不再使用，保留作为备用）
-     */
-    private void ReturnToOriginalPosition()
-    {
-        // 使用LeanTween返回原始位置（如果需要的话）
-        // LeanTween.value(gameObject, rectTransform.anchoredPosition, originalPosition, 0.3f)
-        //     .setOnUpdate((Vector2 val) => {
-        //         rectTransform.anchoredPosition = val;
-        //     })
-        //     .setEase(LeanTweenType.easeOutBack);
-    }
-
-    /*
      * 从镜槽移除镜子
      */
     public void RemoveFromMirrorSlot()
     {
         if (currentMirrorSlot != null)
         {
+            ReleaseSlot(currentMirrorSlot);
             DeactivateMirrorSlot(currentMirrorSlot);
             currentMirrorSlot = null;
         }
