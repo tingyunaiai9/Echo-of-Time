@@ -11,7 +11,6 @@ public struct MirrorSlot
     public int xindex;
     public int yindex;
     public float rotation; // 只能是0,45,90,135
-    public bool active;
 }
 
 /*
@@ -156,9 +155,6 @@ public class LightPanel : MonoBehaviour
     {
         foreach (var slot in mirrorSlots)
         {
-            if (!slot.active)
-                continue;
-
             int index = slot.yindex * columns + slot.xindex;
             if (index < 0 || index >= cells.Length)
                 continue;
@@ -199,8 +195,8 @@ public class LightPanel : MonoBehaviour
             BoxCollider2D collider = line.AddComponent<BoxCollider2D>();
             collider.size = lineRect.sizeDelta; // 设置碰撞器大小与线段一致
             collider.offset = Vector2.zero; // 碰撞器中心与线段对齐
-            // collider.isTrigger = true; // 设置为触发器，避免物理碰撞
-
+            collider.enabled = false;
+            
             // 设置 Layer 为 "Light"
             line.layer = LayerMask.NameToLayer("Light");
         }
