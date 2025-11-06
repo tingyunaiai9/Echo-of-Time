@@ -7481,6 +7481,9 @@ MonoBehaviour:
   resultContent: {fileID: 0}
   confirmButton: {fileID: 0}
   correctAnswer: "\u5357\u5C71"
+  levelAnswers:
+  - "\u5357\u5C71"
+  - "\u5F52\u53BB"
 --- !u!1 &1046941122
 GameObject:
   m_ObjectHideFlags: 0
@@ -9089,6 +9092,37 @@ MonoBehaviour:
   columns: 16
   rows: 9
   cellColor: {r: 1, g: 1, b: 1, a: 1}
+  mirrorSlots:
+  - xindex: 0
+    yindex: 0
+    rotation: 0
+  - xindex: 0
+    yindex: 0
+    rotation: 0
+  - xindex: 0
+    yindex: 0
+    rotation: 0
+  - xindex: 0
+    yindex: 0
+    rotation: 0
+  - xindex: 0
+    yindex: 0
+    rotation: 0
+  - xindex: 0
+    yindex: 0
+    rotation: 0
+  - xindex: 0
+    yindex: 0
+    rotation: 0
+  - xindex: 0
+    yindex: 0
+    rotation: 0
+  - xindex: 0
+    yindex: 0
+    rotation: 0
+  - xindex: 0
+    yindex: 0
+    rotation: 0
   mirrorLineColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   ContentContainer: {fileID: 0}
 --- !u!1 &1196057147
