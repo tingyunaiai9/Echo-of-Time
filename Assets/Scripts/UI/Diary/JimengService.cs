@@ -127,7 +127,7 @@ public static class JimengService
         };
         string jsonBody = JsonConvert.SerializeObject(requestBody);
         
-        // (与上一版相同，仍需实现签名)
+        // 签名
         var request = await CreateSignedRequest(SubmitTaskUrl, jsonBody);
         if (request == null) return null; // 签名失败
 
@@ -174,7 +174,7 @@ public static class JimengService
         };
         string jsonBody = JsonConvert.SerializeObject(requestBody);
 
-        // (与上一版相同，仍需实现签名)
+        // 签名
         var request = await CreateSignedRequest(QueryTaskUrl, jsonBody);
         if (request == null) return null; // 签名失败
 
