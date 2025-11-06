@@ -298,24 +298,3 @@ public static class JimengService
         }
     }
 }
-
-
-/*
- * (辅助类) 用于反序列化火山引擎的通用错误响应
- */
-[Serializable]
-public class VolcErrorResponse
-{
-    public ResponseMetadata ResponseMetadata { get; set; }
-}
-[Serializable]
-public class ResponseMetadata
-{
-    public VolcError Error { get; set; }
-}
-[Serializable]
-public class VolcError
-{
-    public string Code { get; set; }
-    public string Message { get; set; }
-}
