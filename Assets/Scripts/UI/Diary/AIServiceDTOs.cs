@@ -96,25 +96,62 @@ namespace AI.DTOs
 
     /*
      * =======================================================
-     * 即梦 AI (Jimeng AI) / 火山引擎 (VolcEngine)
+     * 即梦 AI v3.1 (Jimeng v3.1) / 火山引擎 (VolcEngine)
      * =======================================================
      */
 
-    /* 即梦 AI 请求体 (Body) */
+    // ---- 1. 提交任务 (Submit Task) DTOs ----
+
+    /* 提交任务 请求体 (Body) */
     [Serializable]
-    public class JimengRequestBody
+    public class JimengSubmitBody
     {
         public string req_key;
         public string prompt;
-        public bool return_url;
+        public bool use_pre_llm;
+        public int seed;
         public int width;
         public int height;
-        public bool use_pre_llm;
-        public bool use_sr;
+    }
+
+    /* Tijiao 任务 响应体 (Response) */
+    [Serializable]
+    public class JimengSubmitResponse
+    {
+        public int code;
+        public JimengSubmitData data;
+        public string message;
+        public string request_id;
+    }
+
+    /* 提交任务 响应数据 (用于获取 task_id) */
+    [Serializable]
+    public class JimengSubmitData
+    {
+        public string task_id;
+    }
+
+    // ---- 2. 查询任务 (Query Task) DTOs ----
+
+    /* 查询任务 请求体 (Body) */
+    [Serializable]
+    public class JimengQueryBody
+    {
+        public string req_key;
+        public string task_id;
+        public string req_json; // 这是一个被序列化为字符串的JSON对象
+    }
+
+    /* 用于生成 req_json 字符串的辅助类 */
+    [Serializable]
+    public class JimengQueryReqJson
+    {
+        public bool return_url;
         public LogoInfo logo_info;
         public AIGCMeta aigc_meta;
     }
-
+    
+    // (LogoInfo 和 AIGCMeta 与上一版文档相同，可以保留)
     [Serializable]
     public class LogoInfo
     {
@@ -130,20 +167,22 @@ namespace AI.DTOs
         public string producer_id;
     }
 
-    /* 即梦 AI 响应体 (Response) */
+    /* 查询任务 响应体 (Response) */
     [Serializable]
-    public class JimengResponse
+    public class JimengQueryResponse
     {
         public int code;
-        public JimengData data;
+        public JimengQueryData data;
         public string message;
         public string request_id;
     }
 
+    /* 查询任务 响应数据 (用于获取 status 和 urls) */
     [Serializable]
-    public class JimengData
+    public class JimengQueryData
     {
+        public string status; // 关键字段: "in_queue", "generating", "done"
         public List<string> image_urls;
-        // public List<string> binary_data_base64; // 我们优先使用 image_urls
+        // public List<string> binary_data_base64;
     }
 }
