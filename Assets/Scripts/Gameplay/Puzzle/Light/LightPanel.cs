@@ -87,8 +87,8 @@ public class LightPanel : MonoBehaviour
         if (!s_initialized && s_root != null)
         {
             s_initialized = true;
-            s_root.SetActive(false);
-            Debug.Log("[LightPanel.Start] 光线面板已初始化并关闭");
+            s_root.SetActive(true);
+            Debug.Log("[LightPanel.Start] 光线面板已初始化并打开");
         }
     }
 
