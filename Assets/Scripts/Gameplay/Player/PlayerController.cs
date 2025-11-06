@@ -141,6 +141,12 @@ public class PlayerController : NetworkBehaviour
             Debug.Log("[PlayerController] F3键按下，切换光线谜题页面。");
         }
 
+        if (Input.GetKeyDown(KeyCode.F4))
+        {
+            PuzzlePanel.TogglePanel();
+            Debug.Log("[PlayerController] F4键按下，切换拼画谜题页面。");
+        }
+
         // 背包打开时，禁用游戏输入（移动、交互等）
         if (isBackpackOpen) return;
 
