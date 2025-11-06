@@ -113,6 +113,6 @@ public class PuzzlePiece : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             {
                 rectTransform.anchoredPosition = val;
             })
-            .setEase(LeanTweenType.easeOutBack); // 使用回弹效果
+            .setEase(LeanTweenType.easeOutQuad); // 使用回弹效果
     }
 }
