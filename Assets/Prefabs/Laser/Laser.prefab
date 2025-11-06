@@ -287,7 +287,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.5
+      scalar: 0.1
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -5005,7 +5005,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 5
+      scalar: 8
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -5123,7 +5123,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.5
+      scalar: 0.2
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -9959,7 +9959,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.5
+      scalar: 0.3
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -14559,7 +14559,7 @@ MonoBehaviour:
   noiseScale: 3.14
   lineRenderer: {fileID: 2670941497334916751}
   startVFX: {fileID: 6914598875573648629}
-  endVFX: {fileID: 0}
+  reflectVFX: {fileID: 0}
   followMouse: 1
   color: {r: 1, g: 1, b: 1, a: 1}
   colorIntensity: 2
@@ -14855,7 +14855,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.5
+      scalar: 0.3
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -19414,7 +19414,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1789496325068817739}
   m_Layer: 6
-  m_Name: EndVFX
+  m_Name: ReflectVFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

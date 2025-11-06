@@ -7,7 +7,7 @@ public class LaserBeam : MonoBehaviour
     [SerializeField] private float noiseScale = 3.14f;
     [SerializeField] private LineRenderer lineRenderer;
     [SerializeField] private GameObject startVFX;
-    [SerializeField] private GameObject endVFX;
+    [SerializeField] private GameObject reflectVFX;
     [SerializeField] private bool followMouse = true; // 补充的变量，用于控制是否跟随鼠标
 
     // 补充的变量，用于控制激光颜色和强度
@@ -62,57 +62,73 @@ public class LaserBeam : MonoBehaviour
 
     public void UpdateLaserPosition(Vector2 startPos, Vector2 endPos, float nouse)
     {
-        // 清除之前的反射点特效
-        ClearReflectionVFX();
-
         Vector2 direction = (endPos - startPos).normalized;
-        float rotationZ = Mathf.Atan2(direction.y, direction.x); // 计算弧度
-
+        float rotationZ = Mathf.Atan2(direction.y, direction.x);
+    
         int i = 0;
+        int vfxIndex = 0; // 用于追踪当前使用的特效索引
         Vector2 currentPosition = startPos;
-
-        // 初始化LineRenderer，从起点开始
+    
+        // 初始化LineRenderer
         lineRenderer.positionCount = 1;
         lineRenderer.SetPosition(i, currentPosition);
-
-        // 设置起始视觉特效的位置和旋转（使用 LineRenderer 的第一个点）
+    
+        // 设置起始特效
         startVFX.transform.SetPositionAndRotation(currentPosition, Quaternion.Euler(0, 0, rotationZ * Mathf.Rad2Deg));
-
+    
         // 第一次射线检测
         RaycastHit2D hit = Physics2D.Raycast(currentPosition, direction, MAX_LENGTH, layerMask);
-
-        // 当射线碰到物体且反射次数小于5次时，进行反射
+    
+        // 反射循环
         while (hit.collider != null && i < 5)
         {
             currentPosition = hit.point;
             lineRenderer.positionCount++;
             lineRenderer.SetPosition(++i, currentPosition);
-
-            // 在反射点添加特效
-            if (endVFX != null)
+    
+            // 复用或创建反射点特效
+            if (reflectVFX != null)
             {
-                GameObject vfx = Instantiate(endVFX, currentPosition, Quaternion.identity);
-                // 设置特效朝向（可选，根据反射方向或法线方向）
+                GameObject vfx;
+                if (vfxIndex < reflectionVFXList.Count)
+                {
+                    // 复用已存在的特效
+                    vfx = reflectionVFXList[vfxIndex];
+                    vfx.SetActive(true);
+                }
+                else
+                {
+                    // 创建新特效
+                    vfx = Instantiate(reflectVFX, currentPosition, Quaternion.identity);
+                    reflectionVFXList.Add(vfx);
+                }
+    
+                // 更新特效位置和旋转
                 float vfxRotation = Mathf.Atan2(hit.normal.y, hit.normal.x) * Mathf.Rad2Deg;
-                vfx.transform.rotation = Quaternion.Euler(0, 0, vfxRotation);
-                reflectionVFXList.Add(vfx);
+                vfx.transform.SetPositionAndRotation(currentPosition, Quaternion.Euler(0, 0, vfxRotation));
+                vfxIndex++;
             }
-
-            // 计算反射方向
+    
+            // 计算反射
             direction = Vector2.Reflect(direction, hit.normal);
-            // 将当前位置稍微向反射方向移动一点，避免与碰撞体重复碰撞
             currentPosition = currentPosition + OFFSET * direction;
-            // 进行下一次射线检测
             hit = Physics2D.Raycast(currentPosition, direction, MAX_LENGTH, layerMask);
         }
-
-        // 处理最后一次（未碰撞或达到最大反射次数）的线段终点
+    
+        // 隐藏多余的特效（而不是销毁）
+        for (int j = vfxIndex; j < reflectionVFXList.Count; j++)
+        {
+            if (reflectionVFXList[j] != null)
+                reflectionVFXList[j].SetActive(false);
+        }
+    
+        // 处理最后一段
         currentPosition = currentPosition + MAX_LENGTH * direction;
         lineRenderer.positionCount++;
         lineRenderer.SetPosition(++i, currentPosition);
     }
 
-    // 清除所有反射点特效
+    // 修改清理方法（仅在销毁时调用）
     private void ClearReflectionVFX()
     {
         foreach (GameObject vfx in reflectionVFXList)
@@ -122,7 +138,7 @@ public class LaserBeam : MonoBehaviour
         }
         reflectionVFXList.Clear();
     }
-
+    
     private void OnDestroy()
     {
         // 清理所有特效
