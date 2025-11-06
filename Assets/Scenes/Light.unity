@@ -1497,43 +1497,33 @@ MonoBehaviour:
   - xindex: 3
     yindex: 2
     rotation: 45
-    active: 1
   - xindex: 3
     yindex: 7
     rotation: 45
-    active: 1
   - xindex: 7
     yindex: 7
     rotation: 135
-    active: 1
   - xindex: 7
     yindex: 2
     rotation: 135
-    active: 1
   - xindex: 3
     yindex: 5
     rotation: 45
-    active: 1
   - xindex: 7
     yindex: 5
     rotation: 135
-    active: 1
   - xindex: 11
     yindex: 2
     rotation: 135
-    active: 1
   - xindex: 11
     yindex: 5
     rotation: 135
-    active: 1
   - xindex: 12
     yindex: 7
     rotation: 135
-    active: 1
   - xindex: 12
     yindex: 3
     rotation: 45
-    active: 1
   mirrorLineColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   ContentContainer: {fileID: 0}
 --- !u!114 &2123841890
@@ -1668,7 +1658,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5330829311241905075, guid: 5c681acc5f82148d6867b4f296eb1582, type: 3}
       propertyPath: followMouse
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5330829311241905075, guid: 5c681acc5f82148d6867b4f296eb1582, type: 3}
       propertyPath: endPosition.x
