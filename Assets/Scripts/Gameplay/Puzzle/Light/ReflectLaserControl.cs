@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class LaserBeam : MonoBehaviour
 {
@@ -22,6 +23,9 @@ public class LaserBeam : MonoBehaviour
     private const float OFFSET = 1f;
     [SerializeField] private string[] layerMasks;
     private LayerMask layerMask;
+
+    // 存储所有反射点的特效实例
+    private List<GameObject> reflectionVFXList = new List<GameObject>();
 
     private void Awake()
     {
@@ -58,11 +62,11 @@ public class LaserBeam : MonoBehaviour
 
     public void UpdateLaserPosition(Vector2 startPos, Vector2 endPos, float nouse)
     {
+        // 清除之前的反射点特效
+        ClearReflectionVFX();
+
         Vector2 direction = (endPos - startPos).normalized;
         float rotationZ = Mathf.Atan2(direction.y, direction.x); // 计算弧度
-
-        // 设置起始视觉特效的位置和旋转
-        startVFX.transform.SetPositionAndRotation(startPos, Quaternion.Euler(0, 0, rotationZ * Mathf.Rad2Deg));
 
         int i = 0;
         Vector2 currentPosition = startPos;
@@ -70,6 +74,9 @@ public class LaserBeam : MonoBehaviour
         // 初始化LineRenderer，从起点开始
         lineRenderer.positionCount = 1;
         lineRenderer.SetPosition(i, currentPosition);
+
+        // 设置起始视觉特效的位置和旋转（使用 LineRenderer 的第一个点）
+        startVFX.transform.SetPositionAndRotation(currentPosition, Quaternion.Euler(0, 0, rotationZ * Mathf.Rad2Deg));
 
         // 第一次射线检测
         RaycastHit2D hit = Physics2D.Raycast(currentPosition, direction, MAX_LENGTH, layerMask);
@@ -80,6 +87,16 @@ public class LaserBeam : MonoBehaviour
             currentPosition = hit.point;
             lineRenderer.positionCount++;
             lineRenderer.SetPosition(++i, currentPosition);
+
+            // 在反射点添加特效
+            if (endVFX != null)
+            {
+                GameObject vfx = Instantiate(endVFX, currentPosition, Quaternion.identity);
+                // 设置特效朝向（可选，根据反射方向或法线方向）
+                float vfxRotation = Mathf.Atan2(hit.normal.y, hit.normal.x) * Mathf.Rad2Deg;
+                vfx.transform.rotation = Quaternion.Euler(0, 0, vfxRotation);
+                reflectionVFXList.Add(vfx);
+            }
 
             // 计算反射方向
             direction = Vector2.Reflect(direction, hit.normal);
@@ -93,5 +110,22 @@ public class LaserBeam : MonoBehaviour
         currentPosition = currentPosition + MAX_LENGTH * direction;
         lineRenderer.positionCount++;
         lineRenderer.SetPosition(++i, currentPosition);
+    }
+
+    // 清除所有反射点特效
+    private void ClearReflectionVFX()
+    {
+        foreach (GameObject vfx in reflectionVFXList)
+        {
+            if (vfx != null)
+                Destroy(vfx);
+        }
+        reflectionVFXList.Clear();
+    }
+
+    private void OnDestroy()
+    {
+        // 清理所有特效
+        ClearReflectionVFX();
     }
 }
