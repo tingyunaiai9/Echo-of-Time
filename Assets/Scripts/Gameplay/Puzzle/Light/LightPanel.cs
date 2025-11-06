@@ -219,11 +219,18 @@ public class LightPanel : MonoBehaviour
 
             // 设置旋转角度
             line.transform.localRotation = Quaternion.Euler(0, 0, slot.rotation);
+
+            // 添加 BoxCollider2D 组件
+            BoxCollider2D collider = line.AddComponent<BoxCollider2D>();
+            collider.size = lineRect.sizeDelta; // 设置碰撞器大小与线段一致
+            collider.offset = Vector2.zero; // 碰撞器中心与线段对齐
+            // collider.isTrigger = true; // 设置为触发器，避免物理碰撞
+
+            // 设置 Layer 为 "Light"
+            line.layer = LayerMask.NameToLayer("Light");
         }
-
-        Debug.Log("[LightPanel] 已绘制所有镜槽");
     }
-
+    
     /*
      * 清除所有格子
      */
