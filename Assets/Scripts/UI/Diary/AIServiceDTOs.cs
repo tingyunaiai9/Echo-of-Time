@@ -175,6 +175,9 @@ namespace AI.DTOs
         public JimengQueryData data;
         public string message;
         public string request_id;
+
+        // 捕获通用错误
+        public ResponseMetadata ResponseMetadata { get; set; }
     }
 
     /* 查询任务 响应数据 (用于获取 status 和 urls) */
