@@ -11,6 +11,10 @@ public class TimelinePlayer : NetworkBehaviour
     [SyncVar(hook = nameof(OnTimelineChanged))]
     public int timeline = -1;
 
+    [Header("游戏进程")]
+    [SyncVar(hook = nameof(OnLevelChanged))]
+    public int currentLevel = 1;
+
     [SyncVar]
     public string playerName = "";
 
@@ -31,6 +35,23 @@ public class TimelinePlayer : NetworkBehaviour
 
         var nm = (EchoNetworkManager)NetworkManager.singleton;
         nm.ServerRememberTimeline(connectionToClient, roleIndex);
+    }
+
+    [Command]
+    public void CmdReportedCorrectAnswer()
+    {
+        var nm = (EchoNetworkManager)NetworkManager.singleton;
+        nm.ServerPlayerAnsweredCorrectly(this);
+    }
+
+    private void OnLevelChanged(int oldLevel, int newLevel)
+    {
+        Debug.Log($"[TimelinePlayer] {playerName} 的层数从 {oldLevel} 变为 {newLevel}");
+        // 仅在本地玩家上重置本地UI（提交按钮从“正确！”恢复为“提交”）
+        if (isLocalPlayer)
+        {
+            DialogPanel.ResetConfirmButtonForNewLevel();
+        }
     }
 
     [Header("玩家信息")]
@@ -135,9 +156,10 @@ public class TimelinePlayer : NetworkBehaviour
         // 显示玩家信息
         string info = $"玩家: {playerName}\n";
         info += $"时间线: {GetTimelineName(timeline)}\n";
+        info += $"层数: {currentLevel}\n";
         info += $"Transport ID: {transportId}";
         
-        GUI.Box(new Rect(10, 10, 200, 80), info);
+        GUI.Box(new Rect(10, 10, 200, 100), info);
     }
     
     private string GetTimelineName(int timeline)

@@ -23,6 +23,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Mirror;
 using Unity.Sync.Relay;
 using Unity.Sync.Relay.Lobby;
@@ -53,6 +54,10 @@ public class EchoNetworkManager : Mirror.NetworkManager
     private readonly Dictionary<int, int> _timelineByConnectionId = new Dictionary<int, int>(); // 连接ID -> 时间线映射（用于断线重连恢复）
 
     private RelayTransportMirror relayTransport; // Relay 传输组件（Mirror Transport）
+    
+    // 用于追踪当前层级答对的玩家与当前层数（服务器权威）
+    private readonly HashSet<NetworkConnectionToClient> _answeredConnections = new HashSet<NetworkConnectionToClient>();
+    private int _currentLevel = 1;
     
     /*
      * Unity 生命周期：启动时初始化网络事件、Relay、注册回调、设置玩家信息
@@ -457,6 +462,60 @@ public class EchoNetworkManager : Mirror.NetworkManager
         playerTimelineMap.Clear();
     }
     
+    /// <summary>
+    /// 服务器端：记录一个玩家已正确回答当前层级的谜题。
+    /// </summary>
+    [Server]
+    public void ServerPlayerAnsweredCorrectly(TimelinePlayer player)
+    {
+        if (player == null || player.connectionToClient == null)
+        {
+            Debug.LogWarning("[NetworkManager] 收到无效的玩家或连接，忽略");
+            return;
+        }
+
+        if (player.currentLevel != _currentLevel)
+        {
+            Debug.LogWarning($"[NetworkManager] 玩家 {player.playerName} (层数: {player.currentLevel}) 尝试回答第 {_currentLevel} 层的题目。忽略。");
+            return;
+        }
+
+        if (_answeredConnections.Add(player.connectionToClient))
+        {
+            Debug.Log($"[NetworkManager] 玩家 {player.playerName} 已正确回答第 {_currentLevel} 层的题目。当前进度: {_answeredConnections.Count}/{numPlayers}");
+
+            // 检查是否所有玩家都已答对
+            if (_answeredConnections.Count >= numPlayers)
+            {
+                ServerAdvanceToNextLevel();
+            }
+        }
+    }
+
+    /// <summary>
+    /// 服务器端：提升所有玩家到下一层。
+    /// </summary>
+    [Server]
+    private void ServerAdvanceToNextLevel()
+    {
+        _currentLevel++;
+        Debug.Log($"[NetworkManager] 所有玩家均已答对！正在进入第 {_currentLevel} 层...");
+
+        // 清空答对列表，为下一层做准备
+        _answeredConnections.Clear();
+
+        // 提升所有在线玩家的层数
+        foreach (var player in NetworkServer.spawned.Values.Select(identity => identity.GetComponent<TimelinePlayer>()))
+        {
+            if (player != null)
+            {
+                player.currentLevel = _currentLevel;
+            }
+        }
+        
+        // TODO: 在这里可以添加进入下一层后的服务器端逻辑，例如生成新的谜题
+    }
+    
     /*
      * 分配指定玩家到某个时间线（仅服务器调用）
      * @param transportId 玩家 TransportId
@@ -717,6 +776,9 @@ public class EchoNetworkManager : Mirror.NetworkManager
      */
     public override void OnServerDisconnect(NetworkConnectionToClient conn)
     {
+        // 当玩家断开连接时，也从答题列表中移除
+        _answeredConnections.Remove(conn);
+        
         base.OnServerDisconnect(conn);
         
         // 清理玩家的时间线分配
