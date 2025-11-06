@@ -833,7 +833,7 @@ GameObject:
   - component: {fileID: 1739172013}
   - component: {fileID: 1739172012}
   m_Layer: 5
-  m_Name: Count
+  m_Name: MirrorCount
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
