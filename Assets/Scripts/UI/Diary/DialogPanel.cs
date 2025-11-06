@@ -109,7 +109,12 @@ public class DialogPanel : MonoBehaviour
     /* 发送按钮点击事件 */
     private void OnSendButtonClicked()
     {
-        if (inputField == null || string.IsNullOrWhiteSpace(inputField.text)) return;
+        Debug.Log("[DialogPanel] 发送按钮被点击");
+        if (inputField == null || string.IsNullOrWhiteSpace(inputField.text))
+        {
+            Debug.LogWarning("[DialogPanel] 输入框为空，已忽略");
+            return;
+        }
 
         string userInput = inputField.text.Trim();
         inputField.text = "";
@@ -186,6 +191,12 @@ public class DialogPanel : MonoBehaviour
         isStreaming = true;
         StringBuilder fullResponse = new StringBuilder();
 
+        // 在主线程获取 Timeline
+        var localPlayerIdentity = Mirror.NetworkClient.localPlayer;
+        var localPlayer = localPlayerIdentity != null ? localPlayerIdentity.GetComponent<TimelinePlayer>() : null;
+        int timeline = localPlayer != null ? localPlayer.timeline : -1;
+        Debug.Log($"[DialogPanel] 获取到本地玩家 Timeline: {timeline}");
+
         // 1. 定义回调函数，用于处理来自服务的数据
         Action<string> onChunkReceived = (chunk) =>
         {
@@ -213,6 +224,7 @@ public class DialogPanel : MonoBehaviour
             // 调用独立的静态服务
             await DeepSeekService.GetChatCompletionStreaming(
                 prompt,
+                timeline, // 使用在主线程获取的timeline
                 onChunkReceived,
                 onStreamEnd,
                 onError
