@@ -59,8 +59,8 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     private GameObject mirrorImage;
     
     // 静态变量：镜子计数
-    private static int mirrorCount = 6;
-    private const int MAX_MIRROR_COUNT = 6;
+    private static int mirrorCount = 5;
+    private const int MAX_MIRROR_COUNT = 5;
     
     // 静态列表：记录所有MirrorObject实例
     private static List<MirrorObject> allMirrorObjects = new List<MirrorObject>();
