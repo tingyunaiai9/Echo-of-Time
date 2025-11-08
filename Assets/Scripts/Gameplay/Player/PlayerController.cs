@@ -104,9 +104,6 @@ public class PlayerController : NetworkBehaviour
     {
         if (!isLocalPlayer) return;
 
-        // ❌ 删除所有 UI 按键处理（已迁移到 UIManager）
-        // B, F1, F2, F3, F4, Plus, Minus 等按键现在由 UIManager 处理
-
         // 背包打开时，禁用游戏输入（移动、交互等）
         if (isBackpackOpen) return;
 

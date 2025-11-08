@@ -54,13 +54,13 @@ public class UIManager : Singleton<UIManager>
         Debug.Log($"[UIManager] 玩家 {evt.playerNetId} 拾取了物品 {evt.itemId}，弹窗提醒！");
     }
 
-    /* ⭐ 每帧处理 UI 相关的按键输入 */
+    /* 每帧更新 */
     void Update()
     {
         HandleUIInput();
     }
 
-    /* ⭐ 处理所有 UI 相关的按键 */
+    /* 处理所有 UI 相关的按键 */
     private void HandleUIInput()
     {
         // 背包开关 (B键)
