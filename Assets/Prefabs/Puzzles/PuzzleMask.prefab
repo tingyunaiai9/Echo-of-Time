@@ -89,4 +89,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleMask
   maskId: 0
-  targetPosition: {x: 0, y: 0}
+  highlightColor: {r: 0.015686274, g: 0.64854896, b: 1, a: 1}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
