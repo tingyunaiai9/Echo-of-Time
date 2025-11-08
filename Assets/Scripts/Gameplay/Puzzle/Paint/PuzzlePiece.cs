@@ -26,6 +26,8 @@ public class PuzzlePiece : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     private PuzzleManager puzzleManager;
     private bool isPlaced = false;
     private Vector2 originalPosition; // 记录初始位置
+    private PuzzleMask currentHighlightedMask;
+
 
     void Awake()
     {
@@ -34,7 +36,6 @@ public class PuzzlePiece : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         canvas = GetComponentInParent<Canvas>();
         puzzleManager = GetComponentInParent<PuzzleManager>();
         
-        // 记录初始位置
         originalPosition = rectTransform.anchoredPosition;
     }
 
@@ -53,6 +54,8 @@ public class PuzzlePiece : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         if (isPlaced) return;
 
         rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
+        
+        UpdateNearestMaskHighlight();
     }
 
     /* 结束拖拽 */
@@ -63,7 +66,9 @@ public class PuzzlePiece : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         canvasGroup.alpha = 1f;
         canvasGroup.blocksRaycasts = true;
 
-        // 检查是否靠近对应遮罩
+        // 结束拖拽时清除所有高光
+        ClearAllHighlights();
+
         if (targetMask != null)
         {
             // 使用屏幕坐标（统一坐标系）
@@ -102,7 +107,69 @@ public class PuzzlePiece : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         }
     }
 
-    /* 返回原始位置（使用 LeanTween 动画） */
+    /* 实时更新最近 Mask 的高光 */
+    private void UpdateNearestMaskHighlight()
+    {
+        PuzzleMask nearestMask = FindNearestMask();
+
+        // 如果最近的 Mask 发生变化
+        if (nearestMask != currentHighlightedMask)
+        {
+            // 清除之前的高光
+            if (currentHighlightedMask != null)
+            {
+                currentHighlightedMask.HideHighlight();
+            }
+
+            // 高光新的 Mask
+            if (nearestMask != null)
+            {
+                nearestMask.ShowHighlight();
+            }
+
+            currentHighlightedMask = nearestMask;
+        }
+    }
+
+    /* 查找最近的 Mask */
+    private PuzzleMask FindNearestMask()
+    {
+        PuzzleMask[] allMasks = FindObjectsByType<PuzzleMask>(FindObjectsSortMode.None);
+        PuzzleMask nearest = null;
+        float minDistance = snapThreshold;
+
+        Vector2 pieceScreenPos = RectTransformUtility.WorldToScreenPoint(canvas.worldCamera, rectTransform.position);
+
+        foreach (PuzzleMask mask in allMasks)
+        {
+            // 跳过已经消失的 Mask
+            if (!mask.gameObject.activeSelf)
+                continue;
+
+            Vector2 maskScreenPos = RectTransformUtility.WorldToScreenPoint(canvas.worldCamera, mask.GetComponent<RectTransform>().position);
+            float distance = Vector2.Distance(pieceScreenPos, maskScreenPos);
+
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                nearest = mask;
+            }
+        }
+
+        return nearest;
+    }
+
+    /* 清除所有高光 */
+    private void ClearAllHighlights()
+    {
+        if (currentHighlightedMask != null)
+        {
+            currentHighlightedMask.HideHighlight();
+            currentHighlightedMask = null;
+        }
+    }
+
+    /* 回到原来位置 */
     private void ReturnToOriginalPosition()
     {
         Debug.Log($"[PuzzlePiece] 碎片 {pieceId} 位置不正确，返回原位");
