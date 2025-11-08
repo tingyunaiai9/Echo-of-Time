@@ -11,17 +11,21 @@ public class PuzzlePiece : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     public int pieceId;
 
     [HideInInspector]
-    public PuzzleMask targetMask; // 对应的遮罩（由 PuzzleManager 设置）
+    public PuzzleMask targetMask; // 对应的遮罩
 
     [Header("设置")]
     [Tooltip("吸附阈值（像素）")]
     public float snapThreshold = 100f;
+
+    [Tooltip("返回原位的动画时长（秒）")]
+    public float returnDuration = 0.3f;
 
     private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
     private Canvas canvas;
     private PuzzleManager puzzleManager;
     private bool isPlaced = false;
+    private Vector2 originalPosition; // 记录初始位置
 
     void Awake()
     {
@@ -29,6 +33,9 @@ public class PuzzlePiece : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         canvasGroup = GetComponent<CanvasGroup>();
         canvas = GetComponentInParent<Canvas>();
         puzzleManager = GetComponentInParent<PuzzleManager>();
+        
+        // 记录初始位置
+        originalPosition = rectTransform.anchoredPosition;
     }
 
     /* 开始拖拽 */
@@ -82,6 +89,30 @@ public class PuzzlePiece : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
                     puzzleManager.OnPieceCorrect(pieceId);
                 }
             }
+            else
+            {
+                // 位置不对，返回原位
+                ReturnToOriginalPosition();
+            }
         }
+        else
+        {
+            // 没有目标遮罩，返回原位
+            ReturnToOriginalPosition();
+        }
+    }
+
+    /* 返回原始位置（使用 LeanTween 动画） */
+    private void ReturnToOriginalPosition()
+    {
+        Debug.Log($"[PuzzlePiece] 碎片 {pieceId} 位置不正确，返回原位");
+
+        // 使用 LeanTween 播放平滑返回动画
+        LeanTween.value(gameObject, rectTransform.anchoredPosition, originalPosition, returnDuration)
+            .setOnUpdate((Vector2 val) =>
+            {
+                rectTransform.anchoredPosition = val;
+            })
+            .setEase(LeanTweenType.easeOutQuad); // 使用回弹效果
     }
 }
