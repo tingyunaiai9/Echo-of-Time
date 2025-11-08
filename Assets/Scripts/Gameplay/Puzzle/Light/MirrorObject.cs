@@ -65,6 +65,9 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     // 静态列表：记录所有MirrorObject实例
     private static List<MirrorObject> allMirrorObjects = new List<MirrorObject>();
 
+    /*
+     * 初始化组件和变量
+     */
     void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
@@ -85,6 +88,9 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         mirrorImage = gameObject;
     }
     
+    /*
+     * 初始化镜子计数显示和重置按钮事件
+     */
     void Start()
     {
         UpdateMirrorCountDisplay();
@@ -141,6 +147,9 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     
     // ======拖拽事件实现======
 
+    /*
+     * 开始拖拽事件
+     */
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (mirrorCount <= 0) return;
@@ -151,6 +160,9 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         canvasGroup.alpha = 0.6f;
     }
 
+    /*
+     * 拖拽中事件
+     */
     public void OnDrag(PointerEventData eventData)
     {
         if (draggedClone == null) return;
@@ -160,6 +172,9 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         UpdateNearestSlotHighlight();
     }
 
+    /*
+     * 拖拽结束事件
+     */
     public void OnEndDrag(PointerEventData eventData)
     {
         canvasGroup.alpha = 1f;
@@ -174,16 +189,25 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
     // ===== 镜槽占用管理方法 =====
     
+    /*
+     * 检查镜槽是否被其他对象占用
+     */
     private bool IsSlotOccupiedByOther(GameObject slot)
     {
         return slotOccupancy.ContainsKey(slot) && slotOccupancy[slot] != this;
     }
     
+    /*
+     * 占用镜槽
+     */
     private void OccupySlot(GameObject slot)
     {
         slotOccupancy[slot] = this;
     }
     
+    /*
+     * 释放镜槽
+     */
     private void ReleaseSlot(GameObject slot)
     {
         if (slotOccupancy.ContainsKey(slot) && slotOccupancy[slot] == this)
@@ -234,6 +258,9 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     
     // =====高亮镜槽实现======
     
+    /*
+     * 更新最近镜槽的高亮状态
+     */
     private void UpdateNearestSlotHighlight()
     {
         GameObject nearestSlot = FindNearestMirrorSlot();
@@ -250,6 +277,9 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         }
     }
     
+    /*
+     * 清除所有镜槽的高亮状态
+     */
     private void ClearAllHighlights()
     {
         GameObject[] allObjects = FindObjectsByType<GameObject>(FindObjectsSortMode.None);
@@ -261,12 +291,18 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         currentHighlightedSlot = null;
     }
     
+    /*
+     * 高亮指定镜槽
+     */
     private void HighlightSlot(GameObject mirrorSlot)
     {
         Image img = mirrorSlot.GetComponent<Image>();
         if (img != null) img.color = Color.yellow;
     }
     
+    /*
+     * 重置镜槽颜色
+     */
     private void ResetSlotColor(GameObject mirrorSlot)
     {
         Image img = mirrorSlot.GetComponent<Image>();
@@ -276,6 +312,9 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
     // =====镜槽检测与激活实现======
     
+    /*
+     * 查找最近的镜槽
+     */
     private GameObject FindNearestMirrorSlot()
     {
         if (draggedClone == null) return null;
@@ -307,6 +346,9 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         return nearest;
     }
 
+    /*
+     * 激活指定镜槽
+     */
     private void ActivateMirrorSlot(GameObject mirrorSlot)
     {
         OccupySlot(mirrorSlot);
@@ -322,6 +364,9 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         UpdateMirrorCountDisplay();
     }
 
+    /*
+     * 取消激活指定镜槽
+     */
     private void DeactivateMirrorSlot(GameObject mirrorSlot)
     {
         if (mirrorSlot == null) return;
@@ -333,6 +378,9 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         if (img != null) img.color = originalMirrorColor;
     }
 
+    /*
+     * 从当前镜槽移除
+     */
     public void RemoveFromMirrorSlot()
     {
         if (currentMirrorSlot != null)
@@ -343,6 +391,9 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         }
     }
 
+    /*
+     * 对象销毁时的清理操作
+     */
     void OnDestroy()
     {
         allMirrorObjects.Remove(this);
