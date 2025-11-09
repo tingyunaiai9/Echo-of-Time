@@ -209,4 +209,18 @@ namespace AI.DTOs
         public string Code { get; set; }
         public string Message { get; set; }
     }
+
+    /*
+     * =======================================================
+     * API 密钥配置 (api_keys.json)
+     * =======================================================
+     */
+    
+    [Serializable]
+    public class ApiKeysConfig
+    {
+        public string DeepSeekKey { get; set; }
+        public string VolcAccessKey { get; set; }
+        public string VolcSecretKey { get; set; }
+    }
 }

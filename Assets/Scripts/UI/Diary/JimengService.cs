@@ -23,8 +23,8 @@ public static class JimengService
     private const string ReqKey = "jimeng_t2i_v31"; // v3.1 的固定值
 
     // !! 鉴权密钥 (!!不要硬编码, 应从安全位置读取!!)
-    private const string VolcAccessKey = "YOUR_ACCESS_KEY"; // TODO: 替换
-    private const string VolcSecretKey = "YOUR_SECRET_KEY"; // TODO: 替换
+    // private const string VolcAccessKey = "YOUR_ACCESS_KEY"; 
+    // private const string VolcSecretKey = "YOUR_SECRET_KEY"; 
     private const string VolcRegion = "cn-north-1";
     private const string VolcService = "cv";
 
@@ -271,14 +271,14 @@ public static class JimengService
                 VolcSigner.HashSHA256(canonicalRequest); // HexEncode(Hash(CanonicalRequest))
 
             // --- 步骤 4: 派生签名密钥 (kSigning) ---
-            byte[] kSigning = VolcSigner.GenSigningSecretKeyV4(VolcSecretKey, shortDate, VolcRegion, VolcService);
+            byte[] kSigning = VolcSigner.GenSigningSecretKeyV4(ApiKeyManager.VolcSecretKey, shortDate, VolcRegion, VolcService);
 
             // --- 步骤 5: 计算签名 (Signature) ---
             byte[] signatureBytes = VolcSigner.HmacSHA256(kSigning, stringToSign);
             string signature = VolcSigner.ToHexString(signatureBytes);
 
             // --- 步骤 6: 构建 Authorization 标头 ---
-            string authorization = $"HMAC-SHA256 Credential={VolcAccessKey}/{credentialScope}, SignedHeaders={signedHeaders}, Signature={signature}";
+            string authorization = $"HMAC-SHA256 Credential={ApiKeyManager.VolcAccessKey}/{credentialScope}, SignedHeaders={signedHeaders}, Signature={signature}";
 
             // --- 7. 将所有标头添加到实际请求中 ---
             request.Headers.Host = Host;

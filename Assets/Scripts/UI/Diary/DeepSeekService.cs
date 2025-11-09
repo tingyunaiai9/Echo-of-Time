@@ -20,7 +20,7 @@ public static class DeepSeekService
 {
     // API 配置
     private const string DeepSeekApiUrl = "https://api.deepseek.com/v1/chat/completions";
-    private const string ApiKey = "sk-c05934a1774344c29ca7be049fb92741"; // 您的密钥
+    // private const string ApiKey = ""; // 您的密钥
 
     // 静态共享的 HttpClient 实例
     private static readonly HttpClient s_sharedClient;
@@ -32,7 +32,14 @@ public static class DeepSeekService
     static DeepSeekService()
     {
         s_sharedClient = new HttpClient();
-        s_sharedClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {ApiKey}");
+        // 使用 ApiKeyManager.DeepSeekKey
+        if (string.IsNullOrEmpty(ApiKeyManager.DeepSeekKey))
+        {
+            Debug.LogError("[DeepSeekService] DeepSeekKey 为空！请检查 api_keys.json。");
+            return;
+        }
+        
+        s_sharedClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {ApiKeyManager.DeepSeekKey}");
         s_sharedClient.Timeout = System.TimeSpan.FromMinutes(2);
 
         // 预热连接 (在后台线程启动，不阻塞主线程)
