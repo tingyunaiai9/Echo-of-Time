@@ -166,9 +166,15 @@ public class PuzzleOverlayManager : MonoBehaviour
 
         // 相机处理：记录当前主相机状态并根据设置进行调整
         Camera mainCam = Camera.main;
+        if (mainCam == null)
+        {
+            if (verboseLog) Debug.LogError("[PuzzleOverlay] Camera.main is NULL. 无法执行相机操作。请确保场景中有一个 Tag 为 'MainCamera' 的激活相机。");
+        }
+
         CameraState prevCamState = default;
         if (mainCam != null)
         {
+            if (verboseLog) Debug.Log($"[PuzzleOverlay] 找到主相机: {mainCam.name}。当前 Culling Mask: {LayerMask.LayerToName(mainCam.cullingMask)} ({mainCam.cullingMask})");
             prevCamState = CaptureCameraState(mainCam);
 
             if (moveCameraToAnchor)
@@ -190,6 +196,7 @@ public class PuzzleOverlayManager : MonoBehaviour
             if (overrideCameraCulling)
             {
                 mainCam.cullingMask = puzzleCullingMask;
+                if (verboseLog) Debug.Log($"[PuzzleOverlay] 已覆盖 Culling Mask。新 Culling Mask: {LayerMask.LayerToName(mainCam.cullingMask)} ({mainCam.cullingMask})");
             }
         }
 
