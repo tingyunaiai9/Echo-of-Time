@@ -201,11 +201,9 @@ public static class JimengService
             return null;
         }
 
-        // 同时反序列化为 JimengQueryResponse 和 通用错误
-        var queryResponse = JsonConvert.DeserializeObject<JimengQueryResponse>(responseBody);
-        queryResponse.ResponseMetadata = JsonConvert.DeserializeObject<VolcErrorResponse>(responseBody).ResponseMetadata;
-        
-        return queryResponse;
+        // 单次反序列化。JsonConvert 会自动填充 data (如果code=10000) 
+        // 或 ResponseMetadata (如果code!=10000)
+        return JsonConvert.DeserializeObject<JimengQueryResponse>(responseBody);
     }
 
     /// <summary>
