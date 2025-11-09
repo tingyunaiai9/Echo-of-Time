@@ -15,12 +15,16 @@ public static class VolcSigner
     private static readonly Encoding s_utf8 = Encoding.UTF8;
 
     /// <summary>
-    /// 对字节数组执行 SHA256 哈希，并返回十六进制字符串
+    /// 对字节数组执行 SHA256 哈希，并返回十六进制字符串 (兼容 Unity)
     /// </summary>
     public static string HashSHA256(byte[] data)
     {
-        byte[] hashBytes = SHA256.HashData(data);
-        return ToHexString(hashBytes);
+        // 使用 .NET Standard 2.0 / .NET Framework 兼容的创建实例方法
+        using (var sha256 = SHA256.Create())
+        {
+            byte[] hashBytes = sha256.ComputeHash(data);
+            return ToHexString(hashBytes);
+        }
     }
 
     /// <summary>
