@@ -1,12 +1,14 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using Events;
 
 public class DrawerPanel : MonoBehaviour
 {
     [SerializeField] private Color outlineColor = Color.green;
     private Outline imageOutline;
     private GameObject imageGameObject;
+    private Image imageComponent;
 
     void Start()
     {
@@ -16,6 +18,8 @@ public class DrawerPanel : MonoBehaviour
         {
             imageGameObject = imageTransform.gameObject;
             imageOutline = imageTransform.GetComponent<Outline>();
+            imageComponent = imageTransform.GetComponent<Image>();
+            
             if (imageOutline != null)
             {
                 // 初始状态设置为不激活
@@ -80,5 +84,17 @@ public class DrawerPanel : MonoBehaviour
         {
             imageGameObject.SetActive(false);
         }
+        
+        // 获取 Image 的 Sprite 作为 icon
+        Sprite icon = imageComponent != null ? imageComponent.sprite : null;
+        
+        EventBus.LocalPublish(new ItemPickedUpEvent
+        {
+            playerNetId = 0,
+            itemId = "poem_painting",
+            itemName = "一幅画",
+            description = "拼好5首诗句后抽屉中的一幅画。",
+            icon = icon
+        });
     }
 }
