@@ -6,6 +6,7 @@ public class DrawerPanel : MonoBehaviour
 {
     [SerializeField] private Color outlineColor = Color.green;
     private Outline imageOutline;
+    private GameObject imageGameObject;
 
     void Start()
     {
@@ -13,6 +14,7 @@ public class DrawerPanel : MonoBehaviour
         Transform imageTransform = transform.Find("Background/Image");
         if (imageTransform != null)
         {
+            imageGameObject = imageTransform.gameObject;
             imageOutline = imageTransform.GetComponent<Outline>();
             if (imageOutline != null)
             {
@@ -39,6 +41,12 @@ public class DrawerPanel : MonoBehaviour
                 entryExit.eventID = EventTriggerType.PointerExit;
                 entryExit.callback.AddListener((data) => { OnPointerExit(); });
                 trigger.triggers.Add(entryExit);
+
+                // 添加鼠标点击事件
+                EventTrigger.Entry entryClick = new EventTrigger.Entry();
+                entryClick.eventID = EventTriggerType.PointerClick;
+                entryClick.callback.AddListener((data) => { OnPointerClick(); });
+                trigger.triggers.Add(entryClick);
             }
             else
             {
@@ -62,6 +70,15 @@ public class DrawerPanel : MonoBehaviour
         if (imageOutline != null)
         {
             imageOutline.enabled = false;
+        }
+    }
+
+    // 鼠标点击时调用
+    private void OnPointerClick()
+    {
+        if (imageGameObject != null)
+        {
+            imageGameObject.SetActive(false);
         }
     }
 }
