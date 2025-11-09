@@ -4,6 +4,7 @@
  * 提供序列化和反序列化支持，用于网络通信和数据解析
  */
 using System;
+using System.Collections.Generic;
 
 namespace AI.DTOs
 {
