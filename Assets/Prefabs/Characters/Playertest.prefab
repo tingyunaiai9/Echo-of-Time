@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3424359291841341703}
   - component: {fileID: 5163958443321356722}
   - component: {fileID: 2894971122153229878}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -119,7 +119,7 @@ GameObject:
   - component: {fileID: 6742378691099855092}
   - component: {fileID: 3276632568305713458}
   - component: {fileID: 8010244578911979422}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Playertest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -310,6 +310,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   timeline: -1
+  currentLevel: 1
   playerName: 
   transportId: 0
 --- !u!114 &3276632568305713458
@@ -329,6 +330,7 @@ MonoBehaviour:
   syncInterval: 0
   role: 0
   isReady: 1
+  isRoleSelected: 0
 --- !u!114 &8010244578911979422
 MonoBehaviour:
   m_ObjectHideFlags: 0

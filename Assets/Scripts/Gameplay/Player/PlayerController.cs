@@ -165,6 +165,36 @@ public class PlayerController : NetworkBehaviour
     /* 尝试与最近的交互物体互动 */
     private void TryInteract()
     {
+        // 首先检查是否要打开谜题
+        Collider[] puzzleColliders = Physics.OverlapSphere(transform.position, interactionRange, interactableLayer);
+        if (puzzleColliders.Length > 0)
+        {
+            InteractToOpenPuzzle bestPuzzle = null;
+            float closestPuzzleDistSqr = float.MaxValue;
+
+            foreach (var hitCollider in puzzleColliders)
+            {
+                InteractToOpenPuzzle puzzle = hitCollider.GetComponent<InteractToOpenPuzzle>();
+                if (puzzle != null)
+                {
+                    float distSqr = (hitCollider.transform.position - transform.position).sqrMagnitude;
+                    if (distSqr < closestPuzzleDistSqr)
+                    {
+                        closestPuzzleDistSqr = distSqr;
+                        bestPuzzle = puzzle;
+                    }
+                }
+            }
+
+            if (bestPuzzle != null)
+            {
+                Debug.Log($"找到谜题交互点: {bestPuzzle.gameObject.name}, 尝试打开。");
+                bestPuzzle.OpenPuzzle();
+                return; // 优先处理谜题，不再继续查找其他交互
+            }
+        }
+
+
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, interactionRange, interactableLayer);
 
         if (hitColliders.Length > 0)
