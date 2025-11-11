@@ -65,6 +65,7 @@ namespace Events
         public string clueText;
         public string clueDescription;
         public Sprite icon;
+        public Sprite image;
     }
 
     // 玩家打开独立UI界面时发布

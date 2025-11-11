@@ -57,7 +57,14 @@ public class LaserBeam : MonoBehaviour
     private void Update()
     {
         if (followMouse)
+        {
             UpdateLaserPosition(startPosition, Utils.GetMousePosition(), 0); // 假设Utils.GetMousePosition()存在
+        }
+        else
+        {
+            // 即使不跟随鼠标，也需要持续更新激光位置以检测碰撞器变化
+            UpdateLaserPosition(startPosition, endPosition, 0);
+        }
     }
 
     public void UpdateLaserPosition(Vector2 startPos, Vector2 endPos, float nouse)

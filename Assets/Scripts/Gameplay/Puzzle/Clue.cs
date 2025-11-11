@@ -19,6 +19,9 @@ public class Clue : Interaction
     [Tooltip("线索图标，用于背包 UI 显示")]
     public Sprite clueIcon;
 
+    [Tooltip("线索对应的大图（在详情栏右下角按钮查看）")]
+    public Sprite clueImage;
+
     [Tooltip("是否已被调查过")]
     public bool discovered;
 
@@ -40,8 +43,9 @@ public class Clue : Interaction
                 playerNetId = pid,
                 clueId = gameObject.name,
                 clueText = clueText,
-                clueDescription = clueDescription,  // ✅ 添加详细描述
-                icon = clueIcon
+                clueDescription = clueDescription,
+                icon = clueIcon,
+                image = clueImage
             });
         }
 
