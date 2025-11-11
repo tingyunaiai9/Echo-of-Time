@@ -14,6 +14,7 @@ public class InventoryItem
     public string description;
     public int quantity;
     public Sprite icon;
+    public Sprite image;
 }
 
 /*
