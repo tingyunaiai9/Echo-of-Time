@@ -5264,7 +5264,7 @@ MonoBehaviour:
   detailDescription: {fileID: 415767248}
   viewImageButton: {fileID: 415390858}
   imageViewer: {fileID: 291905704}
-  imageViewerImage: {fileID: 0}
+  imageViewerImage: {fileID: 1929912292}
 --- !u!1 &660584232
 GameObject:
   m_ObjectHideFlags: 0
