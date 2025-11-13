@@ -21,6 +21,10 @@ public class TimelinePlayer : NetworkBehaviour
     [SyncVar]
     public uint transportId = 0;
 
+    [Header("可见性")]
+    [SyncVar(hook = nameof(OnVisibilityChanged))]
+    public bool isVisible = false; // 初始不可见（只能看自己）
+
     [Server]
     public void ServerSetTimeline(int tl)
     {
@@ -78,6 +82,9 @@ public class TimelinePlayer : NetworkBehaviour
         }
         
         Debug.Log($"[TimelinePlayer] Local player started");
+
+        // 本地玩家始终可见（即使 isVisible=false 也显示自身模型）
+        ApplyVisibility();
     }
     
     public override void OnStartClient()
@@ -96,6 +103,9 @@ public class TimelinePlayer : NetworkBehaviour
         {
             ApplyTimelineColor();
         }
+
+        // 初始化可见性
+        ApplyVisibility();
     }
     
     [Command]
@@ -135,6 +145,11 @@ public class TimelinePlayer : NetworkBehaviour
 
         SceneDirector.Instance?.TryLoadTimelineNow();
     }
+
+    private void OnVisibilityChanged(bool oldValue, bool newValue)
+    {
+        ApplyVisibility();
+    }
     
     private void ApplyTimelineColor()
     {
@@ -147,6 +162,27 @@ public class TimelinePlayer : NetworkBehaviour
             
             Debug.Log($"[TimelinePlayer] Applied color for timeline {timeline}");
         }
+    }
+
+    private void ApplyVisibility()
+    {
+        // 规则：自身始终可见；其他玩家只有在 isVisible=true 后可见
+        bool shouldShow = isLocalPlayer || isVisible;
+
+        var renderers = GetComponentsInChildren<Renderer>(true);
+        foreach (var r in renderers)
+        {
+            if (r != null)
+            {
+                r.enabled = shouldShow;
+            }
+        }
+    }
+
+    [Server]
+    public void ServerSetVisibility(bool visible)
+    {
+        isVisible = visible; // SyncVar 同步到所有客户端，触发 hook
     }
     
     void OnGUI()
