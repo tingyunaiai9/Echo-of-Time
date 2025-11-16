@@ -508,10 +508,10 @@ MonoBehaviour:
   disablePlayerControlDuringPuzzle: 0
   unlockCursorDuringPuzzle: 1
   relockCursorOnExit: 0
-  overrideCameraCulling: 0
+  overrideCameraCulling: 1
   puzzleCullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 375
   moveCameraToAnchor: 0
   puzzleCameraAnchorName: PuzzleCameraAnchor
   cameraMoveLerpDuration: 0

@@ -25,6 +25,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Mirror;
+using Telepathy;
 using Unity.Sync.Relay;
 using Unity.Sync.Relay.Lobby;
 using Unity.Sync.Relay.Model;
@@ -58,6 +59,7 @@ public class EchoNetworkManager : Mirror.NetworkManager
     // 用于追踪当前层级答对的玩家与当前层数（服务器权威）
     private readonly HashSet<NetworkConnectionToClient> _answeredConnections = new HashSet<NetworkConnectionToClient>();
     private int _currentLevel = 1;
+    private bool _playersRevealed = false; // 是否已揭示所有玩家（只执行一次）
     
     /*
      * Unity 生命周期：启动时初始化网络事件、Relay、注册回调、设置玩家信息
@@ -514,6 +516,21 @@ public class EchoNetworkManager : Mirror.NetworkManager
         }
         
         // TODO: 在这里可以添加进入下一层后的服务器端逻辑，例如生成新的谜题
+        ServerRevealAllPlayers();
+    }
+
+    [Server]
+    private void ServerRevealAllPlayers()
+    {
+        Debug.Log("[NetworkManager] 揭示所有玩家，可见性设为 true");
+        foreach (var tp in NetworkServer.spawned.Values.Select(i => i.GetComponent<TimelinePlayer>()))
+        {
+            if (tp != null)
+            {
+                tp.ServerSetVisibility(true);
+            }
+        }
+        _playersRevealed = true;
     }
     
     /*
