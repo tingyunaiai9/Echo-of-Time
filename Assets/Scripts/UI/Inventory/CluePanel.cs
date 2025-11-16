@@ -104,10 +104,12 @@ public class CluePanel : Inventory
             Debug.LogError("[CluePanel] 未找到用于显示大图的 Image 组件。");
             return;
         }
-
+        
+        imageViewer.SetActive(true);
+        imageViewerImage.gameObject.SetActive(true);
         imageViewerImage.sprite = currentDetailImage;
         // imageViewerImage.SetNativeSize();     // 按需：用容器自适配可移除
-        imageViewer.SetActive(true);
+        
     }
 
     // 可选：给关闭按钮绑定
