@@ -98,13 +98,27 @@ public class UIManager : Singleton<UIManager>
             Debug.Log("[UIManager] F4键按下，切换拼画谜题页面。");
         }
 
-        // 添加测试聊天消息 (Plus键)
-        if (Input.GetKeyDown(KeyCode.Plus) || Input.GetKeyDown(KeyCode.KeypadPlus))
+        // 添加测试聊天消息 (Equals键)
+        if (Input.GetKeyDown(KeyCode.Equals) || Input.GetKeyDown(KeyCode.KeypadEquals))
         {
             DialogPanel.AddChatMessage(
                 "托马斯·库恩在《科学革命的结构》中提出的范式理论，深刻重构了科学演进的理解框架。本书第三章《常规科学的本质》与第九章《科学革命的本质与必然性》分别从科学实践的稳定性和变革性两个维度展开论述，系统揭示了范式在科学活动中的核心作用。", 
                 MessageType.Modern);
-            Debug.Log("[UIManager] Plus键按下，添加测试聊天消息。");
+            Debug.Log("[UIManager] Equals键按下，添加测试聊天消息。");
+        }
+
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            Sprite tymSprite = Resources.Load<Sprite>("tym");
+            if (tymSprite != null)
+            {
+                DialogPanel.AddChatImage(tymSprite);
+                Debug.Log("[UIManager] I键按下，添加图片消息。");
+            }
+            else
+            {
+                Debug.LogError("[UIManager] 无法加载 Sprite 文件 'tym'，请检查路径和文件名是否正确。");
+            }
         }
 
         // 添加测试线索条目 (Minus键)

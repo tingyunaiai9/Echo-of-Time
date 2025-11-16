@@ -13,6 +13,9 @@ public class DialogPanel : MonoBehaviour
     [Tooltip("聊天消息预制体（包含MessageText和TypeText两个子对象）")]
     public GameObject chatMessagePrefab;
 
+    [Tooltip("聊天图片预制体")]
+    public GameObject chatImagePrefab;
+
     [Tooltip("聊天消息容器（Vertical Layout Group）")]
     public Transform chatContent;
 
@@ -383,6 +386,46 @@ public class DialogPanel : MonoBehaviour
         newMessage.transform.SetAsLastSibling();
     }
 
+    /* 添加新的聊天图片消息 */
+    public static void AddChatImage(Sprite image)
+    {
+        if (s_instance == null || image == null) return;
+
+        // 创建图片消息
+        s_instance.CreateChatImage(image);
+    }
+
+    /* 创建单个聊天图片消息 */
+    private void CreateChatImage(Sprite image)
+    {
+        if (chatContent == null || chatImagePrefab == null) return;
+    
+        // 实例化图片消息预制体
+        GameObject newImageMessage = Instantiate(chatImagePrefab, chatContent);
+    
+        // 查找图片组件并设置图片
+        Transform imageTransform = newImageMessage.transform.Find("Image");
+        if (imageTransform != null)
+        {
+            Image imageComponent = imageTransform.GetComponent<Image>();
+            if (imageComponent != null)
+            {
+                imageComponent.sprite = image;
+    
+                // 设置图片宽度为 505pt，高度根据图片比例动态调整
+                RectTransform rectTransform = imageComponent.GetComponent<RectTransform>();
+                if (rectTransform != null && image != null)
+                {
+                    float aspectRatio = image.rect.height / image.rect.width; // 计算图片宽高比
+                    rectTransform.sizeDelta = new Vector2(505f, 505f * aspectRatio); // 设置宽度为 505，高度根据比例调整
+                }
+            }
+        }
+    
+        // 将消息放置在聊天内容的末尾
+        newImageMessage.transform.SetAsLastSibling();
+    }
+    
     // 进入新的一层时重置“提交”按钮状态（从“正确！”恢复为“提交”并可点击）
     public static void ResetConfirmButtonForNewLevel()
     {
