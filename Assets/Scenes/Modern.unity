@@ -7752,6 +7752,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogPanel
   chatMessagePrefab: {fileID: 1568691845952435987, guid: fadf74954cb214fac850b0902b404f97, type: 3}
+  chatImagePrefab: {fileID: 2541347803609357501, guid: a4d9b81c1018d425189211e62ac3fe70, type: 3}
   chatContent: {fileID: 0}
   inputField: {fileID: 0}
   sendButton: {fileID: 0}
