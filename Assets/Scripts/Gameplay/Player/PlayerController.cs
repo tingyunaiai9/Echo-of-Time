@@ -31,6 +31,15 @@ public class PlayerController : NetworkBehaviour
     [Range(0.01f, 1f)]
     public float cameraSmoothSpeed = 0.125f;
 
+    [Header("运动约束")]
+    [Tooltip("背景物体的 Tag，用于限定左右范围")]
+    public string backgroundTag = "Background";
+    [Tooltip("左右范围外额外留白(世界单位)")]
+    public float horizontalPadding = 0.2f;
+
+    private float minX;
+    private float maxX;
+    private bool hasBounds;
     Rigidbody rb;
     bool initialized;
 
@@ -44,7 +53,13 @@ public class PlayerController : NetworkBehaviour
         if (rb != null)
         {
             rb.freezeRotation = true;
+            // 冻结不使用的轴（不允许前后(Z) 与上下(Y) 位移）
+            rb.constraints = RigidbodyConstraints.FreezeRotation |
+                             RigidbodyConstraints.FreezePositionZ |
+                             RigidbodyConstraints.FreezePositionY;
         }
+
+        // AcquireBackgroundBounds();
 
         if (cameraTransform == null)
         {
@@ -56,6 +71,27 @@ public class PlayerController : NetworkBehaviour
             {
                 Debug.LogWarning("PlayerController: 未找到 Main Camera，相机跟随功能将不可用。");
             }
+        }
+    }
+
+    void AcquireBackgroundBounds()
+    {
+        var bg = GameObject.FindWithTag(backgroundTag);
+        if (bg != null)
+        {
+            var r = bg.GetComponent<Renderer>();
+            if (r != null)
+            {
+                Bounds b = r.bounds;
+                minX = b.min.x + horizontalPadding;
+                maxX = b.max.x - horizontalPadding;
+                hasBounds = true;
+                Debug.Log($"[PlayerController] 背景范围设置: {minX} ~ {maxX}");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("[PlayerController] 未找到背景(Tag=Background)，不进行水平范围限制。");
         }
     }
 
@@ -82,6 +118,9 @@ public class PlayerController : NetworkBehaviour
     {
         base.OnStartLocalPlayer();
         EventBus.Subscribe<FreezeEvent>(OnBackpackStateChanged);
+
+        AcquireBackgroundBounds();
+        
     }
 
     /* 销毁时取消订阅 */
@@ -109,18 +148,20 @@ public class PlayerController : NetworkBehaviour
 
         // 游戏输入逻辑（移动、旋转）
         float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
-        Vector3 input = new Vector3(h, 0f, v).normalized;
+        // 禁止前后：垂直输入直接忽略
+        float v = 0f;
 
+        Vector3 input = new Vector3(h, 0f, v);
         if (input.sqrMagnitude > 0.0001f)
         {
-            Quaternion target = Quaternion.LookRotation(input);
+            Quaternion target = Quaternion.LookRotation(new Vector3(input.x, 0f, 0f));
             transform.rotation = Quaternion.RotateTowards(transform.rotation, target, rotationSpeed * Time.deltaTime);
         }
 
         if (rb == null)
         {
-            transform.Translate(input * moveSpeed * Time.deltaTime, Space.World);
+            transform.Translate(new Vector3(input.x, 0f, 0f) * moveSpeed * Time.deltaTime, Space.World);
+            ClampPosition();
         }
 
         // 交互键（F键）
@@ -141,12 +182,19 @@ public class PlayerController : NetworkBehaviour
         if (rb != null)
         {
             float h = Input.GetAxisRaw("Horizontal");
-            float v = Input.GetAxisRaw("Vertical");
-            Vector3 input = new Vector3(h, 0f, v).normalized;
-            Vector3 velocity = input * moveSpeed;
-            velocity.y = rb.linearVelocity.y;
+            Vector3 velocity = new Vector3(h * moveSpeed, rb.linearVelocity.y, 0f);
             rb.linearVelocity = velocity;
+            ClampPosition();
         }
+    }
+
+    void ClampPosition()
+    {
+        if (!hasBounds) return;
+        Vector3 p = transform.position;
+        p.x = Mathf.Clamp(p.x, minX, maxX);
+        p.z = 0f; // 强制不前后移动
+        transform.position = p;
     }
 
     /* 相机跟随 */

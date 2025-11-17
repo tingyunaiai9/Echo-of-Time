@@ -243,6 +243,11 @@ MonoBehaviour:
   cameraTransform: {fileID: 0}
   cameraOffset: {x: 0, y: 3, z: -10}
   cameraSmoothSpeed: 0.125
+  backgroundTag: Background
+  horizontalPadding: 0.2
+  ancientBackground: {fileID: 0}
+  modernBackground: {fileID: 0}
+  futureBackground: {fileID: 0}
 --- !u!114 &5301687240463009392
 MonoBehaviour:
   m_ObjectHideFlags: 0
