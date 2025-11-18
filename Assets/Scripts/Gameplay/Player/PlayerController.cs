@@ -53,7 +53,7 @@ public class PlayerController : NetworkBehaviour
         if (rb != null)
         {
             rb.freezeRotation = true;
-            // 冻结不使用的轴（不允许前后(Z) 与上下(Y) 位移）
+            // 冻结不使用的轴，不允许前后(Z) 与上下(Y) 位移
             rb.constraints = RigidbodyConstraints.FreezeRotation |
                              RigidbodyConstraints.FreezePositionZ |
                              RigidbodyConstraints.FreezePositionY;
@@ -80,14 +80,13 @@ public class PlayerController : NetworkBehaviour
 
     System.Collections.IEnumerator TryAcquireBackgroundBounds()
     {
-        // 最多重试 30 帧（约 0.5 秒），应对延迟加载
+        // 最多重试 30 帧，应对延迟加载
         for (int i = 0; i < 30 && !hasBounds; i++)
         {
             AcquireBackgroundBounds();
             if (hasBounds) break;
             yield return null;
         }
-        if (!hasBounds) DebugListBackgroundCandidates();
     }
 
     void AcquireBackgroundBounds()
@@ -106,39 +105,8 @@ public class PlayerController : NetworkBehaviour
                 return;
             }
         }
-
-        // 兜底：寻找最大的 SpriteRenderer
-        SpriteRenderer largest = null;
-        float bestArea = -1f;
-        foreach (var sr in FindObjectsOfType<SpriteRenderer>())
-        {
-            float area = sr.bounds.size.x * sr.bounds.size.y;
-            if (area > bestArea) { bestArea = area; largest = sr; }
-        }
-        if (largest != null)
-        {
-            var b = largest.bounds;
-            minX = b.min.x + horizontalPadding;
-            maxX = b.max.x - horizontalPadding;
-            hasBounds = true;
-            Debug.Log($"[PlayerController] Tag未找到，使用最大Sprite: {largest.name} 范围: {minX} ~ {maxX}");
-        }
-        else
-        {
-            hasBounds = false;
-            Debug.LogWarning("[PlayerController] 未找到背景(Tag=Background)，不进行水平范围限制。");
-        }
     }
 
-    void DebugListBackgroundCandidates()
-    {
-        var all = Resources.FindObjectsOfTypeAll<GameObject>();
-        foreach (var go in all)
-        {
-            if (go.CompareTag(backgroundTag))
-                Debug.Log($"[PlayerController] 调试: 找到同Tag对象 {go.name}, activeInHierarchy={go.activeInHierarchy}, scene={go.scene.name}");
-        }
-    }
 
     /* 权限启动时设置刚体 */
     public override void OnStartAuthority()
