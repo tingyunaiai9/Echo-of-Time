@@ -17,26 +17,15 @@ public class LockController : MonoBehaviour
 
     public void OnWheelChanged()
     {
-        // 先打印当前组合
-        string combo = "";
-        for (int i = 0; i < wheels.Length; i++)
-        {
-            combo += wheels[i].GetCurrentIndex();
-        }
-        Debug.Log("Current combo: " + combo);
+        // 组合变化时检查是否解锁
 
         if (isUnlocked) return;
 
         if (IsCorrect())
         {
-            Debug.Log("Unlocked! combo = " + combo);
             isUnlocked = true;
 
             StartCoroutine(PlayUnlockAnimation());
-        }
-        else
-        {
-            Debug.Log("Not correct yet.");
         }
     }
 
@@ -54,7 +43,6 @@ public class LockController : MonoBehaviour
             int target = correctCode[i];
             if (cur != target)
             {
-                Debug.Log($"Wheel {i} mismatch: current={cur}, target={target}");
                 return false;
             }
         }
