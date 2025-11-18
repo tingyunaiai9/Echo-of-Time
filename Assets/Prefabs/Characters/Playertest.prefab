@@ -135,7 +135,7 @@ Transform:
   m_GameObject: {fileID: 2535583183450427492}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.98769, y: 0, z: 0.88832}
+  m_LocalPosition: {x: 0, y: -3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -241,8 +241,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   cameraTransform: {fileID: 0}
-  cameraOffset: {x: 0, y: 0, z: -10}
+  cameraOffset: {x: 0, y: 3, z: -10}
   cameraSmoothSpeed: 0.125
+  backgroundTag: Background
+  horizontalPadding: 0.5
 --- !u!114 &5301687240463009392
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -313,6 +315,7 @@ MonoBehaviour:
   currentLevel: 1
   playerName: 
   transportId: 0
+  isVisible: 0
 --- !u!114 &3276632568305713458
 MonoBehaviour:
   m_ObjectHideFlags: 0

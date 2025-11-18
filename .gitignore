@@ -16,7 +16,6 @@
 /Assets/ParrelSync/
 /Assets/Plugins/ParrelSync/
 /Assets/LeanTween/
-/Assets/TextMesh Pro/Resources/Fonts & Materials/*.asset
 *.log
 
 # By default unity supports Blender asset imports, *.blend1 blender files do not need to be commited to version control.

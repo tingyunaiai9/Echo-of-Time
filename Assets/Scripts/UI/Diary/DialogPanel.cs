@@ -7,11 +7,16 @@ using System.Text;
 using Events;
 using System.Collections; // 用于协程
 using System;
+using System.IO;
+using System.Net.Http;
 
 public class DialogPanel : MonoBehaviour
 {
     [Tooltip("聊天消息预制体（包含MessageText和TypeText两个子对象）")]
     public GameObject chatMessagePrefab;
+
+    [Tooltip("聊天图片预制体")]
+    public GameObject chatImagePrefab;
 
     [Tooltip("聊天消息容器（Vertical Layout Group）")]
     public Transform chatContent;
@@ -43,6 +48,15 @@ public class DialogPanel : MonoBehaviour
     private TMP_Text confirmButtonText; // 存储按钮文字组件
     private bool isConfirmButtonCooldown = false; // 按钮冷却状态
     private HashSet<uint> answeredPlayers = new HashSet<uint>(); // 已回答正确的玩家列表
+
+    public enum AiTarget
+    {
+        DeepSeek,
+        JimengImage
+    }
+
+    [Header("调试用：当前消息发送目标 AI")]
+    public AiTarget currentAiTarget = AiTarget.JimengImage;
 
     void Awake()
     {
@@ -129,8 +143,15 @@ public class DialogPanel : MonoBehaviour
         // 预创建 AI 响应的消息框 (本地显示)
         CreateStreamingMessage(MessageType.Future);
 
-        // 启动协程处理流式输出
-        StartCoroutine(StreamingCoroutine(userInput));
+        // 根据当前调试目标，发送到不同的 AI
+        if (currentAiTarget == AiTarget.DeepSeek)
+        {
+            StartCoroutine(StreamingCoroutine(userInput));
+        }
+        else
+        {
+            StartCoroutine(ImageGenCoroutine(userInput));
+        }
     }
 
     /* 确认按钮点击事件 */
@@ -297,6 +318,111 @@ public class DialogPanel : MonoBehaviour
         Debug.Log("[DialogPanel] 流式输出协程结束");
     }
 
+    /* 即梦图像生成协程（在主线程执行）*/
+    private IEnumerator ImageGenCoroutine(string prompt)
+    {
+        isStreaming = true;
+
+        var localPlayerIdentity = Mirror.NetworkClient.localPlayer;
+        var localPlayer = localPlayerIdentity != null ? localPlayerIdentity.GetComponent<TimelinePlayer>() : null;
+        int timeline = localPlayer != null ? localPlayer.timeline : -1;
+        Debug.Log($"[DialogPanel] ImageGenCoroutine 启动，Timeline: {timeline}, Prompt: {prompt}");
+
+        string imageUrl = null;
+        string errorMessage = null;
+        bool callCompleted = false;
+
+        // 后台 Task 只负责调用即梦 API，拿到 URL 或错误
+        Task.Run(async () =>
+        {
+            await JimengService.GenerateImage(
+                prompt,
+                url =>
+                {
+                    imageUrl = url;
+                    callCompleted = true;
+                },
+                err =>
+                {
+                    errorMessage = err;
+                    callCompleted = true;
+                }
+            );
+
+            isStreaming = false;
+        });
+
+        // 在主线程等待 API 调用结束
+        while (!callCompleted)
+        {
+            yield return null;
+        }
+
+        string finalMessage = string.Empty;
+
+        if (!string.IsNullOrEmpty(errorMessage))
+        {
+            finalMessage = $"[即梦调用错误] {errorMessage}";
+        }
+        else if (!string.IsNullOrEmpty(imageUrl))
+        {
+            // 在主线程中使用 Unity API，构建本地路径并下载图片
+            string fullPath = null;
+            try
+            {
+                string folder = Path.Combine(Application.persistentDataPath, "JimengTempImages");
+                if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
+
+                string fileName = $"jimeng_{DateTime.Now:yyyyMMdd_HHmmss_fff}.png";
+                fullPath = Path.Combine(folder, fileName);
+            }
+            catch (Exception ex)
+            {
+                finalMessage = $"[即梦生成失败] 生成本地路径出错: {ex.Message}";
+            }
+
+            if (string.IsNullOrEmpty(finalMessage))
+            {
+                var www = UnityEngine.Networking.UnityWebRequest.Get(imageUrl);
+                yield return www.SendWebRequest();
+
+                if (www.result == UnityEngine.Networking.UnityWebRequest.Result.Success)
+                {
+                    try
+                    {
+                        File.WriteAllBytes(fullPath, www.downloadHandler.data);
+                        finalMessage = $"[即梦生成完成]\nURL: {imageUrl}\n本地: {fullPath}";
+                    }
+                    catch (Exception ex)
+                    {
+                        finalMessage = $"[即梦生成失败] 保存图片出错: {ex.Message}";
+                    }
+                }
+                else
+                {
+                    finalMessage = $"[即梦生成失败] 下载图片出错: {www.error}";
+                }
+            }
+        }
+        else
+        {
+            finalMessage = "[即梦生成失败] 未收到图片 URL";
+        }
+
+        if (currentStreamingText != null)
+        {
+            currentStreamingText.text = finalMessage;
+        }
+
+        EventBus.Publish(new ChatMessageUpdatedEvent
+        {
+            MessageContent = finalMessage,
+            MessageType = MessageType.Future
+        });
+
+        Debug.Log("[DialogPanel] ImageGenCoroutine 结束");
+    }
+
     /* 创建流式输出的消息容器 */
     private void CreateStreamingMessage(MessageType type)
     {
@@ -383,6 +509,46 @@ public class DialogPanel : MonoBehaviour
         newMessage.transform.SetAsLastSibling();
     }
 
+    /* 添加新的聊天图片消息 */
+    public static void AddChatImage(Sprite image)
+    {
+        if (s_instance == null || image == null) return;
+
+        // 创建图片消息
+        s_instance.CreateChatImage(image);
+    }
+
+    /* 创建单个聊天图片消息 */
+    private void CreateChatImage(Sprite image)
+    {
+        if (chatContent == null || chatImagePrefab == null) return;
+    
+        // 实例化图片消息预制体
+        GameObject newImageMessage = Instantiate(chatImagePrefab, chatContent);
+    
+        // 查找图片组件并设置图片
+        Transform imageTransform = newImageMessage.transform.Find("Image");
+        if (imageTransform != null)
+        {
+            Image imageComponent = imageTransform.GetComponent<Image>();
+            if (imageComponent != null)
+            {
+                imageComponent.sprite = image;
+    
+                // 设置图片宽度为 505pt，高度根据图片比例动态调整
+                RectTransform rectTransform = imageComponent.GetComponent<RectTransform>();
+                if (rectTransform != null && image != null)
+                {
+                    float aspectRatio = image.rect.height / image.rect.width; // 计算图片宽高比
+                    rectTransform.sizeDelta = new Vector2(505f, 505f * aspectRatio); // 设置宽度为 505，高度根据比例调整
+                }
+            }
+        }
+    
+        // 将消息放置在聊天内容的末尾
+        newImageMessage.transform.SetAsLastSibling();
+    }
+    
     // 进入新的一层时重置“提交”按钮状态（从“正确！”恢复为“提交”并可点击）
     public static void ResetConfirmButtonForNewLevel()
     {

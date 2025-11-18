@@ -213,8 +213,31 @@ public static class JimengService
     {
         try
         {
-            var uri = new Uri(url);
-            var request = new HttpRequestMessage(HttpMethod.Post, uri);
+            // 按文档规则：显式构造带 Query 的 URL，避免解析误差
+            var baseUri = new Uri(url);
+
+            // 解析原始 URL 中的 Action / Version
+            var originalQuery = baseUri.Query.TrimStart('?');
+            var queryPairs = originalQuery.Split(new[] { '&' }, StringSplitOptions.RemoveEmptyEntries)
+                                          .Select(q => q.Split('='))
+                                          .Where(p => p.Length == 2)
+                                          .ToDictionary(p => p[0], p => p[1]);
+
+            // 规范化 Query：排序 + RFC3986 编码
+            var sortedQuery = new SortedDictionary<string, string>();
+            foreach (var kv in queryPairs)
+            {
+                sortedQuery[kv.Key] = kv.Value;
+            }
+
+            string canonicalQuery = string.Join("&", sortedQuery.Select(kv =>
+                $"{VolcSigner.Rfc3986Encode(kv.Key)}={VolcSigner.Rfc3986Encode(kv.Value)}"));
+
+            // 用 canonicalQuery 作为真实请求的 query，保证与签名一致
+            var fullUrl = $"https://{Host}{baseUri.AbsolutePath}?{canonicalQuery}";
+            var requestUri = new Uri(fullUrl);
+
+            var request = new HttpRequestMessage(HttpMethod.Post, requestUri);
             request.Content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
 
             // --- 步骤 1 & 2: 准备基础数据 ---
@@ -223,52 +246,33 @@ public static class JimengService
             string shortDate = utcNow.ToString("yyyyMMdd");
             string payloadHash = VolcSigner.HashSHA256(jsonBody);
 
-            // 规范化 Headers (必须按key排序)
-            var headers = new SortedDictionary<string, string>
+            // 只将 host 与 x-date 参与签名（与官方示例一致）
+            var headersToSign = new SortedDictionary<string, string>
             {
                 { "host", Host },
-                { "x-date", xDate },
-                { "x-content-sha256", payloadHash },
-                { "content-type", "application/json" }
+                { "x-date", xDate }
             };
-            
-            string canonicalHeaders = string.Join("\n", headers.Select(kv => $"{kv.Key.ToLower()}:{kv.Value.Trim()}")) + "\n";
-            string signedHeaders = string.Join(";", headers.Keys.Select(k => k.ToLower()));
 
-            // 规范化 Query (必须按key排序)
-            // (使用手动解析器替换 System.Web.HttpUtility)
-            var sortedQuery = new SortedDictionary<string, string>();
-            if (uri.Query.Length > 1) // 确保有Query (忽略 '?')
-            {
-                string query = uri.Query.Substring(1);
-                foreach (var pair in query.Split('&'))
-                {
-                    var parts = pair.Split('=');
-                    if (parts.Length == 2)
-                    {
-                        // Note: 不处理 URL 解码，因为我们的 Action/Version 不包含特殊字符
-                        sortedQuery[parts[0]] = parts[1];
-                    }
-                }
-            }
-            string canonicalQuery = string.Join("&", sortedQuery.Select(kv => $"{kv.Key}={kv.Value}"));
+            string canonicalHeaders = string.Join("\n", headersToSign.Select(kv =>
+                $"{kv.Key}:{kv.Value.Trim()}")) + "\n";
+            string signedHeaders = string.Join(";", headersToSign.Keys);
 
             // --- 步骤 2: 创建规范请求 (CanonicalRequest) ---
             string canonicalRequest =
-                "POST" + "\n" +         // HTTPRequestMethod
-                uri.AbsolutePath + "\n" + // CanonicalURI (e.g., "/")
-                canonicalQuery + "\n" +   // CanonicalQueryString
-                canonicalHeaders + "\n" + // CanonicalHeaders
-                signedHeaders + "\n" +    // SignedHeaders
-                payloadHash;              // HexEncode(Hash(RequestPayload))
+                "POST" + "\n" +             // HTTPRequestMethod
+                baseUri.AbsolutePath + "\n" + // CanonicalURI (通常为 "/")
+                canonicalQuery + "\n" +       // CanonicalQueryString
+                canonicalHeaders + "\n" +     // CanonicalHeaders
+                signedHeaders + "\n" +        // SignedHeaders
+                payloadHash;                    // HexEncode(Hash(RequestPayload))
 
             // --- 步骤 3: 创建待签名字符串 (StringToSign) ---
             string credentialScope = $"{shortDate}/{VolcRegion}/{VolcService}/request";
             string stringToSign =
-                "HMAC-SHA256" + "\n" +          // Algorithm
-                xDate + "\n" +                  // RequestDate
-                credentialScope + "\n" +        // CredentialScope
-                VolcSigner.HashSHA256(canonicalRequest); // HexEncode(Hash(CanonicalRequest))
+                "HMAC-SHA256" + "\n" +
+                xDate + "\n" +
+                credentialScope + "\n" +
+                VolcSigner.HashSHA256(canonicalRequest);
 
             // --- 步骤 4: 派生签名密钥 (kSigning) ---
             byte[] kSigning = VolcSigner.GenSigningSecretKeyV4(ApiKeyManager.VolcSecretKey, shortDate, VolcRegion, VolcService);
@@ -283,9 +287,8 @@ public static class JimengService
             // --- 7. 将所有标头添加到实际请求中 ---
             request.Headers.Host = Host;
             request.Headers.Add("X-Date", xDate);
-            request.Headers.Add("X-Content-Sha256", payloadHash); // 这是一个非标准但常用的 SigV4 标头
             request.Headers.Add("Authorization", authorization);
-            // (Content-Type 已在 Content 属性中设置)
+            // Content-Type 由 HttpContent 设置
 
             return request;
         }
