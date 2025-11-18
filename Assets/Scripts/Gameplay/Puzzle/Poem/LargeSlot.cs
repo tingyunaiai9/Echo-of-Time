@@ -57,6 +57,7 @@ public class LargeNoteSlot : MonoBehaviour
         if (poemText != null && !isFilled)
         {
             poemText.text = text;
+            poemText.color = Color.white;
             isFilled = true;
             Debug.Log($"[LargeNoteSlot] {noteId} 已填充: {text}");
         }
