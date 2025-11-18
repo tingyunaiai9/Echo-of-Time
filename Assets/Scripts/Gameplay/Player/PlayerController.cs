@@ -35,7 +35,7 @@ public class PlayerController : NetworkBehaviour
     [Tooltip("背景物体的 Tag，用于限定左右范围")]
     public string backgroundTag = "Background";
     [Tooltip("左右范围外额外留白(世界单位)")]
-    public float horizontalPadding = 0.2f;
+    public float horizontalPadding = 0.5f;
 
     private float minX;
     private float maxX;
@@ -59,8 +59,6 @@ public class PlayerController : NetworkBehaviour
                              RigidbodyConstraints.FreezePositionY;
         }
 
-        // AcquireBackgroundBounds();
-
         if (cameraTransform == null)
         {
             if (Camera.main != null)
@@ -72,6 +70,24 @@ public class PlayerController : NetworkBehaviour
                 Debug.LogWarning("PlayerController: 未找到 Main Camera，相机跟随功能将不可用。");
             }
         }
+    }
+
+    void Start()
+    {
+        if (isLocalPlayer)
+            StartCoroutine(TryAcquireBackgroundBounds());
+    }
+
+    System.Collections.IEnumerator TryAcquireBackgroundBounds()
+    {
+        // 最多重试 30 帧（约 0.5 秒），应对延迟加载
+        for (int i = 0; i < 30 && !hasBounds; i++)
+        {
+            AcquireBackgroundBounds();
+            if (hasBounds) break;
+            yield return null;
+        }
+        if (!hasBounds) DebugListBackgroundCandidates();
     }
 
     void AcquireBackgroundBounds()
@@ -87,11 +103,40 @@ public class PlayerController : NetworkBehaviour
                 maxX = b.max.x - horizontalPadding;
                 hasBounds = true;
                 Debug.Log($"[PlayerController] 背景范围设置: {minX} ~ {maxX}");
+                return;
             }
+        }
+
+        // 兜底：寻找最大的 SpriteRenderer
+        SpriteRenderer largest = null;
+        float bestArea = -1f;
+        foreach (var sr in FindObjectsOfType<SpriteRenderer>())
+        {
+            float area = sr.bounds.size.x * sr.bounds.size.y;
+            if (area > bestArea) { bestArea = area; largest = sr; }
+        }
+        if (largest != null)
+        {
+            var b = largest.bounds;
+            minX = b.min.x + horizontalPadding;
+            maxX = b.max.x - horizontalPadding;
+            hasBounds = true;
+            Debug.Log($"[PlayerController] Tag未找到，使用最大Sprite: {largest.name} 范围: {minX} ~ {maxX}");
         }
         else
         {
+            hasBounds = false;
             Debug.LogWarning("[PlayerController] 未找到背景(Tag=Background)，不进行水平范围限制。");
+        }
+    }
+
+    void DebugListBackgroundCandidates()
+    {
+        var all = Resources.FindObjectsOfTypeAll<GameObject>();
+        foreach (var go in all)
+        {
+            if (go.CompareTag(backgroundTag))
+                Debug.Log($"[PlayerController] 调试: 找到同Tag对象 {go.name}, activeInHierarchy={go.activeInHierarchy}, scene={go.scene.name}");
         }
     }
 
