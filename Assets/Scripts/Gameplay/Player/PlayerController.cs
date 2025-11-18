@@ -37,6 +37,11 @@ public class PlayerController : NetworkBehaviour
     [Tooltip("左右范围外额外留白(世界单位)")]
     public float horizontalPadding = 0.5f;
 
+    // 新增：上下留白与相机裁剪需要的缓存
+    [Tooltip("上下范围外额外留白(世界单位)")]
+    public float verticalPadding = 0.5f;
+    private float minY, maxY, bgZ;
+
     private float minX;
     private float maxX;
     private bool hasBounds;
@@ -100,8 +105,12 @@ public class PlayerController : NetworkBehaviour
                 Bounds b = r.bounds;
                 minX = b.min.x + horizontalPadding;
                 maxX = b.max.x - horizontalPadding;
+                // 新增：上下与Z缓存
+                minY = b.min.y + verticalPadding;
+                maxY = b.max.y - verticalPadding;
+                bgZ  = b.center.z;
                 hasBounds = true;
-                Debug.Log($"[PlayerController] 背景范围设置: {minX} ~ {maxX}");
+                Debug.Log($"[PlayerController] 背景范围设置: X[{minX},{maxX}] Y[{minY},{maxY}]");
                 return;
             }
         }
@@ -218,9 +227,44 @@ public class PlayerController : NetworkBehaviour
         if (cameraTransform != null)
         {
             Vector3 desiredPosition = transform.position + cameraOffset;
+            // 新增：相机位置裁剪，防止超出背景
+            desiredPosition = ClampCameraToBackground(desiredPosition);
+
             Vector3 smoothedPosition = Vector3.Lerp(cameraTransform.position, desiredPosition, cameraSmoothSpeed);
             cameraTransform.position = smoothedPosition;
         }
+    }
+
+    // 新增：将相机中心限制在背景内（考虑相机视野尺寸）
+    Vector3 ClampCameraToBackground(Vector3 camPos)
+    {
+        if (!hasBounds || cameraTransform == null) return camPos;
+
+        var cam = cameraTransform.GetComponent<Camera>();
+        if (cam == null) return camPos;
+
+        float halfH, halfW;
+        if (cam.orthographic)
+        {
+            halfH = cam.orthographicSize;
+            halfW = halfH * cam.aspect;
+        }
+        else
+        {
+            // 透视下用到背景所在平面与相机的Z距离估算可视半高
+            float dist = Mathf.Abs(camPos.z - bgZ);
+            halfH = Mathf.Tan(cam.fieldOfView * 0.5f * Mathf.Deg2Rad) * dist;
+            halfW = halfH * cam.aspect;
+        }
+
+        // 背景太小的兜底：直接锁在背景中心
+        float cxMin = minX + halfW, cxMax = maxX - halfW;
+        float cyMin = minY + halfH, cyMax = maxY - halfH;
+
+        float clampedX = (cxMin <= cxMax) ? Mathf.Clamp(camPos.x, cxMin, cxMax) : (minX + maxX) * 0.5f;
+        float clampedY = (cyMin <= cyMax) ? Mathf.Clamp(camPos.y, cyMin, cyMax) : (minY + maxY) * 0.5f;
+
+        return new Vector3(clampedX, clampedY, camPos.z);
     }
 
     /* 尝试与最近的交互物体互动 */
