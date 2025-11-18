@@ -244,7 +244,8 @@ MonoBehaviour:
   cameraOffset: {x: 0, y: 3, z: -10}
   cameraSmoothSpeed: 0.125
   backgroundTag: Background
-  horizontalPadding: 0.5
+  horizontalPadding: 1
+  verticalPadding: 1
 --- !u!114 &5301687240463009392
 MonoBehaviour:
   m_ObjectHideFlags: 0
