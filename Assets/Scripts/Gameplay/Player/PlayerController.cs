@@ -14,31 +14,31 @@ public class PlayerController : NetworkBehaviour
     public float rotationSpeed = 720f;
 
     [Header("交互设置")]
-    [Tooltip("交互的最大范围半径（米）。不再使用方向限制。")]
+    [Tooltip("交互的最大范围半径。")]
     public float interactionRange = 3f;
 
-    [Tooltip("可交互物体的 LayerMask ( 可选，用于优化 )")]
+    [Tooltip("可交互物体的 LayerMask")]
     public LayerMask interactableLayer;
 
     [Header("相机跟随设置")]
     [Tooltip("要跟随的相机 Transform，通常是场景中的 Main Camera。如果不指定，Awake 时会尝试自动查找。")]
     public Transform cameraTransform;
 
-    [Tooltip("相机相对于玩家的固定偏移量（如: (0, 10, -10)）。")]
+    [Tooltip("相机相对于玩家的固定偏移量。")]
     public Vector3 cameraOffset = new Vector3(0f, 0f, -10f);
 
-    [Tooltip("相机跟随的平滑度（值越大，跟随越慢/平滑）。推荐值 0.05 到 0.2。")]
+    [Tooltip("相机跟随的平滑度（值越大，跟随越平滑）。")]
     [Range(0.01f, 1f)]
     public float cameraSmoothSpeed = 0.125f;
 
     [Header("运动约束")]
     [Tooltip("背景物体的 Tag，用于限定左右范围")]
     public string backgroundTag = "Background";
-    [Tooltip("左右范围外额外留白(世界单位)")]
+    [Tooltip("左右范围外额外留白")]
     public float horizontalPadding = 0.5f;
 
-    // 新增：上下留白与相机裁剪需要的缓存
-    [Tooltip("上下范围外额外留白(世界单位)")]
+    // 上下留白与相机裁剪需要的缓存
+    [Tooltip("上下范围外额外留白")]
     public float verticalPadding = 0.5f;
     private float minY, maxY, bgZ;
 
@@ -105,7 +105,7 @@ public class PlayerController : NetworkBehaviour
                 Bounds b = r.bounds;
                 minX = b.min.x + horizontalPadding;
                 maxX = b.max.x - horizontalPadding;
-                // 新增：上下与Z缓存
+                // 上下与Z缓存
                 minY = b.min.y + verticalPadding;
                 maxY = b.max.y - verticalPadding;
                 bgZ  = b.center.z;
