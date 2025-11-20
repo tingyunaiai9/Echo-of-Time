@@ -157,6 +157,19 @@ public class LightPanel : MonoBehaviour
                 // 设置旋转（只支持 0, 45, 90, 135）
                 rectTransform.localRotation = Quaternion.Euler(0, 0, slot.rotation);
 
+                // 初始化时禁用 BoxCollider2D
+                BoxCollider2D collider = mirrorSlot.GetComponent<BoxCollider2D>();
+                if (collider != null)
+                    collider.enabled = false;
+
+                // 设置图像为灰度，透明度 50%
+                Image image = mirrorSlot.GetComponent<Image>();
+                if (image != null)
+                {
+                    Color grayColor = new Color(0.5f, 0.5f, 0.5f, 0.5f);
+                    image.color = grayColor;
+                }
+
                 Debug.Log($"[LightPanel] 绘制镜槽: 索引({slot.xindex}, {slot.yindex}), " +
                          $"位置({centerX:F2}, {centerY:F2}), 旋转{slot.rotation}°");
             }

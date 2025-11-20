@@ -132,6 +132,14 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             if (collider.gameObject.layer == LayerMask.NameToLayer("Light") && collider.gameObject.name.Contains("Mirror"))
             {
                 collider.enabled = false;
+                
+                // 恢复为灰度，透明度 50%
+                Image image = collider.GetComponent<Image>();
+                if (image != null)
+                {
+                    Color grayColor = new Color(0.5f, 0.5f, 0.5f, 0.5f);
+                    image.color = grayColor;
+                }
             }
         }
         slotOccupancy.Clear();
@@ -352,8 +360,16 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     {
         OccupySlot(mirrorSlot);
         
+        // 启用 BoxCollider2D
         BoxCollider2D collider = mirrorSlot.GetComponent<BoxCollider2D>();
         if (collider != null) collider.enabled = true;
+
+        // 恢复颜色和透明度
+        Image image = mirrorSlot.GetComponent<Image>();
+        if (image != null)
+        {
+            image.color = Color.white; // 恢复为原始颜色（完全不透明的白色）
+        }
 
         currentMirrorSlot = mirrorSlot;
         mirrorCount--;
@@ -367,8 +383,17 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     {
         if (mirrorSlot == null) return;
         
+        // 禁用 BoxCollider2D
         BoxCollider2D collider = mirrorSlot.GetComponent<BoxCollider2D>();
         if (collider != null) collider.enabled = false;
+
+        // 恢复为灰度，透明度 50%
+        Image image = mirrorSlot.GetComponent<Image>();
+        if (image != null)
+        {
+            Color grayColor = new Color(0.5f, 0.5f, 0.5f, 0.5f);
+            image.color = grayColor;
+        }
     }
 
     /*
