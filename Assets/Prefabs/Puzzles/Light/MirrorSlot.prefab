@@ -12,8 +12,9 @@ GameObject:
   - component: {fileID: 2929514927271289697}
   - component: {fileID: 9125936461292673262}
   - component: {fileID: 3441348447714521116}
+  - component: {fileID: 109121560384302257}
   m_Layer: 6
-  m_Name: Mirror
+  m_Name: MirrorSlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -83,7 +84,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1904580698853253649}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
@@ -122,3 +123,18 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 140, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &109121560384302257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1904580698853253649}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
+  m_EffectColor: {r: 0.04045032, g: 0.64827144, b: 0.9528302, a: 0.5}
+  m_EffectDistance: {x: 1, y: -1}
+  m_UseGraphicAlpha: 1

@@ -29,12 +29,12 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     [Tooltip("当前占用的镜槽")]
     private GameObject currentMirrorSlot;
     
-    [Header("镜槽颜色设置")]
-    [Tooltip("镜槽激活时的颜色")]
-    public Color activeMirrorColor = Color.blue;
+    [Header("镜槽高亮设置")]
+    [Tooltip("高亮时的 Outline 颜色")]
+    public Color highlightOutlineColor = Color.yellow;
     
-    [Tooltip("镜槽原始颜色")]
-    private Color originalMirrorColor = Color.gray;
+    [Tooltip("高亮时的 Outline 宽度")]
+    public Vector2 highlightOutlineDistance = new Vector2(2, -2);
     
     [Header("检测配置")]
     [Tooltip("最大检测距离（像素）")]
@@ -126,16 +126,12 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         UpdateMirrorCountDisplay();
         
         // 重置所有镜槽
-        GameObject[] allObjects = FindObjectsByType<GameObject>(FindObjectsSortMode.None);
-        foreach (GameObject obj in allObjects)
+        BoxCollider2D[] allColliders = FindObjectsByType<BoxCollider2D>(FindObjectsSortMode.None);
+        foreach (BoxCollider2D collider in allColliders)
         {
-            if (obj.name == "MirrorLine" && obj.layer == LayerMask.NameToLayer("Light"))
+            if (collider.gameObject.layer == LayerMask.NameToLayer("Light") && collider.gameObject.name.Contains("Mirror"))
             {
-                BoxCollider2D collider = obj.GetComponent<BoxCollider2D>();
-                if (collider != null) collider.enabled = false;
-                
-                Image img = obj.GetComponent<Image>();
-                if (img != null) img.color = originalMirrorColor;
+                collider.enabled = false;
             }
         }
         slotOccupancy.Clear();
@@ -282,12 +278,7 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
      */
     private void ClearAllHighlights()
     {
-        GameObject[] allObjects = FindObjectsByType<GameObject>(FindObjectsSortMode.None);
-        foreach (GameObject obj in allObjects)
-        {
-            if (obj.name == "MirrorLine" && obj.layer == LayerMask.NameToLayer("Light"))
-                ResetSlotColor(obj);
-        }
+        // 清除高亮状态（新版本不使用颜色高亮）
         currentHighlightedSlot = null;
     }
     
@@ -296,8 +287,13 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
      */
     private void HighlightSlot(GameObject mirrorSlot)
     {
-        Image img = mirrorSlot.GetComponent<Image>();
-        if (img != null) img.color = Color.yellow;
+        Outline outline = mirrorSlot.GetComponent<Outline>();
+        if (outline != null)
+        {
+            outline.enabled = true;
+            outline.effectColor = highlightOutlineColor;
+            outline.effectDistance = highlightOutlineDistance;
+        }
     }
     
     /*
@@ -305,9 +301,11 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
      */
     private void ResetSlotColor(GameObject mirrorSlot)
     {
-        Image img = mirrorSlot.GetComponent<Image>();
-        if (img != null)
-            img.color = slotOccupancy.ContainsKey(mirrorSlot) ? activeMirrorColor : originalMirrorColor;
+        Outline outline = mirrorSlot.GetComponent<Outline>();
+        if (outline != null)
+        {
+            outline.enabled = false;
+        }
     }
 
     // =====镜槽检测与激活实现======
@@ -320,13 +318,14 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         if (draggedClone == null) return null;
 
         RectTransform cloneRect = draggedClone.GetComponent<RectTransform>();
-        GameObject[] allObjects = FindObjectsByType<GameObject>(FindObjectsSortMode.None);
+        BoxCollider2D[] allColliders = FindObjectsByType<BoxCollider2D>(FindObjectsSortMode.None);
         GameObject nearest = null;
         float minDistance = maxDetectionDistance;
 
-        foreach (GameObject obj in allObjects)
+        foreach (BoxCollider2D collider in allColliders)
         {
-            if (obj.name == "MirrorLine" && obj.layer == LayerMask.NameToLayer("Light"))
+            GameObject obj = collider.gameObject;
+            if (obj.layer == LayerMask.NameToLayer("Light") && obj.name.Contains("Mirror"))
             {
                 if (IsSlotOccupiedByOther(obj)) continue;
 
@@ -355,9 +354,6 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         
         BoxCollider2D collider = mirrorSlot.GetComponent<BoxCollider2D>();
         if (collider != null) collider.enabled = true;
-        
-        Image img = mirrorSlot.GetComponent<Image>();
-        if (img != null) img.color = activeMirrorColor;
 
         currentMirrorSlot = mirrorSlot;
         mirrorCount--;
@@ -373,9 +369,6 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         
         BoxCollider2D collider = mirrorSlot.GetComponent<BoxCollider2D>();
         if (collider != null) collider.enabled = false;
-        
-        Image img = mirrorSlot.GetComponent<Image>();
-        if (img != null) img.color = originalMirrorColor;
     }
 
     /*
