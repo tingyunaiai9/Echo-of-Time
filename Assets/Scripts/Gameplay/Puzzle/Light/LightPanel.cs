@@ -184,14 +184,42 @@ public class LightPanel : MonoBehaviour
     /*
      * 谜题完成时调用
      */
-    public void OnPuzzleCompleted()
+    public static void OnPuzzleCompleted()
     {
         Debug.Log("[LightPanel] 谜题完成！");
 
         // 设置完成标志
         s_isPuzzleCompleted = true;
 
-        // 在这里添加完成后的逻辑（例如播放动画、显示提示等）
+        // 关闭 Laser 对象
+        if (s_instance != null)
+        {
+            Transform laser = s_instance.backgroundTransform.Find("Laser");
+            if (laser != null)
+            {
+                laser.gameObject.SetActive(false);
+                Debug.Log("[LightPanel] Laser 已关闭");
+            }
+            else
+            {
+                Debug.LogWarning("[LightPanel] 未找到 Background/Laser");
+            }
+        }
+
+        // 查找并打开 ConsolePanel
+        if (s_instance != null && s_instance.transform.parent != null)
+        {
+            Transform consolePanel = s_instance.transform.parent.Find("ConsolePanel");
+            if (consolePanel != null)
+            {
+                consolePanel.gameObject.SetActive(true);
+                Debug.Log("[LightPanel] ConsolePanel 已打开");
+            }
+            else
+            {
+                Debug.LogWarning("[LightPanel] 未找到 ConsolePanel");
+            }
+        }
     }
 
     // ============ 静态面板控制方法 ============

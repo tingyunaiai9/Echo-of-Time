@@ -387,6 +387,12 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         currentMirrorSlot = mirrorSlot;
         mirrorCount--;
         UpdateMirrorCountDisplay();
+        
+        // 当所有镜子都放置完毕时，调用谜题完成
+        if (mirrorCount == 0)
+        {
+            LightPanel.OnPuzzleCompleted();
+        }
     }
 
     /*
