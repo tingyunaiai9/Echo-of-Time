@@ -639,7 +639,7 @@ MonoBehaviour:
   - {fileID: 831434827}
   - {fileID: 2146680853}
   - {fileID: 679686688}
-  correctCode: 09000000090000000900000009000000
+  correctCode: 01000000010000000100000001000000
   bodyParts:
   - {fileID: 105258216}
   wheelParts:
@@ -648,8 +648,8 @@ MonoBehaviour:
   - {fileID: 831434825}
   - {fileID: 2040690873}
   bodyMoveOffset: {x: 0, y: 10, z: 0}
-  wheelMoveOffset: {x: -2, y: 0, z: 0}
-  animDuration: 1
+  wheelMoveOffset: {x: 0, y: 0, z: 10}
+  animDuration: 3
 --- !u!4 &126819578
 Transform:
   m_ObjectHideFlags: 0
@@ -3944,7 +3944,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DialWheel
   steps: 10
   rotateSpeed: 300
-  lockController: {fileID: 0}
+  lockController: {fileID: 126819577}
 --- !u!65 &679686689
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5170,7 +5170,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DialWheel
   steps: 10
   rotateSpeed: 300
-  lockController: {fileID: 0}
+  lockController: {fileID: 126819577}
 --- !u!1 &843080276
 GameObject:
   m_ObjectHideFlags: 0
@@ -5655,6 +5655,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogPanel
   chatMessagePrefab: {fileID: 1568691845952435987, guid: fadf74954cb214fac850b0902b404f97, type: 3}
+  chatImagePrefab: {fileID: 0}
   chatContent: {fileID: 0}
   inputField: {fileID: 0}
   sendButton: {fileID: 0}
@@ -5664,6 +5665,7 @@ MonoBehaviour:
   levelAnswers:
   - "\u5357\u5C71"
   - "\u5F52\u53BB"
+  currentAiTarget: 1
 --- !u!114 &925008456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13304,7 +13306,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DialWheel
   steps: 10
   rotateSpeed: 300
-  lockController: {fileID: 0}
+  lockController: {fileID: 126819577}
 --- !u!1 &2043275471
 GameObject:
   m_ObjectHideFlags: 0
@@ -13730,7 +13732,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DialWheel
   steps: 10
   rotateSpeed: 300
-  lockController: {fileID: 0}
+  lockController: {fileID: 126819577}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
