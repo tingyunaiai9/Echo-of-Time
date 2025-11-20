@@ -1206,7 +1206,7 @@ MonoBehaviour:
     rotation: 135
   - xindex: 3
     yindex: 0
-    rotation: 45
+    rotation: -135
   - xindex: 3
     yindex: 2
     rotation: 45

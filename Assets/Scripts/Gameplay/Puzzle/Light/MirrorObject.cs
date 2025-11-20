@@ -140,13 +140,26 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
                     Color grayColor = new Color(0.5f, 0.5f, 0.5f, 0.5f);
                     image.color = grayColor;
                 }
+                
+                // 清除高亮状态（禁用 Outline）
+                Outline outline = collider.GetComponent<Outline>();
+                if (outline != null)
+                {
+                    outline.enabled = false;
+                }
             }
         }
         slotOccupancy.Clear();
         
-        // 移除所有镜子的占用状态
+        // 清除所有 MirrorObject 的高亮状态引用
         foreach (var mirrorObj in allMirrorObjects)
-            mirrorObj?.RemoveFromMirrorSlot();
+        {
+            if (mirrorObj != null)
+            {
+                mirrorObj.currentHighlightedSlot = null;
+                mirrorObj.RemoveFromMirrorSlot();
+            }
+        }
     }
     
     // ======拖拽事件实现======
