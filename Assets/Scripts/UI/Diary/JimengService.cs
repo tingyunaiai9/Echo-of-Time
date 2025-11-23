@@ -287,7 +287,8 @@ public static class JimengService
             // --- 7. 将所有标头添加到实际请求中 ---
             request.Headers.Host = Host;
             request.Headers.Add("X-Date", xDate);
-            request.Headers.Add("Authorization", authorization);
+            // 使用 TryAddWithoutValidation 避免在部分平台（如 macOS）上因格式校验过严导致的异常
+            request.Headers.TryAddWithoutValidation("Authorization", authorization);
             // Content-Type 由 HttpContent 设置
 
             return request;
