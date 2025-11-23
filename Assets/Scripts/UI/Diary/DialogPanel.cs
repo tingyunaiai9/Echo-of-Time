@@ -61,17 +61,19 @@ public class DialogPanel : MonoBehaviour
     void Awake()
     {
         s_instance = this;
+        
         // 查找 UI 元素
         if (chatContent == null)
-            chatContent = transform.Find("Panel/LeftPanel/ChatScrollView/Viewport/Content");
+            chatContent = transform.Find("LeftPanel/ChatPanel/ChatScrollView/Viewport/Content");
         if (inputField == null)
-            inputField = transform.Find("Panel/LeftPanel/InputPanel/InputField").GetComponent<TMP_InputField>();
+            inputField = transform.Find("LeftPanel/InputPanel/InputField").GetComponent<TMP_InputField>();
         if (sendButton == null)
-            sendButton = transform.Find("Panel/LeftPanel/InputPanel/InputField/SendButton").GetComponent<Button>();
+            sendButton = transform.Find("LeftPanel/InputPanel/SendButton").GetComponent<Button>();
         if (resultContent == null)
-            resultContent = transform.Find("Panel/RightPanel/ResultPanel/BackGround/InputField").GetComponent<TMP_InputField>();
+            resultContent = transform.Find("RightPanel/ResultPanel/InputField").GetComponent<TMP_InputField>();
         if (confirmButton == null)
-            confirmButton = transform.Find("Panel/RightPanel/ResultPanel/BackGround/ConfirmButton").GetComponent<Button>();
+            confirmButton = transform.Find("RightPanel/ResultPanel/ConfirmButton").GetComponent<Button>();
+        
         
         // 获取确认按钮的文字组件
         confirmButtonText = confirmButton.GetComponentInChildren<TMP_Text>();
@@ -457,8 +459,7 @@ public class DialogPanel : MonoBehaviour
 
     /* 添加新的聊天消息 */
     public static void AddChatMessage(string content, MessageType type, bool publish = true)
-    {
-        if (s_instance == null) return;
+    {        
         s_instance.CreateChatMessage(content, type);
         if (publish)
         {
@@ -483,7 +484,6 @@ public class DialogPanel : MonoBehaviour
     /* 创建单个聊天消息 */
     private void CreateChatMessage(string content, MessageType type)
     {
-        if (chatContent == null || chatMessagePrefab == null) return;
         GameObject newMessage = Instantiate(chatMessagePrefab, chatContent);
 
         Transform messageTextTransform = newMessage.transform.Find("MessageText");
@@ -496,17 +496,34 @@ public class DialogPanel : MonoBehaviour
             }
         }
 
-        Transform typeTextTransform = newMessage.transform.Find("TypeText");
-        if (typeTextTransform != null)
+        // 根据消息类型设置 Avatar 颜色
+        Transform avatarTransform = newMessage.transform.Find("Avatar");
+        if (avatarTransform != null)
         {
-            TMP_Text typeText = typeTextTransform.GetComponent<TMP_Text>();
-            if (typeText != null)
+            Image avatarImage = avatarTransform.GetComponent<Image>();
+            if (avatarImage != null)
             {
-                typeText.text = type.ToString();
+                switch (type)
+                {
+                    case MessageType.Modern:
+                        avatarImage.color = new Color(0.68f, 0.85f, 0.90f); // 浅蓝色
+                        break;
+                    case MessageType.Ancient:
+                        avatarImage.color = new Color(0.80f, 0.65f, 0.40f); // 黄褐色
+                        break;
+                    case MessageType.Future:
+                        avatarImage.color = new Color(0.60f, 0.50f, 0.90f); // 蓝紫色
+                        break;
+                    default:
+                        avatarImage.color = Color.white; // 默认白色
+                        break;
+                }
+                Debug.Log($"[DialogPanel.CreateChatMessage] Avatar 颜色设置成功: {type}");
             }
         }
 
         newMessage.transform.SetAsLastSibling();
+        Debug.Log($"[DialogPanel.CreateChatMessage] 消息创建完成！");
     }
 
     /* 添加新的聊天图片消息 */
@@ -535,12 +552,12 @@ public class DialogPanel : MonoBehaviour
             {
                 imageComponent.sprite = image;
     
-                // 设置图片宽度为 505pt，高度根据图片比例动态调整
+                // 设置图片宽度为 405pt，高度根据图片比例动态调整
                 RectTransform rectTransform = imageComponent.GetComponent<RectTransform>();
                 if (rectTransform != null && image != null)
                 {
                     float aspectRatio = image.rect.height / image.rect.width; // 计算图片宽高比
-                    rectTransform.sizeDelta = new Vector2(505f, 505f * aspectRatio); // 设置宽度为 505，高度根据比例调整
+                    rectTransform.sizeDelta = new Vector2(405f, 405f * aspectRatio); // 设置宽度为 405，高度根据比例调整
                 }
             }
         }
