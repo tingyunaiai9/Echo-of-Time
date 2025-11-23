@@ -552,12 +552,12 @@ public class DialogPanel : MonoBehaviour
             {
                 imageComponent.sprite = image;
     
-                // 设置图片宽度为 505pt，高度根据图片比例动态调整
+                // 设置图片宽度为 405pt，高度根据图片比例动态调整
                 RectTransform rectTransform = imageComponent.GetComponent<RectTransform>();
                 if (rectTransform != null && image != null)
                 {
                     float aspectRatio = image.rect.height / image.rect.width; // 计算图片宽高比
-                    rectTransform.sizeDelta = new Vector2(505f, 505f * aspectRatio); // 设置宽度为 505，高度根据比例调整
+                    rectTransform.sizeDelta = new Vector2(405f, 405f * aspectRatio); // 设置宽度为 405，高度根据比例调整
                 }
             }
         }

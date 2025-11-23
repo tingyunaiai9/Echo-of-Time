@@ -124,7 +124,11 @@ public class UIManager : Singleton<UIManager>
         // 添加测试线索条目 (Minus键)
         if (Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadMinus))
         {
-            ClueBoard.AddClueEntry("这是一个测试线索条目，记录玩家的发现。");
+            ClueBoard clueBoardInstance = FindFirstObjectByType<ClueBoard>();
+            if (clueBoardInstance != null)
+            {
+                clueBoardInstance.TestClueEntries();
+            }
             Debug.Log("[UIManager] Minus键按下，添加测试线索条目。");
         }
     }
