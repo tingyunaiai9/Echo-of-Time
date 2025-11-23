@@ -1,7 +1,7 @@
 /* UI/Diary/DeepSeekService.cs
- * 独立负责处理 DeepSeek Chat API 的所有网络请求
- * 包含连接预热、流式请求和错误处理
- * 提供静态方法调用AI服务，支持流式响应回调机制
+ * DeepSeek 聊天服务调用封装
+ * 独立负责处理 DeepSeek Chat API 的所有网络请求，包含连接预热、流式请求和错误处理
+ * 提供静态方法调用 AI 服务，支持流式响应回调机制
  */
 using System;
 using System.IO;
@@ -13,8 +13,8 @@ using Newtonsoft.Json;
 using UnityEngine;
 
 /*
- * DeepSeek AI服务静态类
- * 提供流式聊天API调用功能，包含连接预热和错误处理
+ * DeepSeek AI 服务静态类，提供流式聊天 API 调用功能
+ * 负责封装请求体构造、SSE 流解析和错误回调
  */
 public static class DeepSeekService
 {

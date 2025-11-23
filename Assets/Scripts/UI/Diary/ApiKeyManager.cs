@@ -1,6 +1,7 @@
-/* ApiKeyManager.cs
- * * 负责在游戏启动时从 /Assets/StreamingAssets/api_keys.json 加载 API 密钥。
- * 这是一个静态类，为所有 AI 服务（DeepSeek, Jimeng）提供统一的密钥访问点。
+/* UI/Diary/ApiKeyManager.cs
+ * API 密钥加载与访问管理
+ * 负责在游戏启动时从 Assets/StreamingAssets/api_keys.json 加载各类 AI 服务密钥
+ * 为 DeepSeek、即梦等服务提供统一的静态访问入口
  */
 using System;
 using System.IO;

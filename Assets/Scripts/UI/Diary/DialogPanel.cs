@@ -1,3 +1,8 @@
+/* UI/Diary/DialogPanel.cs
+ * 日记左侧对话与 AI 交互面板
+ * 负责本地聊天消息展示、DeepSeek 文本流式调用与即梦图像生成入口
+ */
+
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -9,6 +14,11 @@ using System.Collections; // 用于协程
 using System;
 using System.IO;
 using System.Net.Http;
+
+/*
+ * 日记对话面板控制组件
+ * 管理聊天消息 UI、按钮交互以及调用不同 AI 目标处理玩家输入
+ */
 
 public class DialogPanel : MonoBehaviour
 {
