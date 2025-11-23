@@ -35,8 +35,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 322.5, y: -95.25}
-  m_SizeDelta: {x: 505, y: 0}
+  m_AnchoredPosition: {x: 272.5, y: -30}
+  m_SizeDelta: {x: 405, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8742173434115769236
 CanvasRenderer:
@@ -66,10 +66,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u6258\u9A6C\u65AF\xB7\u5E93\u6069\u5728\u300A\u79D1\u5B66\u9769\u547D\u7684\u7ED3\u6784\u300B\u4E2D\u63D0\u51FA\u7684\u8303\u5F0F\u7406\u8BBA\uFF0C\u6DF1\u523B\u91CD\u6784\u4E86\u79D1\u5B66\u6F14\u8FDB\u7684\u7406\u89E3\u6846\u67B6\u3002\u672C\u4E66\u7B2C\u4E09\u7AE0\u300A\u5E38\u89C4\u79D1\u5B66\u7684\u672C\u8D28\u300B\u4E0E\u7B2C\u4E5D\u7AE0\u300A\u79D1\u5B66\u9769\u547D\u7684\u672C\u8D28\u4E0E\u5FC5\u7136\u6027\u300B\u5206\u522B\u4ECE\u79D1\u5B66\u5B9E\u8DF5\u7684\u7A33\u5B9A\u6027\u548C\u53D8\u9769\u6027\u4E24\u4E2A\u7EF4\u5EA6\u5C55\u5F00\u8BBA\u8FF0\uFF0C\u7CFB\u7EDF\u63ED\u793A\u4E86\u8303\u5F0F\u5728\u79D1\u5B66\u6D3B\u52A8\u4E2D\u7684\u6838\u5FC3\u4F5C\u7528\u3002"
+  m_text: "\u4E24\u53EA\u9EC4\u9E42\u9E23\u7FE0\u67F3\uFF0C\u4E00\u884C\u767D\u9E6D\u4E0A\u9752\u5929"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2d2bc92911e3143c49c4e1ef98998b9f, type: 2}
-  m_sharedMaterial: {fileID: -8588852133097181418, guid: 2d2bc92911e3143c49c4e1ef98998b9f, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5c5ac64b947792d4b88d4a0981ffe9a9, type: 2}
+  m_sharedMaterial: {fileID: 684731690854960430, guid: 5c5ac64b947792d4b88d4a0981ffe9a9, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -190,7 +190,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 585, y: 0}
+  m_SizeDelta: {x: 485, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &1912971595871220394
 CanvasRenderer:
@@ -247,7 +247,7 @@ MonoBehaviour:
     m_Right: 10
     m_Top: 10
     m_Bottom: 10
-  m_ChildAlignment: 0
+  m_ChildAlignment: 4
   m_Spacing: 20
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1

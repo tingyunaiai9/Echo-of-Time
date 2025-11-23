@@ -102,7 +102,7 @@ public class UIManager : Singleton<UIManager>
         if (Input.GetKeyDown(KeyCode.Equals) || Input.GetKeyDown(KeyCode.KeypadEquals))
         {
             DialogPanel.AddChatMessage(
-                "托马斯·库恩在《科学革命的结构》中提出的范式理论，深刻重构了科学演进的理解框架。本书第三章《常规科学的本质》与第九章《科学革命的本质与必然性》分别从科学实践的稳定性和变革性两个维度展开论述，系统揭示了范式在科学活动中的核心作用。", 
+                "两只黄鹂鸣翠柳，一行白鹭上青天。", 
                 MessageType.Modern);
             Debug.Log("[UIManager] Equals键按下，添加测试聊天消息。");
         }
