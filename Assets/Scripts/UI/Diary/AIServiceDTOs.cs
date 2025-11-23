@@ -1,6 +1,6 @@
 /* UI/Diary/AIServiceDTOs.cs
- * AI服务数据传输对象定义文件
- * 存放所有 AI API (DeepSeek, DALL-E, etc.) 的 JSON 响应/请求数据结构
+ * AI 服务数据传输对象定义
+ * 存放 DeepSeek、即梦等 AI API 的请求/响应 JSON 数据结构
  * 提供序列化和反序列化支持，用于网络通信和数据解析
  */
 using System;
@@ -10,7 +10,7 @@ namespace AI.DTOs
 {
     /*
      * DeepSeek 流式响应数据结构
-     * 用于处理流式聊天API返回的数据块
+     * 用于处理流式聊天 API 返回的增量数据块
      */
     [Serializable]
     public class StreamChunk
@@ -47,7 +47,7 @@ namespace AI.DTOs
 
     /*
      * DeepSeek 完整响应数据结构
-     * 用于处理非流式API调用的完整响应
+     * 用于处理非流式 API 调用返回的完整对话内容
      */
     [Serializable]
     public class DeepSeekResponse
@@ -84,8 +84,8 @@ namespace AI.DTOs
     }
 
     /*
-     * API使用统计数据结构
-     * 记录token使用情况和计费信息
+     * API 使用统计数据结构
+     * 记录 token 使用情况和计费信息
      */
     [Serializable]
     public class Usage

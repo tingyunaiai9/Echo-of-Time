@@ -1,3 +1,7 @@
+/* UI/Diary/Diary.cs
+ * 日记总面板控制脚本
+ * 管理根节点的开关，以及 Shared/Clue 子页签的切换
+ */
 using System;
 using UnityEngine;
 using UnityEngine.UI;

@@ -1,3 +1,8 @@
+/* UI/Diary/DialogPanel.cs
+ * 日记左侧对话与 AI 交互面板
+ * 负责本地聊天消息展示、DeepSeek 文本流式调用与即梦图像生成入口
+ */
+
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -9,6 +14,11 @@ using System.Collections; // 用于协程
 using System;
 using System.IO;
 using System.Net.Http;
+
+/*
+ * 日记对话面板控制组件
+ * 管理聊天消息 UI、按钮交互以及调用不同 AI 目标处理玩家输入
+ */
 
 public class DialogPanel : MonoBehaviour
 {
@@ -43,6 +53,7 @@ public class DialogPanel : MonoBehaviour
 
     // --- UI 状态变量 ---
     private TMP_Text currentStreamingText;
+    private GameObject currentStreamingMessageGO; // 当前流式消息占位对象
     private Queue<string> streamQueue = new Queue<string>(); // 存储流式数据
     private bool isStreaming = false;
     private TMP_Text confirmButtonText; // 存储按钮文字组件
@@ -406,6 +417,7 @@ public class DialogPanel : MonoBehaviour
         if (!string.IsNullOrEmpty(errorMessage))
         {
             finalMessage = $"[即梦调用错误] {errorMessage}";
+            Debug.LogError($"[Jimeng] 即梦调用错误: {errorMessage}");
         }
         else if (!string.IsNullOrEmpty(imageUrl))
         {
@@ -413,7 +425,8 @@ public class DialogPanel : MonoBehaviour
             string fullPath = null;
             try
             {
-                string folder = Path.Combine(Application.persistentDataPath, "JimengTempImages");
+                // 将图片保存到项目内的 Assets/StreamingAssets/tmp 目录
+                string folder = Path.Combine(Application.dataPath, "StreamingAssets/tmp");
                 if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
 
                 string fileName = $"jimeng_{DateTime.Now:yyyyMMdd_HHmmss_fff}.png";
@@ -433,17 +446,45 @@ public class DialogPanel : MonoBehaviour
                 {
                     try
                     {
-                        File.WriteAllBytes(fullPath, www.downloadHandler.data);
-                        finalMessage = $"[即梦生成完成]\nURL: {imageUrl}\n本地: {fullPath}";
+                        var data = www.downloadHandler.data;
+                        File.WriteAllBytes(fullPath, data);
+                        Debug.Log($"[Jimeng] 图片已保存到: {fullPath}");
+
+                        // 从本地数据创建 Texture 和 Sprite，并插入聊天图片
+                        var tex = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+                        if (tex.LoadImage(data))
+                        {
+                            var sprite = Sprite.Create(
+                                tex,
+                                new Rect(0, 0, tex.width, tex.height),
+                                new Vector2(0.5f, 0.5f)
+                            );
+                            DialogPanel.AddChatImage(sprite);
+                            // 图片生成成功后，移除“俺在思考……”占位消息
+                            if (currentStreamingMessageGO != null)
+                            {
+                                Destroy(currentStreamingMessageGO);
+                                currentStreamingMessageGO = null;
+                                currentStreamingText = null;
+                            }
+                            finalMessage = string.Empty; // 聊天面板只展示图片，不展示文本
+                        }
+                        else
+                        {
+                            finalMessage = "[即梦生成失败] 图片数据解析失败";
+                            Debug.LogError("[Jimeng] 图片数据解析失败，无法创建 Texture2D");
+                        }
                     }
                     catch (Exception ex)
                     {
-                        finalMessage = $"[即梦生成失败] 保存图片出错: {ex.Message}";
+                        finalMessage = $"[即梦生成失败] 保存或加载图片出错: {ex.Message}";
+                        Debug.LogError($"[Jimeng] 保存或加载图片失败: {ex.Message}");
                     }
                 }
                 else
                 {
                     finalMessage = $"[即梦生成失败] 下载图片出错: {www.error}";
+                    Debug.LogError($"[Jimeng] 下载图片失败: {www.error}");
                 }
             }
         }
@@ -452,16 +493,20 @@ public class DialogPanel : MonoBehaviour
             finalMessage = "[即梦生成失败] 未收到图片 URL";
         }
 
-        if (currentStreamingText != null)
+        // 仅在需要时在聊天框中显示文本（例如错误信息）
+        if (!string.IsNullOrEmpty(finalMessage))
         {
-            currentStreamingText.text = finalMessage;
-        }
+            if (currentStreamingText != null)
+            {
+                currentStreamingText.text = finalMessage;
+            }
 
-        EventBus.Publish(new ChatMessageUpdatedEvent
-        {
-            MessageContent = finalMessage,
-            MessageType = MessageType.Future
-        });
+            EventBus.Publish(new ChatMessageUpdatedEvent
+            {
+                MessageContent = finalMessage,
+                MessageType = MessageType.Future
+            });
+        }
 
         Debug.Log("[DialogPanel] ImageGenCoroutine 结束");
     }
@@ -473,6 +518,9 @@ public class DialogPanel : MonoBehaviour
 
         GameObject currentStreamingMessage = Instantiate(chatMessagePrefab, chatContent);
         currentStreamingMessage.transform.SetAsLastSibling();
+
+        // 记录当前占位消息对象，以便后续替换/销毁
+        currentStreamingMessageGO = currentStreamingMessage;
 
         Transform messageTextTransform = currentStreamingMessage.transform.Find("MessageText");
         if (messageTextTransform != null)

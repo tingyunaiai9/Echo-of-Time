@@ -1,8 +1,7 @@
-/* JimengService.cs
- * (已更新，包含完整的火山引擎 v3.1 签名认证)
- *
- * 独立负责处理 即梦 AI v3.1 图像生成 API
- * 包含：1. 提交任务 -> 2. 轮询结果
+/* UI/Diary/JimengService.cs
+ * 即梦 AI v3.1 图像生成服务
+ * 独立负责处理火山引擎即梦图像生成 API，包括提交任务与轮询结果
+ * 内部集成 SigV4 鉴权签名逻辑，并通过回调返回图像 URL 或错误信息
  */
 using System;
 using System.Net.Http;
@@ -14,6 +13,10 @@ using UnityEngine;
 using System.Collections.Generic; // 用于 Dictionary
 using System.Linq; // 用于 OrderBy
 
+/*
+ * 即梦 AI 服务静态类
+ * 对外提供 GenerateImage 接口，封装任务提交与结果查询流程
+ */
 public static class JimengService
 {
     // API 配置
@@ -287,6 +290,7 @@ public static class JimengService
             // --- 7. 将所有标头添加到实际请求中 ---
             request.Headers.Host = Host;
             request.Headers.Add("X-Date", xDate);
+            // 使用 TryAddWithoutValidation 避免在部分平台（如 macOS）上因格式校验过严导致的异常
             request.Headers.TryAddWithoutValidation("Authorization", authorization);
             // Content-Type 由 HttpContent 设置
 

@@ -1,11 +1,16 @@
+/* UI/Diary/ClueBoard.cs
+ * 线索便签墙控制脚本
+ * 负责线索条目的添加、布局以及事件驱动的显示更新
+ */
 using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
 using Events;
 
 /*
- 控制线索条目的添加与显示
-*/
+ * 线索便签墙控制组件
+ * 通过 EventBus 接收线索更新事件并在界面上生成便签
+ */
 public class ClueBoard : MonoBehaviour
 {
     [Tooltip("便签预制体")]
