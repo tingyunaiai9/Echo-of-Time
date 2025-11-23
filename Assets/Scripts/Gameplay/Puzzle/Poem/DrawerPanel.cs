@@ -87,14 +87,16 @@ public class DrawerPanel : MonoBehaviour
         
         // 获取 Image 的 Sprite 作为 icon
         Sprite icon = imageComponent != null ? imageComponent.sprite : null;
-        
-        EventBus.LocalPublish(new ItemPickedUpEvent
+    
+        // 发布 ClueDiscoveredEvent 事件
+        EventBus.LocalPublish(new ClueDiscoveredEvent
         {
             playerNetId = 0,
-            itemId = "poem_painting",
-            itemName = "一幅画",
-            description = "拼好5首诗句后抽屉中的一幅画。",
-            icon = icon
+            clueId = "poem_clue",
+            clueText = "拼好5首诗句后抽屉中的一幅画。",
+            clueDescription = "这幅画可能隐藏着重要的线索。",
+            icon = icon,
+            image = icon // 假设 image 和 icon 是相同的
         });
     }
 }
