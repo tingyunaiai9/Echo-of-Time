@@ -365,6 +365,7 @@ public class DialogPanel : MonoBehaviour
         if (!string.IsNullOrEmpty(errorMessage))
         {
             finalMessage = $"[即梦调用错误] {errorMessage}";
+            Debug.LogError($"[Jimeng] 即梦调用错误: {errorMessage}");
         }
         else if (!string.IsNullOrEmpty(imageUrl))
         {
@@ -372,8 +373,8 @@ public class DialogPanel : MonoBehaviour
             string fullPath = null;
             try
             {
-            // 如需调整保存目录，可修改此处的子文件夹名称
-            string folder = Path.Combine(Application.persistentDataPath, "JimengTempImages");
+                // 将图片保存到项目内的 Assets/StreamingAssets/tmp 目录
+                string folder = Path.Combine(Application.dataPath, "StreamingAssets/tmp");
                 if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
 
                 string fileName = $"jimeng_{DateTime.Now:yyyyMMdd_HHmmss_fff}.png";
@@ -393,14 +394,32 @@ public class DialogPanel : MonoBehaviour
                 {
                     try
                     {
-                        File.WriteAllBytes(fullPath, www.downloadHandler.data);
-                        finalMessage = $"[即梦生成完成]\nURL: {imageUrl}\n本地: {fullPath}";
-                        Debug.Log($"[Jimeng] 图片已保存到本地: {fullPath}");
+                        var data = www.downloadHandler.data;
+                        File.WriteAllBytes(fullPath, data);
+                        Debug.Log($"[Jimeng] 图片已保存到: {fullPath}");
+
+                        // 从本地数据创建 Texture 和 Sprite，并插入聊天图片
+                        var tex = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+                        if (tex.LoadImage(data))
+                        {
+                            var sprite = Sprite.Create(
+                                tex,
+                                new Rect(0, 0, tex.width, tex.height),
+                                new Vector2(0.5f, 0.5f)
+                            );
+                            DialogPanel.AddChatImage(sprite);
+                            finalMessage = string.Empty; // 聊天面板只展示图片，不展示文本
+                        }
+                        else
+                        {
+                            finalMessage = "[即梦生成失败] 图片数据解析失败";
+                            Debug.LogError("[Jimeng] 图片数据解析失败，无法创建 Texture2D");
+                        }
                     }
                     catch (Exception ex)
                     {
-                        finalMessage = $"[即梦生成失败] 保存图片出错: {ex.Message}";
-                        Debug.LogError($"[Jimeng] 保存图片失败: {ex.Message}");
+                        finalMessage = $"[即梦生成失败] 保存或加载图片出错: {ex.Message}";
+                        Debug.LogError($"[Jimeng] 保存或加载图片失败: {ex.Message}");
                     }
                 }
                 else
@@ -415,16 +434,20 @@ public class DialogPanel : MonoBehaviour
             finalMessage = "[即梦生成失败] 未收到图片 URL";
         }
 
-        if (currentStreamingText != null)
+        // 仅在需要时在聊天框中显示文本（例如错误信息）
+        if (!string.IsNullOrEmpty(finalMessage))
         {
-            currentStreamingText.text = finalMessage;
-        }
+            if (currentStreamingText != null)
+            {
+                currentStreamingText.text = finalMessage;
+            }
 
-        EventBus.Publish(new ChatMessageUpdatedEvent
-        {
-            MessageContent = finalMessage,
-            MessageType = MessageType.Future
-        });
+            EventBus.Publish(new ChatMessageUpdatedEvent
+            {
+                MessageContent = finalMessage,
+                MessageType = MessageType.Future
+            });
+        }
 
         Debug.Log("[DialogPanel] ImageGenCoroutine 结束");
     }
