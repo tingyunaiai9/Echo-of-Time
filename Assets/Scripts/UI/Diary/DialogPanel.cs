@@ -160,34 +160,37 @@ public class DialogPanel : MonoBehaviour
     private void OnConfirmButtonClicked()
     {
         Debug.Log("[DialogPanel] 确认按钮被点击");
-
+    
         // 如果在冷却期间，直接返回
         if (isConfirmButtonCooldown)
         {
             Debug.Log("[DialogPanel] 按钮冷却中，忽略点击");
             return;
         }
-
+    
         if (resultContent == null) return;
-
+    
         string userAnswer = resultContent.text.Trim();
-
+    
         // 获取当前层级 & 动态正确答案
         var localPlayer = Mirror.NetworkClient.localPlayer?.GetComponent<TimelinePlayer>();
         int currentLevel = localPlayer != null ? localPlayer.currentLevel : 1;
         string expectedAnswer = GetCorrectAnswerForLevel(currentLevel);
         Debug.Log($"[DialogPanel] 当前层数: {currentLevel}, 期望答案: '{expectedAnswer}', 玩家输入: '{userAnswer}'");
-
-        // 检查答案是否正确（忽略前后空白, 支持完全匹配，可扩展为模糊匹配）
+    
+        // 检查答案是否正确
         if (string.Equals(userAnswer, expectedAnswer, StringComparison.Ordinal))
         {
-            confirmButtonText.text = "正确！";
-            confirmButtonText.color = Color.green;
-            confirmButton.interactable = false; // 禁用按钮
             Debug.Log("[DialogPanel] 答案正确！");
+            AddButtonOverlay(confirmButton, new Color(0, 1, 0, 0.5f)); // 添加绿色透明遮罩
+            confirmButton.interactable = false; // 禁用按钮
+    
+            // 修改输入框内容为“答案正确！”并禁用输入框
+            resultContent.text = "答案正确！";
+            resultContent.interactable = false;
+    
             if (localPlayer != null)
             {
-                // 调用服务器上报（层数推进在 NetworkManager 中处理）
                 localPlayer.CmdReportedCorrectAnswer();
                 Debug.Log("[DialogPanel] 已调用 CmdReportedCorrectAnswer() 上报服务器");
             }
@@ -199,23 +202,61 @@ public class DialogPanel : MonoBehaviour
         else
         {
             Debug.Log($"[DialogPanel] 答案错误。输入: '{userAnswer}', 正确答案应为: '{expectedAnswer}'");
-            // 启动冷却协程
+            resultContent.text = "答案错误！";
+            resultContent.interactable = false;
             StartCoroutine(ErrorCooldownCoroutine());
         }
-
-        // 匿名协程函数
+    
+        // 错误冷却协程
         IEnumerator ErrorCooldownCoroutine()
         {
             isConfirmButtonCooldown = true;
-            confirmButtonText.text = "错误！";
-            confirmButtonText.color = Color.red;
-
+            AddButtonOverlay(confirmButton, new Color(1, 0, 0, 0.5f)); // 添加红色透明遮罩
+    
             yield return new WaitForSeconds(1f);
-
-            confirmButtonText.text = "确认";
-            confirmButtonText.color = Color.black;
+    
+            RemoveButtonOverlay(confirmButton); // 移除遮罩
+            resultContent.text = "";
+            resultContent.interactable = true;
             isConfirmButtonCooldown = false;
-            Debug.Log("[DialogPanel] 按钮文字已重置");
+            Debug.Log("[DialogPanel] 按钮遮罩已移除");
+        }
+    }
+    
+    /* 添加按钮遮罩 */
+    private void AddButtonOverlay(Button button, Color overlayColor)
+    {
+        if (button == null) return;
+    
+        // 检查是否已有遮罩
+        Transform overlayTransform = button.transform.Find("Overlay");
+        if (overlayTransform != null) return;
+    
+        // 创建遮罩对象
+        GameObject overlay = new GameObject("Overlay", typeof(RectTransform), typeof(Image));
+        overlay.transform.SetParent(button.transform, false);
+    
+        // 设置遮罩属性
+        RectTransform rectTransform = overlay.GetComponent<RectTransform>();
+        rectTransform.anchorMin = Vector2.zero;
+        rectTransform.anchorMax = Vector2.one;
+        rectTransform.offsetMin = Vector2.zero;
+        rectTransform.offsetMax = Vector2.zero;
+    
+        Image overlayImage = overlay.GetComponent<Image>();
+        overlayImage.color = overlayColor;
+        overlayImage.raycastTarget = false; // 避免遮罩阻挡点击事件
+    }
+    
+    /* 移除按钮遮罩 */
+    private void RemoveButtonOverlay(Button button)
+    {
+        if (button == null) return;
+    
+        Transform overlayTransform = button.transform.Find("Overlay");
+        if (overlayTransform != null)
+        {
+            Destroy(overlayTransform.gameObject);
         }
     }
 
