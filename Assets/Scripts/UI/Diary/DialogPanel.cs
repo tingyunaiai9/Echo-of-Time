@@ -372,7 +372,8 @@ public class DialogPanel : MonoBehaviour
             string fullPath = null;
             try
             {
-                string folder = Path.Combine(Application.persistentDataPath, "JimengTempImages");
+            // 如需调整保存目录，可修改此处的子文件夹名称
+            string folder = Path.Combine(Application.persistentDataPath, "JimengTempImages");
                 if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
 
                 string fileName = $"jimeng_{DateTime.Now:yyyyMMdd_HHmmss_fff}.png";
@@ -394,15 +395,18 @@ public class DialogPanel : MonoBehaviour
                     {
                         File.WriteAllBytes(fullPath, www.downloadHandler.data);
                         finalMessage = $"[即梦生成完成]\nURL: {imageUrl}\n本地: {fullPath}";
+                        Debug.Log($"[Jimeng] 图片已保存到本地: {fullPath}");
                     }
                     catch (Exception ex)
                     {
                         finalMessage = $"[即梦生成失败] 保存图片出错: {ex.Message}";
+                        Debug.LogError($"[Jimeng] 保存图片失败: {ex.Message}");
                     }
                 }
                 else
                 {
                     finalMessage = $"[即梦生成失败] 下载图片出错: {www.error}";
+                    Debug.LogError($"[Jimeng] 下载图片失败: {www.error}");
                 }
             }
         }
