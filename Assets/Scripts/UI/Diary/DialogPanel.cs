@@ -43,6 +43,7 @@ public class DialogPanel : MonoBehaviour
 
     // --- UI 状态变量 ---
     private TMP_Text currentStreamingText;
+    private GameObject currentStreamingMessageGO; // 当前流式消息占位对象
     private Queue<string> streamQueue = new Queue<string>(); // 存储流式数据
     private bool isStreaming = false;
     private TMP_Text confirmButtonText; // 存储按钮文字组件
@@ -408,6 +409,13 @@ public class DialogPanel : MonoBehaviour
                                 new Vector2(0.5f, 0.5f)
                             );
                             DialogPanel.AddChatImage(sprite);
+                            // 图片生成成功后，移除“俺在思考……”占位消息
+                            if (currentStreamingMessageGO != null)
+                            {
+                                Destroy(currentStreamingMessageGO);
+                                currentStreamingMessageGO = null;
+                                currentStreamingText = null;
+                            }
                             finalMessage = string.Empty; // 聊天面板只展示图片，不展示文本
                         }
                         else
@@ -459,6 +467,9 @@ public class DialogPanel : MonoBehaviour
 
         GameObject currentStreamingMessage = Instantiate(chatMessagePrefab, chatContent);
         currentStreamingMessage.transform.SetAsLastSibling();
+
+        // 记录当前占位消息对象，以便后续替换/销毁
+        currentStreamingMessageGO = currentStreamingMessage;
 
         Transform messageTextTransform = currentStreamingMessage.transform.Find("MessageText");
         if (messageTextTransform != null)
