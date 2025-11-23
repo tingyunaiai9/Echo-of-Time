@@ -287,7 +287,7 @@ public static class JimengService
             // --- 7. 将所有标头添加到实际请求中 ---
             request.Headers.Host = Host;
             request.Headers.Add("X-Date", xDate);
-            request.Headers.Add("Authorization", authorization);
+            request.Headers.TryAddWithoutValidation("Authorization", authorization);
             // Content-Type 由 HttpContent 设置
 
             return request;
