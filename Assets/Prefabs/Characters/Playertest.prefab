@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3424359291841341703}
   - component: {fileID: 5163958443321356722}
   - component: {fileID: 2894971122153229878}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -119,7 +119,7 @@ GameObject:
   - component: {fileID: 6742378691099855092}
   - component: {fileID: 3276632568305713458}
   - component: {fileID: 8010244578911979422}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Playertest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -135,7 +135,7 @@ Transform:
   m_GameObject: {fileID: 2535583183450427492}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -3, z: 0}
+  m_LocalPosition: {x: 0.98769, y: 0, z: 0.88832}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -241,11 +241,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   cameraTransform: {fileID: 0}
-  cameraOffset: {x: 0, y: 3, z: -10}
+  cameraOffset: {x: 0, y: 0, z: -10}
   cameraSmoothSpeed: 0.125
-  backgroundTag: Background
-  horizontalPadding: 1
-  verticalPadding: 1
 --- !u!114 &5301687240463009392
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -313,10 +310,8 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   timeline: -1
-  currentLevel: 1
   playerName: 
   transportId: 0
-  isVisible: 0
 --- !u!114 &3276632568305713458
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -334,7 +329,6 @@ MonoBehaviour:
   syncInterval: 0
   role: 0
   isReady: 1
-  isRoleSelected: 0
 --- !u!114 &8010244578911979422
 MonoBehaviour:
   m_ObjectHideFlags: 0

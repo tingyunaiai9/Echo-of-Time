@@ -1,16 +1,5 @@
 /* Core/Services/Network/NetworkUI.cs
- * 网络测试 UI 管理器，提供房间创建、加入、离开等网络功能的可视化界面
- * 
- * 主要功能：
- * - 创建房间（Host 模式）
- * - 加入可用房间（Client 模式）
- * - 通过房间代码加入指定房间
- * - 显示房间信息和玩家列表
- * - 实时更新玩家时间线分配状态
- * 
- * UI 面板：
- * - Menu Panel：主菜单，包含创建/加入房间选项
- * - Room Panel：房间面板，显示房间信息和玩家列表
+ * 网络测试 UI，用于测试房间创建和加入功能
  */
 
 using UnityEngine;
@@ -18,9 +7,6 @@ using UnityEngine.UI;
 using TMPro;
 using Mirror;
 
-/*
- * 网络测试 UI 控制器，管理网络相关 UI 交互逻辑
- */
 public class NetworkUI : MonoBehaviour
 {
     [Header("UI References")]
@@ -44,9 +30,6 @@ public class NetworkUI : MonoBehaviour
     
     private EchoNetworkManager networkManager;
     
-    /*
-     * Unity 生命周期：初始化时查找网络管理器并设置 UI
-     */
     void Start()
     {
         networkManager = FindFirstObjectByType<EchoNetworkManager>();
@@ -62,17 +45,11 @@ public class NetworkUI : MonoBehaviour
         UpdateUI();
     }
     
-    /*
-     * Unity 生命周期：每帧更新房间信息显示
-     */
     void Update()
     {
         UpdateRoomInfo();
     }
     
-    /*
-     * 初始化 UI 元素，生成随机房间名并显示主菜单面板
-     */
     private void SetupUI()
     {
         if (roomNameInput != null)
@@ -83,9 +60,6 @@ public class NetworkUI : MonoBehaviour
         ShowMenuPanel();
     }
     
-    /*
-     * 注册所有按钮的点击事件
-     */
     private void RegisterButtonEvents()
     {
         if (createRoomButton != null)
@@ -109,10 +83,6 @@ public class NetworkUI : MonoBehaviour
         }
     }
     
-    /*
-     * 创建房间按钮点击事件
-     * 验证房间名后调用网络管理器创建房间（Host 模式）
-     */
     private void OnCreateRoomClicked()
     {
         string roomName = roomNameInput != null ? roomNameInput.text : "DefaultRoom";
@@ -141,10 +111,6 @@ public class NetworkUI : MonoBehaviour
         });
     }
     
-    /*
-     * 加入房间按钮点击事件
-     * 自动查找并加入第一个可用房间（Client 模式）
-     */
     private void OnJoinRoomClicked()
     {
         UpdateStatus("正在查找房间...", Color.yellow);
@@ -165,10 +131,6 @@ public class NetworkUI : MonoBehaviour
         });
     }
     
-    /*
-     * 通过房间代码加入按钮点击事件
-     * 验证房间代码后加入指定房间（Client 模式）
-     */
     private void OnJoinByCodeClicked()
     {
         string roomCode = roomCodeInput != null ? roomCodeInput.text : "";
@@ -197,10 +159,6 @@ public class NetworkUI : MonoBehaviour
         });
     }
     
-    /*
-     * 离开房间按钮点击事件
-     * 断开网络连接并返回主菜单
-     */
     private void OnLeaveRoomClicked()
     {
         networkManager.LeaveRoom();
@@ -208,9 +166,6 @@ public class NetworkUI : MonoBehaviour
         ShowMenuPanel();
     }
     
-    /*
-     * 更新 UI 显示状态，根据网络连接状态切换面板
-     */
     private void UpdateUI()
     {
         bool isInRoom = NetworkClient.isConnected || NetworkServer.active;
@@ -225,10 +180,6 @@ public class NetworkUI : MonoBehaviour
         }
     }
     
-    /*
-     * 实时更新房间信息显示
-     * 包括房间名、房间代码、角色（Host/Client）、玩家列表、时间线分配等
-     */
     private void UpdateRoomInfo()
     {
         if (roomPanel != null && roomPanel.activeSelf)
@@ -236,7 +187,6 @@ public class NetworkUI : MonoBehaviour
             var room = networkManager.GetCurrentRoom();
             var player = networkManager.GetCurrentPlayer();
             
-            // 更新房间基本信息
             if (roomInfoText != null)
             {
                 string role = NetworkServer.active ? (NetworkClient.isConnected ? "Host" : "Server") : "Client";
@@ -244,7 +194,6 @@ public class NetworkUI : MonoBehaviour
                 roomInfoText.text = roomInfo;
             }
             
-            // 更新玩家列表和时间线分配
             if (playersListText != null && room != null)
             {
                 string playersList = $"玩家列表 ({room.Players.Count}/3):\n";
@@ -260,9 +209,6 @@ public class NetworkUI : MonoBehaviour
         }
     }
     
-    /*
-     * 显示主菜单面板，隐藏房间面板
-     */
     private void ShowMenuPanel()
     {
         if (menuPanel != null) menuPanel.SetActive(true);
@@ -270,18 +216,12 @@ public class NetworkUI : MonoBehaviour
         EnableButtons();
     }
     
-    /*
-     * 显示房间面板，隐藏主菜单面板
-     */
     private void ShowRoomPanel()
     {
         if (menuPanel != null) menuPanel.SetActive(false);
         if (roomPanel != null) roomPanel.SetActive(true);
     }
     
-    /*
-     * 禁用所有交互按钮（请求进行中时）
-     */
     private void DisableButtons()
     {
         if (createRoomButton != null) createRoomButton.interactable = false;
@@ -289,9 +229,6 @@ public class NetworkUI : MonoBehaviour
         if (joinByCodeButton != null) joinByCodeButton.interactable = false;
     }
     
-    /*
-     * 启用所有交互按钮
-     */
     private void EnableButtons()
     {
         if (createRoomButton != null) createRoomButton.interactable = true;
@@ -299,11 +236,6 @@ public class NetworkUI : MonoBehaviour
         if (joinByCodeButton != null) joinByCodeButton.interactable = true;
     }
     
-    /*
-     * 更新状态文本显示
-     * @param message 状态消息内容
-     * @param color 消息颜色（绿色=成功，红色=失败，黄色=进行中）
-     */
     private void UpdateStatus(string message, Color color)
     {
         if (statusText != null)

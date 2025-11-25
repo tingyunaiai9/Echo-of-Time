@@ -1,22 +1,9 @@
-/* Core/SceneDirector.cs
- * 场景管理器，负责游戏场景的加载、切换与时间线场景管理
- * 
- * 主要功能：
- * - 启动时加载 StartPage（角色选择界面）
- * - 管理在线主场景（GameBase）的加载
- * - 根据玩家时间线自动加载对应场景（Ancient/Modern/Future）
- * - 支持本地测试模式和联网模式的自动切换
- * - 处理场景加载完成后的回调逻辑
- */
-
+// Core/Scene/SceneDirector.cs
 using System.Collections;
 using Mirror;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-/*
- * 场景管理器单例类，统筹所有场景的加载与切换逻辑
- */
 public class SceneDirector : Singleton<SceneDirector>
 {
     private bool timelineLoaded = false;
@@ -33,9 +20,6 @@ public class SceneDirector : Singleton<SceneDirector>
     [Tooltip("如果为 true，在本地测试模式（skipRelay）下不自动加载时间线场景，由 LocalTestLauncher 负责")]
     [SerializeField] private bool skipAutoLoadInLocalTest = true;
 
-    /*
-     * Unity 生命周期：初始化时加载 StartPage 并注册场景加载回调
-     */
     private void Start()
     {
         if (loadStartPageOnBoot)
@@ -46,9 +30,6 @@ public class SceneDirector : Singleton<SceneDirector>
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    /*
-     * 尝试立即加载时间线场景（需要本地玩家已分配时间线）
-     */
     public void TryLoadTimelineNow()
     {
         if (timelineLoaded) return;
@@ -65,9 +46,6 @@ public class SceneDirector : Singleton<SceneDirector>
         SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
     }
 
-    /*
-     * 协程：以叠加模式加载 StartPage 场景并设为活动场景
-     */
     private IEnumerator LoadStartPageAdditive()
     {
         if (!SceneManager.GetSceneByName(startPageScene).isLoaded)
@@ -79,10 +57,9 @@ public class SceneDirector : Singleton<SceneDirector>
         if (start.IsValid()) SceneManager.SetActiveScene(start);
     }
 
-    /*
-     * StartPage 上 Confirm 按钮调用，仅 Host/Server 触发场景切换
-     * 将所有客户端统一切换到在线主场景（GameBase）
-     */
+    /// <summary>
+    /// StartPage 上 Confirm 按钮调用。仅 Host/Server 触发，统一换到在线主场景。
+    /// </summary>
     public void StartGameFromStartPage()
     {
         // 只允许 Host/Server 触发场景切换，避免客户端各自切换造成不同步
@@ -95,14 +72,13 @@ public class SceneDirector : Singleton<SceneDirector>
         // 统一换到在线主场景（GameBase）。Mirror 会把所有客户端一起带过去。
         Debug.Log("[SceneDirector] Server changing scene to online main scene...");
         NetworkManager.singleton.ServerChangeScene(onlineMainScene);
+
+        // （可选）也可以先卸载 StartPage：等在线场景加载后由 OnSceneLoaded 里再处理
     }
 
-    /*
-     * 场景加载完成时的回调处理
-     * - 检测本地测试模式，决定是否自动加载时间线场景
-     * - 卸载 StartPage 场景
-     * - 触发时间线场景加载逻辑
-     */
+    /// <summary>
+    /// 场景加载完成时回调。
+    /// </summary>
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         // 当在线主场景加载完成时（所有端都会走到这里）
@@ -133,10 +109,6 @@ public class SceneDirector : Singleton<SceneDirector>
         }
     }
 
-    /*
-     * 协程：等待本地玩家生成并分配时间线后，加载对应时间线场景
-     * 超时时间：20 秒
-     */
     private IEnumerator WaitAndLoadTimelineScene()
     {
         // 等待本地玩家生成并且 Timeline 分配完成（TimelinePlayer.timeline >= 0）
@@ -178,9 +150,6 @@ public class SceneDirector : Singleton<SceneDirector>
         if (online.IsValid()) SceneManager.SetActiveScene(online);
     }
 
-    /*
-     * 卸载指定名称的场景（如果已加载）
-     */
     private void UnloadSceneIfLoaded(string name)
     {
         var sc = SceneManager.GetSceneByName(name);

@@ -48,91 +48,13 @@ public class UIManager : Singleton<UIManager>
         base.OnDestroy();
     }
 
-    /* 监听物品拾取事件，Debug.Log模拟弹窗 */
+    // 监听物品拾取事件，Debug.Log模拟弹窗
     private void OnItemPickedUp(ItemPickedUpEvent evt)
     {
         Debug.Log($"[UIManager] 玩家 {evt.playerNetId} 拾取了物品 {evt.itemId}，弹窗提醒！");
     }
 
-    /* 每帧更新 */
-    void Update()
-    {
-        HandleUIInput();
-    }
-
-    /* 处理所有 UI 相关的按键 */
-    private void HandleUIInput()
-    {
-        // 背包开关 (B键)
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            Inventory.ToggleBackpack();
-            Debug.Log("[UIManager] B键按下，切换背包。");
-        }
-
-        // 日记页面切换 (F1键)
-        if (Input.GetKeyDown(KeyCode.F1))
-        {
-            Diary.TogglePanel();
-            Debug.Log("[UIManager] F1键按下，切换日记页面。");
-        }
-
-        // 诗词谜题 (F2键)
-        if (Input.GetKeyDown(KeyCode.F2))
-        {
-            PoemManager.TogglePanel();
-            Debug.Log("[UIManager] F2键按下，切换诗词谜题页面。");
-        }
-
-        // 光线谜题 (F3键)
-        if (Input.GetKeyDown(KeyCode.F3))
-        {
-            LightPanel.TogglePanel();
-            Debug.Log("[UIManager] F3键按下，切换光线谜题页面。");
-        }
-
-        // 拼画谜题 (F4键)
-        if (Input.GetKeyDown(KeyCode.F4))
-        {
-            PuzzlePanel.TogglePanel();
-            Debug.Log("[UIManager] F4键按下，切换拼画谜题页面。");
-        }
-
-        // 添加测试聊天消息 (Equals键)
-        if (Input.GetKeyDown(KeyCode.Equals) || Input.GetKeyDown(KeyCode.KeypadEquals))
-        {
-            DialogPanel.AddChatMessage(
-                "两只黄鹂鸣翠柳，一行白鹭上青天。", 
-                MessageType.Modern);
-            Debug.Log("[UIManager] Equals键按下，添加测试聊天消息。");
-        }
-
-/*         if (Input.GetKeyDown(KeyCode.I))
-        {
-            Sprite tymSprite = Resources.Load<Sprite>("tym");
-            if (tymSprite != null)
-            {
-                DialogPanel.AddChatImage(tymSprite);
-                Debug.Log("[UIManager] I键按下，添加图片消息。");
-            }
-            else
-            {
-                Debug.LogError("[UIManager] 无法加载 Sprite 文件 'tym'，请检查路径和文件名是否正确。");
-            }
-        } */
-
-        // 添加测试线索条目 (Minus键)
-        if (Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadMinus))
-        {
-            ClueBoard clueBoardInstance = FindFirstObjectByType<ClueBoard>();
-            if (clueBoardInstance != null)
-            {
-                clueBoardInstance.TestClueEntries();
-            }
-            Debug.Log("[UIManager] Minus键按下，添加测试线索条目。");
-        }
-    }
-
+    
     public void InitializeAllUI()
     {
         // 初始化 UI 面板...
