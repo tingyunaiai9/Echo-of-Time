@@ -165,10 +165,17 @@ public class PlayerController : NetworkBehaviour
         float v = 0f;
 
         Vector3 input = new Vector3(h, 0f, v);
-        if (input.sqrMagnitude > 0.0001f)
+        // if (input.sqrMagnitude > 0.0001f)
+        // {
+        //     Quaternion target = Quaternion.LookRotation(new Vector3(input.x, 0f, 0f));
+        //     transform.rotation = Quaternion.RotateTowards(transform.rotation, target, rotationSpeed * Time.deltaTime);
+        // }
+
+        // 用 SpriteRenderer 翻转朝向
+        if (h != 0)
         {
-            Quaternion target = Quaternion.LookRotation(new Vector3(input.x, 0f, 0f));
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, target, rotationSpeed * Time.deltaTime);
+            var sr = GetComponent<SpriteRenderer>();
+            if (sr != null) sr.flipX = (h < 0); // 向左走时翻转
         }
 
         if (rb == null)

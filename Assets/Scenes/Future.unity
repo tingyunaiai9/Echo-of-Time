@@ -1614,10 +1614,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LightPanel
   PanelRoot: {fileID: 0}
-  CellPrefab: {fileID: 0}
-  columns: 16
-  rows: 9
-  cellColor: {r: 1, g: 1, b: 1, a: 1}
+  MirrorSlotPrefab: {fileID: 0}
   mirrorSlots:
   - xindex: 0
     yindex: 0
@@ -1649,8 +1646,6 @@ MonoBehaviour:
   - xindex: 0
     yindex: 0
     rotation: 0
-  mirrorLineColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-  ContentContainer: {fileID: 0}
 --- !u!114 &417679705
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3394,6 +3389,9 @@ MonoBehaviour:
   detailIcon: {fileID: 1362615168}
   detailName: {fileID: 1328437344}
   detailDescription: {fileID: 267577787}
+  viewImageButton: {fileID: 0}
+  imageViewer: {fileID: 0}
+  imageViewerImage: {fileID: 0}
 --- !u!224 &724933805
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4100,6 +4098,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogPanel
   chatMessagePrefab: {fileID: 1568691845952435987, guid: fadf74954cb214fac850b0902b404f97, type: 3}
+  chatImagePrefab: {fileID: 0}
   chatContent: {fileID: 0}
   inputField: {fileID: 0}
   sendButton: {fileID: 0}
@@ -4109,6 +4108,7 @@ MonoBehaviour:
   levelAnswers:
   - "\u5357\u5C71"
   - "\u5F52\u53BB"
+  currentAiTarget: 1
 --- !u!114 &772645486
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8726,7 +8726,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77a1946da1e4a4068972024b7485178d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ClueBoard
-  clueEntryPrefab: {fileID: 7348651457501190784, guid: 3bd71fcb8a1f340aa9bde5146ad3be93, type: 3}
+  Note: {fileID: 0}
   contentParent: {fileID: 0}
 --- !u!114 &1590860418
 MonoBehaviour:
@@ -10493,8 +10493,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractToOpenPuzzle
   puzzleSceneName: Light
-  interactKey: 102
-  requireLocalPlayer: 1
   closeExistingBeforeOpen: 0
 --- !u!1 &1836909380
 GameObject:

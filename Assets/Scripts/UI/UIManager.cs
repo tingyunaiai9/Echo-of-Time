@@ -107,7 +107,7 @@ public class UIManager : Singleton<UIManager>
             Debug.Log("[UIManager] Equals键按下，添加测试聊天消息。");
         }
 
-        if (Input.GetKeyDown(KeyCode.I))
+/*         if (Input.GetKeyDown(KeyCode.I))
         {
             Sprite tymSprite = Resources.Load<Sprite>("tym");
             if (tymSprite != null)
@@ -119,12 +119,16 @@ public class UIManager : Singleton<UIManager>
             {
                 Debug.LogError("[UIManager] 无法加载 Sprite 文件 'tym'，请检查路径和文件名是否正确。");
             }
-        }
+        } */
 
         // 添加测试线索条目 (Minus键)
         if (Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadMinus))
         {
-            ClueBoard.AddClueEntry("这是一个测试线索条目，记录玩家的发现。");
+            ClueBoard clueBoardInstance = FindFirstObjectByType<ClueBoard>();
+            if (clueBoardInstance != null)
+            {
+                clueBoardInstance.TestClueEntries();
+            }
             Debug.Log("[UIManager] Minus键按下，添加测试线索条目。");
         }
     }

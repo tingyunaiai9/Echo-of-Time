@@ -1,3 +1,8 @@
+/* UI/Diary/DialogPanel.cs
+ * 日记左侧对话与 AI 交互面板
+ * 负责本地聊天消息展示、DeepSeek 文本流式调用与即梦图像生成入口
+ */
+
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -9,6 +14,11 @@ using System.Collections; // 用于协程
 using System;
 using System.IO;
 using System.Net.Http;
+
+/*
+ * 日记对话面板控制组件
+ * 管理聊天消息 UI、按钮交互以及调用不同 AI 目标处理玩家输入
+ */
 
 public class DialogPanel : MonoBehaviour
 {
@@ -43,6 +53,7 @@ public class DialogPanel : MonoBehaviour
 
     // --- UI 状态变量 ---
     private TMP_Text currentStreamingText;
+    private GameObject currentStreamingMessageGO; // 当前流式消息占位对象
     private Queue<string> streamQueue = new Queue<string>(); // 存储流式数据
     private bool isStreaming = false;
     private TMP_Text confirmButtonText; // 存储按钮文字组件
@@ -160,34 +171,37 @@ public class DialogPanel : MonoBehaviour
     private void OnConfirmButtonClicked()
     {
         Debug.Log("[DialogPanel] 确认按钮被点击");
-
+    
         // 如果在冷却期间，直接返回
         if (isConfirmButtonCooldown)
         {
             Debug.Log("[DialogPanel] 按钮冷却中，忽略点击");
             return;
         }
-
+    
         if (resultContent == null) return;
-
+    
         string userAnswer = resultContent.text.Trim();
-
+    
         // 获取当前层级 & 动态正确答案
         var localPlayer = Mirror.NetworkClient.localPlayer?.GetComponent<TimelinePlayer>();
         int currentLevel = localPlayer != null ? localPlayer.currentLevel : 1;
         string expectedAnswer = GetCorrectAnswerForLevel(currentLevel);
         Debug.Log($"[DialogPanel] 当前层数: {currentLevel}, 期望答案: '{expectedAnswer}', 玩家输入: '{userAnswer}'");
-
-        // 检查答案是否正确（忽略前后空白, 支持完全匹配，可扩展为模糊匹配）
+    
+        // 检查答案是否正确
         if (string.Equals(userAnswer, expectedAnswer, StringComparison.Ordinal))
         {
-            confirmButtonText.text = "正确！";
-            confirmButtonText.color = Color.green;
-            confirmButton.interactable = false; // 禁用按钮
             Debug.Log("[DialogPanel] 答案正确！");
+            AddButtonOverlay(confirmButton, new Color(0, 1, 0, 0.5f)); // 添加绿色透明遮罩
+            confirmButton.interactable = false; // 禁用按钮
+    
+            // 修改输入框内容为“答案正确！”并禁用输入框
+            resultContent.text = "答案正确！";
+            resultContent.interactable = false;
+    
             if (localPlayer != null)
             {
-                // 调用服务器上报（层数推进在 NetworkManager 中处理）
                 localPlayer.CmdReportedCorrectAnswer();
                 Debug.Log("[DialogPanel] 已调用 CmdReportedCorrectAnswer() 上报服务器");
             }
@@ -199,23 +213,61 @@ public class DialogPanel : MonoBehaviour
         else
         {
             Debug.Log($"[DialogPanel] 答案错误。输入: '{userAnswer}', 正确答案应为: '{expectedAnswer}'");
-            // 启动冷却协程
+            resultContent.text = "答案错误！";
+            resultContent.interactable = false;
             StartCoroutine(ErrorCooldownCoroutine());
         }
-
-        // 匿名协程函数
+    
+        // 错误冷却协程
         IEnumerator ErrorCooldownCoroutine()
         {
             isConfirmButtonCooldown = true;
-            confirmButtonText.text = "错误！";
-            confirmButtonText.color = Color.red;
-
+            AddButtonOverlay(confirmButton, new Color(1, 0, 0, 0.5f)); // 添加红色透明遮罩
+    
             yield return new WaitForSeconds(1f);
-
-            confirmButtonText.text = "确认";
-            confirmButtonText.color = Color.black;
+    
+            RemoveButtonOverlay(confirmButton); // 移除遮罩
+            resultContent.text = "";
+            resultContent.interactable = true;
             isConfirmButtonCooldown = false;
-            Debug.Log("[DialogPanel] 按钮文字已重置");
+            Debug.Log("[DialogPanel] 按钮遮罩已移除");
+        }
+    }
+    
+    /* 添加按钮遮罩 */
+    private void AddButtonOverlay(Button button, Color overlayColor)
+    {
+        if (button == null) return;
+    
+        // 检查是否已有遮罩
+        Transform overlayTransform = button.transform.Find("Overlay");
+        if (overlayTransform != null) return;
+    
+        // 创建遮罩对象
+        GameObject overlay = new GameObject("Overlay", typeof(RectTransform), typeof(Image));
+        overlay.transform.SetParent(button.transform, false);
+    
+        // 设置遮罩属性
+        RectTransform rectTransform = overlay.GetComponent<RectTransform>();
+        rectTransform.anchorMin = Vector2.zero;
+        rectTransform.anchorMax = Vector2.one;
+        rectTransform.offsetMin = Vector2.zero;
+        rectTransform.offsetMax = Vector2.zero;
+    
+        Image overlayImage = overlay.GetComponent<Image>();
+        overlayImage.color = overlayColor;
+        overlayImage.raycastTarget = false; // 避免遮罩阻挡点击事件
+    }
+    
+    /* 移除按钮遮罩 */
+    private void RemoveButtonOverlay(Button button)
+    {
+        if (button == null) return;
+    
+        Transform overlayTransform = button.transform.Find("Overlay");
+        if (overlayTransform != null)
+        {
+            Destroy(overlayTransform.gameObject);
         }
     }
 
@@ -365,6 +417,7 @@ public class DialogPanel : MonoBehaviour
         if (!string.IsNullOrEmpty(errorMessage))
         {
             finalMessage = $"[即梦调用错误] {errorMessage}";
+            Debug.LogError($"[Jimeng] 即梦调用错误: {errorMessage}");
         }
         else if (!string.IsNullOrEmpty(imageUrl))
         {
@@ -372,7 +425,8 @@ public class DialogPanel : MonoBehaviour
             string fullPath = null;
             try
             {
-                string folder = Path.Combine(Application.persistentDataPath, "JimengTempImages");
+                // 将图片保存到项目内的 Assets/StreamingAssets/tmp 目录
+                string folder = Path.Combine(Application.dataPath, "StreamingAssets/tmp");
                 if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
 
                 string fileName = $"jimeng_{DateTime.Now:yyyyMMdd_HHmmss_fff}.png";
@@ -392,17 +446,45 @@ public class DialogPanel : MonoBehaviour
                 {
                     try
                     {
-                        File.WriteAllBytes(fullPath, www.downloadHandler.data);
-                        finalMessage = $"[即梦生成完成]\nURL: {imageUrl}\n本地: {fullPath}";
+                        var data = www.downloadHandler.data;
+                        File.WriteAllBytes(fullPath, data);
+                        Debug.Log($"[Jimeng] 图片已保存到: {fullPath}");
+
+                        // 从本地数据创建 Texture 和 Sprite，并插入聊天图片
+                        var tex = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+                        if (tex.LoadImage(data))
+                        {
+                            var sprite = Sprite.Create(
+                                tex,
+                                new Rect(0, 0, tex.width, tex.height),
+                                new Vector2(0.5f, 0.5f)
+                            );
+                            DialogPanel.AddChatImage(sprite);
+                            // 图片生成成功后，移除“俺在思考……”占位消息
+                            if (currentStreamingMessageGO != null)
+                            {
+                                Destroy(currentStreamingMessageGO);
+                                currentStreamingMessageGO = null;
+                                currentStreamingText = null;
+                            }
+                            finalMessage = string.Empty; // 聊天面板只展示图片，不展示文本
+                        }
+                        else
+                        {
+                            finalMessage = "[即梦生成失败] 图片数据解析失败";
+                            Debug.LogError("[Jimeng] 图片数据解析失败，无法创建 Texture2D");
+                        }
                     }
                     catch (Exception ex)
                     {
-                        finalMessage = $"[即梦生成失败] 保存图片出错: {ex.Message}";
+                        finalMessage = $"[即梦生成失败] 保存或加载图片出错: {ex.Message}";
+                        Debug.LogError($"[Jimeng] 保存或加载图片失败: {ex.Message}");
                     }
                 }
                 else
                 {
                     finalMessage = $"[即梦生成失败] 下载图片出错: {www.error}";
+                    Debug.LogError($"[Jimeng] 下载图片失败: {www.error}");
                 }
             }
         }
@@ -411,16 +493,20 @@ public class DialogPanel : MonoBehaviour
             finalMessage = "[即梦生成失败] 未收到图片 URL";
         }
 
-        if (currentStreamingText != null)
+        // 仅在需要时在聊天框中显示文本（例如错误信息）
+        if (!string.IsNullOrEmpty(finalMessage))
         {
-            currentStreamingText.text = finalMessage;
-        }
+            if (currentStreamingText != null)
+            {
+                currentStreamingText.text = finalMessage;
+            }
 
-        EventBus.Publish(new ChatMessageUpdatedEvent
-        {
-            MessageContent = finalMessage,
-            MessageType = MessageType.Future
-        });
+            EventBus.Publish(new ChatMessageUpdatedEvent
+            {
+                MessageContent = finalMessage,
+                MessageType = MessageType.Future
+            });
+        }
 
         Debug.Log("[DialogPanel] ImageGenCoroutine 结束");
     }
@@ -432,6 +518,9 @@ public class DialogPanel : MonoBehaviour
 
         GameObject currentStreamingMessage = Instantiate(chatMessagePrefab, chatContent);
         currentStreamingMessage.transform.SetAsLastSibling();
+
+        // 记录当前占位消息对象，以便后续替换/销毁
+        currentStreamingMessageGO = currentStreamingMessage;
 
         Transform messageTextTransform = currentStreamingMessage.transform.Find("MessageText");
         if (messageTextTransform != null)
@@ -552,12 +641,12 @@ public class DialogPanel : MonoBehaviour
             {
                 imageComponent.sprite = image;
     
-                // 设置图片宽度为 505pt，高度根据图片比例动态调整
+                // 设置图片宽度为 405pt，高度根据图片比例动态调整
                 RectTransform rectTransform = imageComponent.GetComponent<RectTransform>();
                 if (rectTransform != null && image != null)
                 {
                     float aspectRatio = image.rect.height / image.rect.width; // 计算图片宽高比
-                    rectTransform.sizeDelta = new Vector2(505f, 505f * aspectRatio); // 设置宽度为 505，高度根据比例调整
+                    rectTransform.sizeDelta = new Vector2(405f, 405f * aspectRatio); // 设置宽度为 405，高度根据比例调整
                 }
             }
         }
