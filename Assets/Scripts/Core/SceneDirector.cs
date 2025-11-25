@@ -25,7 +25,10 @@ public class SceneDirector : Singleton<SceneDirector>
     [SerializeField] private string bootScene = "Boot";
     [SerializeField] private string startPageScene = "StartPage";
     [SerializeField] private string onlineMainScene = "GameBase";
-    [SerializeField] private string[] timelineToScene = new string[] { "Ancient", "Modern", "Future" };
+    [Tooltip("Prefixes for timeline scenes. Final name will be Prefix + Level (e.g. Ancient1)")]
+    [SerializeField] private string[] timelineScenePrefixes = new string[] { "Ancient", "Modern", "Future" };
+
+    private string currentLoadedTimelineScene = "";
 
     [Header("Options")]
     [SerializeField] private bool loadStartPageOnBoot = true;
@@ -51,18 +54,34 @@ public class SceneDirector : Singleton<SceneDirector>
      */
     public void TryLoadTimelineNow()
     {
-        if (timelineLoaded) return;
         var lp = NetworkClient.localPlayer;
         if (lp == null) return;
 
         var tp = lp.GetComponent<TimelinePlayer>();
         if (tp == null || tp.timeline < 0) return;
 
+        string sceneName = GetSceneName(tp.timeline, tp.currentLevel);
+        if (string.IsNullOrEmpty(sceneName)) return;
+
+        // 如果场景已加载且是当前场景，则跳过
+        if (sceneName == currentLoadedTimelineScene && SceneManager.GetSceneByName(sceneName).isLoaded) return;
+
+        // 如果有旧场景加载了，先卸载
+        if (!string.IsNullOrEmpty(currentLoadedTimelineScene) && currentLoadedTimelineScene != sceneName)
+        {
+            UnloadSceneIfLoaded(currentLoadedTimelineScene);
+        }
+
         timelineLoaded = true;
-        var tl = Mathf.Clamp(tp.timeline, 0, timelineToScene.Length - 1);
-        var sceneName = timelineToScene[tl];
         Debug.Log($"[SceneDirector] Loading timeline scene: {sceneName}");
         SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+        currentLoadedTimelineScene = sceneName;
+    }
+
+    public string GetSceneName(int timeline, int level)
+    {
+        if (timeline < 0 || timeline >= timelineScenePrefixes.Length) return "";
+        return $"{timelineScenePrefixes[timeline]}{level}";
     }
 
     /*
@@ -162,8 +181,7 @@ public class SceneDirector : Singleton<SceneDirector>
         }
 
         // 映射 timeline → 具体场景名
-        int tl = Mathf.Clamp(local.timeline, 0, timelineToScene.Length - 1);
-        string sceneName = timelineToScene[tl];
+        string sceneName = GetSceneName(local.timeline, local.currentLevel);
 
         // 已在则不重复加载
         if (!SceneManager.GetSceneByName(sceneName).isLoaded)
@@ -171,6 +189,7 @@ public class SceneDirector : Singleton<SceneDirector>
             Debug.Log($"[SceneDirector] Loading timeline scene: {sceneName}");
             var op = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
             while (!op.isDone) yield return null;
+            currentLoadedTimelineScene = sceneName;
         }
 
         // 将在线主场景设为 Active，时间线场景只是内容补充
