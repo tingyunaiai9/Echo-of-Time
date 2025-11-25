@@ -347,4 +347,31 @@ public class LaserPuzzleGenerator
                 return MirrorSlot.Direction.TOP_RIGHT; // '/' 镜子，-45°
         }
     }
+
+    public static void Main(string[] args)
+    {
+        // 创建一个激光谜题生成器实例
+        LaserPuzzleGenerator generator = new LaserPuzzleGenerator(rows: 5, cols: 11);
+
+        // 生成谜题
+        var (allSlots, start, end, solutionSlots) = generator.Generate();
+
+        // 输出起点和终点
+        Console.WriteLine($"起点: ({start.Item1}, {start.Item2})");
+        Console.WriteLine($"终点: ({end.Item1}, {end.Item2})");
+
+        // 输出所有镜槽信息
+        Console.WriteLine("所有镜槽:");
+        foreach (var slot in allSlots)
+        {
+            Console.WriteLine($"位置: ({slot.yindex}, {slot.xindex}), 方向: {slot.direction}");
+        }
+
+        // 输出正确解的镜槽信息
+        Console.WriteLine("正确解:");
+        foreach (var slot in solutionSlots)
+        {
+            Console.WriteLine($"位置: ({slot.yindex}, {slot.xindex}), 方向: {slot.direction}");
+        }
+    }
 }
