@@ -55,6 +55,7 @@ public class TimelinePlayer : NetworkBehaviour
         if (isLocalPlayer)
         {
             DialogPanel.ResetConfirmButtonForNewLevel();
+            SceneDirector.Instance?.TryLoadTimelineNow();
         }
     }
 
