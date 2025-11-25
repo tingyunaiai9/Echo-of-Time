@@ -10,7 +10,15 @@ public struct MirrorSlot
 {
     public int xindex;
     public int yindex;
-    public float rotation; // 只能是0,45,90,135
+    public enum Direction
+    {
+        TOP_LEFT,
+        BOTTOM_LEFT,
+        BOTTOM_RIGHT,
+        TOP_RIGHT,
+    }
+
+    public Direction direction; // Add this field to store the direction value
 }
 
 /*
@@ -154,8 +162,24 @@ public class LightPanel : MonoBehaviour
                 // 设置大小
                 rectTransform.sizeDelta = new Vector2(140f, 30f);
 
-                // 设置旋转（只支持 0, 45, 90, 135）
-                rectTransform.localRotation = Quaternion.Euler(0, 0, slot.rotation);
+                // 设置旋转角度
+                float rotationAngle = 0f;
+                switch (slot.direction)
+                {
+                    case MirrorSlot.Direction.TOP_LEFT:
+                        rotationAngle = 45f;
+                        break;
+                    case MirrorSlot.Direction.BOTTOM_LEFT:
+                        rotationAngle = 135f;
+                        break;
+                    case MirrorSlot.Direction.BOTTOM_RIGHT:
+                        rotationAngle = -135f;
+                        break;
+                    case MirrorSlot.Direction.TOP_RIGHT:
+                        rotationAngle = -45f;
+                        break;
+                }
+                rectTransform.localRotation = Quaternion.Euler(0, 0, rotationAngle);
 
                 // 初始化时禁用 BoxCollider2D
                 BoxCollider2D collider = mirrorSlot.GetComponent<BoxCollider2D>();
@@ -171,7 +195,7 @@ public class LightPanel : MonoBehaviour
                 }
 
                 Debug.Log($"[LightPanel] 绘制镜槽: 索引({slot.xindex}, {slot.yindex}), " +
-                         $"位置({centerX:F2}, {centerY:F2}), 旋转{slot.rotation}°");
+                         $"位置({centerX:F2}, {centerY:F2}), 旋转{rotationAngle}°");
             }
             else
             {
