@@ -11,11 +11,19 @@ public class TimelinePlayer : NetworkBehaviour
     [SyncVar(hook = nameof(OnTimelineChanged))]
     public int timeline = -1;
 
+    [Header("游戏进程")]
+    [SyncVar(hook = nameof(OnLevelChanged))]
+    public int currentLevel = 1;
+
     [SyncVar]
     public string playerName = "";
 
     [SyncVar]
     public uint transportId = 0;
+
+    [Header("可见性")]
+    [SyncVar(hook = nameof(OnVisibilityChanged))]
+    public bool isVisible = false; // 初始不可见（只能看自己）
 
     [Server]
     public void ServerSetTimeline(int tl)
@@ -31,6 +39,23 @@ public class TimelinePlayer : NetworkBehaviour
 
         var nm = (EchoNetworkManager)NetworkManager.singleton;
         nm.ServerRememberTimeline(connectionToClient, roleIndex);
+    }
+
+    [Command]
+    public void CmdReportedCorrectAnswer()
+    {
+        var nm = (EchoNetworkManager)NetworkManager.singleton;
+        nm.ServerPlayerAnsweredCorrectly(this);
+    }
+
+    private void OnLevelChanged(int oldLevel, int newLevel)
+    {
+        Debug.Log($"[TimelinePlayer] {playerName} 的层数从 {oldLevel} 变为 {newLevel}");
+        // 仅在本地玩家上重置本地UI（提交按钮从“正确！”恢复为“提交”）
+        if (isLocalPlayer)
+        {
+            DialogPanel.ResetConfirmButtonForNewLevel();
+        }
     }
 
     [Header("玩家信息")]
@@ -57,6 +82,9 @@ public class TimelinePlayer : NetworkBehaviour
         }
         
         Debug.Log($"[TimelinePlayer] Local player started");
+
+        // 本地玩家始终可见（即使 isVisible=false 也显示自身模型）
+        ApplyVisibility();
     }
     
     public override void OnStartClient()
@@ -75,6 +103,9 @@ public class TimelinePlayer : NetworkBehaviour
         {
             ApplyTimelineColor();
         }
+
+        // 初始化可见性
+        ApplyVisibility();
     }
     
     [Command]
@@ -114,6 +145,11 @@ public class TimelinePlayer : NetworkBehaviour
 
         SceneDirector.Instance?.TryLoadTimelineNow();
     }
+
+    private void OnVisibilityChanged(bool oldValue, bool newValue)
+    {
+        ApplyVisibility();
+    }
     
     private void ApplyTimelineColor()
     {
@@ -127,6 +163,27 @@ public class TimelinePlayer : NetworkBehaviour
             Debug.Log($"[TimelinePlayer] Applied color for timeline {timeline}");
         }
     }
+
+    private void ApplyVisibility()
+    {
+        // 规则：自身始终可见；其他玩家只有在 isVisible=true 后可见
+        bool shouldShow = isLocalPlayer || isVisible;
+
+        var renderers = GetComponentsInChildren<Renderer>(true);
+        foreach (var r in renderers)
+        {
+            if (r != null)
+            {
+                r.enabled = shouldShow;
+            }
+        }
+    }
+
+    [Server]
+    public void ServerSetVisibility(bool visible)
+    {
+        isVisible = visible; // SyncVar 同步到所有客户端，触发 hook
+    }
     
     void OnGUI()
     {
@@ -135,9 +192,10 @@ public class TimelinePlayer : NetworkBehaviour
         // 显示玩家信息
         string info = $"玩家: {playerName}\n";
         info += $"时间线: {GetTimelineName(timeline)}\n";
+        info += $"层数: {currentLevel}\n";
         info += $"Transport ID: {transportId}";
         
-        GUI.Box(new Rect(10, 10, 200, 80), info);
+        GUI.Box(new Rect(10, 10, 200, 100), info);
     }
     
     private string GetTimelineName(int timeline)

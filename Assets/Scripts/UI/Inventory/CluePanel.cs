@@ -3,6 +3,7 @@
  */
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Events;
 
 /*
@@ -13,8 +14,15 @@ public class CluePanel : Inventory
     // 已收集线索的去重集合
     readonly HashSet<string> _clueIds = new HashSet<string>();
 
+    [Header("DetailBar 大图查看")]
+    [SerializeField] Button viewImageButton;       // 右下角按钮
+    [SerializeField] GameObject imageViewer;       // 弹出层/大图面板
+    [SerializeField] Image imageViewerImage;       // 用于显示大图的 Image
+
+    Sprite currentDetailImage;                     // 当前选中线索的大图
+
     /* 添加线索 */
-    public new void AddClue(string clueId, string clueText, string clueDescription = "", Sprite icon = null)
+    public new void AddClue(string clueId, string clueText, string clueDescription = "", Sprite icon = null, Sprite image = null)
     {
         if (string.IsNullOrEmpty(clueId)) return;
         if (!_clueIds.Add(clueId)) return; // 已存在则忽略
@@ -27,7 +35,8 @@ public class CluePanel : Inventory
             itemName = clueText,
             description = clueDescription,
             quantity = 1,
-            icon = icon
+            icon = icon,
+            image = image
         };
         CreateOrUpdateItemUI(item);
     }
@@ -36,6 +45,9 @@ public class CluePanel : Inventory
     protected override void Awake()
     {
         base.Awake();
+        if (viewImageButton != null)
+            viewImageButton.onClick.AddListener(OnClickViewImage);
+
         EventBus.Subscribe<ClueDiscoveredEvent>(OnClueDiscovered);
         Debug.Log("[CluePanel.Awake] 已订阅 ClueDiscoveredEvent");
     }
@@ -52,24 +64,57 @@ public class CluePanel : Inventory
     void OnClueDiscovered(ClueDiscoveredEvent e)
     {
         Debug.Log($"[CluePanel.OnClueDiscovered] 收到事件 - clueId: {e.clueId}, text: {e.clueText}, icon: {(e.icon != null ? e.icon.name : "null")}");
-        AddClue(e.clueId, e.clueText, e.clueDescription, e.icon);
+        AddClue(e.clueId, e.clueText, e.clueDescription, e.icon, e.image);
     }
 
-    /* 线索详细信息展示*/
-    public void DisplayClueDetail(string clueId)
+    // 在你已有的“显示线索详情”的地方调用此方法即可
+    public void SetDetailImage(Sprite img)
     {
-        // TODO: 根据 clueId 在 UI 中显示详细内容
+        currentDetailImage = img;
+        if (viewImageButton != null)
+            viewImageButton.gameObject.SetActive(img != null);
+    }
+    
+    protected override void OnItemClicked(string itemId)
+    {
+        base.OnItemClicked(itemId); // 仍然使用基类的详情展示：名称、描述、图标
+
+        // 从基类受保护字典中取 InventoryItem，携带 image
+        if (itemData != null && itemData.TryGetValue(itemId, out var item))
+        {
+            Debug.Log($"[{GetType().Name}.OnItemClicked] 线索详情图像设置: {(item.image != null ? item.image.name : "null")}");
+            SetDetailImage(item.image); // 让按钮只在有图时可见
+        }
+        else
+        {
+            SetDetailImage(null);
+        }
     }
 
-    /* 分享线索*/
-    public void HandleClueSharing(string clueId, int targetPlayer)
+
+    void OnClickViewImage()
     {
-        // TODO: 网络分享逻辑
+        if (currentDetailImage == null || imageViewer == null) return;
+        Debug.Log($"[{GetType().Name}.OnClickViewImage] 点击查看大图");
+
+        if (imageViewerImage == null)
+            imageViewerImage = imageViewer.GetComponentInChildren<Image>(true);
+        if (imageViewerImage == null)
+        {
+            Debug.LogError("[CluePanel] 未找到用于显示大图的 Image 组件。");
+            return;
+        }
+        
+        imageViewer.SetActive(true);
+        imageViewerImage.gameObject.SetActive(true);
+        imageViewerImage.sprite = currentDetailImage;
+        // imageViewerImage.SetNativeSize();     // 按需：用容器自适配可移除
+        
     }
 
-    /* 更新线索进度（可选） */
-    public void UpdateClueProgress()
+    // 可选：给关闭按钮绑定
+    public void CloseImageViewer()
     {
-        // TODO: 进度统计与 UI 刷新
+        if (imageViewer != null) imageViewer.SetActive(false);
     }
 }

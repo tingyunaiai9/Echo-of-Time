@@ -1,19 +1,36 @@
+/*
+ * File: LocalTestLauncher.cs
+ * Path: Assets/Scripts/Core/Services/Network/LocalTestLauncher.cs
+ * 
+ * Purpose: Boot 场景的本地测试入口脚本
+ * 
+ * Features:
+ * - 启用时自动跳过联网与房间创建
+ * - 启动 Mirror Host
+ * - 直接加载 GameBase → 指定时间线场景
+ * 
+ * Usage:
+ * - 挂载到 Boot 场景的 GameObject 上
+ * - 勾选 enableLocalTestMode 启用本地测试
+ * - 设置 testTimelineIndex 指定目标时间线（0=Ancient, 1=Modern, 2=Future）
+ */
+
 using UnityEngine;
 using Mirror;
 using UnityEngine.SceneManagement;
 
-/// <summary>
-/// Boot 场景的本地测试入口脚本：
-/// - 启用时自动跳过联网与房间创建；
-/// - 启动 Mirror Host；
-/// - 直接加载 GameBase → Modern 场景。
-/// </summary>
+/*
+ * 本地测试启动器
+ * 用于开发阶段快速测试单个时间线，跳过联网流程
+ */
 public class LocalTestLauncher : MonoBehaviour
 {
+    // 本地测试模式开关（勾选后启动时会跳过联网逻辑，直接以 Host 身份运行）
     [Header("本地测试模式开关")]
     [Tooltip("勾选后启动时会跳过联网逻辑，直接以 Host 身份运行。")]
     public bool enableLocalTestMode = false;
 
+    // 本地测试目标时间线（0=Ancient, 1=Modern, 2=Future）
     [Header("本地测试目标时间线")]
     [Tooltip("0=Ancient, 1=Modern, 2=Future")]
     [Range(0, 2)]
@@ -22,6 +39,10 @@ public class LocalTestLauncher : MonoBehaviour
     private EchoNetworkManager nm;
     private bool hasLoadedGameBase = false;
 
+    /*
+     * Unity 生命周期：启动本地测试流程
+     * 在 Start 中执行，确保 NetworkManager.Start() 已被调用
+     */
     private void Start()
     {
         // 在 Start 中执行，确保 NetworkManager.Start() 已被调用
@@ -51,6 +72,11 @@ public class LocalTestLauncher : MonoBehaviour
         NetworkManager.singleton.ServerChangeScene("GameBase");
     }
 
+    /*
+     * 场景加载回调：检测 GameBase 加载完成并分配时间线
+     * @param scene 已加载的场景
+     * @param mode 场景加载模式
+     */
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (!enableLocalTestMode) return;
@@ -65,6 +91,10 @@ public class LocalTestLauncher : MonoBehaviour
         }
     }
 
+    /*
+     * 等待本地玩家生成并分配时间线
+     * 协程：最多等待 10 秒，直到 NetworkClient.localPlayer 创建完成
+     */
     private System.Collections.IEnumerator WaitAndAssignTimeline()
     {
         float t = 0f;
@@ -80,6 +110,10 @@ public class LocalTestLauncher : MonoBehaviour
             Debug.LogWarning("[LocalTestLauncher] LocalPlayer 等待超时，未生成。");
     }
 
+    /*
+     * 分配时间线并加载对应场景
+     * @param player 本地玩家的 NetworkIdentity
+     */
     private void AssignTimelineAndLoadScene(NetworkIdentity player)
     {
         var tp = player.GetComponent<TimelinePlayer>();
@@ -96,6 +130,9 @@ public class LocalTestLauncher : MonoBehaviour
         SceneDirector.Instance.TryLoadTimelineNow();
     }
 
+    /*
+     * Unity 生命周期：清理场景加载回调
+     */
     private void OnDestroy()
     {
         // 清理回调
