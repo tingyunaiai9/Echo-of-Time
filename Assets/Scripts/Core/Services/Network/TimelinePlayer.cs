@@ -60,15 +60,14 @@ public class TimelinePlayer : NetworkBehaviour
     }
 
     [Header("玩家信息")]
-    private Color[] timelineColors = new Color[]
-    {
-        Color.red,      // 时间线 0 - 过去
-        Color.green,    // 时间线 1 - 现在
-        Color.blue      // 时间线 2 - 未来
-    };
-    
     private EchoNetworkManager networkManager;
-    private Renderer playerRenderer;
+
+    [Header("视觉表现")]
+    // 在这里把 Skin_Past, Skin_Present, Skin_Future 拖进去
+    public GameObject[] timelineSkins; 
+
+    // 缓存当前激活的渲染器，用于控制可见性
+    private Renderer currentActiveRenderer;
     
     public override void OnStartLocalPlayer()
     {
@@ -85,28 +84,14 @@ public class TimelinePlayer : NetworkBehaviour
         Debug.Log($"[TimelinePlayer] Local player started");
 
         // 本地玩家始终可见（即使 isVisible=false 也显示自身模型）
-        ApplyVisibility();
+        UpdateVisibilityStatus();
     }
     
     public override void OnStartClient()
     {
         base.OnStartClient();
-        
-        // 获取渲染器组件
-        playerRenderer = GetComponent<Renderer>();
-        if (playerRenderer == null)
-        {
-            playerRenderer = GetComponentInChildren<Renderer>();
-        }
-        
-        // 应用时间线颜色
-        if (timeline >= 0)
-        {
-            ApplyTimelineColor();
-        }
-
-        // 初始化可见性
-        ApplyVisibility();
+        // 初始化：根据当前时间线显示正确的皮肤
+        RefreshVisuals();
     }
     
     [Command]
@@ -142,42 +127,54 @@ public class TimelinePlayer : NetworkBehaviour
     private void OnTimelineChanged(int oldTimeline, int newTimeline)
     {
         Debug.Log($"[TimelinePlayer] Timeline changed from {oldTimeline} to {newTimeline}");
-        ApplyTimelineColor();
+        RefreshVisuals();
 
         SceneDirector.Instance?.TryLoadTimelineNow();
     }
 
     private void OnVisibilityChanged(bool oldValue, bool newValue)
     {
-        ApplyVisibility();
+        UpdateVisibilityStatus();
     }
     
-    private void ApplyTimelineColor()
+    // 核心逻辑：切换皮肤
+    private void RefreshVisuals()
     {
-        if (playerRenderer != null && timeline >= 0 && timeline < timelineColors.Length)
+        // 1. 先隐藏所有皮肤
+        foreach (var skin in timelineSkins)
         {
-            // 创建新材质实例以避免修改共享材质
-            Material mat = new Material(playerRenderer.material);
-            mat.color = timelineColors[timeline];
-            playerRenderer.material = mat;
-            
-            Debug.Log($"[TimelinePlayer] Applied color for timeline {timeline}");
+            if(skin != null) skin.SetActive(false);
         }
-    }
 
-    private void ApplyVisibility()
-    {
-        // 规则：自身始终可见；其他玩家只有在 isVisible=true 后可见
-        bool shouldShow = isLocalPlayer || isVisible;
+        currentActiveRenderer = null;
 
-        var renderers = GetComponentsInChildren<Renderer>(true);
-        foreach (var r in renderers)
+        // 2. 激活对应时间线的皮肤
+        if (timeline >= 0 && timeline < timelineSkins.Length)
         {
-            if (r != null)
+            GameObject targetSkin = timelineSkins[timeline];
+            if (targetSkin != null)
             {
-                r.enabled = shouldShow;
+                targetSkin.SetActive(true);
+                // 获取该皮肤上的渲染器（可能是 SpriteRenderer 或 MeshRenderer）
+                currentActiveRenderer = targetSkin.GetComponent<Renderer>();
+                
+                // 如果是帧动画，Animator 通常也在这个物体上，自动就会开始运行
             }
         }
+
+        // 3. 应用可见性（因为切换皮肤后，新皮肤默认可能是可见的，需要重新检查规则）
+        UpdateVisibilityStatus();
+    }
+
+    // 核心逻辑：控制显隐
+    private void UpdateVisibilityStatus()
+    {
+        if (currentActiveRenderer == null) return;
+
+        // 规则：如果是本地玩家，始终可见；如果是其他玩家，根据 isVisible 决定
+        bool shouldShow = isLocalPlayer || isVisible;
+        
+        currentActiveRenderer.enabled = shouldShow;
     }
 
     [Server]
