@@ -3084,7 +3084,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9056604, g: 0.79190266, b: 0.63510144, a: 0.392}
+  m_Color: {r: 0.8113208, g: 0.6257996, b: 0.5026106, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3135,9 +3135,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 326784256}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87d7d880effe7b34cbd0b1f4da4499a4, type: 3}
+  m_Script: {fileID: 11500000, guid: 695832546994e6247b64c506c5aad80f, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PuzzlePanel
+  m_EditorClassIdentifier: Assembly-CSharp::PuzzlePanel2
   puzzlePanel: {fileID: 326784256}
 --- !u!1 &356606718
 GameObject:
@@ -7001,11 +7001,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3524108354001986323, guid: 2c61635c3d3bfa1409294988e01e1b6a, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -60
+      value: 511
       objectReference: {fileID: 0}
     - target: {fileID: 3524108354001986323, guid: 2c61635c3d3bfa1409294988e01e1b6a, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 191
+      value: -395
       objectReference: {fileID: 0}
     - target: {fileID: 3524108354001986323, guid: 2c61635c3d3bfa1409294988e01e1b6a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -8815,11 +8815,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3524108354001986323, guid: 2c61635c3d3bfa1409294988e01e1b6a, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -60
+      value: 699
       objectReference: {fileID: 0}
     - target: {fileID: 3524108354001986323, guid: 2c61635c3d3bfa1409294988e01e1b6a, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 91
+      value: 210
       objectReference: {fileID: 0}
     - target: {fileID: 3524108354001986323, guid: 2c61635c3d3bfa1409294988e01e1b6a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -11279,7 +11279,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5553777249892779453, guid: 1f67d698cefae9845b478b0e9cb65bb2, type: 3}
       propertyPath: m_Name
-      value: PuzzleMask
+      value: PuzzleMask0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
