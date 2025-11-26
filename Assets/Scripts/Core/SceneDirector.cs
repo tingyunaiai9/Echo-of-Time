@@ -37,6 +37,8 @@ public class SceneDirector : Singleton<SceneDirector>
     [Tooltip("如果为 true，在本地测试模式（skipRelay）下不自动加载时间线场景，由 LocalTestLauncher 负责")]
     [SerializeField] private bool skipAutoLoadInLocalTest = true;
 
+    private bool isLoadingTimeline = false;
+
     /*
      * Unity 生命周期：初始化时加载 StartPage 并注册场景加载回调
      */
@@ -67,19 +69,42 @@ public class SceneDirector : Singleton<SceneDirector>
         string sceneName = GetSceneName(tp.timeline, tp.currentLevel);
         if (string.IsNullOrEmpty(sceneName)) return;
 
-        // 如果场景已加载且是当前场景，则跳过
-        if (sceneName == currentLoadedTimelineScene && SceneManager.GetSceneByName(sceneName).isLoaded) return;
+        // 1. 检查是否正在加载这个场景
+        if (currentLoadedTimelineScene == sceneName && isLoadingTimeline) return;
 
-        // 如果有旧场景加载了，先卸载
+        // 2. 检查场景是否已经加载完毕
+        Scene loadedScene = SceneManager.GetSceneByName(sceneName);
+        if (loadedScene.IsValid() && loadedScene.isLoaded) 
+        {
+            // 确保记录正确
+            currentLoadedTimelineScene = sceneName;
+            return;
+        }
+
+        // 3. 如果记录的是其他场景，先卸载
         if (!string.IsNullOrEmpty(currentLoadedTimelineScene) && currentLoadedTimelineScene != sceneName)
         {
             UnloadSceneIfLoaded(currentLoadedTimelineScene);
         }
 
-        timelineLoaded = true;
+        // 4. 开始加载
+        StartCoroutine(LoadTimelineSceneRoutine(sceneName));
+    }
+
+    private IEnumerator LoadTimelineSceneRoutine(string sceneName)
+    {
+        isLoadingTimeline = true;
+        currentLoadedTimelineScene = sceneName; // 提前占位，防止重复触发
         Debug.Log($"[SceneDirector] Loading timeline scene: {sceneName}");
-        SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-        currentLoadedTimelineScene = sceneName;
+
+        var op = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+        yield return op;
+
+        isLoadingTimeline = false;
+        
+        // 将在线主场景设为 Active，时间线场景只是内容补充
+        Scene online = SceneManager.GetSceneByName(onlineMainScene);
+        if (online.IsValid()) SceneManager.SetActiveScene(online);
     }
 
     public string GetSceneName(int timeline, int level)
@@ -128,6 +153,17 @@ public class SceneDirector : Singleton<SceneDirector>
      */
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        // 如果加载的是 Plot 场景（或者 Boot, StartPage 等非 GameBase 主场景）
+        // 且 mode 是 Single（意味着替换了主场景）
+        if (mode == LoadSceneMode.Single)
+        {
+            if (scene.name != onlineMainScene)
+            {
+                currentLoadedTimelineScene = "";
+                isLoadingTimeline = false;
+            }
+        }
+
         // 当在线主场景加载完成时（所有端都会走到这里）
         if (scene.name == onlineMainScene)
         {
@@ -150,7 +186,7 @@ public class SceneDirector : Singleton<SceneDirector>
             // 在每个客户端本地，按本地玩家的 timeline 加载对应时间线场景
             if (NetworkClient.isConnected && autoLoadTimelineOnSceneLoaded)
             {
-                TryLoadTimelineNow();
+                // 启动协程等待并加载，协程内部会调用 TryLoadTimelineNow
                 StartCoroutine(WaitAndLoadTimelineScene());
             }
         }
@@ -184,21 +220,8 @@ public class SceneDirector : Singleton<SceneDirector>
             yield break;
         }
 
-        // 映射 timeline → 具体场景名
-        string sceneName = GetSceneName(local.timeline, local.currentLevel);
-
-        // 已在则不重复加载
-        if (!SceneManager.GetSceneByName(sceneName).isLoaded)
-        {
-            Debug.Log($"[SceneDirector] Loading timeline scene: {sceneName}");
-            var op = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-            while (!op.isDone) yield return null;
-            currentLoadedTimelineScene = sceneName;
-        }
-
-        // 将在线主场景设为 Active，时间线场景只是内容补充
-        Scene online = SceneManager.GetSceneByName(onlineMainScene);
-        if (online.IsValid()) SceneManager.SetActiveScene(online);
+        // 调用统一的加载方法
+        TryLoadTimelineNow();
     }
 
     /*
