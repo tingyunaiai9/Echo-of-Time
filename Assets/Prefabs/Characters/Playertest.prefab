@@ -54,7 +54,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  moveSpeed: 3
+  moveSpeed: 1
   rotationSpeed: 720
   interactionRange: 3
   interactableLayer:
