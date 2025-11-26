@@ -19,6 +19,7 @@ public class Diary : MonoBehaviour
     [Header("控制按钮")]
     public Button sharedButton;      // SharedButton
     public Button clueButton;        // ClueButton
+    public Button closeButton;       // CloseButton
 
     private static Diary s_instance;
     private static bool s_isOpen;
@@ -29,6 +30,7 @@ public class Diary : MonoBehaviour
     protected static GameObject s_cluePanel;
     protected static Button s_sharedButton;
     protected static Button s_clueButton;
+    protected static Button s_closeButton;
     protected static bool s_initialized = false;
 
     protected void Awake()
@@ -50,6 +52,7 @@ public class Diary : MonoBehaviour
         if (cluePanel != null) s_cluePanel = cluePanel;
         if (sharedButton != null) s_sharedButton = sharedButton;
         if (clueButton != null) s_clueButton = clueButton;
+        if (closeButton != null) s_closeButton = closeButton;
 
         // 按钮回调绑定（避免重复绑定）
         if (s_sharedButton != null)
@@ -61,6 +64,11 @@ public class Diary : MonoBehaviour
         {
             s_clueButton.onClick.RemoveListener(OnClickClueButton);
             s_clueButton.onClick.AddListener(OnClickClueButton);
+        }
+        if (s_closeButton != null)
+        {
+            s_closeButton.onClick.RemoveListener(ClosePanel);
+            s_closeButton.onClick.AddListener(ClosePanel);
         }
 
         // 初始关闭面板，Start 会在所有实例就绪后真正关闭 root
@@ -82,6 +90,7 @@ public class Diary : MonoBehaviour
         // 清理按钮回调
         if (s_sharedButton != null) s_sharedButton.onClick.RemoveListener(OnClickSharedButton);
         if (s_clueButton != null) s_clueButton.onClick.RemoveListener(OnClickClueButton);
+        if (s_closeButton != null) s_closeButton.onClick.RemoveListener(ClosePanel);
 
         // 若当前实例绑定的根等于静态引用则清理静态状态
         if (PanelRoot != null && s_root == PanelRoot)
@@ -91,6 +100,7 @@ public class Diary : MonoBehaviour
             s_cluePanel = null;
             s_sharedButton = null;
             s_clueButton = null;
+            s_closeButton = null;
             s_isOpen = false;
             s_initialized = false;
         }
