@@ -98,6 +98,15 @@ public class UIManager : Singleton<UIManager>
             Debug.Log("[UIManager] F4键按下，切换拼画谜题页面。");
         }
 
+        // 新拼画谜题 (F5键)
+        if (Input.GetKeyDown(KeyCode.F5))
+        {
+            // 假设你的新脚本叫 PuzzlePanel2
+            PuzzlePanel2.TogglePanel();
+            Debug.Log("[UIManager] F5键按下，切换新拼画谜题页面。");
+        }
+
+
         // 添加测试聊天消息 (Equals键)
         if (Input.GetKeyDown(KeyCode.Equals) || Input.GetKeyDown(KeyCode.KeypadEquals))
         {
