@@ -230,19 +230,16 @@ public class LightPanel : MonoBehaviour
             }
         }
 
-        // 查找并打开 ConsolePanel
-        if (s_instance != null && s_instance.transform.parent != null)
+        // 打开控制台面板
+        ConsolePanel.TogglePanel();
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
         {
-            Transform consolePanel = s_instance.transform.parent.Find("ConsolePanel");
-            if (consolePanel != null)
-            {
-                consolePanel.gameObject.SetActive(true);
-                Debug.Log("[LightPanel] ConsolePanel 已打开");
-            }
-            else
-            {
-                Debug.LogWarning("[LightPanel] 未找到 ConsolePanel");
-            }
+            ConsolePanel.TogglePanel();
+            Debug.Log("[LightPanel] P键按下，切换控制台面板。");
         }
     }
 
