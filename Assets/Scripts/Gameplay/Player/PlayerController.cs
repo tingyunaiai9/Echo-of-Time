@@ -43,6 +43,11 @@ public class PlayerController : NetworkBehaviour
     Rigidbody rb;
     bool initialized;
 
+    // 动画相关
+    private Animator animator;
+    private SpriteRenderer spriteRenderer;
+    private static readonly int IsWalking = Animator.StringToHash("IsWalking");
+
     /* 背包打开时禁用游戏输入 */
     bool isBackpackOpen;
 
@@ -50,6 +55,13 @@ public class PlayerController : NetworkBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        // 尝试获取 Animator 和 SpriteRenderer，如果不在根节点，尝试在子节点查找
+        animator = GetComponent<Animator>();
+        if (animator == null) animator = GetComponentInChildren<Animator>();
+        
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        if (spriteRenderer == null) spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
         if (rb != null)
         {
             rb.freezeRotation = true;
@@ -151,6 +163,38 @@ public class PlayerController : NetworkBehaviour
         isBackpackOpen = e.isOpen;
     }
 
+    /* 更新动画状态和朝向 */
+    void UpdateAnimation(float horizontalInput)
+    {
+        // 1. 动态查找当前激活的皮肤组件
+        // 每次更新都检查，或者你可以优化为只在皮肤切换时更新引用（需要与 TimelinePlayer 配合）
+        // 这里为了稳健性，我们优先查找当前激活的子物体上的组件
+        
+        if (animator == null || !animator.gameObject.activeInHierarchy)
+        {
+            animator = GetComponentInChildren<Animator>(false); // false 表示只查找激活的物体
+        }
+        
+        if (spriteRenderer == null || !spriteRenderer.gameObject.activeInHierarchy)
+        {
+            spriteRenderer = GetComponentInChildren<SpriteRenderer>(false); // false 表示只查找激活的物体
+        }
+
+        // 2. 处理朝向翻转
+        if (spriteRenderer != null && horizontalInput != 0)
+        {
+            // 向左走(h<0)时翻转，向右走(h>0)时不翻转
+            spriteRenderer.flipX = (horizontalInput < 0);
+        }
+
+        // 3. 处理动画状态切换
+        if (animator != null)
+        {
+            bool isWalking = Mathf.Abs(horizontalInput) > 0.01f;
+            animator.SetBool(IsWalking, isWalking);
+        }
+    }
+
     /* 处理玩家输入和移动 */
     void Update()
     {
@@ -164,6 +208,9 @@ public class PlayerController : NetworkBehaviour
         // 禁止前后：垂直输入直接忽略
         float v = 0f;
 
+        // 更新动画状态
+        UpdateAnimation(h);
+
         Vector3 input = new Vector3(h, 0f, v);
         // if (input.sqrMagnitude > 0.0001f)
         // {
@@ -171,12 +218,7 @@ public class PlayerController : NetworkBehaviour
         //     transform.rotation = Quaternion.RotateTowards(transform.rotation, target, rotationSpeed * Time.deltaTime);
         // }
 
-        // 用 SpriteRenderer 翻转朝向
-        if (h != 0)
-        {
-            var sr = GetComponent<SpriteRenderer>();
-            if (sr != null) sr.flipX = (h < 0); // 向左走时翻转
-        }
+        // 翻转朝向逻辑移至 UpdateAnimation 中统一处理
 
         if (rb == null)
         {
