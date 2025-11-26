@@ -24,7 +24,8 @@ public class SceneDirector : Singleton<SceneDirector>
     [Header("Scene Names")]
     [SerializeField] private string bootScene = "Boot";
     [SerializeField] private string startPageScene = "StartPage";
-    [SerializeField] private string onlineMainScene = "GameBase";
+    public string onlineMainScene = "GameBase";
+    public string plotScene = "Plot";
     [Tooltip("Prefixes for timeline scenes. Final name will be Prefix + Level (e.g. Ancient1)")]
     [SerializeField] private string[] timelineScenePrefixes = new string[] { "Ancient", "Modern", "Future" };
 
@@ -54,6 +55,9 @@ public class SceneDirector : Singleton<SceneDirector>
      */
     public void TryLoadTimelineNow()
     {
+        // 仅在在线主场景下加载时间线场景
+        if (SceneManager.GetActiveScene().name != onlineMainScene) return;
+
         var lp = NetworkClient.localPlayer;
         if (lp == null) return;
 
@@ -111,9 +115,9 @@ public class SceneDirector : Singleton<SceneDirector>
             return;
         }
 
-        // 统一换到在线主场景（GameBase）。Mirror 会把所有客户端一起带过去。
-        Debug.Log("[SceneDirector] Server changing scene to online main scene...");
-        NetworkManager.singleton.ServerChangeScene(onlineMainScene);
+        // 统一换到剧情场景（Plot），剧情结束后会自动进入在线主场景（GameBase）
+        Debug.Log("[SceneDirector] Server changing scene to Plot scene...");
+        NetworkManager.singleton.ServerChangeScene(plotScene);
     }
 
     /*

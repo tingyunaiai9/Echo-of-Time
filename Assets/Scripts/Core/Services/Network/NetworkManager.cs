@@ -515,8 +515,25 @@ public class EchoNetworkManager : Mirror.NetworkManager
             }
         }
         
-        // TODO: 在这里可以添加进入下一层后的服务器端逻辑，例如生成新的谜题
-        ServerRevealAllPlayers();
+        // 进入剧情场景
+        if (SceneDirector.Instance != null)
+        {
+            ServerChangeScene(SceneDirector.Instance.plotScene);
+        }
+        else
+        {
+            Debug.LogError("SceneDirector instance not found!");
+        }
+    }
+
+    [Server]
+    public void ServerFinishPlot()
+    {
+        Debug.Log("[NetworkManager] Plot finished, returning to game base...");
+        if (SceneDirector.Instance != null)
+        {
+            ServerChangeScene(SceneDirector.Instance.onlineMainScene);
+        }
     }
 
     [Server]
@@ -774,15 +791,21 @@ public class EchoNetworkManager : Mirror.NetworkManager
         if (conn.identity != null)
         {
             var tp = conn.identity.GetComponent<TimelinePlayer>();
-            if (tp != null && _timelineByConnectionId.TryGetValue(conn.connectionId, out var timeline))
+            if (tp != null)
             {
-                // 恢复之前选择的时间线（适用于断线重连场景）
-                tp.ServerSetTimeline(timeline);
-                Debug.Log($"Restored timeline {timeline} for reconnected player (Connection {conn.connectionId})");
-            }
-            else
-            {
-                Debug.Log($"New player added (Connection {conn.connectionId}), waiting for role selection...");
+                // 同步当前层数
+                tp.currentLevel = _currentLevel;
+
+                if (_timelineByConnectionId.TryGetValue(conn.connectionId, out var timeline))
+                {
+                    // 恢复之前选择的时间线（适用于断线重连场景）
+                    tp.ServerSetTimeline(timeline);
+                    Debug.Log($"Restored timeline {timeline} for reconnected player (Connection {conn.connectionId})");
+                }
+                else
+                {
+                    Debug.Log($"New player added (Connection {conn.connectionId}), waiting for role selection...");
+                }
             }
         }
     }
