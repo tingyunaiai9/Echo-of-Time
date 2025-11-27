@@ -32,8 +32,8 @@ Transform:
   m_GameObject: {fileID: 2535583183450427492}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -3.2, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: -3.5, z: 0}
+  m_LocalScale: {x: 1.6, y: 1.6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6191933160362838222}
@@ -61,7 +61,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   cameraTransform: {fileID: 0}
-  cameraOffset: {x: 0, y: 3.2, z: -10}
+  cameraOffset: {x: 0, y: 3.9, z: -10}
   cameraSmoothSpeed: 0.125
   backgroundTag: Background
   horizontalPadding: 1

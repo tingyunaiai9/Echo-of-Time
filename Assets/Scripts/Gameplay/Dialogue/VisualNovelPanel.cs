@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 using System.Collections.Generic;
-using Events; // 假设你有事件系统
+using Events;
 
 public class VisualNovelPanel : MonoBehaviour
 {
@@ -40,6 +40,7 @@ public class VisualNovelPanel : MonoBehaviour
     // 事件回调
     private void OnStartDialogue(StartDialogueEvent evt)
     {
+        Debug.Log("OnStartDialogue() - 已收到开始剧情事件！");
         StartDialogue(evt.data);
     }
 
