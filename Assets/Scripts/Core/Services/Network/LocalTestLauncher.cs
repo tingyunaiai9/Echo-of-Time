@@ -36,6 +36,12 @@ public class LocalTestLauncher : MonoBehaviour
     [Range(0, 2)]
     public int testTimelineIndex = 1;
 
+    // 本地测试目标层级（1=Level1, 2=Level2, ...）
+    [Header("本地测试目标层级")]
+    [Tooltip("1=Level1, 2=Level2, ...")]
+    [Min(1)]
+    public int testLevelIndex = 1;
+
     private EchoNetworkManager nm;
     private bool hasLoadedGameBase = false;
 
@@ -124,7 +130,8 @@ public class LocalTestLauncher : MonoBehaviour
         }
 
         tp.timeline = testTimelineIndex;
-        Debug.Log($"[LocalTestLauncher] 已为本地玩家分配时间线 {testTimelineIndex}");
+        tp.currentLevel = testLevelIndex;
+        Debug.Log($"[LocalTestLauncher] 已为本地玩家分配时间线 {testTimelineIndex}, 层级 {testLevelIndex}");
 
         // 5️⃣ 直接加载对应时间线场景
         SceneDirector.Instance.TryLoadTimelineNow();
