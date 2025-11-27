@@ -40,6 +40,7 @@ public class VisualNovelPanel : MonoBehaviour
     // 事件回调
     private void OnStartDialogue(StartDialogueEvent evt)
     {
+        Debug.Log("OnStartDialogue() - 已收到开始剧情事件！");
         StartDialogue(evt.data);
     }
 

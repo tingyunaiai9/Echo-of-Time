@@ -14,7 +14,7 @@ public class DialogueDebug : MonoBehaviour
             if (testData != null)
             {
                 Debug.Log("开始测试剧情...");
-                EventBus.Publish(new StartDialogueEvent(testData));
+                EventBus.LocalPublish(new StartDialogueEvent(testData));
             }
             else
             {
