@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 using System.Collections.Generic;
-using Events; // 假设你有事件系统
+using Events;
 
 public class VisualNovelPanel : MonoBehaviour
 {
