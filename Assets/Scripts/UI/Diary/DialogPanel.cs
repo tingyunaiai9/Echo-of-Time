@@ -156,14 +156,22 @@ public class DialogPanel : MonoBehaviour
         // 预创建 AI 响应的消息框 (本地显示)
         CreateStreamingMessage(MessageType.Future);
 
-        // 根据当前调试目标，发送到不同的 AI
-        if (currentAiTarget == AiTarget.DeepSeek)
+        // 获取当前玩家的时间线
+        var localPlayerIdentity = Mirror.NetworkClient.localPlayer;
+        var localPlayer = localPlayerIdentity != null ? localPlayerIdentity.GetComponent<TimelinePlayer>() : null;
+        int timeline = localPlayer != null ? localPlayer.timeline : -1;
+        Debug.Log($"[DialogPanel] 当前 Timeline: {timeline}");
+
+        // 根据时间线自动路由
+        // Timeline 1: 即梦 AI
+        // Timeline 0, 2 (及其他): DeepSeek
+        if (timeline == 1)
         {
-            StartCoroutine(StreamingCoroutine(userInput));
+            StartCoroutine(ImageGenCoroutine(userInput));
         }
         else
         {
-            StartCoroutine(ImageGenCoroutine(userInput));
+            StartCoroutine(StreamingCoroutine(userInput));
         }
     }
 
