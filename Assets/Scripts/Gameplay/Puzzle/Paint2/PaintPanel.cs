@@ -1,5 +1,8 @@
+// ...existing code...
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
+using System.Collections;
 
 public class PaintPanel : MonoBehaviour, IPointerClickHandler
 {
@@ -8,10 +11,10 @@ public class PaintPanel : MonoBehaviour, IPointerClickHandler
     public RectTransform OuterImage;
 
     [Tooltip("圆环内半径")]
-    public float innerRadius = 440f;
+    public float innerRadius = 220f;
 
     [Tooltip("圆环外半径")]
-    public float outerRadius = 1000f;
+    public float outerRadius = 500f;
 
     [Tooltip("旋转角度")]
     public float rotationAngle = 30f;
@@ -21,6 +24,23 @@ public class PaintPanel : MonoBehaviour, IPointerClickHandler
 
     private RectTransform panelTransform;
     private Canvas canvas;
+
+    // 新增成员：InnerImage 与 Outline 引用
+    [Tooltip("内圈图像对象（自动查找）")]
+    public RectTransform InnerImage;
+    private Outline outerOutline;
+    private Outline innerOutline;
+    private bool outerOutlineOriginalEnabled;
+    private bool innerOutlineOriginalEnabled;
+    private Color outerOutlineOriginalColor;
+    private Color innerOutlineOriginalColor;
+
+    [Header("旋转步骤规则")]
+    [Tooltip("正数为顺时针次数，负数为逆时针次数（正方向为顺时针）")]
+    public int[] sequence = new int[] { 3, -1, 4, -5, 6, -2 };
+    private int stepIndex = 0;
+    private int stepProgress = 0;
+    private Coroutine flashCoroutine;
 
     void Awake()
     {
@@ -38,6 +58,43 @@ public class PaintPanel : MonoBehaviour, IPointerClickHandler
             else
             {
                 Debug.LogError("[PaintPanel] 未找到 OuterImage 对象！");
+            }
+        }
+
+        // 尝试查找 InnerImage
+        if (InnerImage == null)
+        {
+            Transform innerTransform = transform.Find("InnerImage");
+            if (innerTransform != null)
+            {
+                InnerImage = innerTransform.GetComponent<RectTransform>();
+            }
+            else
+            {
+                Debug.LogWarning("[PaintPanel] 未找到 InnerImage 对象（请检查层级）");
+            }
+        }
+
+        // 获取 Outline 组件并记录初始状态
+        if (OuterImage != null)
+        {
+            outerOutline = OuterImage.GetComponent<Outline>();
+            if (outerOutline != null)
+            {
+                outerOutlineOriginalEnabled = outerOutline.enabled;
+                outerOutlineOriginalColor = outerOutline.effectColor;
+                outerOutline.enabled = false; // 初始不显示
+            }
+        }
+
+        if (InnerImage != null)
+        {
+            innerOutline = InnerImage.GetComponent<Outline>();
+            if (innerOutline != null)
+            {
+                innerOutlineOriginalEnabled = innerOutline.enabled;
+                innerOutlineOriginalColor = innerOutline.effectColor;
+                innerOutline.enabled = false; // 初始不显示
             }
         }
     }
@@ -94,74 +151,92 @@ public class PaintPanel : MonoBehaviour, IPointerClickHandler
         float targetRotation = OuterImage.localEulerAngles.z + angle;
         LeanTween.rotateZ(OuterImage.gameObject, targetRotation, rotationDuration)
             .setEase(LeanTweenType.easeInOutQuad);
+
+        // 检查旋转是否满足当前步骤（按一次点击计一次旋转）
+        CheckCorrectRotation(angle);
     }
 
-    // 可视化调试：在 Scene 视图中绘制圆环范围
-    void OnDrawGizmos()
+    // 检查当前旋转是否符合步骤序列
+    private void CheckCorrectRotation(float angle)
     {
-        if (panelTransform == null)
-            panelTransform = GetComponent<RectTransform>();
+        // 按题意：正方向为顺时针。当前函数接受的 angle 中，负值表示顺时针点击，正值表示逆时针点击。
+        int dir = angle < 0 ? 1 : -1; // dir == 1 表示顺时针，dir == -1 表示逆时针
 
-        if (canvas == null)
-            canvas = GetComponentInParent<Canvas>();
+        int required = sequence[stepIndex];
+        int requiredSign = required > 0 ? 1 : -1;
 
-        // 获取 Canvas 的缩放因子
-        float scaleFactor = 1f;
-        if (canvas != null)
+        if (dir == requiredSign)
         {
-            if (canvas.renderMode == RenderMode.ScreenSpaceOverlay)
+            // 方向正确，增加进度
+            stepProgress++;
+            if (Mathf.Abs(required) <= stepProgress)
             {
-                // Overlay 模式下，使用 Canvas 的 scaleFactor
-                scaleFactor = canvas.scaleFactor;
+                // 当前步骤完成
+                OnCorrectRotation(true);
             }
-            else if (canvas.renderMode == RenderMode.ScreenSpaceCamera || canvas.renderMode == RenderMode.WorldSpace)
-            {
-                // Camera 或 WorldSpace 模式下，使用 RectTransform 的 lossyScale
-                scaleFactor = panelTransform.lossyScale.x;
-            }
+            // 否则继续等待更多相同方向的旋转
         }
-
-        Vector3 centerPos = panelTransform.position;
-
-        // 绘制内圆（应用缩放因子）
-        Gizmos.color = Color.yellow;
-        DrawCircle(centerPos, innerRadius * scaleFactor, 64);
-
-        // 绘制外圆（应用缩放因子）
-        Gizmos.color = Color.green;
-        DrawCircle(centerPos, outerRadius * scaleFactor, 64);
-
-        // 绘制中线（应用缩放因子）
-        Gizmos.color = Color.red;
-        Vector3 upDir = panelTransform.up;
-        Gizmos.DrawLine(centerPos + upDir * outerRadius * scaleFactor, 
-                       centerPos - upDir * outerRadius * scaleFactor);
+        else
+        {
+            // 方向错误，闪红并重置当前步骤进度
+            OnCorrectRotation(false);
+            stepProgress = 0;
+        }
     }
 
-    /* 绘制圆形
-       参数 center: 圆心位置
-       参数 radius: 半径（世界坐标单位）
-       参数 segments: 分段数 */
-    private void DrawCircle(Vector3 center, float radius, int segments)
+    // 当步骤完成或方向错误时调用
+    // success 为 true 时显示绿色并前进到下一步骤；为 false 时显示红色并重置当前步骤进度
+    private void OnCorrectRotation(bool success)
     {
-        float angleStep = 360f / segments;
-        
-        // 使用 RectTransform 的旋转来正确绘制圆环
-        Quaternion rotation = panelTransform.rotation;
-        
-        for (int i = 0; i < segments; i++)
+        // 取消已有闪烁协程，避免颜色冲突
+        if (flashCoroutine != null)
+            StopCoroutine(flashCoroutine);
+
+        if (success)
         {
-            float angle1 = i * angleStep * Mathf.Deg2Rad;
-            float angle2 = (i + 1) * angleStep * Mathf.Deg2Rad;
-
-            // 在本地空间计算点，然后应用旋转
-            Vector3 localP1 = new Vector3(Mathf.Cos(angle1), Mathf.Sin(angle1), 0) * radius;
-            Vector3 localP2 = new Vector3(Mathf.Cos(angle2), Mathf.Sin(angle2), 0) * radius;
-
-            Vector3 p1 = center + rotation * localP1;
-            Vector3 p2 = center + rotation * localP2;
-
-            Gizmos.DrawLine(p1, p2);
+            flashCoroutine = StartCoroutine(FlashOutlines(Color.green, 0.5f));
+            // 前进到下一步
+            stepIndex = (stepIndex + 1) % sequence.Length;
+            stepProgress = 0;
+            Debug.Log($"[PaintPanel] 步骤完成，进入第 {stepIndex} 步");
         }
+        else
+        {
+            flashCoroutine = StartCoroutine(FlashOutlines(Color.red, 0.5f));
+            Debug.Log("[PaintPanel] 方向错误，已闪红并重置当前步骤进度");
+        }
+    }
+
+    // 闪烁两个 Outline（Outer 与 Inner），持续 duration 秒，结束后恢复初始状态
+    private IEnumerator FlashOutlines(Color flashColor, float duration)
+    {
+        // 记录并设置
+        if (outerOutline != null)
+        {
+            outerOutline.enabled = true;
+            outerOutline.effectColor = flashColor;
+        }
+        if (innerOutline != null)
+        {
+            innerOutline.enabled = true;
+            innerOutline.effectColor = flashColor;
+        }
+
+        yield return new WaitForSeconds(duration);
+
+        // 恢复原始状态
+        if (outerOutline != null)
+        {
+            outerOutline.effectColor = outerOutlineOriginalColor;
+            outerOutline.enabled = outerOutlineOriginalEnabled;
+        }
+        if (innerOutline != null)
+        {
+            innerOutline.effectColor = innerOutlineOriginalColor;
+            innerOutline.enabled = innerOutlineOriginalEnabled;
+        }
+
+        flashCoroutine = null;
     }
 }
+// ...existing code...
