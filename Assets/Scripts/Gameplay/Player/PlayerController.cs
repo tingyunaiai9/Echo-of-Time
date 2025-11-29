@@ -195,6 +195,79 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
+    /* 当前选中的交互对象 */
+    private Interaction currentInteraction;
+
+    /* 每帧更新交互目标并处理高亮 */
+    void UpdateInteractionTarget()
+    {
+        if (!isLocalPlayer || isBackpackOpen) return;
+
+        // 兼容 2D 和 3D 检测
+        // 1. 尝试 2D 检测 (优先)
+        Collider2D[] hitColliders2D = Physics2D.OverlapCircleAll(transform.position, interactionRange, interactableLayer);
+        
+        // 2. 尝试 3D 检测 (作为补充，防止旧物体没换组件)
+        Collider[] hitColliders3D = Physics.OverlapSphere(transform.position, interactionRange, interactableLayer);
+
+        Interaction best = null;
+        float closestDistanceSqr = float.MaxValue;
+        Vector3 playerPosition = transform.position;
+
+        // 处理 2D 结果
+        foreach (var hit in hitColliders2D)
+        {
+            Interaction current = hit.GetComponent<Interaction>();
+            if (current == null) current = hit.GetComponentInParent<Interaction>();
+
+            if (current != null && current.isActiveAndEnabled)
+            {
+                float distSqr = (hit.transform.position - playerPosition).sqrMagnitude;
+                if (distSqr < closestDistanceSqr)
+                {
+                    closestDistanceSqr = distSqr;
+                    best = current;
+                }
+            }
+        }
+
+        // 处理 3D 结果 (如果 2D 没找到更近的)
+        foreach (var hit in hitColliders3D)
+        {
+            Interaction current = hit.GetComponent<Interaction>();
+            if (current == null) current = hit.GetComponentInParent<Interaction>();
+
+            if (current != null && current.isActiveAndEnabled)
+            {
+                float distSqr = (hit.transform.position - playerPosition).sqrMagnitude;
+                if (distSqr < closestDistanceSqr)
+                {
+                    closestDistanceSqr = distSqr;
+                    best = current;
+                }
+            }
+        }
+
+        // 如果目标发生了变化
+        if (best != currentInteraction)
+        {
+            // 取消旧目标的高亮
+            if (currentInteraction != null)
+            {
+                currentInteraction.SetHighlight(false);
+            }
+
+            // 设置新目标
+            currentInteraction = best;
+
+            // 开启新目标的高亮
+            if (currentInteraction != null)
+            {
+                currentInteraction.SetHighlight(true);
+            }
+        }
+    }
+
     /* 处理玩家输入和移动 */
     void Update()
     {
@@ -202,6 +275,9 @@ public class PlayerController : NetworkBehaviour
 
         // 背包打开时，禁用游戏输入（移动、交互等）
         if (isBackpackOpen) return;
+
+        // 更新交互目标
+        UpdateInteractionTarget();
 
         // 游戏输入逻辑（移动、旋转）
         float h = Input.GetAxisRaw("Horizontal");
@@ -300,64 +376,10 @@ public class PlayerController : NetworkBehaviour
     /* 尝试与最近的交互物体互动 */
     private void TryInteract()
     {
-        // 首先检查是否要打开谜题
-        Collider[] puzzleColliders = Physics.OverlapSphere(transform.position, interactionRange, interactableLayer);
-        if (puzzleColliders.Length > 0)
+        if (currentInteraction != null)
         {
-            InteractToOpenPuzzle bestPuzzle = null;
-            float closestPuzzleDistSqr = float.MaxValue;
-
-            foreach (var hitCollider in puzzleColliders)
-            {
-                InteractToOpenPuzzle puzzle = hitCollider.GetComponent<InteractToOpenPuzzle>();
-                if (puzzle != null)
-                {
-                    float distSqr = (hitCollider.transform.position - transform.position).sqrMagnitude;
-                    if (distSqr < closestPuzzleDistSqr)
-                    {
-                        closestPuzzleDistSqr = distSqr;
-                        bestPuzzle = puzzle;
-                    }
-                }
-            }
-
-            if (bestPuzzle != null)
-            {
-                Debug.Log($"找到谜题交互点: {bestPuzzle.gameObject.name}, 尝试打开。");
-                bestPuzzle.OpenPuzzle();
-                return; // 优先处理谜题，不再继续查找其他交互
-            }
-        }
-
-
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, interactionRange, interactableLayer);
-
-        if (hitColliders.Length > 0)
-        {
-            Interaction best = null;
-            float closestDistanceSqr = float.MaxValue;
-            Vector3 playerPosition = transform.position;
-
-            foreach (var hitCollider in hitColliders)
-            {
-                Interaction current = hitCollider.GetComponent<Interaction>();
-                if (current != null)
-                {
-                    float distSqr = (hitCollider.transform.position - playerPosition).sqrMagnitude;
-                    if (distSqr < closestDistanceSqr)
-                    {
-                        closestDistanceSqr = distSqr;
-                        best = current;
-                    }
-                }
-            }
-
-            if (best != null)
-            {
-                Debug.Log($"在范围内找到最近的交互物体: {best.gameObject.name}, 尝试交互。");
-                best.OnInteract(this);
-                return;
-            }
+            Debug.Log($"[PlayerController] 与 {currentInteraction.gameObject.name} 交互");
+            currentInteraction.OnInteract(this);
         }
     }
 

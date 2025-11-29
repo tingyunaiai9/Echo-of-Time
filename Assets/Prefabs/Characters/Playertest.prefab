@@ -56,7 +56,7 @@ MonoBehaviour:
   syncInterval: 0
   moveSpeed: 3
   rotationSpeed: 720
-  interactionRange: 3
+  interactionRange: 1
   interactableLayer:
     serializedVersion: 2
     m_Bits: 4294967295
