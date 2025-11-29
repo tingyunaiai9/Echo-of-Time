@@ -203,27 +203,25 @@ public class PlayerController : NetworkBehaviour
     {
         if (!isLocalPlayer || isBackpackOpen) return;
 
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, interactionRange, interactableLayer);
+        // 使用 2D 检测
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, interactionRange, interactableLayer);
+        
         Interaction best = null;
         float closestDistanceSqr = float.MaxValue;
         Vector3 playerPosition = transform.position;
 
-        if (hitColliders.Length > 0)
+        foreach (var hit in hitColliders)
         {
-            foreach (var hitCollider in hitColliders)
-            {
-                Interaction current = hitCollider.GetComponent<Interaction>();
-                // 如果 Interaction 组件不在 Collider 物体上，尝试在父物体查找
-                if (current == null) current = hitCollider.GetComponentInParent<Interaction>();
+            Interaction current = hit.GetComponent<Interaction>();
+            if (current == null) current = hit.GetComponentInParent<Interaction>();
 
-                if (current != null && current.isActiveAndEnabled)
+            if (current != null && current.isActiveAndEnabled)
+            {
+                float distSqr = (hit.transform.position - playerPosition).sqrMagnitude;
+                if (distSqr < closestDistanceSqr)
                 {
-                    float distSqr = (hitCollider.transform.position - playerPosition).sqrMagnitude;
-                    if (distSqr < closestDistanceSqr)
-                    {
-                        closestDistanceSqr = distSqr;
-                        best = current;
-                    }
+                    closestDistanceSqr = distSqr;
+                    best = current;
                 }
             }
         }
