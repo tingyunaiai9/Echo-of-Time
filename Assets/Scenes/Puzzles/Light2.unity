@@ -205,6 +205,7 @@ GameObject:
   - component: {fileID: 32613858}
   - component: {fileID: 32613860}
   - component: {fileID: 32613859}
+  - component: {fileID: 32613861}
   m_Layer: 5
   m_Name: PrunePanel
   m_TagString: Untagged
@@ -273,6 +274,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 32613857}
   m_CullTransparentMesh: 1
+--- !u!114 &32613861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 32613857}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99cce6a603b89be409b56ba869d514d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PrunePanel
+  cursorTexture: {fileID: 2800000, guid: 800e72f09ea981141a79c6501275ddee, type: 3}
+  cursorTexturePressed: {fileID: 0}
+  hotspot: {x: 0, y: 0}
+  hotspotPressed: {x: 0, y: 0}
 --- !u!1 &170499874
 GameObject:
   m_ObjectHideFlags: 0
