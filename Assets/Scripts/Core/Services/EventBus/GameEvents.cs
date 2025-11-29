@@ -42,6 +42,13 @@ namespace Events
         public MessageType MessageType; // 消息类型（Ancient, Modern, Future）
     }
 
+    // 聊天图片更新事件
+    public class ChatImageUpdatedEvent
+    {
+        public Sprite ImageContent; // 图片内容
+        public MessageType MessageType; // 消息类型（Ancient, Modern, Future）
+    }
+
     // 消息类型枚举
     public enum MessageType
     {
