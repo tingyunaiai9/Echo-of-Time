@@ -872,7 +872,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 1
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: 231567723
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!224 &1324334997
@@ -1849,6 +1849,30 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8227451595560222921, guid: 5c681acc5f82148d6867b4f296eb1582, type: 3}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8227451595560222921, guid: 5c681acc5f82148d6867b4f296eb1582, type: 3}
+      propertyPath: m_SortingOrder
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8227451595560222921, guid: 5c681acc5f82148d6867b4f296eb1582, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 231567723
+      objectReference: {fileID: 0}
+    - target: {fileID: 8478800647050077712, guid: 5c681acc5f82148d6867b4f296eb1582, type: 3}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8478800647050077712, guid: 5c681acc5f82148d6867b4f296eb1582, type: 3}
+      propertyPath: m_SortingOrder
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8478800647050077712, guid: 5c681acc5f82148d6867b4f296eb1582, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 231567723
+      objectReference: {fileID: 0}
     - target: {fileID: 8478800647050077712, guid: 5c681acc5f82148d6867b4f296eb1582, type: 3}
       propertyPath: m_Positions.Array.data[0].x
       value: -8
@@ -1864,6 +1888,18 @@ PrefabInstance:
     - target: {fileID: 8478800647050077712, guid: 5c681acc5f82148d6867b4f296eb1582, type: 3}
       propertyPath: m_Positions.Array.data[1].y
       value: 3.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8827095350805176747, guid: 5c681acc5f82148d6867b4f296eb1582, type: 3}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8827095350805176747, guid: 5c681acc5f82148d6867b4f296eb1582, type: 3}
+      propertyPath: m_SortingOrder
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8827095350805176747, guid: 5c681acc5f82148d6867b4f296eb1582, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 231567723
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
