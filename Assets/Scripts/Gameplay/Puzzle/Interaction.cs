@@ -40,6 +40,16 @@ public class Interaction : MonoBehaviour
         return true;
     }
 
+    /* 设置高亮状态 (描边) */
+    public virtual void SetHighlight(bool isActive)
+    {
+        // 尝试获取 Outline 组件 (假设你使用的是 QuickOutline 或类似的插件)
+        // var outline = GetComponent<Outline>();
+        // if (outline != null) outline.enabled = isActive;
+        
+        // 如果没有 Outline 组件，这里是一个占位符，你可以根据实际使用的描边插件进行修改
+    }
+
     /* 重置交互状态 */
     public void ResetInteraction()
     {

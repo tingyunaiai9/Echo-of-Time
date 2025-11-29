@@ -77,34 +77,7 @@ public class UIManager : Singleton<UIManager>
             Debug.Log("[UIManager] F1键按下，切换日记页面。");
         }
 
-        // 诗词谜题 (F2键)
-        if (Input.GetKeyDown(KeyCode.F2))
-        {
-            PoemManager.TogglePanel();
-            Debug.Log("[UIManager] F2键按下，切换诗词谜题页面。");
-        }
 
-        // 光线谜题 (F3键)
-        if (Input.GetKeyDown(KeyCode.F3))
-        {
-            LightPanel.TogglePanel();
-            Debug.Log("[UIManager] F3键按下，切换光线谜题页面。");
-        }
-
-        // 拼画谜题 (F4键)
-        if (Input.GetKeyDown(KeyCode.F4))
-        {
-            PuzzlePanel.TogglePanel();
-            Debug.Log("[UIManager] F4键按下，切换拼画谜题页面。");
-        }
-
-        // 新拼画谜题 (F5键)
-        if (Input.GetKeyDown(KeyCode.F5))
-        {
-            // 假设你的新脚本叫 PuzzlePanel2
-            PuzzlePanel2.TogglePanel();
-            Debug.Log("[UIManager] F5键按下，切换新拼画谜题页面。");
-        }
 
 
         // 添加测试聊天消息 (Equals键)

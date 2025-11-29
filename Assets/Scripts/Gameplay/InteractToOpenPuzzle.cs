@@ -9,15 +9,17 @@ using UnityEngine;
  * **重要**: 这个修改后的版本不再使用 OnTriggerEnter 或 Update。
  * 它依赖于 PlayerController 的 TryInteract() 来被调用。
  */
-public class InteractToOpenPuzzle : MonoBehaviour // 如果你有交互基类，可以改为继承它，如: Interaction
+public class InteractToOpenPuzzle : Interaction
 {
     [SerializeField] private string puzzleSceneName = "Light";
     [Tooltip("是否在按交互键时若已有其它谜题关闭它（当不允许堆栈时可以忽略）")]
     [SerializeField] private bool closeExistingBeforeOpen = false;
 
-    // 这个方法应该由你的 PlayerController 在检测到交互时调用。
-    // 如果你有一个像 OnInteract(PlayerController player) 这样的标准交互方法，
-    // 可以把这个逻辑放进去。
+    public override void OnInteract(PlayerController player)
+    {
+        OpenPuzzle();
+    }
+
     public void OpenPuzzle()
     {
         if (PuzzleOverlayManager.singleton == null)
