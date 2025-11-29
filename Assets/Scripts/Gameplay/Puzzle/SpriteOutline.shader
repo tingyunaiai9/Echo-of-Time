@@ -1,4 +1,4 @@
-Shader "Custom/SpriteOutline"
+Shader "Custom/SpriteOutline_Soft"
 {
     Properties
     {
@@ -10,10 +10,12 @@ Shader "Custom/SpriteOutline"
         [PerRendererData] _AlphaTex ("External Alpha", 2D) = "white" {}
         [PerRendererData] _EnableExternalAlpha ("Enable External Alpha", Float) = 0
 
-        // 描边属性
-        _OutlineColor ("Outline Color", Color) = (1,1,0,1) // 默认黄色
-        _OutlineSize ("Outline Size", Range(0, 10)) = 1
+        // --- 描边属性 ---
         [MaterialToggle] _OutlineEnabled ("Outline Enabled", Float) = 0
+        _OutlineColor ("Outline Color", Color) = (1,1,0,1)
+        _OutlineSize ("Outline Size", Range(0, 10)) = 1
+        _OutlineSmoothness ("Outline Smoothness", Range(0.1, 5)) = 1 // 控制羽化程度
+        _Threshold ("Alpha Threshold", Range(0, 1)) = 0.1 // 控制对杂色的容忍度
     }
 
     SubShader
@@ -30,7 +32,8 @@ Shader "Custom/SpriteOutline"
         Cull Off
         Lighting Off
         ZWrite Off
-        Blend One OneMinusSrcAlpha
+        // 修改1: 使用标准的透明混合模式，避免边缘杂色
+        Blend SrcAlpha OneMinusSrcAlpha
 
         Pass
         {
@@ -62,6 +65,8 @@ Shader "Custom/SpriteOutline"
             fixed4 _OutlineColor;
             float _OutlineSize;
             float _OutlineEnabled;
+            float _OutlineSmoothness; // 新增：羽化参数
+            float _Threshold;         // 新增：阈值
             sampler2D _MainTex;
             float4 _MainTex_TexelSize;
             fixed4 _RendererColor;
@@ -83,28 +88,41 @@ Shader "Custom/SpriteOutline"
             fixed4 frag(v2f IN) : SV_Target
             {
                 fixed4 c = tex2D(_MainTex, IN.texcoord) * IN.color;
-                
+
                 // 如果未启用描边，直接返回原色
                 if (_OutlineEnabled == 0) return c;
 
-                // 简单的采样周围像素来检测边缘
-                // 注意：这种简单的描边在 Sprite 图集紧凑时可能会采样到邻居 Sprite
-                // 但对于独立 Sprite 效果很好
+                // 修改2: 采样周围像素的 Alpha 值并累加，而不是做 if 判断
                 float2 texel = _MainTex_TexelSize.xy;
+                float width = _OutlineSize; 
+
+                // 采样上、下、左、右
+                float alphaSum = 0;
+                alphaSum += tex2D(_MainTex, IN.texcoord + fixed2(0, width * texel.y)).a;
+                alphaSum += tex2D(_MainTex, IN.texcoord - fixed2(0, width * texel.y)).a;
+                alphaSum += tex2D(_MainTex, IN.texcoord + fixed2(width * texel.x, 0)).a;
+                alphaSum += tex2D(_MainTex, IN.texcoord - fixed2(width * texel.x, 0)).a;
                 
-                fixed4 pixelUp = tex2D(_MainTex, IN.texcoord + fixed2(0, _OutlineSize * texel.y));
-                fixed4 pixelDown = tex2D(_MainTex, IN.texcoord - fixed2(0, _OutlineSize * texel.y));
-                fixed4 pixelRight = tex2D(_MainTex, IN.texcoord + fixed2(_OutlineSize * texel.x, 0));
-                fixed4 pixelLeft = tex2D(_MainTex, IN.texcoord - fixed2(_OutlineSize * texel.x, 0));
+                // 也可以额外采样四个对角线方向，让圆角更圆润（可选，会增加性能消耗）
+                // alphaSum += tex2D(_MainTex, IN.texcoord + fixed2(width * texel.x, width * texel.y)).a;
+                // ... (其他对角)
 
-                // 如果当前像素是透明的，但周围有不透明像素，说明是边缘
-                if (c.a == 0 && (pixelUp.a > 0 || pixelDown.a > 0 || pixelRight.a > 0 || pixelLeft.a > 0))
-                {
-                    return _OutlineColor;
-                }
+                // 修改3: 计算描边强度
+                // 逻辑：如果当前像素透明(c.a低)，但周围像素不透明(alphaSum高)，则显示描边
+                // 使用 smoothstep 来实现柔和羽化
+                float outlineAlpha = smoothstep(_Threshold, _Threshold + _OutlineSmoothness, alphaSum);
+                
+                // 确保描边不会画在原来的物体内部（只在 alpha 低的地方画）
+                outlineAlpha = saturate(outlineAlpha - c.a);
 
-                c.rgb *= c.a;
-                return c;
+                // 最终混合：在原图颜色和描边颜色之间插值
+                // 注意：这里不再需要 c.rgb *= c.a，因为我们改了 Blend Mode
+                fixed4 finalColor = lerp(c, _OutlineColor, outlineAlpha);
+                
+                // 修正最终的 Alpha 通道，确保描边部分也是不透明的
+                finalColor.a = max(c.a, outlineAlpha * _OutlineColor.a);
+
+                return finalColor;
             }
             ENDCG
         }

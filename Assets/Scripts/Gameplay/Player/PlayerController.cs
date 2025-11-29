@@ -203,14 +203,36 @@ public class PlayerController : NetworkBehaviour
     {
         if (!isLocalPlayer || isBackpackOpen) return;
 
-        // 使用 2D 检测
-        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, interactionRange, interactableLayer);
+        // 兼容 2D 和 3D 检测
+        // 1. 尝试 2D 检测 (优先)
+        Collider2D[] hitColliders2D = Physics2D.OverlapCircleAll(transform.position, interactionRange, interactableLayer);
         
+        // 2. 尝试 3D 检测 (作为补充，防止旧物体没换组件)
+        Collider[] hitColliders3D = Physics.OverlapSphere(transform.position, interactionRange, interactableLayer);
+
         Interaction best = null;
         float closestDistanceSqr = float.MaxValue;
         Vector3 playerPosition = transform.position;
 
-        foreach (var hit in hitColliders)
+        // 处理 2D 结果
+        foreach (var hit in hitColliders2D)
+        {
+            Interaction current = hit.GetComponent<Interaction>();
+            if (current == null) current = hit.GetComponentInParent<Interaction>();
+
+            if (current != null && current.isActiveAndEnabled)
+            {
+                float distSqr = (hit.transform.position - playerPosition).sqrMagnitude;
+                if (distSqr < closestDistanceSqr)
+                {
+                    closestDistanceSqr = distSqr;
+                    best = current;
+                }
+            }
+        }
+
+        // 处理 3D 结果 (如果 2D 没找到更近的)
+        foreach (var hit in hitColliders3D)
         {
             Interaction current = hit.GetComponent<Interaction>();
             if (current == null) current = hit.GetComponentInParent<Interaction>();
