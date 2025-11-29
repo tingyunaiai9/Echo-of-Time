@@ -121,7 +121,7 @@ public class DialogPanel : MonoBehaviour
     /* 聊天图片更新事件回调 */
     void OnChatImageUpdated(ChatImageUpdatedEvent e)
     {
-        CreateChatImage(e.ImageContent);
+        CreateChatImage(e.ImageContent, e.MessageType);
     }
 
     /* 接收答案正确事件回调 */
@@ -635,7 +635,7 @@ public class DialogPanel : MonoBehaviour
     public static void AddChatImage(Sprite image, MessageType type, bool publish = true)
     {
         // 创建图片消息
-        s_instance.CreateChatImage(image);
+        s_instance.CreateChatImage(image, type);
         if (publish)
         {
             EventBus.Publish(new ChatImageUpdatedEvent
@@ -647,7 +647,7 @@ public class DialogPanel : MonoBehaviour
     }
 
     /* 创建单个聊天图片消息 */
-    private void CreateChatImage(Sprite image)
+    private void CreateChatImage(Sprite image, MessageType type)
     {
         if (chatContent == null || chatImagePrefab == null) return;
     
@@ -670,6 +670,32 @@ public class DialogPanel : MonoBehaviour
                     float aspectRatio = image.rect.height / image.rect.width; // 计算图片宽高比
                     rectTransform.sizeDelta = new Vector2(405f, 405f * aspectRatio); // 设置宽度为 405，高度根据比例调整
                 }
+            }
+        }
+
+        // 根据消息类型设置 Avatar 颜色
+        Transform avatarTransform = newImageMessage.transform.Find("Avatar");
+        if (avatarTransform != null)
+        {
+            Image avatarImage = avatarTransform.GetComponent<Image>();
+            if (avatarImage != null)
+            {
+                switch (type)
+                {
+                    case MessageType.Modern:
+                        avatarImage.color = new Color(0.68f, 0.85f, 0.90f); // 浅蓝色
+                        break;
+                    case MessageType.Ancient:
+                        avatarImage.color = new Color(0.80f, 0.65f, 0.40f); // 黄褐色
+                        break;
+                    case MessageType.Future:
+                        avatarImage.color = new Color(0.60f, 0.50f, 0.90f); // 蓝紫色
+                        break;
+                    default:
+                        avatarImage.color = Color.white; // 默认白色
+                        break;
+                }
+                Debug.Log($"[DialogPanel.CreateChatImage] Avatar 颜色设置成功: {type}");
             }
         }
     
