@@ -89,19 +89,19 @@ public class UIManager : Singleton<UIManager>
             Debug.Log("[UIManager] Equals键按下，添加测试聊天消息。");
         }
 
-/*         if (Input.GetKeyDown(KeyCode.I))
+        if (Input.GetKeyDown(KeyCode.BackQuote))
         {
             Sprite tymSprite = Resources.Load<Sprite>("tym");
             if (tymSprite != null)
             {
-                DialogPanel.AddChatImage(tymSprite);
-                Debug.Log("[UIManager] I键按下，添加图片消息。");
+                DialogPanel.AddChatImage(tymSprite, MessageType.Modern);
+                Debug.Log("[UIManager] `键按下，添加图片消息。");
             }
             else
             {
                 Debug.LogError("[UIManager] 无法加载 Sprite 文件 'tym'，请检查路径和文件名是否正确。");
             }
-        } */
+        }
 
         // 添加测试线索条目 (Minus键)
         if (Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadMinus))

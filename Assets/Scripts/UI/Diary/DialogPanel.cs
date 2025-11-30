@@ -94,6 +94,7 @@ public class DialogPanel : MonoBehaviour
         confirmButton.onClick.AddListener(OnConfirmButtonClicked);
 
         EventBus.Subscribe<ChatMessageUpdatedEvent>(OnChatMessageUpdated);
+        EventBus.Subscribe<ChatImageUpdatedEvent>(OnChatImageUpdated);
         //EventBus.Subscribe<AnswerCorrectEvent>(OnReceiveAnswerCorrectEvent);
     }
 
@@ -115,6 +116,12 @@ public class DialogPanel : MonoBehaviour
     void OnChatMessageUpdated(ChatMessageUpdatedEvent e)
     {
         CreateChatMessage(e.MessageContent, e.MessageType);
+    }
+
+    /* 聊天图片更新事件回调 */
+    void OnChatImageUpdated(ChatImageUpdatedEvent e)
+    {
+        CreateChatImage(e.ImageContent, e.MessageType);
     }
 
     /* 接收答案正确事件回调 */
@@ -382,141 +389,152 @@ public class DialogPanel : MonoBehaviour
 
     /* 即梦图像生成协程（在主线程执行）*/
     private IEnumerator ImageGenCoroutine(string prompt)
-    {
-        isStreaming = true;
-
-        var localPlayerIdentity = Mirror.NetworkClient.localPlayer;
-        var localPlayer = localPlayerIdentity != null ? localPlayerIdentity.GetComponent<TimelinePlayer>() : null;
-        int timeline = localPlayer != null ? localPlayer.timeline : -1;
-        Debug.Log($"[DialogPanel] ImageGenCoroutine 启动，Timeline: {timeline}, Prompt: {prompt}");
-
-        string imageUrl = null;
-        string errorMessage = null;
-        bool callCompleted = false;
-
-        // 后台 Task 只负责调用即梦 API，拿到 URL 或错误
-        Task.Run(async () =>
         {
-            await JimengService.GenerateImage(
-                prompt,
-                url =>
-                {
-                    imageUrl = url;
-                    callCompleted = true;
-                },
-                err =>
-                {
-                    errorMessage = err;
-                    callCompleted = true;
-                }
-            );
-
-            isStreaming = false;
-        });
-
-        // 在主线程等待 API 调用结束
-        while (!callCompleted)
-        {
-            yield return null;
-        }
-
-        string finalMessage = string.Empty;
-
-        if (!string.IsNullOrEmpty(errorMessage))
-        {
-            finalMessage = $"[即梦调用错误] {errorMessage}";
-            Debug.LogError($"[Jimeng] 即梦调用错误: {errorMessage}");
-        }
-        else if (!string.IsNullOrEmpty(imageUrl))
-        {
-            // 在主线程中使用 Unity API，构建本地路径并下载图片
-            string fullPath = null;
-            try
+            isStreaming = true;
+    
+            var localPlayerIdentity = Mirror.NetworkClient.localPlayer;
+            var localPlayer = localPlayerIdentity != null ? localPlayerIdentity.GetComponent<TimelinePlayer>() : null;
+            int timeline = localPlayer != null ? localPlayer.timeline : -1;
+            Debug.Log($"[DialogPanel] ImageGenCoroutine 启动，Timeline: {timeline}, Prompt: {prompt}");
+    
+            string imageUrl = null;
+            string errorMessage = null;
+            bool callCompleted = false;
+    
+            // 后台 Task 只负责调用即梦 API，拿到 URL 或错误
+            Task.Run(async () =>
             {
-                // 将图片保存到项目内的 Assets/StreamingAssets/tmp 目录
-                string folder = Path.Combine(Application.dataPath, "StreamingAssets/tmp");
-                if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
-
-                string fileName = $"jimeng_{DateTime.Now:yyyyMMdd_HHmmss_fff}.png";
-                fullPath = Path.Combine(folder, fileName);
-            }
-            catch (Exception ex)
-            {
-                finalMessage = $"[即梦生成失败] 生成本地路径出错: {ex.Message}";
-            }
-
-            if (string.IsNullOrEmpty(finalMessage))
-            {
-                var www = UnityEngine.Networking.UnityWebRequest.Get(imageUrl);
-                yield return www.SendWebRequest();
-
-                if (www.result == UnityEngine.Networking.UnityWebRequest.Result.Success)
-                {
-                    try
+                await JimengService.GenerateImage(
+                    prompt,
+                    url =>
                     {
-                        var data = www.downloadHandler.data;
-                        File.WriteAllBytes(fullPath, data);
-                        Debug.Log($"[Jimeng] 图片已保存到: {fullPath}");
-
-                        // 从本地数据创建 Texture 和 Sprite，并插入聊天图片
-                        var tex = new Texture2D(2, 2, TextureFormat.RGBA32, false);
-                        if (tex.LoadImage(data))
-                        {
-                            var sprite = Sprite.Create(
-                                tex,
-                                new Rect(0, 0, tex.width, tex.height),
-                                new Vector2(0.5f, 0.5f)
-                            );
-                            DialogPanel.AddChatImage(sprite);
-                            // 图片生成成功后，移除“俺在思考……”占位消息
-                            if (currentStreamingMessageGO != null)
-                            {
-                                Destroy(currentStreamingMessageGO);
-                                currentStreamingMessageGO = null;
-                                currentStreamingText = null;
-                            }
-                            finalMessage = string.Empty; // 聊天面板只展示图片，不展示文本
-                        }
-                        else
-                        {
-                            finalMessage = "[即梦生成失败] 图片数据解析失败";
-                            Debug.LogError("[Jimeng] 图片数据解析失败，无法创建 Texture2D");
-                        }
-                    }
-                    catch (Exception ex)
+                        imageUrl = url;
+                        callCompleted = true;
+                    },
+                    err =>
                     {
-                        finalMessage = $"[即梦生成失败] 保存或加载图片出错: {ex.Message}";
-                        Debug.LogError($"[Jimeng] 保存或加载图片失败: {ex.Message}");
+                        errorMessage = err;
+                        callCompleted = true;
                     }
-                }
-                else
-                {
-                    finalMessage = $"[即梦生成失败] 下载图片出错: {www.error}";
-                    Debug.LogError($"[Jimeng] 下载图片失败: {www.error}");
-                }
-            }
-        }
-        else
-        {
-            finalMessage = "[即梦生成失败] 未收到图片 URL";
-        }
-
-        // 仅在需要时在聊天框中显示文本（例如错误信息）
-        if (!string.IsNullOrEmpty(finalMessage))
-        {
-            if (currentStreamingText != null)
-            {
-                currentStreamingText.text = finalMessage;
-            }
-
-            EventBus.Publish(new ChatMessageUpdatedEvent
-            {
-                MessageContent = finalMessage,
-                MessageType = MessageType.Future
+                );
+    
+                isStreaming = false;
             });
-        }
-
-        Debug.Log("[DialogPanel] ImageGenCoroutine 结束");
+    
+            // 在主线程等待 API 调用结束
+            while (!callCompleted)
+            {
+                yield return null;
+            }
+    
+            string finalMessage = string.Empty;
+    
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                finalMessage = $"[即梦调用错误] {errorMessage}";
+                Debug.LogError($"[Jimeng] 即梦调用错误: {errorMessage}");
+            }
+            else if (!string.IsNullOrEmpty(imageUrl))
+            {
+                // 在主线程中使用 Unity API，构建本地路径并下载图片
+                string fullPath = null;
+                try
+                {
+                    // 将图片保存到项目内的 Assets/StreamingAssets/tmp 目录
+                    string folder = Path.Combine(Application.dataPath, "StreamingAssets/tmp");
+                    if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
+    
+                    string fileName = $"jimeng_{DateTime.Now:yyyyMMdd_HHmmss_fff}.png";
+                    fullPath = Path.Combine(folder, fileName);
+                }
+                catch (Exception ex)
+                {
+                    finalMessage = $"[即梦生成失败] 生成本地路径出错: {ex.Message}";
+                }
+    
+                if (string.IsNullOrEmpty(finalMessage))
+                {
+                    var www = UnityEngine.Networking.UnityWebRequest.Get(imageUrl);
+                    yield return www.SendWebRequest();
+    
+                    if (www.result == UnityEngine.Networking.UnityWebRequest.Result.Success)
+                    {
+                        try
+                        {
+                            var data = www.downloadHandler.data;
+                            File.WriteAllBytes(fullPath, data);
+                            Debug.Log($"[Jimeng] 图片已保存到: {fullPath}");
+    
+                            // 从本地数据创建 Texture 和 Sprite，并插入聊天图片
+                            var tex = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+                            if (tex.LoadImage(data))
+                            {
+                                var sprite = Sprite.Create(
+                                    tex,
+                                    new Rect(0, 0, tex.width, tex.height),
+                                    new Vector2(0.5f, 0.5f)
+                                );
+                                
+                                // 根据时间线动态确定 MessageType
+                                MessageType imageMessageType = MessageType.Future; // 默认值
+                                if (timeline == 0)
+                                    imageMessageType = MessageType.Modern;
+                                else if (timeline == 1)
+                                    imageMessageType = MessageType.Ancient;
+                                else if (timeline == 2)
+                                    imageMessageType = MessageType.Future;
+                                
+                                DialogPanel.AddChatImage(sprite, imageMessageType);
+                                
+                                // 图片生成成功后，移除"俺在思考……"占位消息
+                                if (currentStreamingMessageGO != null)
+                                {
+                                    Destroy(currentStreamingMessageGO);
+                                    currentStreamingMessageGO = null;
+                                    currentStreamingText = null;
+                                }
+                                finalMessage = string.Empty; // 聊天面板只展示图片，不展示文本
+                            }
+                            else
+                            {
+                                finalMessage = "[即梦生成失败] 图片数据解析失败";
+                                Debug.LogError("[Jimeng] 图片数据解析失败，无法创建 Texture2D");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            finalMessage = $"[即梦生成失败] 保存或加载图片出错: {ex.Message}";
+                            Debug.LogError($"[Jimeng] 保存或加载图片失败: {ex.Message}");
+                        }
+                    }
+                    else
+                    {
+                        finalMessage = $"[即梦生成失败] 下载图片出错: {www.error}";
+                        Debug.LogError($"[Jimeng] 下载图片失败: {www.error}");
+                    }
+                }
+            }
+            else
+            {
+                finalMessage = "[即梦生成失败] 未收到图片 URL";
+            }
+    
+            // 仅在需要时在聊天框中显示文本（例如错误信息）
+            if (!string.IsNullOrEmpty(finalMessage))
+            {
+                if (currentStreamingText != null)
+                {
+                    currentStreamingText.text = finalMessage;
+                }
+    
+                EventBus.Publish(new ChatMessageUpdatedEvent
+                {
+                    MessageContent = finalMessage,
+                    MessageType = MessageType.Future
+                });
+            }
+    
+            Debug.Log("[DialogPanel] ImageGenCoroutine 结束");
     }
 
     /* 创建流式输出的消息容器 */
@@ -568,16 +586,6 @@ public class DialogPanel : MonoBehaviour
         }
     }
 
-    /* 批量添加聊天消息 */
-    public static void AddChatMessages(List<ChatMessageData> messages)
-    {
-        if (s_instance == null || messages == null) return;
-        foreach (var messageData in messages)
-        {
-            s_instance.CreateChatMessage(messageData.content, messageData.type);
-        }
-    }
-
     /* 创建单个聊天消息 */
     private void CreateChatMessage(string content, MessageType type)
     {
@@ -624,16 +632,22 @@ public class DialogPanel : MonoBehaviour
     }
 
     /* 添加新的聊天图片消息 */
-    public static void AddChatImage(Sprite image)
+    public static void AddChatImage(Sprite image, MessageType type, bool publish = true)
     {
-        if (s_instance == null || image == null) return;
-
         // 创建图片消息
-        s_instance.CreateChatImage(image);
+        s_instance.CreateChatImage(image, type);
+        if (publish)
+        {
+            EventBus.Publish(new ChatImageUpdatedEvent
+            {
+                ImageContent = image,
+                MessageType = type
+            });
+        }
     }
 
     /* 创建单个聊天图片消息 */
-    private void CreateChatImage(Sprite image)
+    private void CreateChatImage(Sprite image, MessageType type)
     {
         if (chatContent == null || chatImagePrefab == null) return;
     
@@ -656,6 +670,32 @@ public class DialogPanel : MonoBehaviour
                     float aspectRatio = image.rect.height / image.rect.width; // 计算图片宽高比
                     rectTransform.sizeDelta = new Vector2(405f, 405f * aspectRatio); // 设置宽度为 405，高度根据比例调整
                 }
+            }
+        }
+
+        // 根据消息类型设置 Avatar 颜色
+        Transform avatarTransform = newImageMessage.transform.Find("Avatar");
+        if (avatarTransform != null)
+        {
+            Image avatarImage = avatarTransform.GetComponent<Image>();
+            if (avatarImage != null)
+            {
+                switch (type)
+                {
+                    case MessageType.Modern:
+                        avatarImage.color = new Color(0.68f, 0.85f, 0.90f); // 浅蓝色
+                        break;
+                    case MessageType.Ancient:
+                        avatarImage.color = new Color(0.80f, 0.65f, 0.40f); // 黄褐色
+                        break;
+                    case MessageType.Future:
+                        avatarImage.color = new Color(0.60f, 0.50f, 0.90f); // 蓝紫色
+                        break;
+                    default:
+                        avatarImage.color = Color.white; // 默认白色
+                        break;
+                }
+                Debug.Log($"[DialogPanel.CreateChatImage] Avatar 颜色设置成功: {type}");
             }
         }
     
@@ -689,19 +729,5 @@ public class DialogPanel : MonoBehaviour
         {
             Debug.LogWarning($"[DialogPanel] 重置提交按钮失败: {ex.Message}");
         }
-    }
-}
-
-/* 聊天消息数据结构 */
-[System.Serializable]
-public class ChatMessageData
-{
-    public string content;
-    public MessageType type;
-
-    public ChatMessageData(string content, MessageType type)
-    {
-        this.content = content;
-        this.type = type;
     }
 }
