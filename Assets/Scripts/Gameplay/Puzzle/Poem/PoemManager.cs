@@ -45,14 +45,12 @@ public class PoemManager : MonoBehaviour
         if (PanelRoot == null)
             PanelRoot = gameObject;
 
-        // 记录静态根,如果根发生变化则重置初始化状态
-        if (s_root == null || s_root != PanelRoot)
-        {
-            s_root = PanelRoot;
-            s_initialized = false;
-            s_isOpen = false;
-            s_isPuzzleCompleted = false; // 重置完成标志
-        }
+        // 强制重置静态状态，确保每次进入场景都是新的开始
+        s_root = PanelRoot;
+        s_initialized = false;
+        s_isOpen = false;
+        s_isPuzzleCompleted = false; 
+        matchedCount = 0; // 重置匹配计数
 
         // 确保 DrawerPanel 初始时关闭
         if (DrawerPanel != null)
@@ -63,12 +61,17 @@ public class PoemManager : MonoBehaviour
 
     void Start()
     {
-        // 初始化时关闭面板
-        if (!s_initialized && s_root != null)
+        // 场景加载时强制打开面板
+        // 无论之前状态如何，只要作为谜题场景加载，就应该显示
+        if (s_root != null)
         {
+            s_root.SetActive(true);
+            s_isOpen = true;
             s_initialized = true;
-            s_root.SetActive(false);
-            Debug.Log("[PoemManager.Start] 诗词面板已初始化并关闭");
+            Debug.Log("[PoemManager.Start] 场景加载完成，强制打开面板");
+            
+            // 确保发布冻结事件（以防万一）
+            EventBus.LocalPublish(new FreezeEvent { isOpen = true });
         }
     }
 
@@ -86,6 +89,10 @@ public class PoemManager : MonoBehaviour
 
         // 取消所有LeanTween动画
         LeanTween.cancel(PanelRoot);
+
+        // 确保在销毁时恢复玩家移动控制
+        // 防止场景卸载后玩家仍处于冻结状态
+        EventBus.LocalPublish(new FreezeEvent { isOpen = false });
     }
 
     /*

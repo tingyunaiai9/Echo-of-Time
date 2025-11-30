@@ -129,6 +129,8 @@ GameObject:
   m_Component:
   - component: {fileID: 9658678}
   - component: {fileID: 9658679}
+  - component: {fileID: 9658681}
+  - component: {fileID: 9658680}
   m_Layer: 0
   m_Name: table
   m_TagString: Untagged
@@ -176,7 +178,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 0b051f72c945ecc4e83647618c6344ad, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -209,6 +211,41 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &9658680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9658677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e89fb3f20512b64194b8bd27bab949a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractToOpenPuzzle
+  puzzleSceneName: Poem
+  closeExistingBeforeOpen: 0
+--- !u!65 &9658681
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9658677}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 5.1869926, y: 3.1402807, z: 0.2}
+  m_Center: {x: 0.016532898, y: -2.5532937, z: 0}
 --- !u!1 &35369133
 GameObject:
   m_ObjectHideFlags: 0
@@ -2391,6 +2428,8 @@ GameObject:
   m_Component:
   - component: {fileID: 358671001}
   - component: {fileID: 358671002}
+  - component: {fileID: 358671004}
+  - component: {fileID: 358671003}
   m_Layer: 0
   m_Name: easel
   m_TagString: Untagged
@@ -2438,7 +2477,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 0b051f72c945ecc4e83647618c6344ad, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2471,6 +2510,41 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!65 &358671003
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 358671000}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3.1974678, y: 7.1298304, z: 0.2}
+  m_Center: {x: -12.024368, y: -0.46881723, z: 0}
+--- !u!114 &358671004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 358671000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e89fb3f20512b64194b8bd27bab949a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractToOpenPuzzle
+  puzzleSceneName: Paint
+  closeExistingBeforeOpen: 0
 --- !u!1 &364609320
 GameObject:
   m_ObjectHideFlags: 0
