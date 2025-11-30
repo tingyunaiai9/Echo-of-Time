@@ -84,9 +84,7 @@ public class UIManager : Singleton<UIManager>
         if (Input.GetKeyDown(KeyCode.Equals) || Input.GetKeyDown(KeyCode.KeypadEquals))
         {
             // 获取当前玩家的时间线
-            var localPlayer = Mirror.NetworkClient.localPlayer?.GetComponent<TimelinePlayer>();
-            int timeline = localPlayer != null ? localPlayer.timeline : 1; // 默认为 1 (Modern)
-            
+            int timeline = TimelinePlayer.Local.timeline;
             DialogPanel.AddChatMessage(
                 "两只黄鹂鸣翠柳，一行白鹭上青天。", 
                 timeline);
@@ -99,9 +97,7 @@ public class UIManager : Singleton<UIManager>
             if (tymSprite != null)
             {
                 // 获取当前玩家的时间线
-                var localPlayer = Mirror.NetworkClient.localPlayer?.GetComponent<TimelinePlayer>();
-                int timeline = localPlayer != null ? localPlayer.timeline : 1; // 默认为 1 (Modern)
-                
+                int timeline = TimelinePlayer.Local.timeline;                
                 DialogPanel.AddChatImage(tymSprite, timeline);
                 Debug.Log("[UIManager] `键按下，添加图片消息。");
             }
