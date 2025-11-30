@@ -19,13 +19,21 @@ public class PuzzlePanel2 : MonoBehaviour
 
         if (puzzlePanel != null)
         {
-            puzzlePanel.SetActive(false);
-            Debug.Log("拼画面板已初始化为关闭状态");
+            puzzlePanel.SetActive(true);
+            s_isOpen = true;
+            
+            // 初始冻结玩家
+            EventBus.LocalPublish(new FreezeEvent { isOpen = true });
+            
+            Debug.Log("拼画面板已初始化为开启状态");
         }
     }
 
     void OnDestroy() 
     {
+        // 销毁时解冻玩家
+        EventBus.LocalPublish(new FreezeEvent { isOpen = false });
+
         if (s_instance == this)
         {
             s_instance = null;
