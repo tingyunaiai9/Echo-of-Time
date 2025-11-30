@@ -45,14 +45,12 @@ public class PoemManager : MonoBehaviour
         if (PanelRoot == null)
             PanelRoot = gameObject;
 
-        // 记录静态根,如果根发生变化则重置初始化状态
-        if (s_root == null || s_root != PanelRoot)
-        {
-            s_root = PanelRoot;
-            s_initialized = false;
-            s_isOpen = false;
-            s_isPuzzleCompleted = false; // 重置完成标志
-        }
+        // 强制重置静态状态，确保每次进入场景都是新的开始
+        s_root = PanelRoot;
+        s_initialized = false;
+        s_isOpen = false;
+        s_isPuzzleCompleted = false; 
+        matchedCount = 0; // 重置匹配计数
 
         // 确保 DrawerPanel 初始时关闭
         if (DrawerPanel != null)
@@ -91,6 +89,10 @@ public class PoemManager : MonoBehaviour
 
         // 取消所有LeanTween动画
         LeanTween.cancel(PanelRoot);
+
+        // 确保在销毁时恢复玩家移动控制
+        // 防止场景卸载后玩家仍处于冻结状态
+        EventBus.LocalPublish(new FreezeEvent { isOpen = false });
     }
 
     /*

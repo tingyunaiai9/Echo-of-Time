@@ -3856,7 +3856,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PoemManager
   totalNotesRequired: 5
-  PanelRoot: {fileID: 1806226428}
+  PanelRoot: {fileID: 1766814043}
   DrawerPanel: {fileID: 382291571}
   animationDuration: 1
   easeType: 4
