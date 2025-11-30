@@ -3,48 +3,102 @@
  * 集中管理所有游戏内可能触发的事件类型
  */
 
-/*
- * 游戏事件定义，包含所有跨时空合作相关的事件类型
- */
-public static class GameEvents
+using UnityEngine;
+
+namespace Events
 {
-    /*
-     * 线索相关事件（收集、分享、更新）
-     */
-    public class ClueEvents
+    public class GameStartedEvent
     {
-        // 线索收集完成事件
-        // 线索分享请求事件
-        // 线索验证结果事件
+        
+    }
+
+    /*     
+     * 玩家状态相关事件
+     */
+
+    // 道具拾取事件
+    [System.Serializable]
+    public class ItemPickedUpEvent
+    {
+        public uint playerNetId;
+        public string itemId;
+        public string itemName;
+        public string description;
+        public Sprite icon;
+    }
+
+    // 线索更新事件
+    [System.Serializable]
+    public class ClueUpdatedEvent
+    {
+        public uint playerNetId;
+        public string ClueEntry;
+    }
+
+    // 聊天消息更新事件
+    public class ChatMessageUpdatedEvent
+    {
+        public string MessageContent; // 消息内容
+        public int timeline; // 时间线（0=Ancient, 1=Modern, 2=Future）
+    }
+
+    // 聊天图片更新事件
+    public class ChatImageUpdatedEvent
+    {
+        public Sprite ImageContent; // 图片内容
+        public int timeline; // 时间线（0=Ancient, 1=Modern, 2=Future）
+    }
+
+    public class InventoryUpdatedEvent
+    {
+        public uint playerNetId;
+        public string[] inventoryItems;
+    }
+
+    // 线索被发现时发布
+    [System.Serializable]
+    public class ClueDiscoveredEvent
+    {
+        public uint playerNetId;
+        public string clueId;
+        public string clueText;
+        public string clueDescription;
+        public Sprite icon;
+        public Sprite image;
+    }
+
+    // 玩家打开独立UI界面时发布
+    [System.Serializable]
+    public class FreezeEvent
+    {
+        public bool isOpen;
     }
 
     /*
-     * 解谜进度事件（谜题状态变化、合作解谜触发）
+     * 谜题与进度相关事件
      */
-    public class PuzzleEvents
+    // 玩家回答正确时发布
+    [System.Serializable]
+    public class AnswerCorrectEvent
     {
-        // 谜题状态更新事件
-        // 合作解谜触发事件
-        // 时间线同步事件
+        public uint playerNetId;
     }
 
-    /*
-     * 时间线交互事件（时间线同步、时空传输）
-     */
-    public class TimelineEvents
+    // 开始剧情事件
+    public class StartDialogueEvent
     {
-        // 时间线切换事件
-        // 跨时间线通信事件
-        // 时空悖论检测事件
+        public DialogueData data;
+        public StartDialogueEvent(DialogueData data) { this.data = data; }
     }
 
+    // 剧情结束事件，用于恢复玩家移动
+    public class EndDialogueEvent { }
+
     /*
-     * 网络通信事件（消息接收、连接状态）
+     * 时间线交互事件
      */
-    public class NetworkEvents
-    {
-        // 玩家连接事件
-        // 消息接收事件
-        // 网络延迟事件
-    }
+
+    /*
+     * UI与视听反馈事件
+     */
 }

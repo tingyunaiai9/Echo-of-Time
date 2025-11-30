@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "cn.unity.uos.cdn": {
+      "version": "https://cnb.cool/unity/uos/UosCdnSDK.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "bb6d3a7b152662c98a7d1b2833fc4c862c4e9e1f"
+    },
     "cn.unity.uos.launcher": {
       "version": "https://cnb.cool/unity/uos/UOSLauncher.git",
       "depth": 0,
@@ -8,6 +15,29 @@
         "com.unity.nuget.newtonsoft-json": "3.2.1"
       },
       "hash": "7f377e54aa3deae9a9214396d4e7742c67e06b5e"
+    },
+    "cn.unity.uos.sync.relay": {
+      "version": "https://cnb.cool/unity/uos/SyncRelaySDK.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.transport": "1.3.3",
+        "com.unity.nuget.newtonsoft-json": "3.2.1"
+      },
+      "hash": "bd8aec6d937c3be1d91c0db89a328f28e6d7a095"
+    },
+    "cn.unity.uos.transport.kcp2k": {
+      "version": "https://cnb.cool/unity/uos/Transport.git?path=/kcp2k",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "a55636cee7f4973e1a271c791bfa5021a3540ef5"
+    },
+    "com.unity.2d.sprite": {
+      "version": "1.0.0",
+      "depth": 0,
+      "source": "builtin",
+      "dependencies": {}
     },
     "com.unity.ai.navigation": {
       "version": "2.0.9",
@@ -198,6 +228,17 @@
         "com.unity.modules.director": "1.0.0",
         "com.unity.modules.animation": "1.0.0",
         "com.unity.modules.particlesystem": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.transport": {
+      "version": "2.5.3",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.burst": "1.8.12",
+        "com.unity.collections": "2.2.1",
+        "com.unity.mathematics": "1.3.1"
       },
       "url": "https://packages.unity.com"
     },

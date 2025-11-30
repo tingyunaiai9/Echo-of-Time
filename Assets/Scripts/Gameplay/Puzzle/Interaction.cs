@@ -23,6 +23,12 @@ public class Interaction : MonoBehaviour
         // 初始化状态
     }
 
+    protected virtual void Start()
+    {
+        // 游戏开始时强制关闭高亮，防止材质球状态残留
+        SetHighlight(false);
+    }
+
     /* 处理玩家交互触发 */
     public virtual void OnInteract(PlayerController player)
     {
@@ -40,11 +46,41 @@ public class Interaction : MonoBehaviour
         return true;
     }
 
+    /* 缓存渲染器 */
+    protected Renderer[] _renderers;
+    protected bool _initialized = false;
+
+    protected virtual void InitializeHighlighter()
+    {
+        if (_initialized) return;
+        _renderers = GetComponentsInChildren<Renderer>();
+        _initialized = true;
+    }
+
+    /* 设置高亮状态 (仅 Shader 描边) */
+    public virtual void SetHighlight(bool isActive)
+    {
+        if (!_initialized) InitializeHighlighter();
+
+        if (_renderers != null)
+        {
+            for (int i = 0; i < _renderers.Length; i++)
+            {
+                // 直接设置 Shader 属性
+                if (_renderers[i] != null && _renderers[i].material.HasProperty("_OutlineEnabled"))
+                {
+                    _renderers[i].material.SetFloat("_OutlineEnabled", isActive ? 1.0f : 0.0f);
+                }
+            }
+        }
+    }
+
     /* 重置交互状态 */
     public void ResetInteraction()
     {
         // 恢复初始状态
         // 清除临时数据
         // 重置动画效果
+        gameObject.SetActive(true); // 示例：重置时重新激活对象
     }
 }

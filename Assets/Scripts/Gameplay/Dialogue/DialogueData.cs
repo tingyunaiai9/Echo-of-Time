@@ -1,0 +1,25 @@
+using UnityEngine;
+using System.Collections.Generic;
+
+[System.Serializable]
+public class DialogueLine
+{
+    [Tooltip("说话者名字")]
+    public string speakerName;
+    
+    [Tooltip("对话内容")]
+    [TextArea(3, 5)]
+    public string content;
+
+    [Tooltip("角色立绘（可选）")]
+    public Sprite characterSprite;
+
+    [Tooltip("是否在左侧显示立绘（false则在右侧）")]
+    public bool isLeft = true;
+}
+
+[CreateAssetMenu(fileName = "NewDialogue", menuName = "Dialogue/DialogueData")]
+public class DialogueData : ScriptableObject
+{
+    public List<DialogueLine> lines;
+}

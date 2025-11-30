@@ -51,4 +51,6 @@
 *.prefab filter=lfs diff=lfs merge=lfs -text
 *.anim filter=lfs diff=lfs merge=lfs -text
 
-*.meta filter=meta
+*.meta filter=meta -text
+*.unity filter=unity -text
+*.prefab filter=unity -text

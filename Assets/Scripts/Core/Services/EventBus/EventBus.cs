@@ -1,41 +1,161 @@
-/* Core/Services/EventBus/EventBus.cs
- * 事件总线系统核心，提供事件的发布、订阅和分发功能
- * 实现游戏内模块间的松耦合通信
- */
-
 using System;
-/*
- * 事件总线系统，处理游戏内的事件发布和订阅
- */
-public class EventBus
+using System.Collections.Generic;
+using UnityEngine;
+
+public class EventBus : Singleton<EventBus>
 {
-    /* 订阅特定类型的事件 */
-    public void Subscribe<T>(Action<T> handler)
+    // 存储所有事件类型的订阅者列表
+    private readonly Dictionary<Type, List<Delegate>> _subscribers = new Dictionary<Type, List<Delegate>>();
+
+    /* 订阅特定类型的事件（静态安全） */
+    public static void Subscribe<T>(Action<T> handler)
     {
-        // 添加到事件处理器列表
-        // 设置优先级和过滤条件
+        if (Instance == null) return;
+
+        var type = typeof(T);
+        var subs = Instance._subscribers;
+        if (!subs.ContainsKey(type))
+        {
+            subs[type] = new List<Delegate>();
+        }
+        if (!subs[type].Contains(handler))
+        {
+            subs[type].Add(handler);
+        }
     }
 
-    /* 取消事件订阅 */
-    public void Unsubscribe<T>(Action<T> handler)
+    /* 取消事件订阅（静态安全） */
+    public static void Unsubscribe<T>(Action<T> handler)
     {
-        // 从处理器列表中移除
-        // 清理相关资源
+        if (Instance == null) return;
+
+        var type = typeof(T);
+        var subs = Instance._subscribers;
+        if (subs.ContainsKey(type))
+        {
+            subs[type].Remove(handler);
+            if (subs[type].Count == 0)
+            {
+                subs.Remove(type);
+            }
+        }
     }
 
-    /* 发布事件到所有订阅者 */
-    public void Publish<T>(T eventData)
+    /* 发布事件到所有订阅者，并进行网络同步（静态安全） */
+    public static void Publish<T>(T eventData)
     {
-        // 遍历所有订阅者
-        // 执行事件处理逻辑
-        // 处理异常情况
+        if (Instance == null) return;
+
+        var type = typeof(T);
+
+        // 判断是否为GameEvent（可根据实际需求调整类型判断）
+        bool isGameEvent = type.Namespace == "Events";
+
+        if (isGameEvent)
+        {
+            NetworkEventRelay.Instance.RelayGameEvent(eventData);
+        }
+        else
+        {
+            // LocalPublish(eventData);
+            Debug.LogWarning($"EventBus: 事件类型 {type} 非游戏事件，未进行网络同步。");
+        }
     }
 
-    /* 跨时间线事件广播（通过网络同步） */
-    public void BroadcastCrossTimeline<T>(T eventData, int sourceTimeline)
+    // 本地分发事件（静态安全）
+    public static void LocalPublish<T>(T eventData)
     {
-        // 验证时间线权限
-        // 封装网络消息
-        // 发送到目标时间线
+        if (Instance == null) return;
+
+        var type = typeof(T);
+        var subs = Instance._subscribers;
+        if (subs.ContainsKey(type))
+        {
+            var handlers = new List<Delegate>(subs[type]);
+            foreach (var handler in handlers)
+            {
+                try
+                {
+                    ((Action<T>)handler)?.Invoke(eventData);
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"EventBus: 事件处理异常 {ex}");
+                }
+            }
+        }
     }
+
+    /* 动态分发（用于网络反序列化后分发，静态安全） */
+    public static void PublishDynamic(Type type, object eventObj)
+    {
+        if (Instance == null) return;
+
+        var subs = Instance._subscribers;
+        if (subs.ContainsKey(type))
+        {
+            var handlers = new List<Delegate>(subs[type]);
+            foreach (var handler in handlers)
+            {
+                try
+                {
+                    handler.DynamicInvoke(eventObj);
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"EventBus: 动态事件处理异常 {ex}");
+                }
+            }
+        }
+    }
+
+    // -------------------------------------------------------------------
+    // --- STATIC (静态) 安全包装方法 ---
+    // -------------------------------------------------------------------
+
+    /// <summary>
+    /// [静态安全] 订阅事件。
+    /// 自动处理实例为 null 的情况。
+    /// </summary>
+    // public static void SafeSubscribe<T>(Action<T> handler)
+    // {
+    //     if (Instance != null)
+    //     {
+    //         Instance.Subscribe(handler);
+    //     }
+    // }
+
+    // /// <summary>
+    // /// [静态安全] 取消订阅事件。
+    // /// 这将自动处理在 OnDestroy() 中调用时 Instance 为 null 的情况。
+    // /// </summary>
+    // public static void SafeUnsubscribe<T>(Action<T> handler)
+    // {
+    //     if (Instance != null)
+    //     {
+    //         Instance.Unsubscribe(handler);
+    //     }
+    // }
+
+    // /// <summary>
+    // /// [静态安全] 发布网络事件。
+    // /// </summary>
+    // public static void SafePublish<T>(T eventData)
+    // {
+    //     if (Instance != null)
+    //     {
+    //         Instance.Publish(eventData);
+    //     }
+    // }
+
+    // /// <summary>
+    // /// [静态安全] 发布本地事件。
+    // /// </summary>
+    // public static void SafeLocalPublish<T>(T eventData)
+    // {
+    //     if (Instance != null)
+    //     {
+    //         Instance.LocalPublish(eventData);
+    //     }
+    // }
 }

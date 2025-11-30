@@ -1,84 +1,120 @@
 /* Core/Engine/Singleton.cs
- * 单例模式基类，提供全局唯一的实例访问点
- * 确保特定管理器类在游戏中有且仅有一个实例
+ * 适用于 Unity MonoBehaviour 的泛型单例模式基类
+ * 提供线程安全的单例实现，支持自动创建和持久化选项
+ * 使用方法:
+ * 1. 让你的管理器类继承自 Singleton<T>，例如: public class YourManager : Singleton<YourManager> { ... }
+ * 2. 在场景中创建一个空 GameObject，并将 YourManager.cs 脚本挂载上去
+ * 3. 在任何其他脚本中，通过 YourManager.Instance 来访问该单例实例
+ * 特点:
+ * - 自动在场景中查找实例，如果找不到则会自动创建一个新的 GameObject 并挂载脚本
+ * - 保证场景中只有一个实例存在，防止重复创建
+ * - 提供一个持久化选项，使得单例可以在切换场景时不被销毁
+ * - 线程安全
  */
-using System;
+
+using UnityEngine;
 
 /*
- * 单例模式基类，提供线程安全的单例实现
+ * Unity MonoBehaviour 泛型单例基类
+ * 提供线程安全的单例实现，支持自动实例化和持久化
  */
-public abstract class Singleton<T> where T : class, new()
+public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
-    // 私有静态实例与锁对象（使用 volatile 确保多线程可见性）
-    private static volatile T _instance;
-    private static readonly object _syncRoot = new object();
-    private static bool _initialized = false;
+    private static T _instance;
+    private static readonly object _lock = new object();
 
-    /* 获取单例实例 */
+    // 添加一个静态标志，用于标记程序是否正在退出
+    private static bool _isQuitting = false;
+
+    [Tooltip("如果勾选，该单例将在场景加载时保留。")]
+    [SerializeField]
+    private bool _persistent = true;
+
     public static T Instance
     {
         get
         {
-            // 双重检查锁定以减少锁开销
-            if (_instance == null)
+            // 如果程序正在退出，任何对实例的访问都应返回 null
+            if (_isQuitting)
             {
-                lock (_syncRoot)
-                {
-                    if (_instance == null)
-                    {
-                        _instance = new T();
-
-                        // 如果 T 实际继承自 Singleton<T>，则调用初始化方法
-                        // 使用 pattern matching 保证安全调用
-                        if (_instance is Singleton<T> asSingleton)
-                        {
-                            try
-                            {
-                                asSingleton.Initialize();
-                                _initialized = true;
-                            }
-                            catch (Exception)
-                            {
-                                // 初始化失败时清理实例，避免不一致状态
-                                _instance = null;
-                                _initialized = false;
-                                throw;
-                            }
-                        }
-                        else
-                        {
-                            // 若 T 未继承自 Singleton<T>，仍返回构造的实例（兼容性处理）
-                            _initialized = true;
-                        }
-                    }
-                }
+                //Debug.LogWarning($"[{typeof(T).Name}]: 实例已被销毁，无法在应用退出时访问。");
+                return null;
             }
-            return _instance;
+
+            lock (_lock)
+            {
+                if (_instance != null)
+                {
+                    return _instance;
+                }
+
+                _instance = FindFirstObjectByType<T>();
+
+                if (_instance != null)
+                {
+                    // (省略了重复检查的代码，保持与你原版一致)
+                    return _instance;
+                }
+                
+                // 在创建新实例前，再次检查是否正在退出
+                // (这可以防止在多线程中出现竞态条件)
+                if (_isQuitting)
+                {
+                    return null;
+                }
+
+                GameObject singletonObject = new GameObject();
+                _instance = singletonObject.AddComponent<T>();
+                singletonObject.name = $"{typeof(T).Name} (Singleton)";
+                
+                DontDestroyOnLoad(singletonObject);
+                
+                Debug.Log($"[{typeof(T).Name}]: 实例被创建。");
+                
+                return _instance;
+            }
         }
     }
 
-    /* 初始化单例实例（子类可重写以添加自定义初始化逻辑） */
-    protected virtual void Initialize()
+    /*
+     * 单例初始化方法
+     * 确保场景中只有一个实例存在，处理重复实例的销毁
+     */
+    protected virtual void Awake()
     {
-        // 执行初始化逻辑
-        // 注册事件监听器
-        // 设置初始状态
-    }
-
-    /* 销毁单例实例（子类可重写以清理资源） */
-    public virtual void Dispose()
-    {
-        lock (_syncRoot)
+        if (_instance == null)
         {
-            // 子类清理逻辑应在重写中执行，然后调用 base.Dispose()
-            _instance = null;
-            _initialized = false;
+            _instance = this as T;
+
+            if (_persistent)
+            {
+                DontDestroyOnLoad(transform.root.gameObject);
+            }
+        }
+        else if (_instance != this)
+        {
+            Debug.LogWarning($"场景中已存在 {typeof(T).Name} 的实例。销毁重复的 '{gameObject.name}'。");
+            Destroy(gameObject);
         }
     }
 
-    /* 检查单例是否已初始化 */
-    public static bool IsInitialized()
+    /*
+     * 当单例实例被销毁时，设置退出标志
+     */
+    protected virtual void OnDestroy()
     {
-        return _initialized && _instance != null;
+        if (_instance == this)
+        {
+            _isQuitting = true;
+        }
+    }
+
+    /*
+     * 当应用程序退出时，设置退出标志
+     * OnApplicationQuit 会在所有 OnDestroy 之前被调用
+     */
+    protected virtual void OnApplicationQuit()
+    {
+        _isQuitting = true;
     }
 }

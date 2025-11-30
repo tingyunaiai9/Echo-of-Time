@@ -2,6 +2,7 @@
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
 #
+.vscode/
 .utmp/
 /[Ll]ibrary/
 /[Tt]emp/
@@ -10,7 +11,12 @@
 /[Bb]uilds/
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
+# 忽略插件生成的文件夹
 /Assets/Mirror/
+/Assets/UOSLauncherEncrypt/
+/Assets/ParrelSync/
+/Assets/Plugins/ParrelSync/
+/Assets/LeanTween/
 *.log
 
 # By default unity supports Blender asset imports, *.blend1 blender files do not need to be commited to version control.
@@ -101,3 +107,21 @@ InitTestScene*.unity*
 
 # Unity generated template .meta files
 Assets/ScriptTemplates/**
+
+# Encryption files
+EncryptKey.cs
+EncryptManager.cs
+EncryptKey.cs.meta
+EncryptManager.cs.meta
+
+# UOS generated files
+UOS.Environments/
+UOS.Environments.meta
+UOS.Sync/
+
+# ParrelSync generated files
+ParrelSync.meta
+Plugins.meta
+
+# material packages
+Assets/PBR Material Bundle Vol1
