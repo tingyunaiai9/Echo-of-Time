@@ -63,12 +63,17 @@ public class PoemManager : MonoBehaviour
 
     void Start()
     {
-        // 初始化时关闭面板
-        if (!s_initialized && s_root != null)
+        // 场景加载时强制打开面板
+        // 无论之前状态如何，只要作为谜题场景加载，就应该显示
+        if (s_root != null)
         {
+            s_root.SetActive(true);
+            s_isOpen = true;
             s_initialized = true;
-            s_root.SetActive(false);
-            Debug.Log("[PoemManager.Start] 诗词面板已初始化并关闭");
+            Debug.Log("[PoemManager.Start] 场景加载完成，强制打开面板");
+            
+            // 确保发布冻结事件（以防万一）
+            EventBus.LocalPublish(new FreezeEvent { isOpen = true });
         }
     }
 
