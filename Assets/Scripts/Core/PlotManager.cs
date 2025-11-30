@@ -39,6 +39,9 @@ public class PlotManager : NetworkBehaviour
         {
             Debug.LogError("EchoNetworkManager singleton not found!");
         }
+
+        // Hide the plot panel
+        RpcHidePlot();
     }
 
     [ClientRpc]
@@ -48,5 +51,11 @@ public class PlotManager : NetworkBehaviour
         {
             countdownText.text = text;
         }
+    }
+
+    [ClientRpc]
+    private void RpcHidePlot()
+    {
+        gameObject.SetActive(false);
     }
 }

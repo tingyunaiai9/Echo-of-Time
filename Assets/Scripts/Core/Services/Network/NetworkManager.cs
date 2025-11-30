@@ -515,25 +515,15 @@ public class EchoNetworkManager : Mirror.NetworkManager
             }
         }
         
-        // 进入剧情场景
-        if (SceneDirector.Instance != null)
-        {
-            ServerChangeScene(SceneDirector.Instance.plotScene);
-        }
-        else
-        {
-            Debug.LogError("SceneDirector instance not found!");
-        }
+        // 不再切换到 Plot 场景，而是直接在当前场景中通过 TimelinePlayer 的 OnLevelChanged 回调加载新关卡
+        Debug.Log($"[NetworkManager] Level advanced to {_currentLevel}. Clients should load new timeline scenes.");
     }
 
     [Server]
     public void ServerFinishPlot()
     {
-        Debug.Log("[NetworkManager] Plot finished, returning to game base...");
-        if (SceneDirector.Instance != null)
-        {
-            ServerChangeScene(SceneDirector.Instance.onlineMainScene);
-        }
+        Debug.Log("[NetworkManager] Plot finished.");
+        // Plot 现在是 Panel，不需要切换场景
     }
 
     [Server]

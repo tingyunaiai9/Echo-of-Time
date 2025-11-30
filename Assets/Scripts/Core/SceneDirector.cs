@@ -140,9 +140,9 @@ public class SceneDirector : Singleton<SceneDirector>
             return;
         }
 
-        // 统一换到剧情场景（Plot），剧情结束后会自动进入在线主场景（GameBase）
-        Debug.Log("[SceneDirector] Server changing scene to Plot scene...");
-        NetworkManager.singleton.ServerChangeScene(plotScene);
+        // 直接进入在线主场景（GameBase），跳过 Plot 场景（改为 Panel 遮罩）
+        Debug.Log("[SceneDirector] Server changing scene to Online Main scene...");
+        NetworkManager.singleton.ServerChangeScene(onlineMainScene);
     }
 
     /*
