@@ -159,9 +159,7 @@ public class DialogPanel : MonoBehaviour
         inputField.text = "";
 
         // 获取当前玩家的时间线
-        var localPlayerIdentity = Mirror.NetworkClient.localPlayer;
-        var localPlayer = localPlayerIdentity != null ? localPlayerIdentity.GetComponent<TimelinePlayer>() : null;
-        int timeline = localPlayer != null ? localPlayer.timeline : -1;
+        int timeline = TimelinePlayer.Local.timeline;
 
         // 添加用户输入的消息 (本地显示)
         AddChatMessage(userInput, timeline, publish: false);
@@ -317,9 +315,7 @@ public class DialogPanel : MonoBehaviour
         StringBuilder fullResponse = new StringBuilder();
 
         // 在主线程获取 Timeline
-        var localPlayerIdentity = Mirror.NetworkClient.localPlayer;
-        var localPlayer = localPlayerIdentity != null ? localPlayerIdentity.GetComponent<TimelinePlayer>() : null;
-        int timeline = localPlayer != null ? localPlayer.timeline : -1;
+        int timeline = TimelinePlayer.Local.timeline;
         Debug.Log($"[DialogPanel] 获取到本地玩家 Timeline: {timeline}");
 
         // 1. 定义回调函数，用于处理来自服务的数据
@@ -394,9 +390,7 @@ public class DialogPanel : MonoBehaviour
         {
             isStreaming = true;
     
-            var localPlayerIdentity = Mirror.NetworkClient.localPlayer;
-            var localPlayer = localPlayerIdentity != null ? localPlayerIdentity.GetComponent<TimelinePlayer>() : null;
-            int timeline = localPlayer != null ? localPlayer.timeline : -1;
+            int timeline = TimelinePlayer.Local.timeline;
             Debug.Log($"[DialogPanel] ImageGenCoroutine 启动，Timeline: {timeline}, Prompt: {prompt}");
     
             string imageUrl = null;
