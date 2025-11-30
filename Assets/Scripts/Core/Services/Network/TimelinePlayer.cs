@@ -25,6 +25,11 @@ public class TimelinePlayer : NetworkBehaviour
     [SyncVar(hook = nameof(OnVisibilityChanged))]
     public bool isVisible = false; // 初始不可见（只能看自己）
 
+    /// <summary>
+    /// 本地玩家的单例引用，方便全局访问
+    /// </summary>
+    public static TimelinePlayer Local { get; private set; }
+
     [Server]
     public void ServerSetTimeline(int tl)
     {
@@ -73,6 +78,9 @@ public class TimelinePlayer : NetworkBehaviour
     {
         base.OnStartLocalPlayer();
         
+        // 注册全局单例
+        Local = this;
+
         networkManager = FindFirstObjectByType<EchoNetworkManager>();
         
         // 请求服务器分配时间线
@@ -92,6 +100,15 @@ public class TimelinePlayer : NetworkBehaviour
         base.OnStartClient();
         // 初始化：根据当前时间线显示正确的皮肤
         RefreshVisuals();
+    }
+
+    private void OnDestroy()
+    {
+        // 清理单例引用
+        if (Local == this)
+        {
+            Local = null;
+        }
     }
     
     [Command]
