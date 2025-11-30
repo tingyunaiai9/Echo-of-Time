@@ -109,19 +109,20 @@ public class DialogPanel : MonoBehaviour
             confirmButton.onClick.RemoveListener(OnConfirmButtonClicked);
         }
         EventBus.Unsubscribe<ChatMessageUpdatedEvent>(OnChatMessageUpdated);
+        EventBus.Unsubscribe<ChatImageUpdatedEvent>(OnChatImageUpdated);
         //EventBus.Unsubscribe<AnswerCorrectEvent>(OnReceiveAnswerCorrectEvent);
     }
 
     /* 聊天消息更新事件回调 */
     void OnChatMessageUpdated(ChatMessageUpdatedEvent e)
     {
-        CreateChatMessage(e.MessageContent, e.MessageType);
+        CreateChatMessage(e.MessageContent, e.timeline);
     }
 
     /* 聊天图片更新事件回调 */
     void OnChatImageUpdated(ChatImageUpdatedEvent e)
     {
-        CreateChatImage(e.ImageContent, e.MessageType);
+        CreateChatImage(e.ImageContent, e.timeline);
     }
 
     /* 接收答案正确事件回调 */
@@ -157,16 +158,15 @@ public class DialogPanel : MonoBehaviour
         string userInput = inputField.text.Trim();
         inputField.text = "";
 
+        // 获取当前玩家的时间线
+        int timeline = TimelinePlayer.Local.timeline;
+
         // 添加用户输入的消息 (本地显示)
-        AddChatMessage(userInput, MessageType.Modern, publish: false);
+        AddChatMessage(userInput, timeline, publish: false);
 
         // 预创建 AI 响应的消息框 (本地显示)
-        CreateStreamingMessage(MessageType.Future);
+        CreateStreamingMessage(timeline);
 
-        // 获取当前玩家的时间线
-        var localPlayerIdentity = Mirror.NetworkClient.localPlayer;
-        var localPlayer = localPlayerIdentity != null ? localPlayerIdentity.GetComponent<TimelinePlayer>() : null;
-        int timeline = localPlayer != null ? localPlayer.timeline : -1;
         Debug.Log($"[DialogPanel] 当前 Timeline: {timeline}");
 
         // 根据时间线自动路由
@@ -315,9 +315,7 @@ public class DialogPanel : MonoBehaviour
         StringBuilder fullResponse = new StringBuilder();
 
         // 在主线程获取 Timeline
-        var localPlayerIdentity = Mirror.NetworkClient.localPlayer;
-        var localPlayer = localPlayerIdentity != null ? localPlayerIdentity.GetComponent<TimelinePlayer>() : null;
-        int timeline = localPlayer != null ? localPlayer.timeline : -1;
+        int timeline = TimelinePlayer.Local.timeline;
         Debug.Log($"[DialogPanel] 获取到本地玩家 Timeline: {timeline}");
 
         // 1. 定义回调函数，用于处理来自服务的数据
@@ -380,7 +378,7 @@ public class DialogPanel : MonoBehaviour
             EventBus.Publish(new ChatMessageUpdatedEvent
             {
                 MessageContent = finalContent,
-                MessageType = MessageType.Future
+                timeline = timeline
             });
         }
 
@@ -392,9 +390,7 @@ public class DialogPanel : MonoBehaviour
         {
             isStreaming = true;
     
-            var localPlayerIdentity = Mirror.NetworkClient.localPlayer;
-            var localPlayer = localPlayerIdentity != null ? localPlayerIdentity.GetComponent<TimelinePlayer>() : null;
-            int timeline = localPlayer != null ? localPlayer.timeline : -1;
+            int timeline = TimelinePlayer.Local.timeline;
             Debug.Log($"[DialogPanel] ImageGenCoroutine 启动，Timeline: {timeline}, Prompt: {prompt}");
     
             string imageUrl = null;
@@ -475,18 +471,8 @@ public class DialogPanel : MonoBehaviour
                                     new Vector2(0.5f, 0.5f)
                                 );
                                 
-                                // 根据时间线动态确定 MessageType
-                                MessageType imageMessageType = MessageType.Future; // 默认值
-                                if (timeline == 0)
-                                    imageMessageType = MessageType.Modern;
-                                else if (timeline == 1)
-                                    imageMessageType = MessageType.Ancient;
-                                else if (timeline == 2)
-                                    imageMessageType = MessageType.Future;
-                                
-                                DialogPanel.AddChatImage(sprite, imageMessageType);
-                                
-                                // 图片生成成功后，移除"俺在思考……"占位消息
+                                // 根据时间线发布图片消息
+                                DialogPanel.AddChatImage(sprite, timeline);                                // 图片生成成功后，移除"俺在思考……"占位消息
                                 if (currentStreamingMessageGO != null)
                                 {
                                     Destroy(currentStreamingMessageGO);
@@ -530,7 +516,7 @@ public class DialogPanel : MonoBehaviour
                 EventBus.Publish(new ChatMessageUpdatedEvent
                 {
                     MessageContent = finalMessage,
-                    MessageType = MessageType.Future
+                    timeline = timeline
                 });
             }
     
@@ -538,7 +524,7 @@ public class DialogPanel : MonoBehaviour
     }
 
     /* 创建流式输出的消息容器 */
-    private void CreateStreamingMessage(MessageType type)
+    private void CreateStreamingMessage(int timeline)
     {
         if (chatContent == null || chatMessagePrefab == null) return;
 
@@ -564,7 +550,7 @@ public class DialogPanel : MonoBehaviour
             TMP_Text typeText = typeTextTransform.GetComponent<TMP_Text>();
             if (typeText != null)
             {
-                typeText.text = type.ToString();
+                typeText.text = GetTimelineName(timeline);
             }
         }
 
@@ -573,21 +559,21 @@ public class DialogPanel : MonoBehaviour
     }
 
     /* 添加新的聊天消息 */
-    public static void AddChatMessage(string content, MessageType type, bool publish = true)
+    public static void AddChatMessage(string content, int timeline, bool publish = true)
     {        
-        s_instance.CreateChatMessage(content, type);
+        s_instance.CreateChatMessage(content, timeline);
         if (publish)
         {
             EventBus.Publish(new ChatMessageUpdatedEvent
             {
                 MessageContent = content,
-                MessageType = type
+                timeline = timeline
             });
         }
     }
 
     /* 创建单个聊天消息 */
-    private void CreateChatMessage(string content, MessageType type)
+    private void CreateChatMessage(string content, int timeline)
     {
         GameObject newMessage = Instantiate(chatMessagePrefab, chatContent);
 
@@ -601,29 +587,29 @@ public class DialogPanel : MonoBehaviour
             }
         }
 
-        // 根据消息类型设置 Avatar 颜色
+        // 根据时间线设置 Avatar 颜色
         Transform avatarTransform = newMessage.transform.Find("Avatar");
         if (avatarTransform != null)
         {
             Image avatarImage = avatarTransform.GetComponent<Image>();
             if (avatarImage != null)
             {
-                switch (type)
+                switch (timeline)
                 {
-                    case MessageType.Modern:
-                        avatarImage.color = new Color(0.68f, 0.85f, 0.90f); // 浅蓝色
-                        break;
-                    case MessageType.Ancient:
+                    case 0: // Ancient
                         avatarImage.color = new Color(0.80f, 0.65f, 0.40f); // 黄褐色
                         break;
-                    case MessageType.Future:
+                    case 1: // Modern
+                        avatarImage.color = new Color(0.68f, 0.85f, 0.90f); // 浅蓝色
+                        break;
+                    case 2: // Future
                         avatarImage.color = new Color(0.60f, 0.50f, 0.90f); // 蓝紫色
                         break;
                     default:
                         avatarImage.color = Color.white; // 默认白色
                         break;
                 }
-                Debug.Log($"[DialogPanel.CreateChatMessage] Avatar 颜色设置成功: {type}");
+                Debug.Log($"[DialogPanel.CreateChatMessage] Avatar 颜色设置成功，Timeline: {timeline}");
             }
         }
 
@@ -632,22 +618,22 @@ public class DialogPanel : MonoBehaviour
     }
 
     /* 添加新的聊天图片消息 */
-    public static void AddChatImage(Sprite image, MessageType type, bool publish = true)
+    public static void AddChatImage(Sprite image, int timeline, bool publish = true)
     {
         // 创建图片消息
-        s_instance.CreateChatImage(image, type);
+        s_instance.CreateChatImage(image, timeline);
         if (publish)
         {
             EventBus.Publish(new ChatImageUpdatedEvent
             {
                 ImageContent = image,
-                MessageType = type
+                timeline = timeline
             });
         }
     }
 
     /* 创建单个聊天图片消息 */
-    private void CreateChatImage(Sprite image, MessageType type)
+    private void CreateChatImage(Sprite image, int timeline)
     {
         if (chatContent == null || chatImagePrefab == null) return;
     
@@ -673,34 +659,46 @@ public class DialogPanel : MonoBehaviour
             }
         }
 
-        // 根据消息类型设置 Avatar 颜色
+        // 根据时间线设置 Avatar 颜色
         Transform avatarTransform = newImageMessage.transform.Find("Avatar");
         if (avatarTransform != null)
         {
             Image avatarImage = avatarTransform.GetComponent<Image>();
             if (avatarImage != null)
             {
-                switch (type)
+                switch (timeline)
                 {
-                    case MessageType.Modern:
-                        avatarImage.color = new Color(0.68f, 0.85f, 0.90f); // 浅蓝色
-                        break;
-                    case MessageType.Ancient:
+                    case 0: // Ancient
                         avatarImage.color = new Color(0.80f, 0.65f, 0.40f); // 黄褐色
                         break;
-                    case MessageType.Future:
+                    case 1: // Modern
+                        avatarImage.color = new Color(0.68f, 0.85f, 0.90f); // 浅蓝色
+                        break;
+                    case 2: // Future
                         avatarImage.color = new Color(0.60f, 0.50f, 0.90f); // 蓝紫色
                         break;
                     default:
                         avatarImage.color = Color.white; // 默认白色
                         break;
                 }
-                Debug.Log($"[DialogPanel.CreateChatImage] Avatar 颜色设置成功: {type}");
+                Debug.Log($"[DialogPanel.CreateChatImage] Avatar 颜色设置成功，Timeline: {timeline}");
             }
         }
     
         // 将消息放置在聊天内容的末尾
         newImageMessage.transform.SetAsLastSibling();
+    }
+
+    /* 根据 timeline 获取时间线名称 */
+    private string GetTimelineName(int timeline)
+    {
+        switch (timeline)
+        {
+            case 0: return "Ancient";
+            case 1: return "Modern";
+            case 2: return "Future";
+            default: return "Unknown";
+        }
     }
     
     // 进入新的一层时重置“提交”按钮状态（从“正确！”恢复为“提交”并可点击）

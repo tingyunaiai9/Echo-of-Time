@@ -83,9 +83,11 @@ public class UIManager : Singleton<UIManager>
         // 添加测试聊天消息 (Equals键)
         if (Input.GetKeyDown(KeyCode.Equals) || Input.GetKeyDown(KeyCode.KeypadEquals))
         {
+            // 获取当前玩家的时间线
+            int timeline = TimelinePlayer.Local.timeline;
             DialogPanel.AddChatMessage(
                 "两只黄鹂鸣翠柳，一行白鹭上青天。", 
-                MessageType.Modern);
+                timeline);
             Debug.Log("[UIManager] Equals键按下，添加测试聊天消息。");
         }
 
@@ -94,7 +96,9 @@ public class UIManager : Singleton<UIManager>
             Sprite tymSprite = Resources.Load<Sprite>("tym");
             if (tymSprite != null)
             {
-                DialogPanel.AddChatImage(tymSprite, MessageType.Modern);
+                // 获取当前玩家的时间线
+                int timeline = TimelinePlayer.Local.timeline;                
+                DialogPanel.AddChatImage(tymSprite, timeline);
                 Debug.Log("[UIManager] `键按下，添加图片消息。");
             }
             else

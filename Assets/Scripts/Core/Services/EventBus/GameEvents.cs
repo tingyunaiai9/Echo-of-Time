@@ -39,22 +39,14 @@ namespace Events
     public class ChatMessageUpdatedEvent
     {
         public string MessageContent; // 消息内容
-        public MessageType MessageType; // 消息类型（Ancient, Modern, Future）
+        public int timeline; // 时间线（0=Ancient, 1=Modern, 2=Future）
     }
 
     // 聊天图片更新事件
     public class ChatImageUpdatedEvent
     {
         public Sprite ImageContent; // 图片内容
-        public MessageType MessageType; // 消息类型（Ancient, Modern, Future）
-    }
-
-    // 消息类型枚举
-    public enum MessageType
-    {
-        Ancient, // 古代
-        Modern,  // 现代
-        Future   // 未来
+        public int timeline; // 时间线（0=Ancient, 1=Modern, 2=Future）
     }
 
     public class InventoryUpdatedEvent
