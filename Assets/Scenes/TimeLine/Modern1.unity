@@ -10914,6 +10914,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1307117139}
   - component: {fileID: 1307117140}
+  - component: {fileID: 1307117142}
+  - component: {fileID: 1307117141}
   m_Layer: 0
   m_Name: table
   m_TagString: Untagged
@@ -10961,7 +10963,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 0b051f72c945ecc4e83647618c6344ad, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -10994,6 +10996,41 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1307117141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1307117138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e89fb3f20512b64194b8bd27bab949a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractToOpenPuzzle
+  puzzleSceneName: Paint
+  closeExistingBeforeOpen: 0
+--- !u!65 &1307117142
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1307117138}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 4.1481085, y: 3.2337976, z: 0.2}
+  m_Center: {x: 0.06538439, y: -2.4944541, z: 0}
 --- !u!1 &1328985670
 GameObject:
   m_ObjectHideFlags: 0
@@ -16583,11 +16620,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DiaryController
   PanelRoot: {fileID: 0}
-  sharedPanel: {fileID: 1032553296}
-  cluePanel: {fileID: 470147368}
-  sharedButton: {fileID: 1827426363}
-  clueButton: {fileID: 982003101}
-  closeButton: {fileID: 0}
 --- !u!114 &1937329971
 MonoBehaviour:
   m_ObjectHideFlags: 0
