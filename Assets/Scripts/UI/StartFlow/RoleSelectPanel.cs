@@ -2,250 +2,177 @@ using Mirror;
 using UnityEngine;
 using Events;
 using TMPro;
+using UnityEngine.UI; // 引入 UI 命名空间
 
 public class RoleSelectPanel : MonoBehaviour
 {
     public StartMenuController flow;
-    public UnityEngine.UI.Button startButton;
     
-    [Header("角色选择按钮")]
-    public UnityEngine.UI.Button poetButton;
-    public UnityEngine.UI.Button artistButton;
-    public UnityEngine.UI.Button analystButton;
-    
-    [Header("准备系统")]
-    public UnityEngine.UI.Button readyButton;
-    public TMP_Text readyButtonText;
+    [Header("角色图片按钮")]
+    // 这里把你的图片按钮拖进去
+    public Button poetButton;   // Ancient / Past
+    public Button artistButton; // Modern / Present
+    public Button analystButton; // Future
 
+    [Header("角色归属显示文本")]
+    // 这里把你刚才新建在图片下方的 NameText 拖进去
+    public TMP_Text poetNameText;
+    public TMP_Text artistNameText;
+    public TMP_Text analystNameText;
+
+    [Header("开始游戏")]
+    public Button startButton;
+
+    // 本地缓存
     private PlayerRole localRole;
     private TimelinePlayer localTimeline;
-    private bool isRoleSelected = false;
-    private bool hasSelectedRole = false; // 是否已选择过角色（不是"未选择"状态）
 
-    void Awake() { TryBindLocal(); }
-    
-    void OnEnable() 
-    { 
-        TryBindLocal(); 
-        StartCoroutine(WaitAndBind());
-        UpdateReadyButton();
-        UpdateRoleButtonsInteractable();
-        UpdateStartButton();
-        
-        // 如果是房主，开始监听玩家准备状态
+    void OnEnable()
+    {
+        // 绑定按钮点击事件
+        poetButton.onClick.RemoveAllListeners();
+        poetButton.onClick.AddListener(() => OnClickRole(0)); // 0 = Ancient
+
+        artistButton.onClick.RemoveAllListeners();
+        artistButton.onClick.AddListener(() => OnClickRole(1)); // 1 = Modern
+
+        analystButton.onClick.RemoveAllListeners();
+        analystButton.onClick.AddListener(() => OnClickRole(2)); // 2 = Future
+
+        // 房主每0.5秒检查一次是否可以开始游戏
         if (NetworkServer.active)
         {
-            InvokeRepeating(nameof(CheckAndUpdateStartButton), 0.5f, 0.5f);
+            InvokeRepeating(nameof(CheckStartButtonState), 0.5f, 0.5f);
         }
     }
 
     void OnDisable()
     {
-        // 停止监听
-        CancelInvoke(nameof(CheckAndUpdateStartButton));
+        CancelInvoke(nameof(CheckStartButtonState));
+    }
+
+    void Update()
+    {
+        // 每一帧都根据网络数据刷新 UI 显示
+        // 因为 SyncVar 的更新是异步的，所以在 Update 里轮询是最简单的同步 UI 方式
+        RefreshRoleUI();
+        TryBindLocal(); // 确保本地引用存在
+    }
+
+    /// <summary>
+    /// 核心逻辑：遍历所有玩家，更新 UI 上的名字
+    /// </summary>
+    void RefreshRoleUI()
+    {
+        // 1. 先重置所有文本为 Unselected
+        poetNameText.text = "Unselected";
+        artistNameText.text = "Unselected";
+        analystNameText.text = "Unselected";
+
+        // 重置按钮交互性（假设没人选）
+        bool ancientTaken = false;
+        bool modernTaken = false;
+        bool futureTaken = false;
+
+        // 2. 查找场景里所有的 TimelinePlayer (包含自己和其他客户端的镜像)
+        // 注意：TimelinePlayer 必须挂载在 Player Prefab 上
+        TimelinePlayer[] allPlayers = FindObjectsByType<TimelinePlayer>(FindObjectsSortMode.None);
+
+        foreach (var player in allPlayers)
+        {
+            // 根据玩家存储的 timeline 变量决定显示名字的位置
+            // 0=Ancient, 1=Modern, 2=Future (对应 TimelinePlayer.cs 的逻辑)
+            switch (player.timeline)
+            {
+                case 0:
+                    poetNameText.text = player.playerName;
+                    ancientTaken = true;
+                    break;
+                case 1:
+                    artistNameText.text = player.playerName;
+                    modernTaken = true;
+                    break;
+                case 2:
+                    analystNameText.text = player.playerName;
+                    futureTaken = true;
+                    break;
+            }
+        }
+
+        // 3. 更新按钮的可交互性
+        // 规则：如果这个位置已经被占了(Taken)，且不是我自己占的，那就不能点
+        // 如果想要让玩家可以点击“抢”位置，可以去掉这个 interactable 的限制
+        
+        // 获取本地当前选中的角色
+        int myCurrentSelection = localTimeline != null ? localTimeline.timeline : -1;
+
+        poetButton.interactable = !ancientTaken || (myCurrentSelection == 0);
+        artistButton.interactable = !modernTaken || (myCurrentSelection == 1);
+        analystButton.interactable = !futureTaken || (myCurrentSelection == 2);
+    }
+
+    /// <summary>
+    /// 点击角色图片时调用
+    /// </summary>
+    /// <param name="timelineIndex">0, 1, 2</param>
+    void OnClickRole(int timelineIndex)
+    {
+        if (localTimeline == null) return;
+
+        // 发送命令给服务器：我要选这个角色
+        // TimelinePlayer.cs 里的 CmdChooseRole 会更新 SyncVar，随后同步给所有人
+        localTimeline.CmdChooseRole(timelineIndex);
     }
 
     void TryBindLocal()
     {
-        if (NetworkClient.active && NetworkClient.localPlayer != null)
+        if (localTimeline == null && NetworkClient.localPlayer != null)
         {
-            if (localRole == null)
-                localRole = NetworkClient.localPlayer.GetComponent<PlayerRole>();
-            if (localTimeline == null)
-                localTimeline = NetworkClient.localPlayer.GetComponent<TimelinePlayer>();
-
-            if (localRole != null || localTimeline != null)
-                Debug.Log("[RoleSelect] 绑定本地玩家成功");
+            localTimeline = NetworkClient.localPlayer.GetComponent<TimelinePlayer>();
         }
     }
+    
+    // --- 以下是房主开始游戏的逻辑 ---
 
-    System.Collections.IEnumerator WaitAndBind()
-    {
-        // 最多等 3 秒，每帧尝试一次
-        float t = 0f;
-        while (localRole == null && t < 3f)
-        {
-            TryBindLocal();
-            t += Time.deltaTime;
-            yield return null;
-        }
-        if (localRole == null) Debug.LogWarning("[RoleSelect] 本地玩家仍未就绪，稍后再点按钮会再次尝试绑定");
-    }
-
-    public void OnClickRole_Poet() => Choose(RoleType.Ancient);
-    public void OnClickRole_Artist() => Choose(RoleType.Modern);
-    public void OnClickRole_Analyst() => Choose(RoleType.Future);
-
-    void Choose(RoleType r)
-    {
-        if (isRoleSelected)
-        {
-            Debug.LogWarning("已确认角色选择，无法切换角色。请先取消选择。");
-            return;
-        }
-
-        if (localRole == null) { TryBindLocal(); }
-        if (localRole == null) { Debug.LogWarning("本地玩家未就绪，稍等 NetworkClient 生成"); return; }
-
-        if (localRole != null)
-        {
-            localRole.ChooseRole(r);
-        }
-        int tl = r == RoleType.Ancient ? 0 : r == RoleType.Modern ? 1 : 2;
-        localTimeline.CmdChooseRole(tl);
-        
-        // 标记已选择过角色
-        hasSelectedRole = true;
-        UpdateReadyButton();
-    }
-
-    /// <summary>
-    /// 确认/取消角色选择按钮点击事件
-    /// </summary>
-    public void OnClickReady()
-    {
-        if (localRole == null) 
-        { 
-            TryBindLocal();
-            if (localRole == null)
-            {
-                Debug.LogWarning("本地玩家未就绪");
-                return;
-            }
-        }
-
-        // 如果还没选择角色，不允许确认
-        if (!hasSelectedRole && !isRoleSelected)
-        {
-            Debug.LogWarning("请先选择一个角色");
-            return;
-        }
-
-        // 切换选择确认状态
-        isRoleSelected = !isRoleSelected;
-        localRole.SetRoleSelected(isRoleSelected);
-
-        // 更新UI
-        UpdateReadyButton();
-        UpdateRoleButtonsInteractable();
-        
-        // 如果是房主，立即检查开始按钮状态
-        if (NetworkServer.active)
-        {
-            UpdateStartButton();
-        }
-
-        Debug.Log($"角色选择状态: {(isRoleSelected ? "已确认" : "已取消")}");
-    }
-
-    /// <summary>
-    /// 更新准备按钮的文字和样式
-    /// </summary>
-    void UpdateReadyButton()
-    {
-        if (readyButton == null || readyButtonText == null) return;
-
-        // 如果还没选择角色，按钮显示 "Select" 但禁用
-        if (!hasSelectedRole)
-        {
-            readyButtonText.text = "Select";
-            readyButton.interactable = false;
-            return;
-        }
-
-        // 已选择角色，根据确认状态显示
-        if (isRoleSelected)
-        {
-            readyButtonText.text = "Selected";
-        }
-        else
-        {
-            readyButtonText.text = "Select";
-        }
-        
-        readyButton.interactable = true;
-    }
-
-    /// <summary>
-    /// 更新角色选择按钮的可交互状态
-    /// </summary>
-    void UpdateRoleButtonsInteractable()
-    {
-        bool canChooseRole = !isRoleSelected;
-        
-        if (poetButton != null) poetButton.interactable = canChooseRole;
-        if (artistButton != null) artistButton.interactable = canChooseRole;
-        if (analystButton != null) analystButton.interactable = canChooseRole;
-    }
-
-    /// <summary>
-    /// 更新开始游戏按钮的状态
-    /// </summary>
-    void UpdateStartButton()
+    void CheckStartButtonState()
     {
         if (startButton == null) return;
-
-        // Client：始终禁用开始按钮
-        if (!NetworkServer.active)
+        
+        // 只有房主能看到开始按钮
+        if (!NetworkServer.active) 
         {
-            startButton.interactable = false;
+            startButton.gameObject.SetActive(false);
             return;
         }
 
-        // Host：根据所有玩家准备状态决定是否可点击
+        startButton.gameObject.SetActive(true);
         var nm = FindFirstObjectByType<EchoNetworkManager>();
-        bool allReady = nm != null && nm.CheckAllPlayersReady();
+        
+        // 检查所有玩家是否都分配了有效的时间线 (timeline != -1)
+        bool allReady = CheckAllPlayersHaveRoles();
         startButton.interactable = allReady;
     }
 
-    /// <summary>
-    /// 定期检查并更新开始按钮状态（仅房主调用）
-    /// </summary>
-    void CheckAndUpdateStartButton()
+    private bool CheckAllPlayersHaveRoles()
     {
-        if (!NetworkServer.active)
-        {
-            CancelInvoke(nameof(CheckAndUpdateStartButton));
-            return;
-        }
+        TimelinePlayer[] allPlayers = FindObjectsByType<TimelinePlayer>(FindObjectsSortMode.None);
+        if (allPlayers.Length == 0) return false;
 
-        UpdateStartButton();
+        foreach (var p in allPlayers)
+        {
+            if (p.timeline == -1) return false; // 有人还没选
+        }
+        return true;
     }
 
-    /// <summary>
-    /// 开始游戏按钮点击事件（仅房主可见/可用）
-    /// </summary>
     public void OnClickStartGame()
     {
-        // 检查是否是房主
-        if (!NetworkServer.active)
-        {
-            Debug.LogWarning("只有房主可以开始游戏");
-            return;
-        }
+        if (!NetworkServer.active) return;
 
-        // 检查所有玩家是否准备就绪
-        var nm = FindFirstObjectByType<EchoNetworkManager>();
-        if (nm != null && !nm.CheckAllPlayersReady())
-        {
-            ShowNotReadyWarning();
-            return;
-        }
-
-        Debug.Log("所有玩家已确认角色选择，游戏开始！");
-
-        // 1) 先本地把面板关掉（保证 UI 一定关闭）
+        // 开始游戏逻辑
         if (flow != null) flow.HideRolePanelImmediate();
-
-        // 2) 再广播事件（让其他系统/客户端有机会响应）
         EventBus.Publish(new GameStartedEvent());
-    }
-
-    /// <summary>
-    /// 显示"有玩家未准备"的警告提示
-    /// </summary>
-    void ShowNotReadyWarning()
-    {
-        Debug.LogWarning("⚠️ 有玩家未确认角色选择！请等待所有玩家选择并确认角色。");
+        
+        // 你可能需要在这里通知 EchoNetworkManager 锁定房间或切换场景
     }
 }

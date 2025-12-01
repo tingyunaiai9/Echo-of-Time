@@ -108,7 +108,8 @@ public class EchoNetworkManager : Mirror.NetworkManager
     private void SetupPlayerInfo()
     {
         playerUuid = Guid.NewGuid().ToString();
-        playerName = "Player-" + playerUuid.Substring(0, 8);
+        // 本地临时名字，进入游戏后会被 OnServerAddPlayer 覆盖为 Player 1/2/3
+        playerName = "Guest-" + playerUuid.Substring(0, 4);
         
         if (relayTransport != null)
         {
@@ -783,6 +784,15 @@ public class EchoNetworkManager : Mirror.NetworkManager
             var tp = conn.identity.GetComponent<TimelinePlayer>();
             if (tp != null)
             {
+                // --- 新增命名逻辑 ---
+                // numPlayers 是 Mirror 内置属性，表示当前服务器上的玩家总数
+                // 第一个进来的就是 Player 1，第二个是 Player 2...
+                string sequentialName = $"Player {numPlayers}"; 
+                
+                // 直接修改 TimelinePlayer 的 SyncVar，这会自动同步给所有客户端
+                tp.playerName = sequentialName;
+                // ------------------
+
                 // 同步当前层数
                 tp.currentLevel = _currentLevel;
 
@@ -790,11 +800,11 @@ public class EchoNetworkManager : Mirror.NetworkManager
                 {
                     // 恢复之前选择的时间线（适用于断线重连场景）
                     tp.ServerSetTimeline(timeline);
-                    Debug.Log($"Restored timeline {timeline} for reconnected player (Connection {conn.connectionId})");
+                    Debug.Log($"Restored timeline {timeline} for {sequentialName} (Connection {conn.connectionId})");
                 }
                 else
                 {
-                    Debug.Log($"New player added (Connection {conn.connectionId}), waiting for role selection...");
+                    Debug.Log($"New player added: {sequentialName} (Connection {conn.connectionId}), waiting for role selection...");
                 }
             }
         }
