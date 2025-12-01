@@ -270,7 +270,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c274c87d7863dc241bba83886be0bbdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LocalTestLauncher
-  enableLocalTestMode: 1
+  enableLocalTestMode: 0
   testTimelineIndex: 1
   testLevelIndex: 1
 --- !u!1 &611270528
