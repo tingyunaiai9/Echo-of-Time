@@ -211,10 +211,10 @@ public class LightPanel : MonoBehaviour
     public static void OnPuzzleCompleted()
     {
         Debug.Log("[LightPanel] 谜题完成！");
-
+    
         // 设置完成标志
         s_isPuzzleCompleted = true;
-
+    
         // 关闭 Laser 对象
         if (s_instance != null)
         {
@@ -229,11 +229,26 @@ public class LightPanel : MonoBehaviour
                 Debug.LogWarning("[LightPanel] 未找到 Background/Laser");
             }
         }
-
+    
+        // 获取 ConsolePanel 下的 ConsoleImage
+        Transform consolePanelTransform = s_instance.transform.parent.Find("ConsolePanel");
+        Image consoleImage = consolePanelTransform.Find("ConsoleImage")?.GetComponent<Image>();    
+        Sprite icon = consoleImage.sprite;
+    
+        // 发布 ClueDiscoveredEvent 事件
+        EventBus.LocalPublish(new ClueDiscoveredEvent
+        {
+            playerNetId = 0,
+            clueId = "console_clue",
+            clueText = "拼好5首诗句后抽屉中的一幅画。",
+            clueDescription = "这幅画可能隐藏着重要的线索。",
+            icon = icon,
+            image = icon // 假设 image 和 icon 是相同的
+        });
+    
         // 打开控制台面板
         ConsolePanel.TogglePanel();
     }
-
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.P))
