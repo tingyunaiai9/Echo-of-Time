@@ -53,32 +53,4 @@ public class Diary : MonoBehaviour
             s_initialized = false;
         }
     }
-
-
-    public static void TogglePanel()
-    {
-        if (s_isOpen)
-            ClosePanel();
-        else
-            OpenPanel();
-    }
-
-    public static void OpenPanel()
-    {
-        if (s_root == null) return;
-        s_isOpen = true;
-        s_root.SetActive(true);
-        // 禁用玩家移动
-        EventBus.LocalPublish(new FreezeEvent { isOpen = true });
-    }
-
-    public static void ClosePanel()
-    {
-        if (s_root == null) return;
-        s_isOpen = false;
-        s_root.SetActive(false);
-        // 恢复玩家移动
-        EventBus.LocalPublish(new FreezeEvent { isOpen = false });
-    }
-
 }
