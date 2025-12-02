@@ -6,6 +6,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using Events;
+using TMPro;
 
 public class Diary : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class Diary : MonoBehaviour
     // 静态根与子面板引用（用于跨实例管理）
     protected static GameObject s_root;
     protected static bool s_initialized = false;
+    public TMP_Text TypeText;
 
     protected void Awake()
     {
@@ -31,6 +33,14 @@ public class Diary : MonoBehaviour
             s_initialized = false;
             s_isOpen = false;
         }
+        int timeline = TimelinePlayer.Local.timeline;
+        TypeText.text = timeline switch
+        {
+            0 => "鲲之诗篇",
+            1 => "梦之画卷",
+            2 => "xy?z",
+            _ => "时间的回声"
+        };
     }
 
     protected virtual void Start()
