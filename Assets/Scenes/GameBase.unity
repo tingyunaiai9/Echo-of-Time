@@ -4645,7 +4645,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UIManager
   _persistent: 1
   DiaryPanel: {fileID: 1924663762}
-  InventoryPanel: {fileID: 0}
+  InventoryPanel: {fileID: 255870193}
 --- !u!4 &1391008354
 Transform:
   m_ObjectHideFlags: 0

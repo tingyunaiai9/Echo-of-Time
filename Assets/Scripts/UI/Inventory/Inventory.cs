@@ -269,23 +269,7 @@ public abstract class Inventory : MonoBehaviour
         itemEntries.Clear();
         itemData.Clear();
     }
-
-    /* 开关背包 */
-    public static void ToggleBackpack()
-    {
-        if (s_root == null)
-        {
-            Debug.LogWarning("Inventory: 背包根节点未初始化，请确保场景中有激活的背包面板对象。");
-            return;
-        }
-        s_isOpen = !s_isOpen;
-        s_root.SetActive(s_isOpen);
-        if (s_isOpen) SwitchToProps();
-
-        // 发布事件
-        EventBus.LocalPublish(new FreezeEvent { isOpen = s_isOpen });
-    }
-
+    
     /* 切换背包栏目 */
     public static void SwitchToProps()
     {

@@ -37,7 +37,15 @@ public class UIManager : Singleton<UIManager>
             if (InventoryPanel != null)
             {
                 bool isActive = InventoryPanel.activeSelf;
-                InventoryPanel.SetActive(!isActive);
+                if (!isActive)
+                {
+                    InventoryPanel.SetActive(true);
+                    Inventory.SwitchToProps();
+                }
+                else
+                {
+                    InventoryPanel.SetActive(false);
+                }
             }
             Debug.Log("[UIManager] B键按下，切换背包。");
         }
