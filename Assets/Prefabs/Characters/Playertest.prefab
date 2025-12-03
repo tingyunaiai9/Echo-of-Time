@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 3276632568305713458}
   - component: {fileID: 8010244578911979422}
   - component: {fileID: 1684968832379623468}
+  - component: {fileID: 2687727973925616086}
   m_Layer: 9
   m_Name: Playertest
   m_TagString: Untagged
@@ -203,6 +204,21 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &2687727973925616086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2535583183450427492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a65ececd35a2994db3a77bc91fb2ca3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ImageNetworkSender
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
 --- !u!1 &3014274058220854134
 GameObject:
   m_ObjectHideFlags: 0
