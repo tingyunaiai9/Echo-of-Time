@@ -91,7 +91,8 @@ public class UIManager : Singleton<UIManager>
             {
                 // 获取当前玩家的时间线
                 int timeline = TimelinePlayer.Local.timeline;
-                DialogPanel.AddChatImage(tymSprite, timeline);
+                byte[] spriteBytes = tymSprite.texture.EncodeToPNG();
+                DialogPanel.AddChatImage(spriteBytes, timeline);
                 Debug.Log("[UIManager] `键按下，添加图片消息。");
             }
             else
