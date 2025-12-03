@@ -559,8 +559,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Clue
   clueText: 3
   clueDescription: "\u8FD9\u662F\u4E00\u6761\u91CD\u8981\u7684\u7EBF\u7D22..."
-  clueIcon: {fileID: 0}
-  clueImage: {fileID: 0}
+  clueIcon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  clueImage: {fileID: 2113129898, guid: 4e0cda97a18004455b2c3b752135ea93, type: 3}
   discovered: 0
 --- !u!212 &404588161
 SpriteRenderer:
@@ -1623,8 +1623,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Clue
   clueText: 1
   clueDescription: "\u8FD9\u662F\u4E00\u6761\u91CD\u8981\u7684\u7EBF\u7D22..."
-  clueIcon: {fileID: 0}
-  clueImage: {fileID: 0}
+  clueIcon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  clueImage: {fileID: 1277984521, guid: 4e0cda97a18004455b2c3b752135ea93, type: 3}
   discovered: 0
 --- !u!212 &1703718524
 SpriteRenderer:
@@ -1816,8 +1816,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Clue
   clueText: 2
   clueDescription: "\u8FD9\u662F\u4E00\u6761\u91CD\u8981\u7684\u7EBF\u7D22..."
-  clueIcon: {fileID: 0}
-  clueImage: {fileID: 0}
+  clueIcon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  clueImage: {fileID: 561277813, guid: 4e0cda97a18004455b2c3b752135ea93, type: 3}
   discovered: 0
 --- !u!212 &1743906325
 SpriteRenderer:
@@ -2188,8 +2188,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Clue
   clueText: 0
   clueDescription: "\u8FD9\u662F\u4E00\u6761\u91CD\u8981\u7684\u7EBF\u7D22..."
-  clueIcon: {fileID: 0}
-  clueImage: {fileID: 0}
+  clueIcon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  clueImage: {fileID: -714485973, guid: 4e0cda97a18004455b2c3b752135ea93, type: 3}
   discovered: 0
 --- !u!212 &2101598150
 SpriteRenderer:
