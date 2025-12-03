@@ -365,19 +365,19 @@ public class DialogPanel : MonoBehaviour
         Debug.Log("[DialogPanel] 流式输出协程结束");
     }
 
-    /* 即梦图像生成协程（在主线程执行）*/
+    /* 即梦图像生成协程（在主线程执行） */
     private IEnumerator ImageGenCoroutine(string prompt)
     {
         isStreaming = true;
-
+    
         int timeline = TimelinePlayer.Local.timeline;
         Debug.Log($"[DialogPanel] ImageGenCoroutine 启动，Timeline: {timeline}, Prompt: {prompt}");
-
+    
         string imageUrl = null;
         string errorMessage = null;
         bool callCompleted = false;
-
-        // 后台 Task 只负责调用即梦 API，拿到 URL 或错误
+    
+        // 后台 Task 负责调用即梦 API，获取 URL 或错误
         Task.Run(async () =>
         {
             await JimengService.GenerateImage(
@@ -393,18 +393,18 @@ public class DialogPanel : MonoBehaviour
                     callCompleted = true;
                 }
             );
-
+    
             isStreaming = false;
         });
-
+    
         // 在主线程等待 API 调用结束
         while (!callCompleted)
         {
             yield return null;
         }
-
+    
         string finalMessage = string.Empty;
-
+    
         if (!string.IsNullOrEmpty(errorMessage))
         {
             finalMessage = $"[即梦调用错误] {errorMessage}";
@@ -414,25 +414,37 @@ public class DialogPanel : MonoBehaviour
         {
             var www = UnityEngine.Networking.UnityWebRequest.Get(imageUrl);
             yield return www.SendWebRequest();
-
+    
             if (www.result == UnityEngine.Networking.UnityWebRequest.Result.Success)
             {
                 try
                 {
                     byte[] imageData = www.downloadHandler.data;
                     Debug.Log($"[Jimeng] 图片下载成功，大小: {imageData.Length} 字节");
-
-                    // 使用修改后的 AddChatImage 方法，传入 byte[] 和 timeline
-                    DialogPanel.AddChatImage(imageData, timeline);
-
-                    // 图片生成成功后，移除"俺在思考……"占位消息
-                    if (currentStreamingMessageGO != null)
+    
+                    // 压缩图片数据
+                    byte[] compressedData = ImageUtils.CompressImageBytesToJpeg(imageData, 10); // 可调整质量
+                    if (compressedData != null)
                     {
-                        Destroy(currentStreamingMessageGO);
-                        currentStreamingMessageGO = null;
-                        currentStreamingText = null;
+                        Debug.Log($"[Jimeng] 图片压缩成功，压缩后大小: {compressedData.Length} 字节");
+    
+                        // 使用压缩后的数据添加聊天图片
+                        DialogPanel.AddChatImage(compressedData, timeline);
+    
+                        // 图片生成成功后，移除"俺在思考……"占位消息
+                        if (currentStreamingMessageGO != null)
+                        {
+                            Destroy(currentStreamingMessageGO);
+                            currentStreamingMessageGO = null;
+                            currentStreamingText = null;
+                        }
+                        finalMessage = string.Empty; // 聊天面板只展示图片，不展示文本
                     }
-                    finalMessage = string.Empty; // 聊天面板只展示图片，不展示文本
+                    else
+                    {
+                        finalMessage = "[即梦生成失败] 图片压缩失败";
+                        Debug.LogError("[Jimeng] 图片压缩失败");
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -450,7 +462,7 @@ public class DialogPanel : MonoBehaviour
         {
             finalMessage = "[即梦生成失败] 未收到图片 URL";
         }
-
+    
         // 仅在需要时在聊天框中显示文本（例如错误信息）
         if (!string.IsNullOrEmpty(finalMessage))
         {
@@ -458,16 +470,16 @@ public class DialogPanel : MonoBehaviour
             {
                 currentStreamingText.text = finalMessage;
             }
-
+    
             EventBus.Publish(new ChatMessageUpdatedEvent
             {
                 MessageContent = finalMessage,
                 timeline = timeline
             });
         }
-
+    
         Debug.Log("[DialogPanel] ImageGenCoroutine 结束");
-    }
+    }    
 
     /* 创建流式输出的消息容器 */
     private void CreateStreamingMessage(int timeline)
