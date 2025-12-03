@@ -98,21 +98,26 @@ public class CompassPanel : MonoBehaviour, IPointerClickHandler
         }
     }
 
-    // 实现 IPointerClickHandler 接口
     public void OnPointerClick(PointerEventData eventData)
     {
-        // 获取点击位置相对于 PaintPanel 中心的本地坐标
+        if (InnerImage == null)
+        {
+            Debug.LogError("[CompassPanel] InnerImage 未设置！");
+            return;
+        }
+    
+        // 获取点击位置相对于 InnerImage 中心的本地坐标
         Vector2 localPoint;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            panelTransform, 
-            eventData.position, 
-            eventData.pressEventCamera, 
+            InnerImage, // 将中心点设置为 InnerImage 的中心
+            eventData.position,
+            eventData.pressEventCamera,
             out localPoint
         );
-
-        // 计算点击位置距离中心的距离
+    
+        // 计算点击位置距离 InnerImage 中心的距离
         float distance = localPoint.magnitude;
-
+    
         // 检查是否在圆环范围内
         if (distance >= innerRadius && distance <= outerRadius)
         {
@@ -121,20 +126,20 @@ public class CompassPanel : MonoBehaviour, IPointerClickHandler
             {
                 // 右半侧：顺时针旋转（减少角度）
                 RotateOuterImage(-rotationAngle);
-                Debug.Log($"[PaintPanel] 右半侧点击，顺时针旋转 {rotationAngle} 度");
+                Debug.Log($"[CompassPanel] 右半侧点击，顺时针旋转 {rotationAngle} 度");
             }
             else
             {
                 // 左半侧：逆时针旋转（增加角度）
                 RotateOuterImage(rotationAngle);
-                Debug.Log($"[PaintPanel] 左半侧点击，逆时针旋转 {rotationAngle} 度");
+                Debug.Log($"[CompassPanel] 左半侧点击，逆时针旋转 {rotationAngle} 度");
             }
         }
         else
         {
-            Debug.Log($"[PaintPanel] 点击位置距离中心 {distance:F2}pt，不在圆环范围内");
+            Debug.Log($"[CompassPanel] 点击位置距离中心 {distance:F2}pt，不在圆环范围内");
         }
-    }
+    }   
 
     /* 旋转外圈图像
        参数 angle: 旋转角度（正数为逆时针，负数为顺时针） */
