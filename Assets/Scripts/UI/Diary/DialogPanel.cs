@@ -122,28 +122,8 @@ public class DialogPanel : MonoBehaviour
     /* 聊天图片更新事件回调 */
     void OnChatImageUpdated(ChatImageUpdatedEvent e)
     {
-        CreateChatImage(e.ImageContent, e.timeline);
+        CreateChatImage(e.imageData, e.timeline);
     }
-
-    /* 接收答案正确事件回调 */
-    /*
-    void OnReceiveAnswerCorrectEvent(AnswerCorrectEvent e)
-    {
-        // 如果该玩家已经回答过，忽略重复事件
-        if (!answeredPlayers.Add(e.playerNetId))
-        {
-            Debug.Log($"[DialogPanel] 玩家 {e.playerNetId} 重复回答，已忽略");
-            return;
-        }
-
-        Debug.Log($"[DialogPanel] 收到答案正确事件，玩家: {e.playerNetId}，当前正确计数: {answeredPlayers.Count}");
-
-        if (answeredPlayers.Count >= 3)
-        {
-            Debug.Log("[DialogPanel] 全部玩家解答正确");
-        }
-    }
-    */
     
     /* 发送按钮点击事件 */
     private void OnSendButtonClicked()
@@ -385,143 +365,121 @@ public class DialogPanel : MonoBehaviour
         Debug.Log("[DialogPanel] 流式输出协程结束");
     }
 
-    /* 即梦图像生成协程（在主线程执行）*/
+    /* 即梦图像生成协程（在主线程执行） */
     private IEnumerator ImageGenCoroutine(string prompt)
+    {
+        isStreaming = true;
+    
+        int timeline = TimelinePlayer.Local.timeline;
+        Debug.Log($"[DialogPanel] ImageGenCoroutine 启动，Timeline: {timeline}, Prompt: {prompt}");
+    
+        string imageUrl = null;
+        string errorMessage = null;
+        bool callCompleted = false;
+    
+        // 后台 Task 负责调用即梦 API，获取 URL 或错误
+        Task.Run(async () =>
         {
-            isStreaming = true;
+            await JimengService.GenerateImage(
+                prompt,
+                url =>
+                {
+                    imageUrl = url;
+                    callCompleted = true;
+                },
+                err =>
+                {
+                    errorMessage = err;
+                    callCompleted = true;
+                }
+            );
     
-            int timeline = TimelinePlayer.Local.timeline;
-            Debug.Log($"[DialogPanel] ImageGenCoroutine 启动，Timeline: {timeline}, Prompt: {prompt}");
+            isStreaming = false;
+        });
     
-            string imageUrl = null;
-            string errorMessage = null;
-            bool callCompleted = false;
+        // 在主线程等待 API 调用结束
+        while (!callCompleted)
+        {
+            yield return null;
+        }
     
-            // 后台 Task 只负责调用即梦 API，拿到 URL 或错误
-            Task.Run(async () =>
+        string finalMessage = string.Empty;
+    
+        if (!string.IsNullOrEmpty(errorMessage))
+        {
+            finalMessage = $"[即梦调用错误] {errorMessage}";
+            Debug.LogError($"[Jimeng] 即梦调用错误: {errorMessage}");
+        }
+        else if (!string.IsNullOrEmpty(imageUrl))
+        {
+            var www = UnityEngine.Networking.UnityWebRequest.Get(imageUrl);
+            yield return www.SendWebRequest();
+    
+            if (www.result == UnityEngine.Networking.UnityWebRequest.Result.Success)
             {
-                await JimengService.GenerateImage(
-                    prompt,
-                    url =>
-                    {
-                        imageUrl = url;
-                        callCompleted = true;
-                    },
-                    err =>
-                    {
-                        errorMessage = err;
-                        callCompleted = true;
-                    }
-                );
-    
-                isStreaming = false;
-            });
-    
-            // 在主线程等待 API 调用结束
-            while (!callCompleted)
-            {
-                yield return null;
-            }
-    
-            string finalMessage = string.Empty;
-    
-            if (!string.IsNullOrEmpty(errorMessage))
-            {
-                finalMessage = $"[即梦调用错误] {errorMessage}";
-                Debug.LogError($"[Jimeng] 即梦调用错误: {errorMessage}");
-            }
-            else if (!string.IsNullOrEmpty(imageUrl))
-            {
-                // 在主线程中使用 Unity API，构建本地路径并下载图片
-                string fullPath = null;
                 try
                 {
-                    // 将图片保存到项目内的 Assets/StreamingAssets/tmp 目录
-                    string folder = Path.Combine(Application.dataPath, "StreamingAssets/tmp");
-                    if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
+                    byte[] imageData = www.downloadHandler.data;
+                    Debug.Log($"[Jimeng] 图片下载成功，大小: {imageData.Length} 字节");
     
-                    string fileName = $"jimeng_{DateTime.Now:yyyyMMdd_HHmmss_fff}.png";
-                    fullPath = Path.Combine(folder, fileName);
-                }
-                catch (Exception ex)
-                {
-                    finalMessage = $"[即梦生成失败] 生成本地路径出错: {ex.Message}";
-                }
-    
-                if (string.IsNullOrEmpty(finalMessage))
-                {
-                    var www = UnityEngine.Networking.UnityWebRequest.Get(imageUrl);
-                    yield return www.SendWebRequest();
-    
-                    if (www.result == UnityEngine.Networking.UnityWebRequest.Result.Success)
+                    // 压缩图片数据
+                    byte[] compressedData = ImageUtils.CompressImageBytesToJpeg(imageData, 10); // 可调整质量
+                    if (compressedData != null)
                     {
-                        try
-                        {
-                            var data = www.downloadHandler.data;
-                            File.WriteAllBytes(fullPath, data);
-                            Debug.Log($"[Jimeng] 图片已保存到: {fullPath}");
+                        Debug.Log($"[Jimeng] 图片压缩成功，压缩后大小: {compressedData.Length} 字节");
     
-                            // 从本地数据创建 Texture 和 Sprite，并插入聊天图片
-                            var tex = new Texture2D(2, 2, TextureFormat.RGBA32, false);
-                            if (tex.LoadImage(data))
-                            {
-                                var sprite = Sprite.Create(
-                                    tex,
-                                    new Rect(0, 0, tex.width, tex.height),
-                                    new Vector2(0.5f, 0.5f)
-                                );
-                                
-                                // 根据时间线发布图片消息
-                                DialogPanel.AddChatImage(sprite, timeline);                                // 图片生成成功后，移除"俺在思考……"占位消息
-                                if (currentStreamingMessageGO != null)
-                                {
-                                    Destroy(currentStreamingMessageGO);
-                                    currentStreamingMessageGO = null;
-                                    currentStreamingText = null;
-                                }
-                                finalMessage = string.Empty; // 聊天面板只展示图片，不展示文本
-                            }
-                            else
-                            {
-                                finalMessage = "[即梦生成失败] 图片数据解析失败";
-                                Debug.LogError("[Jimeng] 图片数据解析失败，无法创建 Texture2D");
-                            }
-                        }
-                        catch (Exception ex)
+                        // 使用压缩后的数据添加聊天图片
+                        DialogPanel.AddChatImage(compressedData, timeline);
+    
+                        // 图片生成成功后，移除"俺在思考……"占位消息
+                        if (currentStreamingMessageGO != null)
                         {
-                            finalMessage = $"[即梦生成失败] 保存或加载图片出错: {ex.Message}";
-                            Debug.LogError($"[Jimeng] 保存或加载图片失败: {ex.Message}");
+                            Destroy(currentStreamingMessageGO);
+                            currentStreamingMessageGO = null;
+                            currentStreamingText = null;
                         }
+                        finalMessage = string.Empty; // 聊天面板只展示图片，不展示文本
                     }
                     else
                     {
-                        finalMessage = $"[即梦生成失败] 下载图片出错: {www.error}";
-                        Debug.LogError($"[Jimeng] 下载图片失败: {www.error}");
+                        finalMessage = "[即梦生成失败] 图片压缩失败";
+                        Debug.LogError("[Jimeng] 图片压缩失败");
                     }
+                }
+                catch (Exception ex)
+                {
+                    finalMessage = $"[即梦生成失败] 处理图片出错: {ex.Message}";
+                    Debug.LogError($"[Jimeng] 处理图片失败: {ex.Message}");
                 }
             }
             else
             {
-                finalMessage = "[即梦生成失败] 未收到图片 URL";
+                finalMessage = $"[即梦生成失败] 下载图片出错: {www.error}";
+                Debug.LogError($"[Jimeng] 下载图片失败: {www.error}");
             }
+        }
+        else
+        {
+            finalMessage = "[即梦生成失败] 未收到图片 URL";
+        }
     
-            // 仅在需要时在聊天框中显示文本（例如错误信息）
-            if (!string.IsNullOrEmpty(finalMessage))
+        // 仅在需要时在聊天框中显示文本（例如错误信息）
+        if (!string.IsNullOrEmpty(finalMessage))
+        {
+            if (currentStreamingText != null)
             {
-                if (currentStreamingText != null)
-                {
-                    currentStreamingText.text = finalMessage;
-                }
-    
-                EventBus.Publish(new ChatMessageUpdatedEvent
-                {
-                    MessageContent = finalMessage,
-                    timeline = timeline
-                });
+                currentStreamingText.text = finalMessage;
             }
     
-            Debug.Log("[DialogPanel] ImageGenCoroutine 结束");
-    }
+            EventBus.Publish(new ChatMessageUpdatedEvent
+            {
+                MessageContent = finalMessage,
+                timeline = timeline
+            });
+        }
+    
+        Debug.Log("[DialogPanel] ImageGenCoroutine 结束");
+    }    
 
     /* 创建流式输出的消息容器 */
     private void CreateStreamingMessage(int timeline)
@@ -618,22 +576,22 @@ public class DialogPanel : MonoBehaviour
     }
 
     /* 添加新的聊天图片消息 */
-    public static void AddChatImage(Sprite image, int timeline, bool publish = true)
+    public static void AddChatImage(byte[] imageData, int timeline, bool publish = true)
     {
         // 创建图片消息
-        s_instance.CreateChatImage(image, timeline);
+        s_instance.CreateChatImage(imageData, timeline);
         if (publish)
         {
             EventBus.Publish(new ChatImageUpdatedEvent
             {
-                ImageContent = image,
+                imageData = imageData,
                 timeline = timeline
             });
         }
     }
 
     /* 创建单个聊天图片消息 */
-    private void CreateChatImage(Sprite image, int timeline)
+    private void CreateChatImage(byte[] imageData, int timeline)
     {
         if (chatContent == null || chatImagePrefab == null) return;
     
@@ -647,14 +605,31 @@ public class DialogPanel : MonoBehaviour
             Image imageComponent = imageTransform.GetComponent<Image>();
             if (imageComponent != null)
             {
-                imageComponent.sprite = image;
-    
-                // 设置图片宽度为 405pt，高度根据图片比例动态调整
-                RectTransform rectTransform = imageComponent.GetComponent<RectTransform>();
-                if (rectTransform != null && image != null)
+                // Convert byte[] to Texture2D
+                Texture2D tex = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+                if (tex.LoadImage(imageData))
                 {
-                    float aspectRatio = image.rect.height / image.rect.width; // 计算图片宽高比
-                    rectTransform.sizeDelta = new Vector2(405f, 405f * aspectRatio); // 设置宽度为 405，高度根据比例调整
+                    // Create Sprite from Texture2D
+                    Sprite image = Sprite.Create(
+                        tex,
+                        new Rect(0, 0, tex.width, tex.height),
+                        new Vector2(0.5f, 0.5f)
+                    );
+                    imageComponent.sprite = image;
+                    
+                    // 设置图片宽度为 405pt，高度根据图片比例动态调整
+                    RectTransform rectTransform = imageComponent.GetComponent<RectTransform>();
+                    if (rectTransform != null)
+                    {
+                        float aspectRatio = (float)tex.height / tex.width; // 使用 Texture2D 的实际尺寸计算宽高比
+                        rectTransform.sizeDelta = new Vector2(405f, 405f * aspectRatio); // 设置宽度为 405，高度根据比例调整
+                    }
+                    
+                    Debug.Log("[DialogPanel.CreateChatImage] 图片设置成功");
+                }
+                else
+                {
+                    Debug.LogError("[DialogPanel.CreateChatImage] 图片数据解析失败，无法创建 Texture2D");
                 }
             }
         }

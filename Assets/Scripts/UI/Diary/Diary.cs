@@ -2,83 +2,72 @@
  * 日记总面板控制脚本
  * 管理根节点的开关，以及 Shared/Clue 子页签的切换
  */
-using System;
 using UnityEngine;
-using UnityEngine.UI;
-using Events;
+using TMPro;
 
 public class Diary : MonoBehaviour
 {
     [Tooltip("根对象（用于显示/隐藏）")]
     public GameObject PanelRoot;
+    
+    [Tooltip("时间线类型文本")]
+    public TMP_Text TypeText;
+
     private static Diary s_instance;
+    private static GameObject s_root;
     private static bool s_isOpen;
 
-    // 静态根与子面板引用（用于跨实例管理）
-    protected static GameObject s_root;
-    protected static bool s_initialized = false;
-
-    protected void Awake()
+    void Awake()
     {
         s_instance = this;
+        
         if (PanelRoot == null)
             PanelRoot = gameObject;
 
-        // 记录静态根，如果根发生变化则重置初始化状态（类似 Inventory.cs 行为）
-        if (s_root == null || s_root != PanelRoot)
+        s_root = PanelRoot;
+        
+        InitializeDiary();
+    }
+
+    void Start()
+    {
+        // 设置时间线文本
+        if (TypeText != null && TimelinePlayer.Local != null)
         {
-            s_root = PanelRoot;
-            s_initialized = false;
-            s_isOpen = false;
+            TypeText.text = TimelinePlayer.Local.timeline switch
+            {
+                0 => "鲲之诗篇",
+                1 => "梦之画卷",
+                2 => "JS?N",
+                _ => "时间的回声"
+            };
+        } else
+        {
+            Debug.LogWarning("[Diary] 未能设置时间线文本，TypeText 或 TimelinePlayer.Local 为空");
         }
     }
 
-    protected virtual void Start()
+    private void InitializeDiary()
     {
-        if (!s_initialized && s_root != null)
-        {
-            s_initialized = true;
-            s_root.SetActive(false);
-            Debug.Log($"[DiaryController.Start] 日志面板已初始化并关闭根节点");
-        }
+        // 确保面板激活以便访问子组件
+        if (!s_root.activeSelf)
+            s_root.SetActive(true);
+        
+        
+        // 初始化完成后关闭面板
+        s_root.SetActive(false);
+        s_isOpen = false;
+        
+        Debug.Log("[Diary] 日记面板已初始化并关闭");
     }
 
-    protected virtual void OnDestroy()
+    void OnDestroy()
     {
-        // 若当前实例绑定的根等于静态引用则清理静态状态
-        if (PanelRoot != null && s_root == PanelRoot)
+        if (s_root == PanelRoot)
         {
             s_root = null;
+            s_instance = null;
             s_isOpen = false;
-            s_initialized = false;
         }
     }
-
-
-    public static void TogglePanel()
-    {
-        if (s_isOpen)
-            ClosePanel();
-        else
-            OpenPanel();
-    }
-
-    public static void OpenPanel()
-    {
-        if (s_root == null) return;
-        s_isOpen = true;
-        s_root.SetActive(true);
-        // 禁用玩家移动
-        EventBus.LocalPublish(new FreezeEvent { isOpen = true });
-    }
-
-    public static void ClosePanel()
-    {
-        if (s_root == null) return;
-        s_isOpen = false;
-        s_root.SetActive(false);
-        // 恢复玩家移动
-        EventBus.LocalPublish(new FreezeEvent { isOpen = false });
-    }
-
 }

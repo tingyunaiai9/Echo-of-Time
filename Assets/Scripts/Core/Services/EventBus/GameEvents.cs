@@ -32,7 +32,8 @@ namespace Events
     public class ClueUpdatedEvent
     {
         public uint playerNetId;
-        public string ClueEntry;
+        public string date;
+        public string content;
     }
 
     // 聊天消息更新事件
@@ -45,7 +46,7 @@ namespace Events
     // 聊天图片更新事件
     public class ChatImageUpdatedEvent
     {
-        public Sprite ImageContent; // 图片内容
+        public byte[] imageData; // 图片数据
         public int timeline; // 时间线（0=Ancient, 1=Modern, 2=Future）
     }
 
