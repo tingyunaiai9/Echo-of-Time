@@ -1,10 +1,9 @@
-// ...existing code...
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections;
 
-public class PaintPanel : MonoBehaviour, IPointerClickHandler
+public class CompassPanel : MonoBehaviour, IPointerClickHandler
 {
     [Header("配置")]
     [Tooltip("外圈图像对象")]
