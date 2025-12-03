@@ -91,15 +91,24 @@ public class UIManager : Singleton<UIManager>
             {
                 // 获取当前玩家的时间线
                 int timeline = TimelinePlayer.Local.timeline;
-                DialogPanel.AddChatImage(tymSprite, timeline);
-                Debug.Log("[UIManager] `键按下，添加图片消息。");
+                // 压缩图片，避免过大
+                byte[] spriteBytes = ImageUtils.CompressSpriteToJpegBytes(tymSprite, 60); // 可调整quality
+                if (spriteBytes != null)
+                {
+                    DialogPanel.AddChatImage(spriteBytes, timeline);
+                    Debug.Log("[UIManager] `键按下，添加压缩后的图片消息。");
+                    Debug.Log($"[UIManager] 图片大小：{spriteBytes.Length} 字节");
+                }
+                else
+                {
+                    Debug.LogError("[UIManager] 图片压缩失败。");
+                }
             }
             else
             {
                 Debug.LogError("[UIManager] 无法加载 Sprite 文件 'tym'，请检查路径和文件名是否正确。");
             }
         }
-
         // 添加测试线索条目 (Minus键)
         if (Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadMinus))
         {
