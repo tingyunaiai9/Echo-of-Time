@@ -1827,9 +1827,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 589565702}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8944ebaa738a1ed47992bb6cdc86259f, type: 3}
+  m_Script: {fileID: 11500000, guid: 6c7c1d4179f902c468a8f546898ffa79, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ExitButton
+  m_EditorClassIdentifier: Assembly-CSharp::PuzzleExitButton
 --- !u!1 &633723888
 GameObject:
   m_ObjectHideFlags: 0

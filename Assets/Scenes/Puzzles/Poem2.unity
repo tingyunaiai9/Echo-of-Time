@@ -2815,7 +2815,7 @@ GameObject:
   - component: {fileID: 1054947595}
   - component: {fileID: 1054947594}
   - component: {fileID: 1054947593}
-  - component: {fileID: 1054947592}
+  - component: {fileID: 1054947596}
   m_Layer: 5
   m_Name: CloseButton
   m_TagString: Untagged
@@ -2842,18 +2842,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 1, y: 1}
---- !u!114 &1054947592
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1054947590}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8944ebaa738a1ed47992bb6cdc86259f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ExitButton
 --- !u!114 &1054947593
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2936,6 +2924,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1054947590}
   m_CullTransparentMesh: 1
+--- !u!114 &1054947596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1054947590}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c7c1d4179f902c468a8f546898ffa79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PuzzleExitButton
 --- !u!1 &1070476038
 GameObject:
   m_ObjectHideFlags: 0

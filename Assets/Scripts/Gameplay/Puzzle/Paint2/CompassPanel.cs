@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections;
+using TMPro;
 
 public class CompassPanel : MonoBehaviour, IPointerClickHandler
 {
@@ -33,6 +34,10 @@ public class CompassPanel : MonoBehaviour, IPointerClickHandler
     private bool innerOutlineOriginalEnabled;
     private Color outerOutlineOriginalColor;
     private Color innerOutlineOriginalColor;
+
+    [Header("数字显示")]
+    [Tooltip("DigitPanel 下的 6 个 Text (TMP) 组件，对应 Image1 到 Image6")]
+    public TextMeshProUGUI[] digitTexts = new TextMeshProUGUI[6];
 
     [Header("旋转步骤规则")]
     [Tooltip("正数为顺时针次数，负数为逆时针次数（正方向为顺时针）")]
@@ -199,6 +204,10 @@ public class CompassPanel : MonoBehaviour, IPointerClickHandler
         if (success)
         {
             flashCoroutine = StartCoroutine(FlashOutlines(Color.green, 0.5f));
+            
+            // 更新对应的数字显示
+            UpdateDigitText(stepIndex);
+            
             // 前进到下一步
             stepIndex = (stepIndex + 1) % sequence.Length;
             stepProgress = 0;
@@ -208,6 +217,23 @@ public class CompassPanel : MonoBehaviour, IPointerClickHandler
         {
             flashCoroutine = StartCoroutine(FlashOutlines(Color.red, 0.5f));
             Debug.Log("[PaintPanel] 方向错误，已闪红并重置当前步骤进度");
+        }
+    }
+
+    // 更新指定索引的数字文本
+    private void UpdateDigitText(int index)
+    {
+        if (index < 0 || index >= digitTexts.Length)
+        {
+            Debug.LogWarning($"[CompassPanel] 索引 {index} 超出范围");
+            return;
+        }
+
+        if (digitTexts[index] != null)
+        {
+            int rotationCount = Mathf.Abs(sequence[index]);
+            digitTexts[index].text = rotationCount.ToString();
+            Debug.Log($"[CompassPanel] 更新 Image{index + 1} 的文本为 {rotationCount}");
         }
     }
 
@@ -242,5 +268,24 @@ public class CompassPanel : MonoBehaviour, IPointerClickHandler
 
         flashCoroutine = null;
     }
+
+    
+     /* 重置旋转状态，清空计数并重置所有数字显示 */
+    public void ResetRotation()
+    {
+        // 重置当前步骤索引
+        stepIndex = 0;
+        stepProgress = 0;
+
+        // 重置所有数字文本为 "?"
+        for (int i = 0; i < digitTexts.Length; i++)
+        {
+            if (digitTexts[i] != null)
+            {
+                digitTexts[i].text = "?";
+            }
+        }
+
+        Debug.Log("CompassPanel: 旋转状态已重置");
+    }
 }
-// ...existing code...
