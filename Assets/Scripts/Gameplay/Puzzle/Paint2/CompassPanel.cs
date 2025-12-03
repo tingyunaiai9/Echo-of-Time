@@ -1,10 +1,10 @@
-// ...existing code...
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections;
+using TMPro;
 
-public class PaintPanel : MonoBehaviour, IPointerClickHandler
+public class CompassPanel : MonoBehaviour, IPointerClickHandler
 {
     [Header("配置")]
     [Tooltip("外圈图像对象")]
@@ -34,6 +34,10 @@ public class PaintPanel : MonoBehaviour, IPointerClickHandler
     private bool innerOutlineOriginalEnabled;
     private Color outerOutlineOriginalColor;
     private Color innerOutlineOriginalColor;
+
+    [Header("数字显示")]
+    [Tooltip("DigitPanel 下的 6 个 Text (TMP) 组件，对应 Image1 到 Image6")]
+    public TextMeshProUGUI[] digitTexts = new TextMeshProUGUI[6];
 
     [Header("旋转步骤规则")]
     [Tooltip("正数为顺时针次数，负数为逆时针次数（正方向为顺时针）")]
@@ -99,21 +103,26 @@ public class PaintPanel : MonoBehaviour, IPointerClickHandler
         }
     }
 
-    // 实现 IPointerClickHandler 接口
     public void OnPointerClick(PointerEventData eventData)
     {
-        // 获取点击位置相对于 PaintPanel 中心的本地坐标
+        if (InnerImage == null)
+        {
+            Debug.LogError("[CompassPanel] InnerImage 未设置！");
+            return;
+        }
+    
+        // 获取点击位置相对于 InnerImage 中心的本地坐标
         Vector2 localPoint;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            panelTransform, 
-            eventData.position, 
-            eventData.pressEventCamera, 
+            InnerImage, // 将中心点设置为 InnerImage 的中心
+            eventData.position,
+            eventData.pressEventCamera,
             out localPoint
         );
-
-        // 计算点击位置距离中心的距离
+    
+        // 计算点击位置距离 InnerImage 中心的距离
         float distance = localPoint.magnitude;
-
+    
         // 检查是否在圆环范围内
         if (distance >= innerRadius && distance <= outerRadius)
         {
@@ -122,20 +131,20 @@ public class PaintPanel : MonoBehaviour, IPointerClickHandler
             {
                 // 右半侧：顺时针旋转（减少角度）
                 RotateOuterImage(-rotationAngle);
-                Debug.Log($"[PaintPanel] 右半侧点击，顺时针旋转 {rotationAngle} 度");
+                Debug.Log($"[CompassPanel] 右半侧点击，顺时针旋转 {rotationAngle} 度");
             }
             else
             {
                 // 左半侧：逆时针旋转（增加角度）
                 RotateOuterImage(rotationAngle);
-                Debug.Log($"[PaintPanel] 左半侧点击，逆时针旋转 {rotationAngle} 度");
+                Debug.Log($"[CompassPanel] 左半侧点击，逆时针旋转 {rotationAngle} 度");
             }
         }
         else
         {
-            Debug.Log($"[PaintPanel] 点击位置距离中心 {distance:F2}pt，不在圆环范围内");
+            Debug.Log($"[CompassPanel] 点击位置距离中心 {distance:F2}pt，不在圆环范围内");
         }
-    }
+    }   
 
     /* 旋转外圈图像
        参数 angle: 旋转角度（正数为逆时针，负数为顺时针） */
@@ -195,6 +204,10 @@ public class PaintPanel : MonoBehaviour, IPointerClickHandler
         if (success)
         {
             flashCoroutine = StartCoroutine(FlashOutlines(Color.green, 0.5f));
+            
+            // 更新对应的数字显示
+            UpdateDigitText(stepIndex);
+            
             // 前进到下一步
             stepIndex = (stepIndex + 1) % sequence.Length;
             stepProgress = 0;
@@ -204,6 +217,23 @@ public class PaintPanel : MonoBehaviour, IPointerClickHandler
         {
             flashCoroutine = StartCoroutine(FlashOutlines(Color.red, 0.5f));
             Debug.Log("[PaintPanel] 方向错误，已闪红并重置当前步骤进度");
+        }
+    }
+
+    // 更新指定索引的数字文本
+    private void UpdateDigitText(int index)
+    {
+        if (index < 0 || index >= digitTexts.Length)
+        {
+            Debug.LogWarning($"[CompassPanel] 索引 {index} 超出范围");
+            return;
+        }
+
+        if (digitTexts[index] != null)
+        {
+            int rotationCount = Mathf.Abs(sequence[index]);
+            digitTexts[index].text = rotationCount.ToString();
+            Debug.Log($"[CompassPanel] 更新 Image{index + 1} 的文本为 {rotationCount}");
         }
     }
 
@@ -238,5 +268,24 @@ public class PaintPanel : MonoBehaviour, IPointerClickHandler
 
         flashCoroutine = null;
     }
+
+    
+     /* 重置旋转状态，清空计数并重置所有数字显示 */
+    public void ResetRotation()
+    {
+        // 重置当前步骤索引
+        stepIndex = 0;
+        stepProgress = 0;
+
+        // 重置所有数字文本为 "?"
+        for (int i = 0; i < digitTexts.Length; i++)
+        {
+            if (digitTexts[i] != null)
+            {
+                digitTexts[i].text = "?";
+            }
+        }
+
+        Debug.Log("CompassPanel: 旋转状态已重置");
+    }
 }
-// ...existing code...
