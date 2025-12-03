@@ -49,32 +49,22 @@ public class ClueBoard : MonoBehaviour
     /* 线索更新事件回调 */
     void OnClueUpdated(ClueUpdatedEvent e)
     {
-        AddClueEntry(e.ClueEntry, publish: false);
+        AddClueEntry(e.date, e.content, publish: false);
     }
 
     /* 添加新的线索条目 */
-    public static void AddClueEntry(string content, bool publish = true)
+    public static void AddClueEntry(string date, string content, bool publish = true)
     {
         if (s_instance == null) return;
-        s_instance.CreateClueEntry("", content);
+        s_instance.CreateClueEntry(date, content);
         if (publish)
         {
-            EventBus.Publish(new ClueUpdatedEvent { ClueEntry = content });
-        }
-    }
-
-    /* 批量添加线索条目 */
-    public static void AddClueEntries(List<ClueEntryData> entries)
-    {
-        if (s_instance == null || entries == null) return;
-        foreach (var entryData in entries)
-        {
-            s_instance.CreateClueEntry(entryData.date, entryData.content);
+            EventBus.Publish(new ClueUpdatedEvent { date = date, content = content });
         }
     }
     
     /* 创建单个线索条目 */
-    private void CreateClueEntry(string content, string date = "戊戌年九月廿三")
+    private void CreateClueEntry(string date, string content)
     {
         if (contentParent == null || Note == null) return;
         
@@ -106,19 +96,6 @@ public class ClueBoard : MonoBehaviour
             TMP_Text contentText = contentTextTransform.GetComponent<TMP_Text>();
             contentText.text = content;
         }
-    }
-
-    /* 添加测试线索条目 */
-    [ContextMenu("Test Add Clue Entries")]
-    public void TestClueEntries()
-    {
-        var testEntries = new List<ClueEntryData>
-        {
-            new ClueEntryData("发现神秘钥匙", "戊戌年九月廿三"),
-            new ClueEntryData("解锁了地下室门", "戊戌年九月廿四"),
-            new ClueEntryData("获得新的线索：日记残页", "戊戌年九月廿五")
-        };
-        AddClueEntries(testEntries);
     }
 }
 

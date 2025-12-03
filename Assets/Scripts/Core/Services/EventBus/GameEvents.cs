@@ -32,7 +32,8 @@ namespace Events
     public class ClueUpdatedEvent
     {
         public uint playerNetId;
-        public string ClueEntry;
+        public string date;
+        public string content;
     }
 
     // 聊天消息更新事件

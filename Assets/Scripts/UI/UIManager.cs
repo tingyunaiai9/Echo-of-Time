@@ -103,11 +103,9 @@ public class UIManager : Singleton<UIManager>
         // 添加测试线索条目 (Minus键)
         if (Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadMinus))
         {
-            ClueBoard clueBoardInstance = FindFirstObjectByType<ClueBoard>();
-            if (clueBoardInstance != null)
-            {
-                clueBoardInstance.TestClueEntries();
-            }
+            ClueBoard.AddClueEntry("戊戌年九月廿三", "这是一个测试线索条目，用于验证线索板功能是否正常工作。");
+            ClueBoard.AddClueEntry("戊戌年九月廿四", "第二个测试线索条目，检查多个线索的显示效果。");
+            ClueBoard.AddClueEntry("戊戌年九月廿五", "第三个测试线索条目，确保线索位置循环使用正确。");
             Debug.Log("[UIManager] Minus键按下，添加测试线索条目。");
         }
 
