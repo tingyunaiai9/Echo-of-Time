@@ -427,9 +427,18 @@ public class DialogPanel : MonoBehaviour
                     if (compressedData != null)
                     {
                         Debug.Log($"[Jimeng] 图片压缩成功，压缩后大小: {compressedData.Length} 字节");
-    
-                        // 使用压缩后的数据添加聊天图片
-                        DialogPanel.AddChatImage(compressedData, timeline);
+
+                        // 检查本地玩家的网络组件是否存在
+                        if (ImageNetworkSender.LocalInstance != null)
+                        {
+                            // 走网络发送：切分 -> 发送 -> Rpc回来 -> 显示
+                            ImageNetworkSender.LocalInstance.SendImage(compressedData, timeline);
+                        }
+                        else
+                        {
+                            // 如果没有联网（单机模式调试），则直接本地显示
+                            DialogPanel.AddChatImage(compressedData, timeline, publish: false);
+                        }
     
                         // 图片生成成功后，移除"俺在思考……"占位消息
                         if (currentStreamingMessageGO != null)
