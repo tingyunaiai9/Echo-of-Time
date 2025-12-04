@@ -166,9 +166,7 @@ public class PlayerController : NetworkBehaviour
     /* 更新动画状态和朝向 */
     void UpdateAnimation(float horizontalInput)
     {
-        // 1. 动态查找当前激活的皮肤组件
-        // 每次更新都检查，或者你可以优化为只在皮肤切换时更新引用（需要与 TimelinePlayer 配合）
-        // 这里为了稳健性，我们优先查找当前激活的子物体上的组件
+        // 动态查找当前激活的皮肤组件，优先查找当前激活的子物体上的组件
         
         if (animator == null || !animator.gameObject.activeInHierarchy)
         {
@@ -180,14 +178,14 @@ public class PlayerController : NetworkBehaviour
             spriteRenderer = GetComponentInChildren<SpriteRenderer>(false); // false 表示只查找激活的物体
         }
 
-        // 2. 处理朝向翻转
+        // 处理朝向翻转
         if (spriteRenderer != null && horizontalInput != 0)
         {
-            // 向左走(h<0)时翻转，向右走(h>0)时不翻转
+            // 向左走时翻转，向右走时不翻转
             spriteRenderer.flipX = (horizontalInput < 0);
         }
 
-        // 3. 处理动画状态切换
+        // 处理动画状态切换
         if (animator != null)
         {
             bool isWalking = Mathf.Abs(horizontalInput) > 0.01f;
@@ -203,11 +201,10 @@ public class PlayerController : NetworkBehaviour
     {
         if (!isLocalPlayer || isBackpackOpen) return;
 
-        // 兼容 2D 和 3D 检测
-        // 1. 尝试 2D 检测 (优先)
+        // 尝试 2D 检测
         Collider2D[] hitColliders2D = Physics2D.OverlapCircleAll(transform.position, interactionRange, interactableLayer);
         
-        // 2. 尝试 3D 检测 (作为补充，防止旧物体没换组件)
+        // 尝试 3D 检测
         Collider[] hitColliders3D = Physics.OverlapSphere(transform.position, interactionRange, interactableLayer);
 
         Interaction best = null;
@@ -231,7 +228,7 @@ public class PlayerController : NetworkBehaviour
             }
         }
 
-        // 处理 3D 结果 (如果 2D 没找到更近的)
+        // 处理 3D 结果
         foreach (var hit in hitColliders3D)
         {
             Interaction current = hit.GetComponent<Interaction>();
@@ -288,13 +285,6 @@ public class PlayerController : NetworkBehaviour
         UpdateAnimation(h);
 
         Vector3 input = new Vector3(h, 0f, v);
-        // if (input.sqrMagnitude > 0.0001f)
-        // {
-        //     Quaternion target = Quaternion.LookRotation(new Vector3(input.x, 0f, 0f));
-        //     transform.rotation = Quaternion.RotateTowards(transform.rotation, target, rotationSpeed * Time.deltaTime);
-        // }
-
-        // 翻转朝向逻辑移至 UpdateAnimation 中统一处理
 
         if (rb == null)
         {
