@@ -1724,12 +1724,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 589565702}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1806226432}
+  m_Father: {fileID: 1766814044}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -4102,6 +4102,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 907929868}
+  - {fileID: 589565703}
   m_Father: {fileID: 1806226432}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -4123,7 +4124,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PoemManager
   totalNotesRequired: 5
   PanelRoot: {fileID: 1766814043}
-  DrawerPanel: {fileID: 0}
+  DrawerPanel: {fileID: 222388687}
   animationDuration: 1
   easeType: 4
 --- !u!114 &1766814046
@@ -4258,9 +4259,8 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1766814044}
   - {fileID: 222388688}
-  - {fileID: 589565703}
+  - {fileID: 1766814044}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
