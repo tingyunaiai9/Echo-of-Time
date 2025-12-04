@@ -130,4 +130,12 @@ namespace Events
     /*
      * UI与视听反馈事件
      */
+    
+    // 房间创建/加入进度事件
+    public class RoomProgressEvent
+    {
+        public float Progress; // 0.0 to 1.0
+        public string Message; // 当前状态描述
+        public bool IsVisible; // 是否显示进度条
+    }
 }

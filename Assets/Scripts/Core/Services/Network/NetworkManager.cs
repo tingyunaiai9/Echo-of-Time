@@ -31,6 +31,7 @@ using Unity.Sync.Relay.Lobby;
 using Unity.Sync.Relay.Model;
 using Unity.Sync.Relay.Transport.Mirror;
 using UnityEngine;
+using Events;
 
 /*
  * Echo 网络管理器，基于 Mirror 扩展的跨时空合作网络逻辑
@@ -213,6 +214,7 @@ public class EchoNetworkManager : Mirror.NetworkManager
     private IEnumerator CreateRoomCoroutine(string roomName, Action<bool, string> callback)
     {
         Debug.Log($"Creating room: {roomName}");
+        EventBus.Publish(new RoomProgressEvent { Progress = 0.1f, Message = "Requesting Room Creation...", IsVisible = true });
         
         var request = new CreateRoomRequest()
         {
@@ -231,6 +233,7 @@ public class EchoNetworkManager : Mirror.NetworkManager
                 
                 if (resp.Status == LobbyRoomStatus.ServerAllocated)
                 {
+                    EventBus.Publish(new RoomProgressEvent { Progress = 0.8f, Message = "Starting Host...", IsVisible = true });
                     relayTransport.SetRoomData(resp);
                     StartHost();
                     
@@ -239,12 +242,14 @@ public class EchoNetworkManager : Mirror.NetworkManager
                 else
                 {
                     Debug.LogError($"Room status exception: {resp.Status}");
+                    EventBus.Publish(new RoomProgressEvent { Progress = 0f, Message = "Error", IsVisible = false });
                     callback?.Invoke(false, $"Room status error: {resp.Status}");
                 }
             }
             else
             {
                 Debug.LogError($"Failed to create room - Code: {resp.Code}, Message: {resp.ErrorMessage}");
+                EventBus.Publish(new RoomProgressEvent { Progress = 0f, Message = "Error", IsVisible = false });
                 callback?.Invoke(false, $"Failed to create room: {resp.ErrorMessage}");
             }
         });
@@ -279,6 +284,7 @@ public class EchoNetworkManager : Mirror.NetworkManager
     private IEnumerator JoinRoomCoroutine(Action<bool, string> callback)
     {
         Debug.Log("Searching for available rooms...");
+        EventBus.Publish(new RoomProgressEvent { Progress = 0.2f, Message = "Searching for rooms...", IsVisible = true });
         
         var request = new ListRoomRequest()
         {
@@ -300,16 +306,19 @@ public class EchoNetworkManager : Mirror.NetworkManager
                     // 找到第一个可用的房间（Ready 状态）
                     var availableRoom = resp.Items[0];
                     Debug.Log($"Attempting to join room: {availableRoom.Name} (Status: {availableRoom.Status})");
+                    EventBus.Publish(new RoomProgressEvent { Progress = 0.5f, Message = "Room found, joining...", IsVisible = true });
                     StartCoroutine(QueryAndJoinRoom(availableRoom.RoomUuid, callback));
                 }
                 else
                 {
+                    EventBus.Publish(new RoomProgressEvent { Progress = 0f, Message = "No rooms found", IsVisible = false });
                     callback?.Invoke(false, "No available rooms found. Please create a room first.");
                 }
             }
             else
             {
                 Debug.LogError($"Failed to list rooms - Code: {resp.Code}");
+                EventBus.Publish(new RoomProgressEvent { Progress = 0f, Message = "Error listing rooms", IsVisible = false });
                 callback?.Invoke(false, $"Failed to list rooms: {resp.ErrorMessage}");
             }
         });
@@ -330,6 +339,7 @@ public class EchoNetworkManager : Mirror.NetworkManager
             {
                 Debug.Log($"Room queried successfully - Name: {resp.Name}, Players: {resp.PlayerCount}/{resp.MaxPlayers}");
                 
+                EventBus.Publish(new RoomProgressEvent { Progress = 0.8f, Message = "Connecting to room...", IsVisible = true });
                 relayTransport.SetRoomData(resp);
                 StartClient();
                 
@@ -338,6 +348,7 @@ public class EchoNetworkManager : Mirror.NetworkManager
             else
             {
                 Debug.LogError($"Failed to query room - Code: {resp.Code}");
+                EventBus.Publish(new RoomProgressEvent { Progress = 0f, Message = "Error querying room", IsVisible = false });
                 callback?.Invoke(false, $"Failed to join room: {resp.ErrorMessage}");
             }
         });
@@ -668,6 +679,7 @@ public class EchoNetworkManager : Mirror.NetworkManager
     {
         Debug.Log($"Room Code: {room.RoomCode}");
         Debug.Log($"Players in room: {room.Players.Count}");
+        EventBus.Publish(new RoomProgressEvent { Progress = 1.0f, Message = "Connected!", IsVisible = false });
     }
     
     /*
