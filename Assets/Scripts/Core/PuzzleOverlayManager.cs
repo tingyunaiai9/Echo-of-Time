@@ -87,6 +87,10 @@ public class PuzzleOverlayManager : MonoBehaviour
         if (Application.isPlaying)
         {
             // Use DontDestroyOnLoad to make it persistent across scenes
+            if (transform.parent != null)
+            {
+                transform.SetParent(null);
+            }
             DontDestroyOnLoad(gameObject);
         }
     }
