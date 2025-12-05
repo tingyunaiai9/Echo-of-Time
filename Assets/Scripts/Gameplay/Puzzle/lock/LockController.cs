@@ -1,4 +1,6 @@
 using UnityEngine;
+using Game.UI;
+using Game.Gameplay.Puzzle.Poem2;
 
 public class LockController : MonoBehaviour
 {
@@ -13,6 +15,10 @@ public class LockController : MonoBehaviour
     public Vector3 wheelMoveOffset = new Vector3(-2f, 0f, 0f);
     public float animDuration = 1.0f;
 
+    [Header("Poem2 Logic")]
+    public GameObject scrollInsideBox;
+    public NotificationController notificationController;
+
     bool isUnlocked = false;
 
     public void OnWheelChanged()
@@ -24,6 +30,12 @@ public class LockController : MonoBehaviour
         if (IsCorrect())
         {
             isUnlocked = true;
+
+            // Notify Manager
+            if (Poem2Manager.Instance != null)
+            {
+                Poem2Manager.Instance.CmdSetLockUnlocked(true);
+            }
 
             StartCoroutine(PlayUnlockAnimation());
         }
@@ -100,6 +112,25 @@ public class LockController : MonoBehaviour
         {
             if (wheelParts[i] == null) continue;
             wheelParts[i].localPosition = wheelStartPos[i] + wheelMoveOffset;
+        }
+
+        // Check Scroll State after opening
+        if (Poem2Manager.Instance != null)
+        {
+            bool hasScroll = Poem2Manager.Instance.isScrollPlacedInAncient;
+            
+            if (scrollInsideBox != null)
+            {
+                scrollInsideBox.SetActive(hasScroll);
+            }
+
+            if (!hasScroll)
+            {
+                if (notificationController != null)
+                {
+                    notificationController.ShowNotification("需要古代玩家将竹简放入匣子中。\nAncient player needs to place the bamboo scroll.");
+                }
+            }
         }
     }
 }

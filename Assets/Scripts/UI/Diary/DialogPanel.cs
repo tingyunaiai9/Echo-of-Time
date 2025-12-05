@@ -37,18 +37,6 @@ public class DialogPanel : MonoBehaviour
     [Tooltip("发送按钮")]
     public Button sendButton;
 
-    [Tooltip("结果输入组件")]
-    public TMP_InputField resultContent;
-
-    [Tooltip("确认按钮")]
-    public Button confirmButton;
-
-    [Header("正确答案配置")]
-    [Tooltip("需要匹配的正确答案")]
-    public string correctAnswer = "";
-    [Tooltip("按层数配置的正确答案列表，第1层索引0，第2层索引1，以此类推")]
-    public List<string> levelAnswers = new List<string>() { "南山", "归去" }; // 初始第一层答案
-
     private static DialogPanel s_instance;
 
     // --- UI 状态变量 ---
@@ -56,9 +44,6 @@ public class DialogPanel : MonoBehaviour
     private GameObject currentStreamingMessageGO; // 当前流式消息占位对象
     private Queue<string> streamQueue = new Queue<string>(); // 存储流式数据
     private bool isStreaming = false;
-    private TMP_Text confirmButtonText; // 存储按钮文字组件
-    private bool isConfirmButtonCooldown = false; // 按钮冷却状态
-    private HashSet<uint> answeredPlayers = new HashSet<uint>(); // 已回答正确的玩家列表
 
     public enum AiTarget
     {
@@ -80,18 +65,9 @@ public class DialogPanel : MonoBehaviour
             inputField = transform.Find("LeftPanel/InputPanel/InputField").GetComponent<TMP_InputField>();
         if (sendButton == null)
             sendButton = transform.Find("LeftPanel/InputPanel/SendButton").GetComponent<Button>();
-        if (resultContent == null)
-            resultContent = transform.Find("RightPanel/ResultPanel/InputField").GetComponent<TMP_InputField>();
-        if (confirmButton == null)
-            confirmButton = transform.Find("RightPanel/ResultPanel/ConfirmButton").GetComponent<Button>();
-        
-        
-        // 获取确认按钮的文字组件
-        confirmButtonText = confirmButton.GetComponentInChildren<TMP_Text>();
         
         // 绑定按钮事件
         sendButton.onClick.AddListener(OnSendButtonClicked);
-        confirmButton.onClick.AddListener(OnConfirmButtonClicked);
 
         EventBus.Subscribe<ChatMessageUpdatedEvent>(OnChatMessageUpdated);
         EventBus.Subscribe<ChatImageUpdatedEvent>(OnChatImageUpdated);
@@ -103,10 +79,6 @@ public class DialogPanel : MonoBehaviour
         if (sendButton != null)
         {
             sendButton.onClick.RemoveListener(OnSendButtonClicked);
-        }
-        if (confirmButton != null)
-        {
-            confirmButton.onClick.RemoveListener(OnConfirmButtonClicked);
         }
         EventBus.Unsubscribe<ChatMessageUpdatedEvent>(OnChatMessageUpdated);
         EventBus.Unsubscribe<ChatImageUpdatedEvent>(OnChatImageUpdated);
@@ -160,131 +132,6 @@ public class DialogPanel : MonoBehaviour
         {
             StartCoroutine(StreamingCoroutine(userInput));
         }
-    }
-
-    /* 确认按钮点击事件 */
-    private void OnConfirmButtonClicked()
-    {
-        Debug.Log("[DialogPanel] 确认按钮被点击");
-    
-        // 如果在冷却期间，直接返回
-        if (isConfirmButtonCooldown)
-        {
-            Debug.Log("[DialogPanel] 按钮冷却中，忽略点击");
-            return;
-        }
-    
-        if (resultContent == null) return;
-    
-        string userAnswer = resultContent.text.Trim();
-    
-        // 获取当前层级 & 动态正确答案
-        var localPlayer = Mirror.NetworkClient.localPlayer?.GetComponent<TimelinePlayer>();
-        int currentLevel = localPlayer != null ? localPlayer.currentLevel : 1;
-        string expectedAnswer = GetCorrectAnswerForLevel(currentLevel);
-        Debug.Log($"[DialogPanel] 当前层数: {currentLevel}, 期望答案: '{expectedAnswer}', 玩家输入: '{userAnswer}'");
-    
-        // 检查答案是否正确
-        if (string.Equals(userAnswer, expectedAnswer, StringComparison.Ordinal))
-        {
-            Debug.Log("[DialogPanel] 答案正确！");
-            AddButtonOverlay(confirmButton, new Color(0, 1, 0, 0.5f)); // 添加绿色透明遮罩
-            confirmButton.interactable = false; // 禁用按钮
-    
-            // 修改输入框内容为“答案正确！”并禁用输入框
-            resultContent.text = "答案正确！";
-            resultContent.interactable = false;
-    
-            if (localPlayer != null)
-            {
-                localPlayer.CmdReportedCorrectAnswer();
-                Debug.Log("[DialogPanel] 已调用 CmdReportedCorrectAnswer() 上报服务器");
-            }
-            else
-            {
-                Debug.LogWarning("[DialogPanel] 未找到 TimelinePlayer，无法上报答案正确");
-            }
-        }
-        else
-        {
-            Debug.Log($"[DialogPanel] 答案错误。输入: '{userAnswer}', 正确答案应为: '{expectedAnswer}'");
-            resultContent.text = "答案错误！";
-            resultContent.interactable = false;
-            StartCoroutine(ErrorCooldownCoroutine());
-        }
-    
-        // 错误冷却协程
-        IEnumerator ErrorCooldownCoroutine()
-        {
-            isConfirmButtonCooldown = true;
-            AddButtonOverlay(confirmButton, new Color(1, 0, 0, 0.5f)); // 添加红色透明遮罩
-    
-            yield return new WaitForSeconds(1f);
-    
-            RemoveButtonOverlay(confirmButton); // 移除遮罩
-            resultContent.text = "";
-            resultContent.interactable = true;
-            isConfirmButtonCooldown = false;
-            Debug.Log("[DialogPanel] 按钮遮罩已移除");
-        }
-    }
-    
-    /* 添加按钮遮罩 */
-    private void AddButtonOverlay(Button button, Color overlayColor)
-    {
-        if (button == null) return;
-    
-        // 检查是否已有遮罩
-        Transform overlayTransform = button.transform.Find("Overlay");
-        if (overlayTransform != null) return;
-    
-        // 创建遮罩对象
-        GameObject overlay = new GameObject("Overlay", typeof(RectTransform), typeof(Image));
-        overlay.transform.SetParent(button.transform, false);
-    
-        // 设置遮罩属性
-        RectTransform rectTransform = overlay.GetComponent<RectTransform>();
-        rectTransform.anchorMin = Vector2.zero;
-        rectTransform.anchorMax = Vector2.one;
-        rectTransform.offsetMin = Vector2.zero;
-        rectTransform.offsetMax = Vector2.zero;
-    
-        Image overlayImage = overlay.GetComponent<Image>();
-        overlayImage.color = overlayColor;
-        overlayImage.raycastTarget = false; // 避免遮罩阻挡点击事件
-    }
-    
-    /* 移除按钮遮罩 */
-    private void RemoveButtonOverlay(Button button)
-    {
-        if (button == null) return;
-    
-        Transform overlayTransform = button.transform.Find("Overlay");
-        if (overlayTransform != null)
-        {
-            Destroy(overlayTransform.gameObject);
-        }
-    }
-
-    // 根据层数获取正确答案（层数从1开始，列表索引从0开始）
-    private string GetCorrectAnswerForLevel(int level)
-    {
-        if (level <= 0)
-        {
-            return correctAnswer; // 容错：非法层数返回默认答案
-        }
-        int index = level - 1;
-        if (index < levelAnswers.Count)
-        {
-            var ans = levelAnswers[index];
-            if (!string.IsNullOrWhiteSpace(ans)) return ans.Trim();
-        }
-        // 若该层未配置，返回最后一个已配置答案或默认
-        if (levelAnswers.Count > 0 && !string.IsNullOrWhiteSpace(levelAnswers[levelAnswers.Count - 1]))
-        {
-            return levelAnswers[levelAnswers.Count - 1].Trim();
-        }
-        return correctAnswer;
     }
 
 
@@ -682,34 +529,6 @@ public class DialogPanel : MonoBehaviour
             case 1: return "Modern";
             case 2: return "Future";
             default: return "Unknown";
-        }
-    }
-    
-    // 进入新的一层时重置“提交”按钮状态（从“正确！”恢复为“提交”并可点击）
-    public static void ResetConfirmButtonForNewLevel()
-    {
-        if (s_instance == null) return;
-        try
-        {
-            if (s_instance.confirmButtonText != null)
-            {
-                s_instance.confirmButtonText.text = "提交";
-                s_instance.confirmButtonText.color = Color.black;
-            }
-            if (s_instance.confirmButton != null)
-            {
-                s_instance.confirmButton.interactable = true;
-            }
-            if (s_instance.resultContent != null)
-            {
-                s_instance.resultContent.text = string.Empty;
-            }
-            s_instance.isConfirmButtonCooldown = false;
-            Debug.Log("[DialogPanel] 已因层数提升重置提交按钮为 '提交'");
-        }
-        catch (Exception ex)
-        {
-            Debug.LogWarning($"[DialogPanel] 重置提交按钮失败: {ex.Message}");
         }
     }
 }

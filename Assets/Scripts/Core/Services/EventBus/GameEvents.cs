@@ -55,6 +55,7 @@ namespace Events
     [System.Serializable]
     public class ClueDiscoveredEvent
     {
+        public bool isKeyClue = false;
         public uint playerNetId;
         public string clueId;
         public string clueText;
