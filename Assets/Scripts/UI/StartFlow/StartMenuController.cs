@@ -10,7 +10,7 @@ public class StartMenuController : MonoBehaviour
     public GameObject rolePanel;    // “选择角色”面板
 
     [Header("Progress UI")]
-    public GameObject progressPanel; // 进度条容器（可选）
+    public GameObject progressPanel; // 进度条容器
     public Slider progressSlider;    // 进度条组件
     public TMP_Text progressText;    // 进度文本组件
 
@@ -58,12 +58,11 @@ public class StartMenuController : MonoBehaviour
         if (rolePanel != null) rolePanel.SetActive(false);
     }
 
-
     private void OnGameStarted(GameStartedEvent e)
     {
-        Debug.Log("StartMenuController received GameStartedEvent, closing role panel.");
+        Debug.Log("[StartMenuController] 收到 GameStartedEvent");
         HideRolePanelImmediate();
-        // 这里还可以触发其他游戏开始的逻辑，比如加载游戏场景
+
     }
 
     private void OnRoomProgress(RoomProgressEvent e)
