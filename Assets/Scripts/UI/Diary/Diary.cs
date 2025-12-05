@@ -29,12 +29,8 @@ public class Diary : MonoBehaviour
         InitializeDiary();
     }
 
-    private void InitializeDiary()
+    void Start()
     {
-        // 确保面板激活以便访问子组件
-        if (!s_root.activeSelf)
-            s_root.SetActive(true);
-        
         // 设置时间线文本
         if (TypeText != null && TimelinePlayer.Local != null)
         {
@@ -42,10 +38,21 @@ public class Diary : MonoBehaviour
             {
                 0 => "鲲之诗篇",
                 1 => "梦之画卷",
-                2 => "xy?z",
+                2 => "JS?N",
                 _ => "时间的回声"
             };
+        } else
+        {
+            Debug.LogWarning("[Diary] 未能设置时间线文本，TypeText 或 TimelinePlayer.Local 为空");
         }
+    }
+
+    private void InitializeDiary()
+    {
+        // 确保面板激活以便访问子组件
+        if (!s_root.activeSelf)
+            s_root.SetActive(true);
+        
         
         // 初始化完成后关闭面板
         s_root.SetActive(false);

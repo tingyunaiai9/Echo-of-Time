@@ -161,6 +161,9 @@ public class PuzzleOverlayManager : MonoBehaviour
             yield break; // 提前退出协程
         }
 
+        // 自动禁用 Puzzle 场景中的 EventSystem，防止与主场景冲突
+        DisableEventSystemInScene(puzzleScene);
+
         if (setPuzzleSceneActive)
             SceneManager.SetActiveScene(puzzleScene);
 
@@ -386,5 +389,24 @@ public class PuzzleOverlayManager : MonoBehaviour
             if (c != null) return c;
         }
         return null;
+    }
+
+    private void DisableEventSystemInScene(Scene scene)
+    {
+        if (!scene.IsValid()) return;
+
+        var roots = scene.GetRootGameObjects();
+        foreach (var root in roots)
+        {
+            var eventSystems = root.GetComponentsInChildren<UnityEngine.EventSystems.EventSystem>(true);
+            foreach (var es in eventSystems)
+            {
+                if (es.gameObject.activeSelf)
+                {
+                    if (verboseLog) Debug.Log($"[PuzzleOverlay] Auto-disabling EventSystem in puzzle scene '{scene.name}': {es.gameObject.name}");
+                    es.gameObject.SetActive(false);
+                }
+            }
+        }
     }
 }
