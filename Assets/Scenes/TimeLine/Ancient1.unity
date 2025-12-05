@@ -1000,8 +1000,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -64909701
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 24e442291e06ad94488fc8cf321207da, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1781,7 +1781,6 @@ Transform:
   - {fileID: 882679349}
   - {fileID: 358671001}
   - {fileID: 1002527018}
-  - {fileID: 641922568}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1743906323
