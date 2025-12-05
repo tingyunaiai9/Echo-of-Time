@@ -1,0 +1,50 @@
+using UnityEngine;
+using Game.UI;
+
+namespace Game.Gameplay.Puzzle.Poem2
+{
+    public class FuturePoemPuzzle : Interaction
+    {
+        [Header("Poem2 Settings")]
+        public NotificationController notificationController;
+
+        public override void OnInteract(PlayerController player)
+        {
+            base.OnInteract(player);
+
+            if (Poem2Manager.Instance == null)
+            {
+                Debug.LogError("Poem2Manager instance not found!");
+                return;
+            }
+
+            bool ancientDone = Poem2Manager.Instance.isScrollPlacedInAncient;
+            bool modernDone = Poem2Manager.Instance.isLockUnlockedInModern;
+
+            if (!ancientDone)
+            {
+                if (notificationController != null)
+                    notificationController.ShowNotification("没有竹简。\nNo bamboo scroll found.");
+                return;
+            }
+
+            if (!modernDone)
+            {
+                if (notificationController != null)
+                    notificationController.ShowNotification("匣子未解锁。\nThe box is not unlocked.");
+                return;
+            }
+
+            // If both conditions are met, start the puzzle
+            StartPuzzle();
+        }
+
+        private void StartPuzzle()
+        {
+            Debug.Log("Starting Poem Puzzle...");
+            // Add your puzzle start logic here
+             if (notificationController != null)
+                    notificationController.ShowNotification("开始拼诗任务。\nStarting Poem Puzzle.");
+        }
+    }
+}

@@ -13,9 +13,12 @@ public class PlayerController : NetworkBehaviour
     [Tooltip("旋转速度（度/秒)，面向移动方向时使用")]
     public float rotationSpeed = 720f;
 
-    [Header("交互设置")]
-    [Tooltip("交互的最大范围半径。")]
-    public float interactionRange = 3f;
+    [Header("交互设置 (Box检测)")]
+    [Tooltip("交互检测盒子的尺寸 (宽, 高, 深)")]
+    public Vector3 interactionBoxSize = new Vector3(1.5f, 2.5f, 2f);
+
+    [Tooltip("交互检测盒子的偏移量 (相对于角色脚底)")]
+    public Vector3 interactionOffset = new Vector3(0f, 1.25f, 0f);
 
     [Tooltip("可交互物体的 LayerMask")]
     public LayerMask interactableLayer;
@@ -201,11 +204,16 @@ public class PlayerController : NetworkBehaviour
     {
         if (!isLocalPlayer || isBackpackOpen) return;
 
-        // 尝试 2D 检测
-        Collider2D[] hitColliders2D = Physics2D.OverlapCircleAll(transform.position, interactionRange, interactableLayer);
+        // 计算检测盒子的中心点位置
+        Vector3 center = transform.position + interactionOffset;
+
+        // 1. 尝试 2D 检测 (Box)
+        // 注意：OverlapBox 在 2D 中使用的是 "Size" (全尺寸)
+        Collider2D[] hitColliders2D = Physics2D.OverlapBoxAll(center, new Vector2(interactionBoxSize.x, interactionBoxSize.y), 0f, interactableLayer);
         
-        // 尝试 3D 检测
-        Collider[] hitColliders3D = Physics.OverlapSphere(transform.position, interactionRange, interactableLayer);
+        // 2. 尝试 3D 检测 (Box)
+        // 注意：OverlapBox 在 3D 中使用的是 "HalfExtents" (半尺寸)，所以要除以 2
+        Collider[] hitColliders3D = Physics.OverlapBox(center, interactionBoxSize / 2f, Quaternion.identity, interactableLayer);
 
         Interaction best = null;
         float closestDistanceSqr = float.MaxValue;
@@ -214,53 +222,37 @@ public class PlayerController : NetworkBehaviour
         // 处理 2D 结果
         foreach (var hit in hitColliders2D)
         {
-            Interaction current = hit.GetComponent<Interaction>();
-            if (current == null) current = hit.GetComponentInParent<Interaction>();
-
-            if (current != null && current.isActiveAndEnabled)
-            {
-                float distSqr = (hit.transform.position - playerPosition).sqrMagnitude;
-                if (distSqr < closestDistanceSqr)
-                {
-                    closestDistanceSqr = distSqr;
-                    best = current;
-                }
-            }
+            ProcessHit(hit.gameObject, playerPosition, ref best, ref closestDistanceSqr);
         }
 
         // 处理 3D 结果
         foreach (var hit in hitColliders3D)
         {
-            Interaction current = hit.GetComponent<Interaction>();
-            if (current == null) current = hit.GetComponentInParent<Interaction>();
-
-            if (current != null && current.isActiveAndEnabled)
-            {
-                float distSqr = (hit.transform.position - playerPosition).sqrMagnitude;
-                if (distSqr < closestDistanceSqr)
-                {
-                    closestDistanceSqr = distSqr;
-                    best = current;
-                }
-            }
+            ProcessHit(hit.gameObject, playerPosition, ref best, ref closestDistanceSqr);
         }
 
-        // 如果目标发生了变化
+        // 切换高亮状态
         if (best != currentInteraction)
         {
-            // 取消旧目标的高亮
-            if (currentInteraction != null)
-            {
-                currentInteraction.SetHighlight(false);
-            }
-
-            // 设置新目标
+            if (currentInteraction != null) currentInteraction.SetHighlight(false);
             currentInteraction = best;
+            if (currentInteraction != null) currentInteraction.SetHighlight(true);
+        }
+    }
 
-            // 开启新目标的高亮
-            if (currentInteraction != null)
+    // 辅助方法：处理碰撞结果，避免代码重复
+    void ProcessHit(GameObject hitObj, Vector3 playerPos, ref Interaction best, ref float closestDist)
+    {
+        Interaction current = hitObj.GetComponent<Interaction>();
+        if (current == null) current = hitObj.GetComponentInParent<Interaction>();
+
+        if (current != null && current.isActiveAndEnabled)
+        {
+            float distSqr = (hitObj.transform.position - playerPos).sqrMagnitude;
+            if (distSqr < closestDist)
             {
-                currentInteraction.SetHighlight(true);
+                closestDist = distSqr;
+                best = current;
             }
         }
     }
@@ -377,6 +369,8 @@ public class PlayerController : NetworkBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, interactionRange);
+        // 绘制交互检测框
+        Vector3 center = transform.position + interactionOffset;
+        Gizmos.DrawWireCube(center, interactionBoxSize);
     }
 }
