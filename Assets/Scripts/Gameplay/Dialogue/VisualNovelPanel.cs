@@ -30,6 +30,7 @@ public class VisualNovelPanel : MonoBehaviour
         
         // 订阅剧情开始事件
         EventBus.Subscribe<StartDialogueEvent>(OnStartDialogue);
+        Debug.Log("VisualNovelPanel 已初始化并订阅 StartDialogueEvent");
     }
 
     void OnDestroy()

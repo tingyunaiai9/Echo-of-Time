@@ -169,8 +169,11 @@ public class RoleSelectPanel : MonoBehaviour
     {
         if (!NetworkServer.active) return;
 
+        Debug.Log("[RoleSelectPanel] 房主点击了开始游戏按钮");
+
         // 开始游戏逻辑
         if (flow != null) flow.HideRolePanelImmediate();
+        EventBus.LocalPublish(new GameStartedEvent());
         EventBus.Publish(new GameStartedEvent());
         
         // 你可能需要在这里通知 EchoNetworkManager 锁定房间或切换场景

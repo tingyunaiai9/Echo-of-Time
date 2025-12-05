@@ -1,15 +1,10 @@
-/* Core/Services/EventBus/GameEvents.cs
- * 游戏事件枚举和常量定义
- * 集中管理所有游戏内可能触发的事件类型
- */
-
 using UnityEngine;
 
 namespace Events
 {
     public class GameStartedEvent
     {
-        
+
     }
 
     /*     
@@ -60,6 +55,7 @@ namespace Events
     [System.Serializable]
     public class ClueDiscoveredEvent
     {
+        public bool isKeyClue = false;
         public uint playerNetId;
         public string clueId;
         public string clueText;
@@ -102,4 +98,12 @@ namespace Events
     /*
      * UI与视听反馈事件
      */
+
+    // 房间创建/加入进度事件
+    public class RoomProgressEvent
+    {
+        public float Progress; // 0.0 to 1.0
+        public string Message; // 当前状态描述
+        public bool IsVisible; // 是否显示进度条
+    }
 }

@@ -898,7 +898,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &222388688
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1724,12 +1724,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 589565702}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1806226432}
+  m_Father: {fileID: 1766814044}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -1842,7 +1842,7 @@ GameObject:
   - component: {fileID: 633723893}
   - component: {fileID: 633723892}
   - component: {fileID: 633723891}
-  - component: {fileID: 633723890}
+  - component: {fileID: 633723894}
   m_Layer: 5
   m_Name: ExitButton
   m_TagString: Untagged
@@ -1869,18 +1869,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -250}
   m_SizeDelta: {x: 210, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &633723890
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 633723888}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8944ebaa738a1ed47992bb6cdc86259f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ExitButton
 --- !u!114 &633723891
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1963,6 +1951,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 633723888}
   m_CullTransparentMesh: 1
+--- !u!114 &633723894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 633723888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c7c1d4179f902c468a8f546898ffa79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PuzzleExitButton
 --- !u!1 &637327134
 GameObject:
   m_ObjectHideFlags: 0
@@ -4102,6 +4102,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 907929868}
+  - {fileID: 589565703}
   m_Father: {fileID: 1806226432}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -4123,7 +4124,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PoemManager
   totalNotesRequired: 5
   PanelRoot: {fileID: 1766814043}
-  DrawerPanel: {fileID: 0}
+  DrawerPanel: {fileID: 222388687}
   animationDuration: 1
   easeType: 4
 --- !u!114 &1766814046
@@ -4258,9 +4259,8 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1766814044}
   - {fileID: 222388688}
-  - {fileID: 589565703}
+  - {fileID: 1766814044}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

@@ -302,6 +302,22 @@ public abstract class Inventory : MonoBehaviour
     public void OnClickPropTab() => SwitchToProps();
     public void OnClickClueTab() => SwitchToClues();
 
+
+    /* 退出按钮点击回调 */
+    public void OnClickExit()
+    {
+        if (s_root != null)
+        {
+            s_root.SetActive(false);
+            s_isOpen = false;
+
+            // 发送事件解冻玩家
+            EventBus.LocalPublish(new FreezeEvent { isOpen = false });
+
+            Debug.Log("[Inventory] 点击退出按钮，关闭背包");
+        }
+    }
+
     protected virtual void OnDestroy()
     {
         if (backpackRoot != null && s_root == backpackRoot)
