@@ -369,7 +369,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &671119608
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1577,19 +1577,19 @@ MonoBehaviour:
   mirrorSlots:
   - xindex: 1
     yindex: 2
-    direction: 0
+    direction: 3
   - xindex: 1
     yindex: 0
-    direction: 0
+    direction: 1
   - xindex: 3
     yindex: 0
-    direction: 0
+    direction: 2
   - xindex: 3
     yindex: 2
     direction: 0
   - xindex: 5
     yindex: 0
-    direction: 0
+    direction: 1
   - xindex: 7
     yindex: 3
     direction: 0
