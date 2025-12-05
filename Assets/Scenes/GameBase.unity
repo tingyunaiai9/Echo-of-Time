@@ -3864,7 +3864,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3873,8 +3873,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -5183,6 +5183,7 @@ GameObject:
   - component: {fileID: 1403563509}
   - component: {fileID: 1403563512}
   - component: {fileID: 1403563513}
+  - component: {fileID: 1403563514}
   m_Layer: 5
   m_Name: NotificationPanel
   m_TagString: Untagged
@@ -5199,7 +5200,7 @@ RectTransform:
   m_GameObject: {fileID: 1403563507}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 0.49}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1067849787}
@@ -5207,7 +5208,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -464.5, y: 261}
+  m_AnchoredPosition: {x: -464.5, y: 269.94977}
   m_SizeDelta: {x: 929, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1403563509
@@ -5223,8 +5224,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.VerticalLayoutGroup
   m_Padding:
-    m_Left: 50
-    m_Right: 50
+    m_Left: 100
+    m_Right: 100
     m_Top: 100
     m_Bottom: 100
   m_ChildAlignment: 0
@@ -5257,7 +5258,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 7c87783ad8a908b4a9a648a1886521fa, type: 3}
-  m_Type: 0
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -5300,6 +5301,26 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &1403563514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1403563507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b389855eb89a914b8b3e6bbdfd699d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.UI.NotificationController
+  notificationPanel: {fileID: 1403563508}
+  notificationText: {fileID: 1067849788}
+  canvasGroup: {fileID: 1403563513}
+  startPosition: {x: 0, y: -500}
+  targetPosition: {x: -464.5, y: 269.9498}
+  slideDuration: 0.5
+  stayDuration: 2
+  fadeOutDuration: 0.5
 --- !u!1 &1411577623
 GameObject:
   m_ObjectHideFlags: 0
