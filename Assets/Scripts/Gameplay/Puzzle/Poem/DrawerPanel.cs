@@ -91,6 +91,7 @@ public class DrawerPanel : MonoBehaviour
         // 发布 ClueDiscoveredEvent 事件
         EventBus.LocalPublish(new ClueDiscoveredEvent
         {
+            isKeyClue = true,
             playerNetId = 0,
             clueId = "poem_clue",
             clueText = "拼好5首诗句后抽屉中的一幅画。",
