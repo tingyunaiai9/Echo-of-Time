@@ -7,13 +7,27 @@ namespace Game.Gameplay.Puzzle.Poem2
     {
         [Header("Poem2 Settings")]
         public NotificationController notificationController;
-        public GameObject scrollVisualInBox; // The scroll visual inside the box (initially hidden)
+        //public GameObject scrollVisualInBox; // The scroll visual inside the box (initially hidden)
+        public string requiredItemId = "BambooScroll"; // The ID of the item required
 
         // Assuming we might need to check if player has the item, but for now we'll just simulate the action
         // or assume the player has it if they are at this stage.
         // If you have an Inventory system, check it here.
 
         private bool hasPlacedScroll = false;
+
+        protected override void Start()
+        {
+            base.Start();
+            if (notificationController == null)
+            {
+                notificationController = NotificationController.Instance;
+                if (notificationController == null)
+                {
+                    notificationController = FindFirstObjectByType<NotificationController>();
+                }
+            }
+        }
 
         public override void OnInteract(PlayerController player)
         {
@@ -27,13 +41,19 @@ namespace Game.Gameplay.Puzzle.Poem2
             }
 
             // Logic to place scroll
-            // 1. Check if player has scroll (Optional, skipping for now as per request focus on logic flow)
+            // 1. Check if player has scroll
+            if (!Inventory.HasPropItem(requiredItemId))
+            {
+                if (notificationController != null)
+                    notificationController.ShowNotification("你还没有拾取竹简。\nYou haven't picked up the bamboo scroll yet.");
+                return;
+            }
             
             // 2. Place scroll
             hasPlacedScroll = true;
             
-            if (scrollVisualInBox != null)
-                scrollVisualInBox.SetActive(true);
+            //if (scrollVisualInBox != null)
+            //    scrollVisualInBox.SetActive(true);
 
             // 3. Update Manager
             if (Poem2Manager.Instance != null)

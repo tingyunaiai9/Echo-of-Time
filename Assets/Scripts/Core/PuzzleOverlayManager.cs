@@ -181,7 +181,7 @@ public class PuzzleOverlayManager : MonoBehaviour
         CameraState prevCamState = default;
         if (mainCam != null)
         {
-            if (verboseLog) Debug.Log($"[PuzzleOverlay] 找到主相机: {mainCam.name}。当前 Culling Mask: {LayerMask.LayerToName(mainCam.cullingMask)} ({mainCam.cullingMask})");
+            if (verboseLog) Debug.Log($"[PuzzleOverlay] 找到主相机: {mainCam.name}。当前 Culling Mask: {mainCam.cullingMask}");
             prevCamState = CaptureCameraState(mainCam);
 
             if (moveCameraToAnchor)
@@ -203,7 +203,7 @@ public class PuzzleOverlayManager : MonoBehaviour
             if (overrideCameraCulling)
             {
                 mainCam.cullingMask = puzzleCullingMask;
-                if (verboseLog) Debug.Log($"[PuzzleOverlay] 已覆盖 Culling Mask。新 Culling Mask: {LayerMask.LayerToName(mainCam.cullingMask)} ({mainCam.cullingMask})");
+                if (verboseLog) Debug.Log($"[PuzzleOverlay] 已覆盖 Culling Mask。新 Culling Mask: {mainCam.cullingMask}");
             }
         }
 
