@@ -7,6 +7,8 @@ namespace Game.UI
 {
     public class NotificationController : MonoBehaviour
     {
+        public static NotificationController Instance { get; private set; }
+
         [Header("UI References")]
         [Tooltip("The RectTransform of the notification panel (the object with the Image background)")]
         [SerializeField] private RectTransform notificationPanel;
@@ -37,6 +39,8 @@ namespace Game.UI
 
         private void Awake()
         {
+            if (Instance == null) Instance = this;
+            
             // Auto-assign references if missing
             if (notificationPanel == null) notificationPanel = GetComponent<RectTransform>();
             if (canvasGroup == null) canvasGroup = notificationPanel.GetComponent<CanvasGroup>();
