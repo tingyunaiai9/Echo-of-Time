@@ -21,6 +21,18 @@ public class LockController : MonoBehaviour
 
     bool isUnlocked = false;
 
+    void Start()
+    {
+        if (notificationController == null)
+        {
+            notificationController = NotificationController.Instance;
+            if (notificationController == null)
+            {
+                notificationController = FindFirstObjectByType<NotificationController>();
+            }
+        }
+    }
+
     public void OnWheelChanged()
     {
         // 组合变化时检查是否解锁
@@ -131,6 +143,15 @@ public class LockController : MonoBehaviour
                     notificationController.ShowNotification("需要古代玩家将竹简放入匣子中。\nAncient player needs to place the bamboo scroll.");
                 }
             }
+        }
+
+        // Wait a bit before auto-exiting
+        yield return new WaitForSeconds(1.5f);
+
+        // Auto exit puzzle
+        if (PuzzleOverlayManager.Instance != null)
+        {
+            PuzzleOverlayManager.Instance.ClosePuzzle();
         }
     }
 }
