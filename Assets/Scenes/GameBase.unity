@@ -5154,6 +5154,7 @@ MonoBehaviour:
   _persistent: 1
   DiaryPanel: {fileID: 1924663762}
   InventoryPanel: {fileID: 255870193}
+  mainCanvas: {fileID: 1829174780}
 --- !u!4 &1391008354
 Transform:
   m_ObjectHideFlags: 0
