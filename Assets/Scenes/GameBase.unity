@@ -1029,6 +1029,10 @@ MonoBehaviour:
   chatContent: {fileID: 0}
   inputField: {fileID: 0}
   sendButton: {fileID: 0}
+  avatarSprites:
+  - {fileID: 21300000, guid: 32b53850aa4f648c3b9228ca7402c061, type: 3}
+  - {fileID: 21300000, guid: 65ab37b7f1869482d97b31f1a3f8dfd2, type: 3}
+  - {fileID: 21300000, guid: 778085da5fef54404b8f36cb708c08e9, type: 3}
   currentAiTarget: 1
 --- !u!224 &191336690
 RectTransform:
