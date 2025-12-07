@@ -27,6 +27,7 @@ public class LobbyPanel : MonoBehaviour
         {
             Debug.Log(msg);
             if (ok) flow.OpenRolePanel();
+            else flow.ShowWarning(msg);
         });
     }
 
@@ -36,6 +37,7 @@ public class LobbyPanel : MonoBehaviour
         {
             Debug.Log(msg);
             if (ok) flow.OpenRolePanel();
+            else flow.ShowWarning(msg);
         });
     }
 
@@ -56,6 +58,7 @@ public class LobbyPanel : MonoBehaviour
         {
             Debug.Log(msg);
             if (ok) flow.OpenRolePanel();
+            else flow.ShowWarning(msg);
         });
     }
 

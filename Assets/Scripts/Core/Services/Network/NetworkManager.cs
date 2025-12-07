@@ -214,7 +214,7 @@ public class EchoNetworkManager : Mirror.NetworkManager
     private IEnumerator CreateRoomCoroutine(string roomName, Action<bool, string> callback)
     {
         Debug.Log($"Creating room: {roomName}");
-        EventBus.Publish(new RoomProgressEvent { Progress = 0.1f, Message = "Requesting Room Creation...", IsVisible = true });
+        EventBus.Publish(new RoomProgressEvent { Progress = 0.1f, Message = "正在请求创建房间...", IsVisible = true });
         
         var request = new CreateRoomRequest()
         {
@@ -233,7 +233,7 @@ public class EchoNetworkManager : Mirror.NetworkManager
                 
                 if (resp.Status == LobbyRoomStatus.ServerAllocated)
                 {
-                    EventBus.Publish(new RoomProgressEvent { Progress = 0.8f, Message = "Starting Host...", IsVisible = true });
+                    EventBus.Publish(new RoomProgressEvent { Progress = 0.8f, Message = "正在启动主机...", IsVisible = true });
                     relayTransport.SetRoomData(resp);
                     StartHost();
                     
@@ -242,14 +242,14 @@ public class EchoNetworkManager : Mirror.NetworkManager
                 else
                 {
                     Debug.LogError($"Room status exception: {resp.Status}");
-                    EventBus.Publish(new RoomProgressEvent { Progress = 0f, Message = "Error", IsVisible = false });
+                    EventBus.Publish(new RoomProgressEvent { Progress = 0f, Message = "发生错误", IsVisible = false });
                     callback?.Invoke(false, $"Room status error: {resp.Status}");
                 }
             }
             else
             {
                 Debug.LogError($"Failed to create room - Code: {resp.Code}, Message: {resp.ErrorMessage}");
-                EventBus.Publish(new RoomProgressEvent { Progress = 0f, Message = "Error", IsVisible = false });
+                EventBus.Publish(new RoomProgressEvent { Progress = 0f, Message = "发生错误", IsVisible = false });
                 callback?.Invoke(false, $"Failed to create room: {resp.ErrorMessage}");
             }
         });
@@ -284,7 +284,7 @@ public class EchoNetworkManager : Mirror.NetworkManager
     private IEnumerator JoinRoomCoroutine(Action<bool, string> callback)
     {
         Debug.Log("Searching for available rooms...");
-        EventBus.Publish(new RoomProgressEvent { Progress = 0.2f, Message = "Searching for rooms...", IsVisible = true });
+        EventBus.Publish(new RoomProgressEvent { Progress = 0.2f, Message = "正在搜索房间...", IsVisible = true });
         
         var request = new ListRoomRequest()
         {
@@ -306,24 +306,79 @@ public class EchoNetworkManager : Mirror.NetworkManager
                     // 找到第一个可用的房间（Ready 状态）
                     var availableRoom = resp.Items[0];
                     Debug.Log($"Attempting to join room: {availableRoom.Name} (Status: {availableRoom.Status})");
-                    EventBus.Publish(new RoomProgressEvent { Progress = 0.5f, Message = "Room found, joining...", IsVisible = true });
+                    EventBus.Publish(new RoomProgressEvent { Progress = 0.5f, Message = "找到房间，正在加入...", IsVisible = true });
                     StartCoroutine(QueryAndJoinRoom(availableRoom.RoomUuid, callback));
                 }
                 else
                 {
-                    EventBus.Publish(new RoomProgressEvent { Progress = 0f, Message = "No rooms found", IsVisible = false });
-                    callback?.Invoke(false, "No available rooms found. Please create a room first.");
+                    EventBus.Publish(new RoomProgressEvent { Progress = 0f, Message = "未找到房间", IsVisible = false });
+                    callback?.Invoke(false, "暂无可用房间");
                 }
             }
             else
             {
                 Debug.LogError($"Failed to list rooms - Code: {resp.Code}");
-                EventBus.Publish(new RoomProgressEvent { Progress = 0f, Message = "Error listing rooms", IsVisible = false });
+                EventBus.Publish(new RoomProgressEvent { Progress = 0f, Message = "获取房间列表失败", IsVisible = false });
                 callback?.Invoke(false, $"Failed to list rooms: {resp.ErrorMessage}");
             }
         });
     }
     
+    /*
+     * 启动客户端并验证连接（等待 LocalPlayer 生成）
+     * 防止加入僵尸房间导致卡死
+     */
+    private IEnumerator StartClientAndVerify(Action<bool, string> callback)
+    {
+        StartClient();
+        
+        float timeout = 5f;
+        float timer = 0f;
+        
+        try
+        {
+            EventBus.Publish(new RoomProgressEvent { Progress = 0.9f, Message = "正在验证主机响应...", IsVisible = true });
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"[NetworkManager] Failed to publish progress event: {e.Message}");
+        }
+
+        while (timer < timeout)
+        {
+            // 检查是否已连接且本地玩家对象已生成（说明主机活着并响应了）
+            if (NetworkClient.isConnected && NetworkClient.localPlayer != null)
+            {
+                EventBus.Publish(new RoomProgressEvent { Progress = 1.0f, Message = "加入成功！", IsVisible = false });
+                callback?.Invoke(true, "Joined room successfully");
+                yield break;
+            }
+            
+            // 检查是否连接断开
+            if (!NetworkClient.active) 
+            {
+                 EventBus.Publish(new RoomProgressEvent { Progress = 0f, Message = "连接断开", IsVisible = false });
+                 callback?.Invoke(false, "Connection failed");
+                 yield break;
+            }
+
+            yield return null;
+            timer += Time.deltaTime;
+        }
+        
+        // 超时处理
+        StopClient();
+        try
+        {
+            EventBus.Publish(new RoomProgressEvent { Progress = 0f, Message = "连接超时", IsVisible = false });
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"[NetworkManager] Failed to publish timeout event: {e.Message}");
+        }
+        callback?.Invoke(false, "Connection timed out. Host may be unresponsive.");
+    }
+
     /*
      * 协程：通过房间 UUID 查询并加入房间
      * @param roomUuid 房间唯一标识符
@@ -339,16 +394,14 @@ public class EchoNetworkManager : Mirror.NetworkManager
             {
                 Debug.Log($"Room queried successfully - Name: {resp.Name}, Players: {resp.PlayerCount}/{resp.MaxPlayers}");
                 
-                EventBus.Publish(new RoomProgressEvent { Progress = 0.8f, Message = "Connecting to room...", IsVisible = true });
+                EventBus.Publish(new RoomProgressEvent { Progress = 0.8f, Message = "正在连接房间...", IsVisible = true });
                 relayTransport.SetRoomData(resp);
-                StartClient();
-                
-                callback?.Invoke(true, $"Joined room: {resp.Name}");
+                StartCoroutine(StartClientAndVerify(callback));
             }
             else
             {
                 Debug.LogError($"Failed to query room - Code: {resp.Code}");
-                EventBus.Publish(new RoomProgressEvent { Progress = 0f, Message = "Error querying room", IsVisible = false });
+                EventBus.Publish(new RoomProgressEvent { Progress = 0f, Message = "查询房间失败", IsVisible = false });
                 callback?.Invoke(false, $"Failed to join room: {resp.ErrorMessage}");
             }
         });
@@ -404,8 +457,7 @@ public class EchoNetworkManager : Mirror.NetworkManager
                     {
                         Debug.Log($"Room '{resp.Name}' is ready. Joining...");
                         relayTransport.SetRoomData(resp);
-                        StartClient();
-                        callback?.Invoke(true, $"Joined room: {resp.Name}");
+                        StartCoroutine(StartClientAndVerify(callback));
                         joined = true;
                     }
                     else
@@ -679,7 +731,7 @@ public class EchoNetworkManager : Mirror.NetworkManager
     {
         Debug.Log($"Room Code: {room.RoomCode}");
         Debug.Log($"Players in room: {room.Players.Count}");
-        EventBus.Publish(new RoomProgressEvent { Progress = 1.0f, Message = "Connected!", IsVisible = false });
+        EventBus.Publish(new RoomProgressEvent { Progress = 1.0f, Message = "已连接！", IsVisible = false });
     }
     
     /*
