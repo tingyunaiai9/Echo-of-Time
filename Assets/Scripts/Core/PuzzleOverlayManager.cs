@@ -171,6 +171,12 @@ public class PuzzleOverlayManager : MonoBehaviour
         if (setPuzzleSceneActive)
             SceneManager.SetActiveScene(puzzleScene);
 
+        // 禁用主 UI，防止点击穿透（例如右上角日记按钮与谜题退出按钮重叠）
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.SetMainUIActive(false);
+        }
+
         // 相机处理：记录当前主相机状态并根据设置进行调整
         Camera mainCam = Camera.main;
         if (mainCam == null)
@@ -254,6 +260,12 @@ public class PuzzleOverlayManager : MonoBehaviour
             // 所有关闭后恢复初始控制
             if (disablePlayerControlDuringPuzzle)
                 SetLocalPlayerControl(true);
+
+            // 恢复主 UI
+            if (UIManager.Instance != null)
+            {
+                UIManager.Instance.SetMainUIActive(true);
+            }
 
             if (relockCursorOnExit)
             {
