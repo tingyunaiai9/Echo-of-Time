@@ -11,9 +11,22 @@ public class UIManager : Singleton<UIManager>
     [Tooltip("背包界面游戏对象")]
     public GameObject InventoryPanel;
 
+    [Tooltip("主 UI 画布（包含日记按钮等常驻 UI），用于在谜题中隐藏")]
+    public Canvas mainCanvas;
+
     protected override void Awake()
     {
         base.Awake();
+        // 尝试自动获取 Canvas
+        if (mainCanvas == null)
+        {
+            mainCanvas = GetComponent<Canvas>();
+            if (mainCanvas == null)
+            {
+                // 尝试在父级查找
+                mainCanvas = GetComponentInParent<Canvas>();
+            }
+        }
         InitializeAllUI();
     }
 
@@ -33,6 +46,32 @@ public class UIManager : Singleton<UIManager>
     public void EmitFreezeEvent(bool isOpen)
     {
         EventBus.LocalPublish(new FreezeEvent { isOpen = isOpen });
+    }
+
+    /// <summary>
+    /// 设置主 UI（如日记按钮）的可见性/交互性
+    /// </summary>
+    public void SetMainUIActive(bool active)
+    {
+        if (mainCanvas != null)
+        {
+            mainCanvas.enabled = active;
+            Debug.Log($"[UIManager] SetMainUIActive: {active}");
+        }
+        else
+        {
+            // 如果没有 Canvas，尝试禁用 DiaryPanel 的父级或者其他处理
+            // 这里做一个简单的 fallback，如果 DiaryPanel 存在，禁用它的父物体（假设是 Canvas）
+            if (DiaryPanel != null && DiaryPanel.transform.parent != null)
+            {
+                var parentCanvas = DiaryPanel.GetComponentInParent<Canvas>();
+                if (parentCanvas != null)
+                {
+                    parentCanvas.enabled = active;
+                    Debug.Log($"[UIManager] SetMainUIActive (via DiaryPanel parent): {active}");
+                }
+            }
+        }
     }
 
     /* 处理所有 UI 相关的按键 */
@@ -112,12 +151,22 @@ public class UIManager : Singleton<UIManager>
         // 添加测试线索条目 (Minus键)
         if (Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadMinus))
         {
-            ClueBoard.AddClueEntry("戊戌年九月廿三", "这是一个测试线索条目，用于验证线索板功能是否正常工作。");
-            ClueBoard.AddClueEntry("戊戌年九月廿四", "第二个测试线索条目，检查多个线索的显示效果。");
-            ClueBoard.AddClueEntry("戊戌年九月廿五", "第三个测试线索条目，确保线索位置循环使用正确。");
             Debug.Log("[UIManager] Minus键按下，添加测试线索条目。");
+            
+            Sprite sprite = Resources.Load<Sprite>("Clue_Poem");
+            int timeline = TimelinePlayer.Local.timeline;
+            // 压缩图片，避免过大
+            byte[] spriteBytes = ImageUtils.CompressSpriteToJpegBytes(sprite, 80);
+            if (spriteBytes != null)
+            {
+                Debug.Log($"[UIManager] 线索图片压缩成功，大小：{spriteBytes.Length} 字节");
+                ClueBoard.AddClueEntry(timeline, spriteBytes);
+            }
+            else
+            {
+                Debug.LogError("[UIManager] 线索图片压缩失败。");   
+            }
         }
-
     }
 
     public void InitializeAllUI()

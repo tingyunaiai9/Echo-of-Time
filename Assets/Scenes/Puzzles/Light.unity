@@ -369,7 +369,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &671119608
 RectTransform:
   m_ObjectHideFlags: 0
@@ -600,8 +600,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 5
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
+  m_sharedMaterial: {fileID: -8588852133097181418, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1577,19 +1577,19 @@ MonoBehaviour:
   mirrorSlots:
   - xindex: 1
     yindex: 2
-    direction: 0
+    direction: 3
   - xindex: 1
     yindex: 0
-    direction: 0
+    direction: 1
   - xindex: 3
     yindex: 0
-    direction: 0
+    direction: 2
   - xindex: 3
     yindex: 2
     direction: 0
   - xindex: 5
     yindex: 0
-    direction: 0
+    direction: 1
   - xindex: 7
     yindex: 3
     direction: 0

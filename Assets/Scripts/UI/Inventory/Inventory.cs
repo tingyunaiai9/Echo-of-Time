@@ -298,6 +298,13 @@ public abstract class Inventory : MonoBehaviour
         s_cluePanel.AddClue(clueId, clueText, "", icon);
     }
 
+    /* 静态接口：检查是否拥有某物品 */
+    public static bool HasPropItem(string itemId)
+    {
+        if (s_propPanel == null) return false;
+        return s_propPanel.itemData.ContainsKey(itemId);
+    }
+
     /* 按钮回调 */
     public void OnClickPropTab() => SwitchToProps();
     public void OnClickClueTab() => SwitchToClues();

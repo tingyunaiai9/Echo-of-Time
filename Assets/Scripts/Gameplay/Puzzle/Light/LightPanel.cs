@@ -238,6 +238,7 @@ public class LightPanel : MonoBehaviour
         // 发布 ClueDiscoveredEvent 事件
         EventBus.LocalPublish(new ClueDiscoveredEvent
         {
+            isKeyClue = true,
             playerNetId = 0,
             clueId = "console_clue",
             clueText = "拼好5首诗句后抽屉中的一幅画。",
@@ -249,6 +250,7 @@ public class LightPanel : MonoBehaviour
         // 打开控制台面板
         ConsolePanel.TogglePanel();
     }
+    
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.P))

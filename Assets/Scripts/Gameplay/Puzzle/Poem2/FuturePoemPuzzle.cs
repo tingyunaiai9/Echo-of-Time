@@ -7,6 +7,20 @@ namespace Game.Gameplay.Puzzle.Poem2
     {
         [Header("Poem2 Settings")]
         public NotificationController notificationController;
+        public string puzzleSceneName = "Poem2"; // The name of the puzzle scene to open
+
+        protected override void Start()
+        {
+            base.Start();
+            if (notificationController == null)
+            {
+                notificationController = NotificationController.Instance;
+                if (notificationController == null)
+                {
+                    notificationController = FindFirstObjectByType<NotificationController>();
+                }
+            }
+        }
 
         public override void OnInteract(PlayerController player)
         {
@@ -42,9 +56,15 @@ namespace Game.Gameplay.Puzzle.Poem2
         private void StartPuzzle()
         {
             Debug.Log("Starting Poem Puzzle...");
-            // Add your puzzle start logic here
-             if (notificationController != null)
-                    notificationController.ShowNotification("开始拼诗任务。\nStarting Poem Puzzle.");
+            
+            if (PuzzleOverlayManager.Instance != null)
+            {
+                PuzzleOverlayManager.Instance.OpenPuzzle(puzzleSceneName);
+            }
+            else
+            {
+                Debug.LogError("PuzzleOverlayManager not found!");
+            }
         }
     }
 }

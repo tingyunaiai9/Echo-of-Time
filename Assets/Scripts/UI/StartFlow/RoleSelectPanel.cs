@@ -14,6 +14,11 @@ public class RoleSelectPanel : MonoBehaviour
     public Button artistButton; // Modern / Present
     public Button analystButton; // Future
 
+    [Header("角色立绘组件")]
+    public Image poetCharacterImage;
+    public Image artistCharacterImage;
+    public Image analystCharacterImage;
+
     [Header("角色归属显示文本")]
     // 这里把你刚才新建在图片下方的 NameText 拖进去
     public TMP_Text poetNameText;
@@ -22,6 +27,7 @@ public class RoleSelectPanel : MonoBehaviour
 
     [Header("开始游戏")]
     public Button startButton;
+    public TMP_Text startButtonText;
 
     // 本地缓存
     private PlayerRole localRole;
@@ -38,17 +44,10 @@ public class RoleSelectPanel : MonoBehaviour
 
         analystButton.onClick.RemoveAllListeners();
         analystButton.onClick.AddListener(() => OnClickRole(2)); // 2 = Future
-
-        // 房主每0.5秒检查一次是否可以开始游戏
-        if (NetworkServer.active)
-        {
-            InvokeRepeating(nameof(CheckStartButtonState), 0.5f, 0.5f);
-        }
     }
 
     void OnDisable()
     {
-        CancelInvoke(nameof(CheckStartButtonState));
     }
 
     void Update()
@@ -57,6 +56,7 @@ public class RoleSelectPanel : MonoBehaviour
         // 因为 SyncVar 的更新是异步的，所以在 Update 里轮询是最简单的同步 UI 方式
         RefreshRoleUI();
         TryBindLocal(); // 确保本地引用存在
+        UpdateStartButton();
     }
 
     /// <summary>
@@ -100,15 +100,23 @@ public class RoleSelectPanel : MonoBehaviour
         }
 
         // 3. 更新按钮的可交互性
-        // 规则：如果这个位置已经被占了(Taken)，且不是我自己占的，那就不能点
-        // 如果想要让玩家可以点击“抢”位置，可以去掉这个 interactable 的限制
-        
-        // 获取本地当前选中的角色
-        int myCurrentSelection = localTimeline != null ? localTimeline.timeline : -1;
+        // 规则：如果这个位置已经被占了(Taken)，无论是不是我，都变灰（不可点击）
+        // 这样用户点击后会有“已选择”的反馈（变灰），想换角色点击其他亮着的按钮即可
+        poetButton.interactable = !ancientTaken;
+        artistButton.interactable = !modernTaken;
+        analystButton.interactable = !futureTaken;
 
-        poetButton.interactable = !ancientTaken || (myCurrentSelection == 0);
-        artistButton.interactable = !modernTaken || (myCurrentSelection == 1);
-        analystButton.interactable = !futureTaken || (myCurrentSelection == 2);
+        // 4. 更新立绘颜色
+        UpdateCharacterColor(poetCharacterImage, ancientTaken);
+        UpdateCharacterColor(artistCharacterImage, modernTaken);
+        UpdateCharacterColor(analystCharacterImage, futureTaken);
+    }
+
+    private void UpdateCharacterColor(Image img, bool isTaken)
+    {
+        if (img == null) return;
+        // 如果被占用，显示白色（原色）；否则显示灰色（待选）
+        img.color = isTaken ? Color.white : Color.gray;
     }
 
     /// <summary>
@@ -134,23 +142,26 @@ public class RoleSelectPanel : MonoBehaviour
     
     // --- 以下是房主开始游戏的逻辑 ---
 
-    void CheckStartButtonState()
+    void UpdateStartButton()
     {
         if (startButton == null) return;
         
-        // 只有房主能看到开始按钮
-        if (!NetworkServer.active) 
-        {
-            startButton.gameObject.SetActive(false);
-            return;
-        }
-
+        // 确保按钮对所有人都可见
         startButton.gameObject.SetActive(true);
-        var nm = FindFirstObjectByType<EchoNetworkManager>();
-        
-        // 检查所有玩家是否都分配了有效的时间线 (timeline != -1)
-        bool allReady = CheckAllPlayersHaveRoles();
-        startButton.interactable = allReady;
+
+        if (NetworkServer.active)
+        {
+            // 房主逻辑
+            bool allReady = CheckAllPlayersHaveRoles();
+            startButton.interactable = allReady;
+            if (startButtonText != null) startButtonText.text = "确认";
+        }
+        else
+        {
+            // 客户端逻辑
+            startButton.interactable = false;
+            if (startButtonText != null) startButtonText.text = "等待房主";
+        }
     }
 
     private bool CheckAllPlayersHaveRoles()

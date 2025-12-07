@@ -11,6 +11,9 @@ public class ImageNetworkSender : NetworkBehaviour
     // 缓存正在接收的碎片： imageId -> (index -> data)
     private Dictionary<int, Dictionary<int, byte[]>> receiveBuffer = new Dictionary<int, Dictionary<int, byte[]>>();
 
+    // 防止自己收到自己发的图片导致重复显示
+    private HashSet<int> sentImageIds = new HashSet<int>();
+
     // 分块大小配置
     private const int CHUNK_SIZE = 1024 * 16;
 
@@ -19,20 +22,23 @@ public class ImageNetworkSender : NetworkBehaviour
         LocalInstance = this;
     }
 
-    public void SendImage(byte[] imageData, int timeline)
+    public void SendImage(byte[] imageData, int timeline, string imageType = "Chat")
     {
         if (imageData == null || imageData.Length == 0) return;
 
         // 生成唯一ID
         int imageId = UnityEngine.Random.Range(0, int.MaxValue);
+        
+        // 记录自己发送的ID
+        sentImageIds.Add(imageId);
 
         // 计算分块
         int totalChunks = Mathf.CeilToInt(imageData.Length / (float)CHUNK_SIZE);
 
-        StartCoroutine(SendChunksProcess(imageId, totalChunks, timeline, imageData));
+        StartCoroutine(SendChunksProcess(imageId, totalChunks, timeline, imageData, imageType));
     }
 
-    private IEnumerator SendChunksProcess(int imageId, int totalChunks, int timeline, byte[] fullData)
+    private IEnumerator SendChunksProcess(int imageId, int totalChunks, int timeline, byte[] fullData, string imageType)
     {
         for (int i = 0; i < totalChunks; i++)
         {
@@ -49,11 +55,12 @@ public class ImageNetworkSender : NetworkBehaviour
                 chunkIndex = i,
                 totalChunks = totalChunks,
                 timeline = timeline,
-                chunkData = chunk
+                chunkData = chunk,
+                imageType = imageType
             });
             if (i % 5 == 0) yield return null;
         }
-        Debug.Log($"[Network] 图片发送完毕 ID: {imageId}, 总块数: {totalChunks}");
+        Debug.Log($"[Network] 图片发送完毕 ID: {imageId}, 总块数: {totalChunks}, 类型: {imageType}");
     }
 
     [Command]
@@ -66,6 +73,9 @@ public class ImageNetworkSender : NetworkBehaviour
     [ClientRpc]
     private void RpcReceiveChunk(NetworkMessageTypes.ImageChunkMessage msg)
     {
+        // 如果是自己发送的，直接忽略
+        if (sentImageIds.Contains(msg.imageId)) return;
+
         if (!receiveBuffer.ContainsKey(msg.imageId))
         {
             receiveBuffer[msg.imageId] = new Dictionary<int, byte[]>();
@@ -76,11 +86,11 @@ public class ImageNetworkSender : NetworkBehaviour
         if (receiveBuffer[msg.imageId].Count == msg.totalChunks)
         {
             Debug.Log($"[Network] 图片接收完整 ID: {msg.imageId}");
-            ReassembleAndShow(msg.imageId, msg.totalChunks, msg.timeline);
+            ReassembleAndShow(msg.imageId, msg.totalChunks, msg.timeline, msg.imageType);
         }
     }
 
-    private void ReassembleAndShow(int imageId, int totalChunks, int timeline)
+    private void ReassembleAndShow(int imageId, int totalChunks, int timeline, string imageType)
     {
         if (!receiveBuffer.ContainsKey(imageId)) return;
 
@@ -111,6 +121,13 @@ public class ImageNetworkSender : NetworkBehaviour
         // 清理缓存
         receiveBuffer.Remove(imageId);
 
-        DialogPanel.AddChatImage(fullImage, timeline, publish: false);
+        if (imageType == "Clue")
+        {
+            ClueBoard.AddClueEntry(timeline, fullImage, publish: false);
+        }
+        else
+        {
+            DialogPanel.AddChatImage(fullImage, timeline, publish: false);
+        }
     }
 }
