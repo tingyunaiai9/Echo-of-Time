@@ -41,7 +41,7 @@ namespace Events
     public class ClueSharedEvent
     {
         public byte[] imageData;
-        public string timeline; // 时间线标识
+        public int timeline; // 时间线（0=Ancient, 1=Modern, 2=Future）
     }
 
 

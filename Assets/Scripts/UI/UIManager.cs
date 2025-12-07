@@ -151,20 +151,22 @@ public class UIManager : Singleton<UIManager>
         // 添加测试线索条目 (Minus键)
         if (Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadMinus))
         {
+            Debug.Log("[UIManager] Minus键按下，添加测试线索条目。");
+            
             Sprite sprite = Resources.Load<Sprite>("Clue_Poem");
+            int timeline = TimelinePlayer.Local.timeline;
+            // 压缩图片，避免过大
             byte[] spriteBytes = ImageUtils.CompressSpriteToJpegBytes(sprite, 80);
             if (spriteBytes != null)
             {
-                ClueBoard.AddClueEntry("2024-06-01", spriteBytes);
-                Debug.Log("[UIManager] Minus键按下，添加测试线索条目。");
-                Debug.Log($"[UIManager] 线索图片大小：{spriteBytes.Length} 字节");
+                Debug.Log($"[UIManager] 线索图片压缩成功，大小：{spriteBytes.Length} 字节");
+                ClueBoard.AddClueEntry(timeline, spriteBytes);
             }
             else
             {
                 Debug.LogError("[UIManager] 线索图片压缩失败。");   
             }
         }
-
     }
 
     public void InitializeAllUI()

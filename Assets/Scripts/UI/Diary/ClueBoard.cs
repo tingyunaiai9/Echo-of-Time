@@ -54,7 +54,7 @@ public class ClueBoard : MonoBehaviour
         AddClueEntry(e.timeline, e.imageData, false);
     }
 
-    public static void AddClueEntry(string timeline, byte[] imageBytes, bool publish = true)
+    public static void AddClueEntry(int timeline, byte[] imageBytes, bool publish = true)
     {
         if (s_instance == null) return;
         s_instance.CreateClueEntry(timeline, imageBytes);
@@ -69,7 +69,7 @@ public class ClueBoard : MonoBehaviour
     }
     
     /* 创建单个线索条目 */
-    private void CreateClueEntry(string dateText, byte[] sharedImage = null)
+    private void CreateClueEntry(int timeline, byte[] imageBytes = null)
     {
         if (contentParent == null || Note == null) return;
         
@@ -93,12 +93,26 @@ public class ClueBoard : MonoBehaviour
             TMP_Text dateTextComponent = dateTextTransform.GetComponent<TMP_Text>();
             if (dateTextComponent != null)
             {
-                dateTextComponent.text = dateText;
+            switch (timeline)
+            {
+                case 0:
+                dateTextComponent.text = "Ancient";
+                break;
+                case 1:
+                dateTextComponent.text = "Modern";
+                break;
+                case 2:
+                dateTextComponent.text = "Future";
+                break;
+                default:
+                dateTextComponent.text = "Unknown";
+                break;
+            }
             }
         }
 
         // 处理共享图片
-        if (sharedImage != null && sharedImage.Length > 0)
+        if (imageBytes != null && imageBytes.Length > 0)
         {
             Transform imageTransform = newNote.transform.Find("Image");
             if (imageTransform != null)
@@ -108,7 +122,7 @@ public class ClueBoard : MonoBehaviour
                 {
                     // 将 byte[] 转换为 Texture2D
                     Texture2D texture = new Texture2D(2, 2);
-                    if (texture.LoadImage(sharedImage))
+                    if (texture.LoadImage(imageBytes))
                     {
                         // 从 Texture2D 创建 Sprite
                         Sprite sprite = Sprite.Create(
