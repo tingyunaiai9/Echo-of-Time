@@ -22,15 +22,6 @@ namespace Events
         public Sprite icon;
     }
 
-    // 线索更新事件
-    [System.Serializable]
-    public class ClueUpdatedEvent
-    {
-        public uint playerNetId;
-        public string date;
-        public string content;
-    }
-
     // 聊天消息更新事件
     public class ChatMessageUpdatedEvent
     {
@@ -45,6 +36,15 @@ namespace Events
         public int timeline; // 时间线（0=Ancient, 1=Modern, 2=Future）
     }
 
+    // 日记线索共享事件
+    [System.Serializable]
+    public class ClueSharedEvent
+    {
+        public byte[] imageData;
+        public string timeline; // 时间线标识
+    }
+
+
     public class InventoryUpdatedEvent
     {
         public uint playerNetId;
@@ -55,7 +55,6 @@ namespace Events
     [System.Serializable]
     public class ClueDiscoveredEvent
     {
-        public bool shared = false;
         public bool isKeyClue = false;
         public uint playerNetId;
         public string clueId;

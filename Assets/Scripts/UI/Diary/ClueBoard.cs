@@ -3,9 +3,11 @@
  * 负责线索条目的添加、布局以及事件驱动的显示更新
  */
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 using Events;
+using Unity.VisualScripting;
 
 /*
  * 线索便签墙控制组件
@@ -38,33 +40,36 @@ public class ClueBoard : MonoBehaviour
     void Awake()
     {
         s_instance = this;
-        EventBus.Subscribe<ClueUpdatedEvent>(OnClueUpdated);
+        EventBus.Subscribe<ClueSharedEvent>(OnClueUpdated);
     }
 
     void OnDestroy()
     {
-        EventBus.Unsubscribe<ClueUpdatedEvent>(OnClueUpdated);
+        EventBus.Unsubscribe<ClueSharedEvent>(OnClueUpdated);
     }
 
     /* 线索更新事件回调 */
-    void OnClueUpdated(ClueUpdatedEvent e)
+    void OnClueUpdated(ClueSharedEvent e)
     {
-        AddClueEntry(e.date, e.content, publish: false);
+        AddClueEntry(e.timeline, e.imageData, false);
     }
 
-    /* 添加新的线索条目 */
-    public static void AddClueEntry(string date, string content, bool publish = true)
+    public static void AddClueEntry(string timeline, byte[] imageBytes, bool publish = true)
     {
         if (s_instance == null) return;
-        s_instance.CreateClueEntry(date, content);
+        s_instance.CreateClueEntry(timeline, imageBytes);
         if (publish)
         {
-            EventBus.Publish(new ClueUpdatedEvent { date = date, content = content });
+            EventBus.Publish(new ClueSharedEvent
+            {
+                timeline = timeline,
+                imageData = imageBytes
+            });
         }
     }
     
     /* 创建单个线索条目 */
-    private void CreateClueEntry(string date, string content)
+    private void CreateClueEntry(string dateText, byte[] sharedImage = null)
     {
         if (contentParent == null || Note == null) return;
         
@@ -85,16 +90,54 @@ public class ClueBoard : MonoBehaviour
         Transform dateTextTransform = newNote.transform.Find("DateText");
         if (dateTextTransform != null)
         {
-            TMP_Text dateText = dateTextTransform.GetComponent<TMP_Text>();
-            dateText.text = date;
+            TMP_Text dateTextComponent = dateTextTransform.GetComponent<TMP_Text>();
+            if (dateTextComponent != null)
+            {
+                dateTextComponent.text = dateText;
+            }
         }
 
-        // 设置内容文本
-        Transform contentTextTransform = newNote.transform.Find("ContentText");
-        if (contentTextTransform != null)
+        // 处理共享图片
+        if (sharedImage != null && sharedImage.Length > 0)
         {
-            TMP_Text contentText = contentTextTransform.GetComponent<TMP_Text>();
-            contentText.text = content;
+            Transform imageTransform = newNote.transform.Find("Image");
+            if (imageTransform != null)
+            {
+                Image image = imageTransform.GetComponent<Image>();
+                if (image != null)
+                {
+                    // 将 byte[] 转换为 Texture2D
+                    Texture2D texture = new Texture2D(2, 2);
+                    if (texture.LoadImage(sharedImage))
+                    {
+                        // 从 Texture2D 创建 Sprite
+                        Sprite sprite = Sprite.Create(
+                            texture,
+                            new Rect(0, 0, texture.width, texture.height),
+                            new Vector2(0.5f, 0.5f)
+                        );
+                        
+                        image.sprite = sprite;
+                        
+                        // 设置宽度为 280，高度根据原始比例计算
+                        float targetWidth = 280f;
+                        float aspectRatio = (float)texture.height / texture.width;
+                        float targetHeight = targetWidth * aspectRatio;
+                        
+                        RectTransform imageRect = imageTransform.GetComponent<RectTransform>();
+                        if (imageRect != null)
+                        {
+                            imageRect.sizeDelta = new Vector2(targetWidth, targetHeight);
+                        }
+                        
+                        Debug.Log($"[ClueBoard] 共享线索图片已设置，尺寸: {targetWidth}x{targetHeight}");
+                    }
+                    else
+                    {
+                        Debug.LogError("[ClueBoard] 无法从字节数组加载图片");
+                    }
+                }
+            }
         }
     }
 }

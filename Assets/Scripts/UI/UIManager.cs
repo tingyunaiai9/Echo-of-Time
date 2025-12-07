@@ -151,10 +151,18 @@ public class UIManager : Singleton<UIManager>
         // 添加测试线索条目 (Minus键)
         if (Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadMinus))
         {
-            ClueBoard.AddClueEntry("戊戌年九月廿三", "这是一个测试线索条目，用于验证线索板功能是否正常工作。");
-            ClueBoard.AddClueEntry("戊戌年九月廿四", "第二个测试线索条目，检查多个线索的显示效果。");
-            ClueBoard.AddClueEntry("戊戌年九月廿五", "第三个测试线索条目，确保线索位置循环使用正确。");
-            Debug.Log("[UIManager] Minus键按下，添加测试线索条目。");
+            Sprite sprite = Resources.Load<Sprite>("Clue_Poem");
+            byte[] spriteBytes = ImageUtils.CompressSpriteToJpegBytes(sprite, 80);
+            if (spriteBytes != null)
+            {
+                ClueBoard.AddClueEntry("2024-06-01", spriteBytes);
+                Debug.Log("[UIManager] Minus键按下，添加测试线索条目。");
+                Debug.Log($"[UIManager] 线索图片大小：{spriteBytes.Length} 字节");
+            }
+            else
+            {
+                Debug.LogError("[UIManager] 线索图片压缩失败。");   
+            }
         }
 
     }
