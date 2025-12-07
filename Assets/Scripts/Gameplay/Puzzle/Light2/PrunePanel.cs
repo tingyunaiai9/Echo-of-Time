@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using System.Collections;
 
 public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
@@ -16,8 +17,28 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     [Tooltip("点击状态下的光标热点位置")]
     public Vector2 hotspotPressed = Vector2.zero;
 
+    [Header("macOS 缩放配置")]
+    [Tooltip("macOS 平台下光标缩放比例（建议 0.1）")]
+    [Range(0.1f, 1.0f)]
+    public float macOSScale = 0.1f;
+
+    [Header("点击状态持续时间")]
+    [Tooltip("点击后光标保持按下状态的时间（秒）")]
+    public float pressedDuration = 0.2f;
+
     private bool isPointerInside = false;
     private bool isPressed = false;
+    
+    // 缩放后的光标纹理（仅 macOS 使用）
+    private Texture2D scaledCursorTexture;
+    private Texture2D scaledCursorTexturePressed;
+    
+    // 缩放后的热点位置
+    private Vector2 scaledHotspot;
+    private Vector2 scaledHotspotPressed;
+
+    // 用于延迟恢复光标的协程引用
+    private Coroutine resetCursorCoroutine;
 
     void Start()
     {
@@ -29,6 +50,33 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         if (cursorTexturePressed == null)
         {
             Debug.LogWarning("[PrunePanel] 未设置 cursorTexturePressed！");
+        }
+
+        // 在 macOS 上预先缩放光标纹理
+        if (Application.platform == RuntimePlatform.OSXPlayer || 
+            Application.platform == RuntimePlatform.OSXEditor)
+        {
+            if (cursorTexture != null)
+            {
+                scaledCursorTexture = ScaleTexture(cursorTexture, macOSScale);
+                scaledHotspot = hotspot * macOSScale;
+            }
+            
+            if (cursorTexturePressed != null)
+            {
+                scaledCursorTexturePressed = ScaleTexture(cursorTexturePressed, macOSScale);
+                scaledHotspotPressed = hotspotPressed * macOSScale;
+            }
+            
+            Debug.Log($"[PrunePanel] macOS 平台检测到，光标已缩放至 {macOSScale * 100}%");
+        }
+        else
+        {
+            // Windows 平台直接使用原始纹理
+            scaledCursorTexture = cursorTexture;
+            scaledCursorTexturePressed = cursorTexturePressed;
+            scaledHotspot = hotspot;
+            scaledHotspotPressed = hotspotPressed;
         }
     }
 
@@ -44,6 +92,13 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     {
         isPointerInside = false;
         isPressed = false;
+        
+        // 停止延迟恢复协程
+        if (resetCursorCoroutine != null)
+        {
+            StopCoroutine(resetCursorCoroutine);
+            resetCursorCoroutine = null;
+        }
         
         // 恢复默认光标
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
@@ -61,9 +116,25 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     // 鼠标抬起时调用
     public void OnPointerUp(PointerEventData eventData)
     {
+        // 不立即恢复，而是延迟 0.5 秒
+        if (resetCursorCoroutine != null)
+        {
+            StopCoroutine(resetCursorCoroutine);
+        }
+        resetCursorCoroutine = StartCoroutine(ResetCursorAfterDelay());
+        Debug.Log("[PrunePanel] 鼠标抬起，光标将在 0.5 秒后恢复为默认状态");
+    }
+
+    // 延迟恢复光标状态的协程
+    private IEnumerator ResetCursorAfterDelay()
+    {
+        yield return new WaitForSeconds(pressedDuration);
+        
         isPressed = false;
         UpdateCursor();
-        Debug.Log("[PrunePanel] 鼠标抬起，光标恢复为默认状态");
+        resetCursorCoroutine = null;
+        
+        Debug.Log("[PrunePanel] 光标已恢复为默认状态");
     }
 
     // 更新光标显示
@@ -72,14 +143,36 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         if (!isPointerInside)
             return;
 
-        if (isPressed && cursorTexturePressed != null)
+        if (isPressed && scaledCursorTexturePressed != null)
         {
-            Cursor.SetCursor(cursorTexturePressed, hotspotPressed, CursorMode.Auto);
+            Cursor.SetCursor(scaledCursorTexturePressed, scaledHotspotPressed, CursorMode.Auto);
         }
-        else if (cursorTexture != null)
+        else if (scaledCursorTexture != null)
         {
-            Cursor.SetCursor(cursorTexture, hotspot, CursorMode.Auto);
+            Cursor.SetCursor(scaledCursorTexture, scaledHotspot, CursorMode.Auto);
         }
+    }
+
+    // 缩放纹理
+    private Texture2D ScaleTexture(Texture2D source, float scale)
+    {
+        int newWidth = Mathf.RoundToInt(source.width * scale);
+        int newHeight = Mathf.RoundToInt(source.height * scale);
+        
+        Texture2D result = new Texture2D(newWidth, newHeight, source.format, false);
+        
+        for (int y = 0; y < newHeight; y++)
+        {
+            for (int x = 0; x < newWidth; x++)
+            {
+                float u = (float)x / newWidth;
+                float v = (float)y / newHeight;
+                result.SetPixel(x, y, source.GetPixelBilinear(u, v));
+            }
+        }
+        
+        result.Apply();
+        return result;
     }
 
     void OnDisable()
@@ -90,6 +183,30 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
             isPointerInside = false;
             isPressed = false;
+        }
+        
+        // 停止延迟恢复协程
+        if (resetCursorCoroutine != null)
+        {
+            StopCoroutine(resetCursorCoroutine);
+            resetCursorCoroutine = null;
+        }
+    }
+
+    void OnDestroy()
+    {
+        // 清理动态创建的纹理
+        if (Application.platform == RuntimePlatform.OSXPlayer || 
+            Application.platform == RuntimePlatform.OSXEditor)
+        {
+            if (scaledCursorTexture != null && scaledCursorTexture != cursorTexture)
+            {
+                Destroy(scaledCursorTexture);
+            }
+            if (scaledCursorTexturePressed != null && scaledCursorTexturePressed != cursorTexturePressed)
+            {
+                Destroy(scaledCursorTexturePressed);
+            }
         }
     }
 }
