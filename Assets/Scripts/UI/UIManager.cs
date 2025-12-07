@@ -74,6 +74,19 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
+    /// <summary>
+    /// 关闭日记面板
+    /// </summary>
+    public void CloseDiary()
+    {
+        if (DiaryPanel != null && DiaryPanel.activeSelf)
+        {
+            DiaryPanel.SetActive(false);
+            EventBus.LocalPublish(new FreezeEvent { isOpen = false });
+            Debug.Log("[UIManager] CloseDiary called.");
+        }
+    }
+
     /* 处理所有 UI 相关的按键 */
     private void HandleUIInput()
     {
