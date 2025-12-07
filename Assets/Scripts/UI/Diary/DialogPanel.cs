@@ -405,8 +405,34 @@ public class DialogPanel : MonoBehaviour
             }
         }
     
+        // 根据时间线设置 Background 颜色
+        Transform backgroundTransform = newMessage.transform.Find("Background");
+        if (backgroundTransform != null)
+        {
+            Image backgroundImage = backgroundTransform.GetComponent<Image>();
+            if (backgroundImage != null)
+            {
+                switch (timeline)
+                {
+                    case 0: // Ancient - 青绿色
+                        backgroundImage.color = new Color(0.4f, 0.8f, 0.6f);
+                        break;
+                    case 1: // Modern - 黄褐色
+                        backgroundImage.color = new Color(0.8f, 0.65f, 0.4f);
+                        break;
+                    case 2: // Future - 天蓝色
+                        backgroundImage.color = new Color(0.53f, 0.81f, 0.92f);
+                        break;
+                    default:
+                        backgroundImage.color = Color.white;
+                        break;
+                }
+                Debug.Log($"[DialogPanel.CreateChatMessage] Background 颜色设置成功，Timeline: {timeline}");
+            }
+        }
+
         // 根据时间线设置 Avatar 图片
-        Transform avatarTransform = newMessage.transform.Find("Avatar");
+        Transform avatarTransform = backgroundTransform?.Find("Avatar");
         if (avatarTransform != null)
         {
             Image avatarImage = avatarTransform.GetComponent<Image>();
@@ -488,8 +514,34 @@ public class DialogPanel : MonoBehaviour
             }
         }
 
+        // 根据时间线设置 Background 颜色
+        Transform backgroundTransform = newImageMessage.transform.Find("Background");
+        if (backgroundTransform != null)
+        {
+            Image backgroundImage = backgroundTransform.GetComponent<Image>();
+            if (backgroundImage != null)
+            {
+                switch (timeline)
+                {
+                    case 0: // Ancient - 青绿色
+                        backgroundImage.color = new Color(0.4f, 0.8f, 0.6f);
+                        break;
+                    case 1: // Modern - 黄褐色
+                        backgroundImage.color = new Color(0.8f, 0.65f, 0.4f);
+                        break;
+                    case 2: // Future - 天蓝色
+                        backgroundImage.color = new Color(0.53f, 0.81f, 0.92f);
+                        break;
+                    default:
+                        backgroundImage.color = Color.white;
+                        break;
+                }
+                Debug.Log($"[DialogPanel.CreateChatImage] Background 颜色设置成功，Timeline: {timeline}");
+            }
+        }
+
         // 根据时间线设置 Avatar 图片
-        Transform avatarTransform = newImageMessage.transform.Find("Avatar");
+        Transform avatarTransform = backgroundTransform?.Find("Avatar");
         if (avatarTransform != null)
         {
             Image avatarImage = avatarTransform.GetComponent<Image>();
