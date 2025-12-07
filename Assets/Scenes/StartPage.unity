@@ -407,7 +407,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &171150268
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2814,7 +2814,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1033297883
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5877,7 +5877,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1931026480
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5894,10 +5894,14 @@ MonoBehaviour:
   poetButton: {fileID: 2118776548}
   artistButton: {fileID: 1798967029}
   analystButton: {fileID: 135219016}
+  poetCharacterImage: {fileID: 1597133405}
+  artistCharacterImage: {fileID: 184069561}
+  analystCharacterImage: {fileID: 1362969188}
   poetNameText: {fileID: 585694252}
   artistNameText: {fileID: 1440274886}
   analystNameText: {fileID: 625708016}
   startButton: {fileID: 1652582940}
+  startButtonText: {fileID: 1014742784}
 --- !u!114 &1931026481
 MonoBehaviour:
   m_ObjectHideFlags: 0
