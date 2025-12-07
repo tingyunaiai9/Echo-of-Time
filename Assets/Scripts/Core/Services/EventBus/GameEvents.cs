@@ -12,7 +12,6 @@ namespace Events
      */
 
     // 道具拾取事件
-    [System.Serializable]
     public class ItemPickedUpEvent
     {
         public uint playerNetId;
@@ -37,7 +36,7 @@ namespace Events
     }
 
     // 日记线索共享事件
-    [System.Serializable]
+    
     public class ClueSharedEvent
     {
         public byte[] imageData;
@@ -52,7 +51,7 @@ namespace Events
     }
 
     // 线索被发现时发布
-    [System.Serializable]
+    
     public class ClueDiscoveredEvent
     {
         public bool isKeyClue = false;
@@ -65,7 +64,7 @@ namespace Events
     }
 
     // 玩家打开独立UI界面时发布
-    [System.Serializable]
+    
     public class FreezeEvent
     {
         public bool isOpen;
@@ -75,7 +74,6 @@ namespace Events
      * 谜题与进度相关事件
      */
     // 玩家回答正确时发布
-    [System.Serializable]
     public class AnswerCorrectEvent
     {
         public uint playerNetId;

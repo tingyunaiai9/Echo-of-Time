@@ -52,6 +52,7 @@ public class ClueBoard : MonoBehaviour
     void OnClueUpdated(ClueSharedEvent e)
     {
         AddClueEntry(e.timeline, e.imageData, false);
+        Debug.Log("[ClueBoard] 收到线索共享事件，已添加新线索条目");
     }
 
     public static void AddClueEntry(int timeline, byte[] imageBytes, bool publish = true)
@@ -143,8 +144,6 @@ public class ClueBoard : MonoBehaviour
                         {
                             imageRect.sizeDelta = new Vector2(targetWidth, targetHeight);
                         }
-                        
-                        Debug.Log($"[ClueBoard] 共享线索图片已设置，尺寸: {targetWidth}x{targetHeight}");
                     }
                     else
                     {
