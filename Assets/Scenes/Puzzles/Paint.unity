@@ -624,6 +624,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  puzzlePanel: {fileID: 353986452}
 --- !u!114 &353986454
 MonoBehaviour:
   m_ObjectHideFlags: 0
