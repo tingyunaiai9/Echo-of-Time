@@ -189,7 +189,7 @@ GameObject:
   - component: {fileID: 25969136}
   - component: {fileID: 25969135}
   m_Layer: 5
-  m_Name: Word (6)
+  m_Name: Word7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1384,7 +1384,7 @@ GameObject:
   - component: {fileID: 354101922}
   - component: {fileID: 354101921}
   m_Layer: 5
-  m_Name: Word (1)
+  m_Name: Word2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2979,7 +2979,7 @@ GameObject:
   - component: {fileID: 663970456}
   - component: {fileID: 663970455}
   m_Layer: 5
-  m_Name: Word (5)
+  m_Name: Word6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3421,7 +3421,7 @@ GameObject:
   - component: {fileID: 689984213}
   - component: {fileID: 689984212}
   m_Layer: 5
-  m_Name: Word (2)
+  m_Name: Word3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5713,6 +5713,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResetButton
   piecesParent: {fileID: 1522057645}
+  wordsParent: {fileID: 0}
+  resetColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!1 &1095950641
 GameObject:
   m_ObjectHideFlags: 0
@@ -6197,7 +6199,7 @@ GameObject:
   - component: {fileID: 1195276143}
   - component: {fileID: 1195276142}
   m_Layer: 5
-  m_Name: Word (7)
+  m_Name: Word8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6457,7 +6459,7 @@ GameObject:
   - component: {fileID: 1254146431}
   - component: {fileID: 1254146430}
   m_Layer: 5
-  m_Name: Word (3)
+  m_Name: Word4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6873,7 +6875,7 @@ GameObject:
   - component: {fileID: 1324542254}
   - component: {fileID: 1324542253}
   m_Layer: 5
-  m_Name: Word (8)
+  m_Name: Word9
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8943,7 +8945,7 @@ GameObject:
   - component: {fileID: 1618483944}
   - component: {fileID: 1618483943}
   m_Layer: 5
-  m_Name: Word
+  m_Name: Word1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11732,7 +11734,7 @@ GameObject:
   - component: {fileID: 2049671768}
   - component: {fileID: 2049671767}
   m_Layer: 5
-  m_Name: Word (9)
+  m_Name: Word10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12265,7 +12267,7 @@ GameObject:
   - component: {fileID: 2129755374}
   - component: {fileID: 2129755373}
   m_Layer: 5
-  m_Name: Word (4)
+  m_Name: Word5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -19,7 +19,7 @@ public class Word : MonoBehaviour
 
     private TextMeshProUGUI textMeshPro; // 改为 TextMeshProUGUI
     private Outline outline;
-    private bool isGolden = false; // 标记是否已经变为金黄色
+    public bool isActivated = false; // 用于外部检查该 Word 是否已被激活为金黄色
 
     void Awake()
     {
@@ -47,7 +47,7 @@ public class Word : MonoBehaviour
     void Update()
     {
         // 检查所有对应的 Group 是否都被禁用
-        if (!isGolden && AreAllGroupsInactive())
+        if (!isActivated && AreAllGroupsInactive())
         {
             SetWordToGolden();
         }
@@ -104,6 +104,6 @@ public class Word : MonoBehaviour
             Debug.Log($"[Word] {gameObject.name} Outline 已加粗至 {outlineWidth}");
         }
 
-        isGolden = true; // 标记已经变为金黄色，避免重复设置
+        isActivated = true; // 标记已经变为金黄色，避免重复设置
     }
 }

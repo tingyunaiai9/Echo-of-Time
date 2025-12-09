@@ -84,16 +84,11 @@ public class ResetButton : MonoBehaviour
                 textMeshPro.ForceMeshUpdate();
             }
 
-            // 重置 Word 脚本的 isGolden 标记
+            // 重置 Word 脚本的 isActivated 标记
             Word wordScript = child.GetComponent<Word>();
             if (wordScript != null)
             {
-                // 通过反射重置 isGolden 私有字段
-                var fieldInfo = typeof(Word).GetField("isGolden", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-                if (fieldInfo != null)
-                {
-                    fieldInfo.SetValue(wordScript, false);
-                }
+                wordScript.isActivated = false;
             }
         }
         
