@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 23045489}
   - component: {fileID: 23045490}
   m_Layer: 5
-  m_Name: Flower2
+  m_Name: Group18
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -186,6 +186,8 @@ GameObject:
   - component: {fileID: 25969132}
   - component: {fileID: 25969134}
   - component: {fileID: 25969133}
+  - component: {fileID: 25969136}
+  - component: {fileID: 25969135}
   m_Layer: 5
   m_Name: Word (6)
   m_TagString: Untagged
@@ -311,6 +313,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 25969131}
   m_CullTransparentMesh: 1
+--- !u!114 &25969135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 25969131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 1, y: -1}
+  m_UseGraphicAlpha: 1
+--- !u!114 &25969136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 25969131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8dbbef28b4bd0438f8cc8c44f156001d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Word
+  Pieces: {fileID: 1522057645}
+  coverGroups: 04000000
+  goldenColor: {r: 1, g: 0.84, b: 0, a: 1}
+  outlineWidth: 1.5
 --- !u!1 &32613857
 GameObject:
   m_ObjectHideFlags: 0
@@ -876,7 +909,7 @@ GameObject:
   - component: {fileID: 132828557}
   - component: {fileID: 132828558}
   m_Layer: 5
-  m_Name: Arc1
+  m_Name: Group14
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -930,7 +963,7 @@ GameObject:
   - component: {fileID: 133972706}
   - component: {fileID: 133972707}
   m_Layer: 5
-  m_Name: Flower5
+  m_Name: Group21
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1348,6 +1381,8 @@ GameObject:
   - component: {fileID: 354101918}
   - component: {fileID: 354101920}
   - component: {fileID: 354101919}
+  - component: {fileID: 354101922}
+  - component: {fileID: 354101921}
   m_Layer: 5
   m_Name: Word (1)
   m_TagString: Untagged
@@ -1473,6 +1508,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 354101917}
   m_CullTransparentMesh: 1
+--- !u!114 &354101921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 354101917}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 1, y: -1}
+  m_UseGraphicAlpha: 1
+--- !u!114 &354101922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 354101917}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8dbbef28b4bd0438f8cc8c44f156001d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Word
+  Pieces: {fileID: 1522057645}
+  coverGroups: 0d000000
+  goldenColor: {r: 1, g: 0.84, b: 0, a: 1}
+  outlineWidth: 1.5
 --- !u!1 &365944775
 GameObject:
   m_ObjectHideFlags: 0
@@ -2910,6 +2976,8 @@ GameObject:
   - component: {fileID: 663970452}
   - component: {fileID: 663970454}
   - component: {fileID: 663970453}
+  - component: {fileID: 663970456}
+  - component: {fileID: 663970455}
   m_Layer: 5
   m_Name: Word (5)
   m_TagString: Untagged
@@ -3035,6 +3103,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 663970451}
   m_CullTransparentMesh: 1
+--- !u!114 &663970455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 663970451}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 1, y: -1}
+  m_UseGraphicAlpha: 1
+--- !u!114 &663970456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 663970451}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8dbbef28b4bd0438f8cc8c44f156001d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Word
+  Pieces: {fileID: 1522057645}
+  coverGroups: 12000000
+  goldenColor: {r: 1, g: 0.84, b: 0, a: 1}
+  outlineWidth: 1.5
 --- !u!1 &679044832
 GameObject:
   m_ObjectHideFlags: 0
@@ -3319,6 +3418,8 @@ GameObject:
   - component: {fileID: 689984209}
   - component: {fileID: 689984211}
   - component: {fileID: 689984210}
+  - component: {fileID: 689984213}
+  - component: {fileID: 689984212}
   m_Layer: 5
   m_Name: Word (2)
   m_TagString: Untagged
@@ -3444,6 +3545,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 689984208}
   m_CullTransparentMesh: 1
+--- !u!114 &689984212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 689984208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 1, y: -1}
+  m_UseGraphicAlpha: 1
+--- !u!114 &689984213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 689984208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8dbbef28b4bd0438f8cc8c44f156001d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Word
+  Pieces: {fileID: 1522057645}
+  coverGroups: 08000000
+  goldenColor: {r: 1, g: 0.84, b: 0, a: 1}
+  outlineWidth: 1.5
 --- !u!1 &693005683
 GameObject:
   m_ObjectHideFlags: 0
@@ -3955,7 +4087,7 @@ GameObject:
   - component: {fileID: 847398396}
   - component: {fileID: 847398397}
   m_Layer: 5
-  m_Name: Group1
+  m_Name: Group11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5592,7 +5724,7 @@ GameObject:
   - component: {fileID: 1095950642}
   - component: {fileID: 1095950643}
   m_Layer: 5
-  m_Name: Arc2
+  m_Name: Group15
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5645,7 +5777,7 @@ GameObject:
   - component: {fileID: 1115057102}
   - component: {fileID: 1115057103}
   m_Layer: 5
-  m_Name: Arc3
+  m_Name: Group13
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6062,6 +6194,8 @@ GameObject:
   - component: {fileID: 1195276139}
   - component: {fileID: 1195276141}
   - component: {fileID: 1195276140}
+  - component: {fileID: 1195276143}
+  - component: {fileID: 1195276142}
   m_Layer: 5
   m_Name: Word (7)
   m_TagString: Untagged
@@ -6187,6 +6321,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1195276138}
   m_CullTransparentMesh: 1
+--- !u!114 &1195276142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1195276138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 1, y: -1}
+  m_UseGraphicAlpha: 1
+--- !u!114 &1195276143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1195276138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8dbbef28b4bd0438f8cc8c44f156001d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Word
+  Pieces: {fileID: 1522057645}
+  coverGroups: 10000000
+  goldenColor: {r: 1, g: 0.84, b: 0, a: 1}
+  outlineWidth: 1.5
 --- !u!1 &1212537199
 GameObject:
   m_ObjectHideFlags: 0
@@ -6289,6 +6454,8 @@ GameObject:
   - component: {fileID: 1254146427}
   - component: {fileID: 1254146429}
   - component: {fileID: 1254146428}
+  - component: {fileID: 1254146431}
+  - component: {fileID: 1254146430}
   m_Layer: 5
   m_Name: Word (3)
   m_TagString: Untagged
@@ -6414,6 +6581,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1254146426}
   m_CullTransparentMesh: 1
+--- !u!114 &1254146430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1254146426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 1, y: -1}
+  m_UseGraphicAlpha: 1
+--- !u!114 &1254146431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1254146426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8dbbef28b4bd0438f8cc8c44f156001d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Word
+  Pieces: {fileID: 1522057645}
+  coverGroups: 11000000
+  goldenColor: {r: 1, g: 0.84, b: 0, a: 1}
+  outlineWidth: 1.5
 --- !u!1 &1292018831
 GameObject:
   m_ObjectHideFlags: 0
@@ -6425,7 +6623,7 @@ GameObject:
   - component: {fileID: 1292018832}
   - component: {fileID: 1292018833}
   m_Layer: 5
-  m_Name: Arc4
+  m_Name: Group16
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6672,6 +6870,8 @@ GameObject:
   - component: {fileID: 1324542250}
   - component: {fileID: 1324542252}
   - component: {fileID: 1324542251}
+  - component: {fileID: 1324542254}
+  - component: {fileID: 1324542253}
   m_Layer: 5
   m_Name: Word (8)
   m_TagString: Untagged
@@ -6797,6 +6997,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1324542249}
   m_CullTransparentMesh: 1
+--- !u!114 &1324542253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1324542249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 1, y: -1}
+  m_UseGraphicAlpha: 1
+--- !u!114 &1324542254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1324542249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8dbbef28b4bd0438f8cc8c44f156001d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Word
+  Pieces: {fileID: 1522057645}
+  coverGroups: 0a0000000d000000
+  goldenColor: {r: 1, g: 0.84, b: 0, a: 1}
+  outlineWidth: 1.5
 --- !u!1 &1352664256
 GameObject:
   m_ObjectHideFlags: 0
@@ -6900,8 +7131,9 @@ GameObject:
   - component: {fileID: 1363094726}
   - component: {fileID: 1363094725}
   - component: {fileID: 1363094727}
+  - component: {fileID: 1363094728}
   m_Layer: 5
-  m_Name: Frame4
+  m_Name: Group1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6979,6 +7211,18 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
+--- !u!114 &1363094728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1363094723}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab6c0bb4f2fdd3f45b65f84ccb371fca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Piece
 --- !u!1 &1366538051
 GameObject:
   m_ObjectHideFlags: 0
@@ -7357,7 +7601,7 @@ GameObject:
   - component: {fileID: 1389897074}
   - component: {fileID: 1389897075}
   m_Layer: 5
-  m_Name: Piece1 (2)
+  m_Name: Group12
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7458,7 +7702,7 @@ GameObject:
   - component: {fileID: 1408015218}
   - component: {fileID: 1408015219}
   m_Layer: 5
-  m_Name: Flower3
+  m_Name: Group19
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8404,12 +8648,6 @@ RectTransform:
   - {fileID: 1450954964}
   - {fileID: 297295757}
   - {fileID: 1363094724}
-  - {fileID: 2020447271}
-  - {fileID: 23045489}
-  - {fileID: 1408015218}
-  - {fileID: 1683007344}
-  - {fileID: 133972706}
-  - {fileID: 847398396}
   - {fileID: 167180315}
   - {fileID: 216911861}
   - {fileID: 538148455}
@@ -8419,11 +8657,17 @@ RectTransform:
   - {fileID: 448886979}
   - {fileID: 621223541}
   - {fileID: 1296864176}
+  - {fileID: 847398396}
   - {fileID: 1389897071}
+  - {fileID: 1115057102}
   - {fileID: 132828557}
   - {fileID: 1095950642}
-  - {fileID: 1115057102}
   - {fileID: 1292018832}
+  - {fileID: 2020447271}
+  - {fileID: 23045489}
+  - {fileID: 1408015218}
+  - {fileID: 1683007344}
+  - {fileID: 133972706}
   m_Father: {fileID: 32613858}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -8696,6 +8940,8 @@ GameObject:
   - component: {fileID: 1618483940}
   - component: {fileID: 1618483942}
   - component: {fileID: 1618483941}
+  - component: {fileID: 1618483944}
+  - component: {fileID: 1618483943}
   m_Layer: 5
   m_Name: Word
   m_TagString: Untagged
@@ -8821,6 +9067,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1618483939}
   m_CullTransparentMesh: 1
+--- !u!114 &1618483943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1618483939}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 1, y: -1}
+  m_UseGraphicAlpha: 1
+--- !u!114 &1618483944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1618483939}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8dbbef28b4bd0438f8cc8c44f156001d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Word
+  Pieces: {fileID: 1522057645}
+  coverGroups: 01000000
+  goldenColor: {r: 1, g: 0.84, b: 0, a: 1}
+  outlineWidth: 1.5
 --- !u!1 &1646380877
 GameObject:
   m_ObjectHideFlags: 0
@@ -9089,7 +9366,7 @@ GameObject:
   - component: {fileID: 1683007344}
   - component: {fileID: 1683007345}
   m_Layer: 5
-  m_Name: Flower4
+  m_Name: Group20
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11395,7 +11672,7 @@ GameObject:
   - component: {fileID: 2020447271}
   - component: {fileID: 2020447272}
   m_Layer: 5
-  m_Name: Flower1
+  m_Name: Group17
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11452,6 +11729,8 @@ GameObject:
   - component: {fileID: 2049671764}
   - component: {fileID: 2049671766}
   - component: {fileID: 2049671765}
+  - component: {fileID: 2049671768}
+  - component: {fileID: 2049671767}
   m_Layer: 5
   m_Name: Word (9)
   m_TagString: Untagged
@@ -11577,6 +11856,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2049671763}
   m_CullTransparentMesh: 1
+--- !u!114 &2049671767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2049671763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 1, y: -1}
+  m_UseGraphicAlpha: 1
+--- !u!114 &2049671768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2049671763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8dbbef28b4bd0438f8cc8c44f156001d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Word
+  Pieces: {fileID: 1522057645}
+  coverGroups: 0e000000
+  goldenColor: {r: 1, g: 0.84, b: 0, a: 1}
+  outlineWidth: 1.5
 --- !u!1 &2054668890
 GameObject:
   m_ObjectHideFlags: 0
@@ -11952,6 +12262,8 @@ GameObject:
   - component: {fileID: 2129755370}
   - component: {fileID: 2129755372}
   - component: {fileID: 2129755371}
+  - component: {fileID: 2129755374}
+  - component: {fileID: 2129755373}
   m_Layer: 5
   m_Name: Word (4)
   m_TagString: Untagged
@@ -12077,6 +12389,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2129755369}
   m_CullTransparentMesh: 1
+--- !u!114 &2129755373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2129755369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 1, y: -1}
+  m_UseGraphicAlpha: 1
+--- !u!114 &2129755374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2129755369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8dbbef28b4bd0438f8cc8c44f156001d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Word
+  Pieces: {fileID: 1522057645}
+  coverGroups: 14000000
+  goldenColor: {r: 1, g: 0.84, b: 0, a: 1}
+  outlineWidth: 1.5
 --- !u!1 &2131117754
 GameObject:
   m_ObjectHideFlags: 0

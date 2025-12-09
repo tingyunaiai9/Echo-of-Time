@@ -67,8 +67,6 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
                 scaledCursorTexturePressed = ScaleTexture(cursorTexturePressed, macOSScale);
                 scaledHotspotPressed = hotspotPressed * macOSScale;
             }
-            
-            Debug.Log($"[PrunePanel] macOS 平台检测到，光标已缩放至 {macOSScale * 100}%");
         }
         else
         {
@@ -102,7 +100,6 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         
         // 恢复默认光标
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
-        Debug.Log("[PrunePanel] 鼠标离开，光标已恢复");
     }
 
     // 鼠标按下时调用
@@ -110,7 +107,6 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     {
         isPressed = true;
         UpdateCursor();
-        Debug.Log("[PrunePanel] 鼠标按下，光标切换为点击状态");
     }
 
     // 鼠标抬起时调用
@@ -122,7 +118,6 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             StopCoroutine(resetCursorCoroutine);
         }
         resetCursorCoroutine = StartCoroutine(ResetCursorAfterDelay());
-        Debug.Log("[PrunePanel] 鼠标抬起，光标将在 0.5 秒后恢复为默认状态");
     }
 
     // 延迟恢复光标状态的协程
@@ -134,7 +129,6 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         UpdateCursor();
         resetCursorCoroutine = null;
         
-        Debug.Log("[PrunePanel] 光标已恢复为默认状态");
     }
 
     // 更新光标显示
