@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 /*
  * 拼画管理器：管理遮罩和碎片的绑定，处理完成逻辑
- * 前提：遮罩和碎片已在 Unity 中手动布局好
  */
 public class PuzzleManager : MonoBehaviour
 {
@@ -17,6 +16,10 @@ public class PuzzleManager : MonoBehaviour
     [Header("完成事件")]
     [Tooltip("拼图完成后的回调")]
     public UnityEngine.Events.UnityEvent onPuzzleComplete;
+
+    [Header("关联组件")]
+    [Tooltip("拼画面板管理器，用于显示成功反馈")]
+    public PuzzlePanel puzzlePanel;
 
     // 存储遮罩映射
     private Dictionary<int, PuzzleMask> masks = new Dictionary<int, PuzzleMask>();
@@ -101,6 +104,12 @@ public class PuzzleManager : MonoBehaviour
     {
         Debug.Log("🎉 [PuzzleManager] 拼图完成！");
         onPuzzleComplete?.Invoke();
+        
+        // 显示成功面板（如果已配置）
+        if (puzzlePanel != null)
+        {
+            puzzlePanel.ShowSuccessPanel();
+        }
     }
 
     /* 获取进度 */

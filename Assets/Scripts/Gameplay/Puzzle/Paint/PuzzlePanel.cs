@@ -2,7 +2,7 @@ using UnityEngine;
 using Events;
 
 /*
- * 拼画面板管理器：处理面板开关
+ * 拼画面板管理器：处理面板开关和成功反馈
  */
 public class PuzzlePanel : MonoBehaviour
 {
