@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Game.Gameplay.Puzzle.Paint2;
 
 /*
  * 拼图碎片：可拖拽，靠近对应遮罩时自动消失
@@ -24,6 +25,7 @@ public class PuzzlePiece : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     private CanvasGroup canvasGroup;
     private Canvas canvas;
     private PuzzleManager puzzleManager;
+    private Paint2PuzzleController paint2Manager;
     private bool isPlaced = false;
     private Vector2 originalPosition; // 记录初始位置
     private PuzzleMask currentHighlightedMask;
@@ -35,6 +37,7 @@ public class PuzzlePiece : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         canvasGroup = GetComponent<CanvasGroup>();
         canvas = GetComponentInParent<Canvas>();
         puzzleManager = GetComponentInParent<PuzzleManager>();
+        paint2Manager = GetComponentInParent<Paint2PuzzleController>();
         
         originalPosition = rectTransform.anchoredPosition;
     }
@@ -92,6 +95,10 @@ public class PuzzlePiece : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
                 if (puzzleManager != null)
                 {
                     puzzleManager.OnPieceCorrect(pieceId);
+                }
+                else if (paint2Manager != null)
+                {
+                    paint2Manager.OnPieceCorrect(pieceId);
                 }
             }
             else

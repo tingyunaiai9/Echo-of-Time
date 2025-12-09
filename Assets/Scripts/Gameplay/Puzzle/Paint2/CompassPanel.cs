@@ -3,6 +3,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections;
 using TMPro;
+using Game.Gameplay.Puzzle.Paint2;
 
 public class CompassPanel : MonoBehaviour, IPointerClickHandler
 {
@@ -209,7 +210,17 @@ public class CompassPanel : MonoBehaviour, IPointerClickHandler
             UpdateDigitText(stepIndex);
             
             // 前进到下一步
-            stepIndex = (stepIndex + 1) % sequence.Length;
+            stepIndex++;
+            if (stepIndex >= sequence.Length)
+            {
+                Debug.Log($"[PaintPanel] 所有步骤完成！");
+                if (Paint2Manager.Instance != null)
+                {
+                    Paint2Manager.Instance.CmdSetCompassSolved(true);
+                }
+                stepIndex = 0; // Loop back
+            }
+            
             stepProgress = 0;
             Debug.Log($"[PaintPanel] 步骤完成，进入第 {stepIndex} 步");
         }
