@@ -14,6 +14,9 @@ public class StartMenuController : MonoBehaviour
     public Slider progressSlider;    // 进度条组件
     public TMP_Text progressText;    // 进度文本组件
 
+    [Header("Warning UI")]
+    public WarningPanelManager warningManager;
+
     void OnEnable()
     {
         EventBus.Subscribe<GameStartedEvent>(OnGameStarted);
@@ -70,5 +73,17 @@ public class StartMenuController : MonoBehaviour
         if (progressPanel != null) progressPanel.SetActive(e.IsVisible);
         if (progressSlider != null) progressSlider.value = e.Progress;
         if (progressText != null) progressText.text = e.Message;
+    }
+
+    public void ShowWarning(string message)
+    {
+        if (warningManager != null)
+        {
+            warningManager.ShowWarning(message);
+        }
+        else
+        {
+            Debug.LogWarning($"[StartMenuController] Warning: {message} (Manager not assigned)");
+        }
     }
 }

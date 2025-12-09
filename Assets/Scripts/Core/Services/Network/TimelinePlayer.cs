@@ -61,6 +61,7 @@ public class TimelinePlayer : NetworkBehaviour
         {
             ResultPanel.ResetConfirmButtonForNewLevel();
             SceneDirector.Instance?.TryLoadTimelineNow();
+            UIManager.Instance?.CloseDiary();
         }
     }
 

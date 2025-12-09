@@ -273,7 +273,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LocalTestLauncher
   enableLocalTestMode: 0
   testTimelineIndex: 0
-  testLevelIndex: 2
+  testLevelIndex: 1
 --- !u!1 &611270528
 GameObject:
   m_ObjectHideFlags: 0

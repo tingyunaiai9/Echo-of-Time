@@ -74,6 +74,19 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
+    /// <summary>
+    /// 关闭日记面板
+    /// </summary>
+    public void CloseDiary()
+    {
+        if (DiaryPanel != null && DiaryPanel.activeSelf)
+        {
+            DiaryPanel.SetActive(false);
+            EventBus.LocalPublish(new FreezeEvent { isOpen = false });
+            Debug.Log("[UIManager] CloseDiary called.");
+        }
+    }
+
     /* 处理所有 UI 相关的按键 */
     private void HandleUIInput()
     {
@@ -151,12 +164,22 @@ public class UIManager : Singleton<UIManager>
         // 添加测试线索条目 (Minus键)
         if (Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadMinus))
         {
-            ClueBoard.AddClueEntry("戊戌年九月廿三", "这是一个测试线索条目，用于验证线索板功能是否正常工作。");
-            ClueBoard.AddClueEntry("戊戌年九月廿四", "第二个测试线索条目，检查多个线索的显示效果。");
-            ClueBoard.AddClueEntry("戊戌年九月廿五", "第三个测试线索条目，确保线索位置循环使用正确。");
             Debug.Log("[UIManager] Minus键按下，添加测试线索条目。");
+            
+            Sprite sprite = Resources.Load<Sprite>("Clue_Poem");
+            int timeline = TimelinePlayer.Local.timeline;
+            // 压缩图片，避免过大
+            byte[] spriteBytes = ImageUtils.CompressSpriteToJpegBytes(sprite, 80);
+            if (spriteBytes != null)
+            {
+                Debug.Log($"[UIManager] 线索图片压缩成功，大小：{spriteBytes.Length} 字节");
+                ClueBoard.AddClueEntry(timeline, spriteBytes);
+            }
+            else
+            {
+                Debug.LogError("[UIManager] 线索图片压缩失败。");   
+            }
         }
-
     }
 
     public void InitializeAllUI()

@@ -30,5 +30,6 @@ namespace NetworkMessageTypes
         public int totalChunks;   // 总共有几块
         public int timeline;      // 你的业务逻辑需要的 timeline 参数
         public byte[] chunkData;  // 实际的切片数据
+        public string imageType;  // 图片类型: "Chat", "Clue"
     }
 }

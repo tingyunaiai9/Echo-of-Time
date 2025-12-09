@@ -14,6 +14,7 @@ using System.Collections; // 用于协程
 using System;
 using System.IO;
 using System.Net.Http;
+using UnityEditor.EditorTools;
 
 /*
  * 日记对话面板控制组件
@@ -36,6 +37,9 @@ public class DialogPanel : MonoBehaviour
 
     [Tooltip("发送按钮")]
     public Button sendButton;
+
+    [Tooltip("不同时间线头像图片")]
+    public Sprite[] avatarSprites = new Sprite[3]; // 不同时间线的头像图片
 
     private static DialogPanel s_instance;
 
@@ -390,7 +394,7 @@ public class DialogPanel : MonoBehaviour
     private void CreateChatMessage(string content, int timeline)
     {
         GameObject newMessage = Instantiate(chatMessagePrefab, chatContent);
-
+    
         Transform messageTextTransform = newMessage.transform.Find("MessageText");
         if (messageTextTransform != null)
         {
@@ -400,37 +404,57 @@ public class DialogPanel : MonoBehaviour
                 messageText.text = content;
             }
         }
+    
+        // 根据时间线设置 Background 颜色
+        Transform backgroundTransform = newMessage.transform.Find("Background");
+        if (backgroundTransform != null)
+        {
+            Image backgroundImage = backgroundTransform.GetComponent<Image>();
+            if (backgroundImage != null)
+            {
+                switch (timeline)
+                {
+                    case 0: // Ancient - 青绿色
+                        backgroundImage.color = new Color(0.4f, 0.8f, 0.6f);
+                        break;
+                    case 1: // Modern - 黄褐色
+                        backgroundImage.color = new Color(0.8f, 0.65f, 0.4f);
+                        break;
+                    case 2: // Future - 天蓝色
+                        backgroundImage.color = new Color(0.53f, 0.81f, 0.92f);
+                        break;
+                    default:
+                        backgroundImage.color = Color.white;
+                        break;
+                }
+                Debug.Log($"[DialogPanel.CreateChatMessage] Background 颜色设置成功，Timeline: {timeline}");
+            }
+        }
 
-        // 根据时间线设置 Avatar 颜色
-        Transform avatarTransform = newMessage.transform.Find("Avatar");
+        // 根据时间线设置 Avatar 图片
+        Transform avatarTransform = backgroundTransform?.Find("Avatar");
         if (avatarTransform != null)
         {
             Image avatarImage = avatarTransform.GetComponent<Image>();
             if (avatarImage != null)
             {
-                switch (timeline)
+                // 使用 avatarSprites 数组设置头像
+                if (timeline >= 0 && timeline < avatarSprites.Length && avatarSprites[timeline] != null)
                 {
-                    case 0: // Ancient
-                        avatarImage.color = new Color(0.80f, 0.65f, 0.40f); // 黄褐色
-                        break;
-                    case 1: // Modern
-                        avatarImage.color = new Color(0.68f, 0.85f, 0.90f); // 浅蓝色
-                        break;
-                    case 2: // Future
-                        avatarImage.color = new Color(0.60f, 0.50f, 0.90f); // 蓝紫色
-                        break;
-                    default:
-                        avatarImage.color = Color.white; // 默认白色
-                        break;
+                    avatarImage.sprite = avatarSprites[timeline];
+                    Debug.Log($"[DialogPanel.CreateChatMessage] Avatar 图片设置成功，Timeline: {timeline}");
                 }
-                Debug.Log($"[DialogPanel.CreateChatMessage] Avatar 颜色设置成功，Timeline: {timeline}");
+                else
+                {
+                    Debug.LogWarning($"[DialogPanel.CreateChatMessage] Avatar 图片未设置，Timeline: {timeline}，数组长度: {avatarSprites.Length}");
+                }
             }
         }
-
+    
         newMessage.transform.SetAsLastSibling();
         Debug.Log($"[DialogPanel.CreateChatMessage] 消息创建完成！");
     }
-
+    
     /* 添加新的聊天图片消息 */
     public static void AddChatImage(byte[] imageData, int timeline, bool publish = true)
     {
@@ -450,10 +474,10 @@ public class DialogPanel : MonoBehaviour
     private void CreateChatImage(byte[] imageData, int timeline)
     {
         if (chatContent == null || chatImagePrefab == null) return;
-    
+
         // 实例化图片消息预制体
         GameObject newImageMessage = Instantiate(chatImagePrefab, chatContent);
-    
+
         // 查找图片组件并设置图片
         Transform imageTransform = newImageMessage.transform.Find("Image");
         if (imageTransform != null)
@@ -472,7 +496,7 @@ public class DialogPanel : MonoBehaviour
                         new Vector2(0.5f, 0.5f)
                     );
                     imageComponent.sprite = image;
-                    
+
                     // 设置图片宽度为 405pt，高度根据图片比例动态调整
                     RectTransform rectTransform = imageComponent.GetComponent<RectTransform>();
                     if (rectTransform != null)
@@ -480,7 +504,7 @@ public class DialogPanel : MonoBehaviour
                         float aspectRatio = (float)tex.height / tex.width; // 使用 Texture2D 的实际尺寸计算宽高比
                         rectTransform.sizeDelta = new Vector2(405f, 405f * aspectRatio); // 设置宽度为 405，高度根据比例调整
                     }
-                    
+
                     Debug.Log("[DialogPanel.CreateChatImage] 图片设置成功");
                 }
                 else
@@ -490,32 +514,52 @@ public class DialogPanel : MonoBehaviour
             }
         }
 
-        // 根据时间线设置 Avatar 颜色
-        Transform avatarTransform = newImageMessage.transform.Find("Avatar");
+        // 根据时间线设置 Background 颜色
+        Transform backgroundTransform = newImageMessage.transform.Find("Background");
+        if (backgroundTransform != null)
+        {
+            Image backgroundImage = backgroundTransform.GetComponent<Image>();
+            if (backgroundImage != null)
+            {
+                switch (timeline)
+                {
+                    case 0: // Ancient - 青绿色
+                        backgroundImage.color = new Color(0.4f, 0.8f, 0.6f);
+                        break;
+                    case 1: // Modern - 黄褐色
+                        backgroundImage.color = new Color(0.8f, 0.65f, 0.4f);
+                        break;
+                    case 2: // Future - 天蓝色
+                        backgroundImage.color = new Color(0.53f, 0.81f, 0.92f);
+                        break;
+                    default:
+                        backgroundImage.color = Color.white;
+                        break;
+                }
+                Debug.Log($"[DialogPanel.CreateChatImage] Background 颜色设置成功，Timeline: {timeline}");
+            }
+        }
+
+        // 根据时间线设置 Avatar 图片
+        Transform avatarTransform = backgroundTransform?.Find("Avatar");
         if (avatarTransform != null)
         {
             Image avatarImage = avatarTransform.GetComponent<Image>();
             if (avatarImage != null)
             {
-                switch (timeline)
+                // 使用 avatarSprites 数组设置头像
+                if (timeline >= 0 && timeline < avatarSprites.Length && avatarSprites[timeline] != null)
                 {
-                    case 0: // Ancient
-                        avatarImage.color = new Color(0.80f, 0.65f, 0.40f); // 黄褐色
-                        break;
-                    case 1: // Modern
-                        avatarImage.color = new Color(0.68f, 0.85f, 0.90f); // 浅蓝色
-                        break;
-                    case 2: // Future
-                        avatarImage.color = new Color(0.60f, 0.50f, 0.90f); // 蓝紫色
-                        break;
-                    default:
-                        avatarImage.color = Color.white; // 默认白色
-                        break;
+                    avatarImage.sprite = avatarSprites[timeline];
+                    Debug.Log($"[DialogPanel.CreateChatImage] Avatar 图片设置成功，Timeline: {timeline}");
                 }
-                Debug.Log($"[DialogPanel.CreateChatImage] Avatar 颜色设置成功，Timeline: {timeline}");
+                else
+                {
+                    Debug.LogWarning($"[DialogPanel.CreateChatImage] Avatar 图片未设置，Timeline: {timeline}，数组长度: {avatarSprites.Length}");
+                }
             }
         }
-    
+
         // 将消息放置在聊天内容的末尾
         newImageMessage.transform.SetAsLastSibling();
     }

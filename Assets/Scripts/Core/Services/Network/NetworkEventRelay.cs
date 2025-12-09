@@ -75,7 +75,7 @@ public class NetworkEventRelay : Singleton<NetworkEventRelay>
             // EventBus.LocalPublish(eventData);
             BroadcastToClients(eventData, 0, eventGuid); // 传递eventGuid
         }
-        else if (NetworkClient.active)
+        else if (NetworkClient.active && NetworkClient.isConnected)
         {
             // 客户端：发送到服务器，由服务器分发
             SendEventToServer(eventData);
