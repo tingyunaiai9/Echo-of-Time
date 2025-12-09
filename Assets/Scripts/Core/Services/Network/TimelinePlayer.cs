@@ -87,7 +87,22 @@ public class TimelinePlayer : NetworkBehaviour
         // 请求服务器分配时间线
         if (isClient)
         {
-            CmdRequestTimeline();
+            string myName = "";
+            uint myId = 0;
+
+            // 获取本地 Relay 信息并发送给服务器
+            var relayTransport = networkManager.GetComponent<Unity.Sync.Relay.Transport.Mirror.RelayTransportMirror>();
+            if (relayTransport != null)
+            {
+                var currentPlayer = relayTransport.GetCurrentPlayer();
+                if (currentPlayer != null)
+                {
+                    myName = currentPlayer.Name;
+                    myId = currentPlayer.TransportId;
+                }
+            }
+
+            CmdRequestTimeline(myName, myId);
         }
         
         Debug.Log($"[TimelinePlayer] Local player started");
@@ -113,31 +128,29 @@ public class TimelinePlayer : NetworkBehaviour
     }
     
     [Command]
-    private void CmdRequestTimeline()
+    private void CmdRequestTimeline(string clientName, uint clientId)
     {
         if (networkManager == null)
         {
             networkManager = FindFirstObjectByType<EchoNetworkManager>();
         }
         
-        // 获取 Relay Transport ID
-        var relayTransport = networkManager.GetComponent<Unity.Sync.Relay.Transport.Mirror.RelayTransportMirror>();
-        if (relayTransport != null)
+        // 如果传入了有效的 Relay 信息，则更新
+        if (clientId != 0)
         {
-            var currentPlayer = relayTransport.GetCurrentPlayer();
-            if (currentPlayer != null)
+            transportId = clientId;
+            // 保持服务器分配的 "Player N" 名字，不使用 Relay 中的 Guest 名字覆盖
+            // playerName = clientName; 
+            
+            Debug.Log($"[TimelinePlayer] Linked Relay ID: {transportId}. Relay Name: {clientName}. Keeping Server Name: {playerName}");
+            
+            // 从 NetworkManager 获取已分配的时间线
+            int assignedTimeline = networkManager.GetPlayerTimeline(transportId);
+            
+            if (assignedTimeline >= 0)
             {
-                transportId = currentPlayer.TransportId;
-                playerName = currentPlayer.Name;
-                
-                // 从 NetworkManager 获取已分配的时间线
-                int assignedTimeline = networkManager.GetPlayerTimeline(transportId);
-                
-                if (assignedTimeline >= 0)
-                {
-                    timeline = assignedTimeline;
-                    Debug.Log($"[TimelinePlayer] Assigned to timeline {timeline}");
-                }
+                timeline = assignedTimeline;
+                Debug.Log($"[TimelinePlayer] Assigned to timeline {timeline}");
             }
         }
     }
