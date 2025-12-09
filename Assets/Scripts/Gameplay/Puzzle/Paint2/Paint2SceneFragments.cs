@@ -1,0 +1,35 @@
+using UnityEngine;
+using System.Collections.Generic;
+
+namespace Game.Gameplay.Puzzle.Paint2
+{
+    public class Paint2SceneFragments : MonoBehaviour
+    {
+        [Tooltip("List of fragment objects in the scene to enable when compass is solved")]
+        public List<GameObject> fragments;
+
+        private bool activated = false;
+
+        void Start()
+        {
+            // Ensure they are hidden initially
+            foreach (var f in fragments)
+            {
+                if (f != null) f.SetActive(false);
+            }
+        }
+
+        void Update()
+        {
+            if (!activated && Paint2Manager.Instance != null && Paint2Manager.Instance.isCompassSolved)
+            {
+                activated = true;
+                foreach (var f in fragments)
+                {
+                    if (f != null) f.SetActive(true);
+                }
+                Debug.Log("[Paint2SceneFragments] Fragments activated.");
+            }
+        }
+    }
+}
