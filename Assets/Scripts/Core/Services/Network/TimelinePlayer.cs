@@ -44,6 +44,9 @@ public class TimelinePlayer : NetworkBehaviour
 
         var nm = (EchoNetworkManager)NetworkManager.singleton;
         nm.ServerRememberTimeline(connectionToClient, roleIndex);
+        
+        // 同时更新 NetworkManager 中的 playerTimelineMap，防止重连或场景切换后丢失
+        nm.ServerRegisterTimelineSelection(transportId, roleIndex);
     }
 
     [Command]
