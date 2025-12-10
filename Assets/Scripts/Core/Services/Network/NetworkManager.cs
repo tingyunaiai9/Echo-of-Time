@@ -619,14 +619,28 @@ public class EchoNetworkManager : Mirror.NetworkManager
             return;
         }
         
-        if (playerTimelineMap.ContainsValue(timeline))
+        // 允许覆盖自己的选择，但检查是否被他人占用
+        foreach (var kvp in playerTimelineMap)
         {
-            Debug.LogWarning($"Timeline {timeline} already occupied");
-            return;
+            if (kvp.Value == timeline && kvp.Key != transportId)
+            {
+                Debug.LogWarning($"Timeline {timeline} already occupied by {kvp.Key}");
+                return;
+            }
         }
         
         playerTimelineMap[transportId] = timeline;
         Debug.Log($"Assigned player {transportId} to timeline {timeline}");
+    }
+
+    /*
+     * 注册玩家的时间线选择（更新映射表），供 TimelinePlayer 调用
+     * @param transportId 玩家 TransportId
+     * @param timeline 时间线编号
+     */
+    public void ServerRegisterTimelineSelection(uint transportId, int timeline)
+    {
+        AssignPlayerToTimeline(transportId, timeline);
     }
     
     /*
@@ -740,6 +754,8 @@ public class EchoNetworkManager : Mirror.NetworkManager
      */
     private void OnPlayerJoinedRoom(RelayPlayer player)
     {
+        // 移除自动分配逻辑，等待玩家手动选择角色
+        /*
         // 当新玩家加入时，如果是服务器，自动分配时间线
         if (NetworkServer.active && playerTimelineMap.Count < maxPlayers)
         {
@@ -750,6 +766,8 @@ public class EchoNetworkManager : Mirror.NetworkManager
                 Debug.Log($"Auto-assigned player {player.TransportId} to timeline {nextTimeline}");
             }
         }
+        */
+        Debug.Log($"Player joined room: {player.TransportId}. Waiting for role selection.");
     }
     
     /*
