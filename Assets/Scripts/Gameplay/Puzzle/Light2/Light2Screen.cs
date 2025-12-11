@@ -5,23 +5,18 @@ namespace Game.Gameplay.Puzzle.Light2
 {
     public class Light2Screen : Interaction
     {
-        [Header("Content")]
-        [TextArea(3, 10)]
-        public string screenContent = "屏幕上显示着一些字样...\nSome words are displayed on the screen...";
-
-        [Header("Notification")]
-        public NotificationController notificationController;
+        [Header("UI Settings")]
+        [Tooltip("The Canvas or UI Panel to show when interacting with the screen")]
+        public GameObject screenCanvas;
 
         protected override void Start()
         {
             base.Start();
-            if (notificationController == null)
+            
+            // Ensure canvas is hidden at start
+            if (screenCanvas != null)
             {
-                notificationController = NotificationController.Instance;
-                if (notificationController == null)
-                {
-                    notificationController = FindFirstObjectByType<NotificationController>();
-                }
+                screenCanvas.SetActive(false);
             }
         }
 
@@ -29,9 +24,24 @@ namespace Game.Gameplay.Puzzle.Light2
         {
             base.OnInteract(player);
 
-            if (notificationController != null)
+            if (screenCanvas != null)
             {
-                notificationController.ShowNotification(screenContent);
+                screenCanvas.SetActive(true);
+            }
+            else
+            {
+                Debug.LogWarning("Light2Screen: Screen Canvas is not assigned!");
+            }
+        }
+
+        /// <summary>
+        /// Call this method from a Close Button on the Canvas to hide the screen UI.
+        /// </summary>
+        public void CloseScreen()
+        {
+            if (screenCanvas != null)
+            {
+                screenCanvas.SetActive(false);
             }
         }
     }
