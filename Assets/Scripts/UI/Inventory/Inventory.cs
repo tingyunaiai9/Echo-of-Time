@@ -166,8 +166,8 @@ public abstract class Inventory : MonoBehaviour
             {
                 detailIcon.color = Color.white;  // 确保图标不透明
                 detailIcon.sprite = item.icon;
+                detailIcon.preserveAspect = true; // ← 新增：保持图片原比例
                 detailIcon.enabled = true;
-
             }
             else
             {
@@ -212,6 +212,7 @@ public abstract class Inventory : MonoBehaviour
             if (iconImage != null && item.icon != null)
             {
                 iconImage.sprite = item.icon;
+                iconImage.preserveAspect = true; // ← 新增：保持图片原比例
                 iconImage.enabled = true;
             }
         }
