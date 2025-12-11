@@ -6,9 +6,11 @@ public class KeyPanel : MonoBehaviour
 {
     [Tooltip("重要线索图片")]
     public Image KeyImage;
+    private static KeyPanel s_instance;
 
     void Awake()
     {
+        s_instance = this;
         EventBus.Subscribe<ClueDiscoveredEvent>(OnClueDiscovered);
         Debug.Log("[KeyPanel.Awake] 已订阅 ClueDiscoveredEvent");
     }
@@ -40,6 +42,17 @@ public class KeyPanel : MonoBehaviour
             RectTransform rectTransform = KeyImage.GetComponent<RectTransform>();
             rectTransform.sizeDelta = new Vector2(targetWidth, targetHeight);            
             Debug.Log($"[KeyPanel.OnClueDiscovered] 重要线索已更新: {e.clueId}, 尺寸设置为 {targetWidth}x{targetHeight}，透明度已设置为 1");
+        }
+    }
+
+    public static void Reset()
+    {
+        if (s_instance != null)
+        {
+            s_instance.KeyImage.sprite = null;
+            Color color = s_instance.KeyImage.color;
+            color.a = 0f;
+            s_instance.KeyImage.color = color;
         }
     }
 }
