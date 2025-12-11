@@ -25,7 +25,7 @@ public class VisualNovelPanel : MonoBehaviour
     void Awake()
     {
         Instance = this;
-        panelRoot.SetActive(false); // 默认隐藏
+        panelRoot.SetActive(false);
         continueButton.onClick.AddListener(OnContinueClicked);
         
         // 订阅剧情开始事件
@@ -42,6 +42,7 @@ public class VisualNovelPanel : MonoBehaviour
     private void OnStartDialogue(StartDialogueEvent evt)
     {
         Debug.Log("OnStartDialogue() - 已收到开始剧情事件！");
+        EventBus.LocalPublish(new FreezeEvent {isOpen = true}); // 暂停游戏
         StartDialogue(evt.data);
     }
 
@@ -140,6 +141,6 @@ public class VisualNovelPanel : MonoBehaviour
         panelRoot.SetActive(false);
         Debug.Log("剧情结束");
         // 这里可以发送一个剧情结束事件，恢复玩家控制
-        EventBus.Publish(new EndDialogueEvent());
+        EventBus.LocalPublish(new FreezeEvent {isOpen = false});
     }
 }
