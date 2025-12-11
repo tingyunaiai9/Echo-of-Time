@@ -13,7 +13,7 @@ public class KeyPanel : MonoBehaviour
         Debug.Log("[KeyPanel.Awake] 已订阅 ClueDiscoveredEvent");
     }
 
-    void Oestroy()
+    void OnDestroy()
     {
         EventBus.Unsubscribe<ClueDiscoveredEvent>(OnClueDiscovered);
         Debug.Log("[KeyPanel.OnDestroy] 已取消订阅 ClueDiscoveredEvent");
@@ -27,6 +27,11 @@ public class KeyPanel : MonoBehaviour
         {
             KeyImage.sprite = e.image;
             
+            // 设置透明度为完全不透明
+            Color color = KeyImage.color;
+            color.a = 1f;
+            KeyImage.color = color;
+            
             // 设置宽度为 400pt，高度根据原始比例计算
             float targetWidth = 400f;
             float aspectRatio = (float)e.image.texture.height / e.image.texture.width;
@@ -34,7 +39,7 @@ public class KeyPanel : MonoBehaviour
             
             RectTransform rectTransform = KeyImage.GetComponent<RectTransform>();
             rectTransform.sizeDelta = new Vector2(targetWidth, targetHeight);            
-            Debug.Log($"[KeyPanel.OnClueDiscovered] 重要线索已更新: {e.clueId}, 尺寸设置为 {targetWidth}x{targetHeight}");
+            Debug.Log($"[KeyPanel.OnClueDiscovered] 重要线索已更新: {e.clueId}, 尺寸设置为 {targetWidth}x{targetHeight}，透明度已设置为 1");
         }
     }
 }
