@@ -78,7 +78,7 @@ public class PropBackpack : Inventory
             itemId = e.itemId,
             itemName = e.itemId,
             description = e.description,
-            quantity = e.quantity,
+            quantity = Mathf.Max(1, e.quantity), // 强制最小数量为 1
             icon = e.icon
         };
         AddOrUpdateItem(item);
