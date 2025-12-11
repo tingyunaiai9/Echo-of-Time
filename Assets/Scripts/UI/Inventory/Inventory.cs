@@ -109,7 +109,7 @@ public abstract class Inventory : MonoBehaviour
         if (itemEntries.TryGetValue(item.itemId, out entry))
         {
             // Item 已存在，更新数量等信息
-            Debug.Log($"[{GetType().Name}.CreateOrUpdateItemUI] 更新现有物品条目: {item.itemName}");
+            Debug.Log($"[{GetType().Name}.CreateOrUpdateItemUI] 更新现有物品条目: {item.itemId}");
             UpdateEntryUI(entry, item);
         }
         else
@@ -143,7 +143,7 @@ public abstract class Inventory : MonoBehaviour
             return;
         }
 
-        Debug.Log($"[{GetType().Name}.OnItemClicked] 点击了物品: {item.itemName}");
+        Debug.Log($"[{GetType().Name}.OnItemClicked] 点击了物品: {item.itemId}");
         ShowDetail(item);
     }
 
@@ -178,7 +178,7 @@ public abstract class Inventory : MonoBehaviour
         // 设置名称
         if (detailName != null)
         {
-            detailName.text = item.itemName;
+            detailName.text = item.itemId;
         }
 
         // 设置描述
@@ -189,7 +189,7 @@ public abstract class Inventory : MonoBehaviour
                 : item.description;
         }
 
-        Debug.Log($"[{GetType().Name}.ShowDetail] 已显示详情: {item.itemName}");
+        Debug.Log($"[{GetType().Name}.ShowDetail] 已显示详情: {item.itemId}");
     }
 
     /* 隐藏详情栏 */
