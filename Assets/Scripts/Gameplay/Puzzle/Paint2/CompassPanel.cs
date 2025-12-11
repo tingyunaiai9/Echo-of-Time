@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using System.Collections;
 using TMPro;
 using Game.Gameplay.Puzzle.Paint2;
+using Events;
 
 public class CompassPanel : MonoBehaviour, IPointerClickHandler
 {
@@ -105,6 +106,7 @@ public class CompassPanel : MonoBehaviour, IPointerClickHandler
                 innerOutline.enabled = false; // 初始不显示
             }
         }
+        EventBus.LocalPublish(new FreezeEvent { isOpen = true });
     }
 
     void Update()
@@ -115,6 +117,12 @@ public class CompassPanel : MonoBehaviour, IPointerClickHandler
             Debug.Log("[CompassPanel] 按下 P 键，触发谜题完成效果");
         }
     }
+
+    void OnDestroy()
+    {
+        EventBus.LocalPublish(new FreezeEvent { isOpen = false });
+    }
+    
     public void OnPointerClick(PointerEventData eventData)
     {
         if (InnerImage == null)
