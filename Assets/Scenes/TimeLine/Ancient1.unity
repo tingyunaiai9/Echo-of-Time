@@ -258,7 +258,7 @@ GameObject:
   - component: {fileID: 161056879}
   - component: {fileID: 161056878}
   - component: {fileID: 161056881}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Triangle3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -278,7 +278,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::prop
   itemIcon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  itemDisplayName: triangle3
+  itemDisplayName: triangle
   pickupQuantity: 1
   itemDescription: this is a magic prop...
 --- !u!212 &161056879
@@ -784,7 +784,7 @@ GameObject:
   - component: {fileID: 614983974}
   - component: {fileID: 614983973}
   - component: {fileID: 614983976}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Triangle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1365,7 +1365,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::prop
   itemIcon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  itemDisplayName: triangle2
+  itemDisplayName: triangle
   pickupQuantity: 1
   itemDescription: this is a magic prop...
 --- !u!212 &1630545461
@@ -1519,7 +1519,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::prop
   itemIcon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  itemDisplayName: triangle1
+  itemDisplayName: triangle
   pickupQuantity: 1
   itemDescription: this is a magic prop...
 --- !u!212 &1641003795
