@@ -19,6 +19,7 @@ namespace Events
         public string itemName;
         public string description;
         public Sprite icon;
+        public int quantity = 1;
     }
 
     // 聊天消息更新事件

@@ -242,19 +242,27 @@ public abstract class Inventory : MonoBehaviour
             Debug.LogWarning($"[{GetType().Name}.UpdateEntryUI] 未找到名为 'Name' 的子对象！");
         }
 
-        // 查找 Quantity（可选）
+        // 查找 Quantity（显示在右下角）
         Transform quantityTransform = entry.transform.Find("Quantity");
         if (quantityTransform != null)
         {
-            var quantityText = quantityTransform.GetComponent<Text>();
-            if (quantityText != null && item.quantity > 1)
+            var quantityText = quantityTransform.GetComponent<TextMeshProUGUI>();
+            if (quantityText == null)
             {
-                quantityText.text = $"x{item.quantity}";
-                quantityText.enabled = true;
+                quantityText = quantityTransform.GetComponent<TextMeshProUGUI>();
             }
-            else if (quantityText != null)
+            
+            if (quantityText != null)
             {
-                quantityText.enabled = false;
+                if (item.quantity > 1)
+                {
+                    quantityText.text = $"x{item.quantity}";
+                    quantityText.enabled = true;
+                }
+                else
+                {
+                    quantityText.enabled = false;
+                }
             }
         }
     }

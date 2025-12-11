@@ -70,7 +70,7 @@ public class PropBackpack : Inventory
     /* 处理物品拾取事件 */
     void OnItemPickedUp(ItemPickedUpEvent e)
     {
-        Debug.Log($"[PropBackpack.OnItemPickedUp] 收到事件 - itemId: {e.itemId}, icon: {(e.icon != null ? e.icon.name : "null")}");
+        Debug.Log($"[PropBackpack.OnItemPickedUp] 收到事件 - itemId: {e.itemId}, quantity: {e.quantity}, icon: {(e.icon != null ? e.icon.name : "null")}");
         
         // 将拾取事件转为背包条目
         var item = new InventoryItem
@@ -78,7 +78,7 @@ public class PropBackpack : Inventory
             itemId = e.itemId,
             itemName = e.itemId,
             description = e.description,
-            quantity = 1,
+            quantity = e.quantity,
             icon = e.icon
         };
         AddOrUpdateItem(item);

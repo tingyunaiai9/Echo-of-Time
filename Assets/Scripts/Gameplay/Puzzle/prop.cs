@@ -10,6 +10,9 @@ public class prop : Interaction
     [Tooltip("物品显示名称，留空则使用 GameObject 名称")]
     public string itemDisplayName;
 
+    [Tooltip("拾取时获得的数量")]
+    public int pickupQuantity = 1;
+
     [Header("物品描述")]
     [TextArea(3, 6)]
     [Tooltip("物品详细描述，显示在右侧详情栏")]
@@ -54,10 +57,11 @@ public class prop : Interaction
             playerNetId = pid,
             itemId = displayId,
             icon = itemIcon,
-            description = itemDescription
+            description = itemDescription,
+            quantity = pickupQuantity
         };
         EventBus.LocalPublish(evt);
         EventBus.Publish(evt);
-        Debug.Log($"[prop.OnInteract] 已发布 ItemPickedUpEvent - itemId: {evt.itemId}, icon: {(evt.icon != null ? evt.icon.name : "null")}");
+        Debug.Log($"[prop.OnInteract] 已发布 ItemPickedUpEvent - itemId: {evt.itemId}, quantity: {evt.quantity}, icon: {(evt.icon != null ? evt.icon.name : "null")}");
     }
 }
