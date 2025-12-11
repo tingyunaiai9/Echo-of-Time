@@ -86,8 +86,7 @@ namespace Events
         public StartDialogueEvent(DialogueData data) { this.data = data; }
     }
 
-    // 剧情结束事件，用于恢复玩家移动
-    public class EndDialogueEvent { }
+
 
     /*
      * 时间线交互事件
