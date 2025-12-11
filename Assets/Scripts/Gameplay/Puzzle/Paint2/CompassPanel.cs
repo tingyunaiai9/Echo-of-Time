@@ -29,6 +29,8 @@ public class CompassPanel : MonoBehaviour, IPointerClickHandler
     // 新增成员：InnerImage 与 Outline 引用
     [Tooltip("内圈图像对象（自动查找）")]
     public RectTransform InnerImage;
+    [Tooltip("结果图像对象")]
+    public RectTransform ResultImage;
     private Outline outerOutline;
     private Outline innerOutline;
     private bool outerOutlineOriginalEnabled;
@@ -46,6 +48,7 @@ public class CompassPanel : MonoBehaviour, IPointerClickHandler
     private int stepIndex = 0;
     private int stepProgress = 0;
     private Coroutine flashCoroutine;
+    private bool isPuzzleCompleted = false; // 标记谜题是否已完成
 
     void Awake()
     {
@@ -104,6 +107,14 @@ public class CompassPanel : MonoBehaviour, IPointerClickHandler
         }
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            OnPuzzleCompleted();
+            Debug.Log("[CompassPanel] 按下 P 键，触发谜题完成效果");
+        }
+    }
     public void OnPointerClick(PointerEventData eventData)
     {
         if (InnerImage == null)
@@ -211,18 +222,26 @@ public class CompassPanel : MonoBehaviour, IPointerClickHandler
             
             // 前进到下一步
             stepIndex++;
-            if (stepIndex >= sequence.Length)
+            stepProgress = 0;
+            
+            // 检查是否完成所有步骤
+            if (stepIndex >= sequence.Length && !isPuzzleCompleted)
             {
-                Debug.Log($"[PaintPanel] 所有步骤完成！");
+                Debug.Log($"[CompassPanel] 所有步骤完成！");
+                isPuzzleCompleted = true; // 标记为已完成
+                
                 if (Paint2Manager.Instance != null)
                 {
                     Paint2Manager.Instance.CmdSetCompassSolved(true);
                 }
-                stepIndex = 0; // Loop back
+                
+                // 调用谜题完成函数
+                OnPuzzleCompleted();
             }
-            
-            stepProgress = 0;
-            Debug.Log($"[PaintPanel] 步骤完成，进入第 {stepIndex} 步");
+            else
+            {
+                Debug.Log($"[CompassPanel] 步骤完成，进入第 {stepIndex} 步");
+            }
         }
         else
         {
@@ -280,13 +299,59 @@ public class CompassPanel : MonoBehaviour, IPointerClickHandler
         flashCoroutine = null;
     }
 
+    private void OnPuzzleCompleted()
+    {
+        // 确保 InnerImage 和 OuterImage 存在
+        if (InnerImage != null)
+        {
+            // InnerImage 渐渐透明直至消失
+            CanvasGroup innerCanvasGroup = InnerImage.GetComponent<CanvasGroup>();
+            if (innerCanvasGroup == null)
+            {
+                innerCanvasGroup = InnerImage.gameObject.AddComponent<CanvasGroup>();
+            }
+            LeanTween.alphaCanvas(innerCanvasGroup, 0f, 0.5f).setOnComplete(() =>
+            {
+                InnerImage.gameObject.SetActive(false); // 动画完成后禁用对象
+            });
+        }
     
+        if (OuterImage != null)
+        {
+            // OuterImage 渐渐透明直至消失
+            CanvasGroup outerCanvasGroup = OuterImage.GetComponent<CanvasGroup>();
+            if (outerCanvasGroup == null)
+            {
+                outerCanvasGroup = OuterImage.gameObject.AddComponent<CanvasGroup>();
+            }
+            LeanTween.alphaCanvas(outerCanvasGroup, 0f, 0.5f).setOnComplete(() =>
+            {
+                OuterImage.gameObject.SetActive(false); // 动画完成后禁用对象
+            });
+        }
+    
+        // 确保 ResultImage 存在
+        if (ResultImage != null)
+        {
+            ResultImage.gameObject.SetActive(true); // 确保对象激活
+            // ResultImage 渐渐出现
+            CanvasGroup resultCanvasGroup = ResultImage.GetComponent<CanvasGroup>();
+            if (resultCanvasGroup == null)
+            {
+                resultCanvasGroup = ResultImage.gameObject.AddComponent<CanvasGroup>();
+                resultCanvasGroup.alpha = 0f; // 确保初始透明
+            }
+            LeanTween.alphaCanvas(resultCanvasGroup, 1f, 0.5f);
+        }
+    }
+
      /* 重置旋转状态，清空计数并重置所有数字显示 */
     public void ResetRotation()
     {
         // 重置当前步骤索引
         stepIndex = 0;
         stepProgress = 0;
+        isPuzzleCompleted = false; // 重置完成标志
 
         // 重置所有数字文本为 "?"
         for (int i = 0; i < digitTexts.Length; i++)
