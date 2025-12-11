@@ -40,6 +40,8 @@ public class DialogPanel : MonoBehaviour
 
     [Tooltip("不同时间线头像图片")]
     public Sprite[] avatarSprites = new Sprite[3]; // 不同时间线的头像图片
+    [Tooltip("默认头像图片")]
+    public Sprite defaultAvatarSprite;
 
     private static DialogPanel s_instance;
 
@@ -457,6 +459,7 @@ public class DialogPanel : MonoBehaviour
                 }
                 else
                 {
+                    avatarImage.sprite = defaultAvatarSprite;
                     Debug.LogWarning($"[DialogPanel.CreateChatMessage] Avatar 图片未设置，Timeline: {timeline}，数组长度: {avatarSprites.Length}");
                 }
             }
@@ -566,6 +569,7 @@ public class DialogPanel : MonoBehaviour
                 }
                 else
                 {
+                    avatarImage.sprite = defaultAvatarSprite;
                     Debug.LogWarning($"[DialogPanel.CreateChatImage] Avatar 图片未设置，Timeline: {timeline}，数组长度: {avatarSprites.Length}");
                 }
             }
