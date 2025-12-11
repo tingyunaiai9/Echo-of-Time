@@ -563,7 +563,7 @@ GameObject:
   - component: {fileID: 872927304}
   - component: {fileID: 872927306}
   - component: {fileID: 872927305}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: tree
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -999,7 +999,7 @@ GameObject:
   - component: {fileID: 1151637472}
   - component: {fileID: 1151637474}
   - component: {fileID: 1151637473}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: pot
   m_TagString: Untagged
   m_Icon: {fileID: 0}

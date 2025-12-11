@@ -972,7 +972,7 @@ GameObject:
   - component: {fileID: 1397742149}
   - component: {fileID: 1397742151}
   - component: {fileID: 1397742150}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: pot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1688,7 +1688,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1878763287
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1937,7 +1937,7 @@ GameObject:
   - component: {fileID: 1942966836}
   - component: {fileID: 1942966838}
   - component: {fileID: 1942966837}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: seed
   m_TagString: Untagged
   m_Icon: {fileID: 0}

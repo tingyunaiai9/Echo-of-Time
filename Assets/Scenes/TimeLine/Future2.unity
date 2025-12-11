@@ -456,7 +456,7 @@ GameObject:
   m_Component:
   - component: {fileID: 536360948}
   - component: {fileID: 536360949}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: words
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -741,7 +741,7 @@ GameObject:
   - component: {fileID: 834418272}
   - component: {fileID: 834418274}
   - component: {fileID: 834418273}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: device
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -866,7 +866,7 @@ GameObject:
   m_Component:
   - component: {fileID: 843299855}
   - component: {fileID: 843299856}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: words (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -956,7 +956,7 @@ GameObject:
   m_Component:
   - component: {fileID: 879742341}
   - component: {fileID: 879742342}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: words (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1179,7 +1179,7 @@ GameObject:
   - component: {fileID: 1456438082}
   - component: {fileID: 1456438081}
   - component: {fileID: 1456438080}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: pot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1308,7 +1308,7 @@ GameObject:
   - component: {fileID: 1469183952}
   - component: {fileID: 1469183951}
   - component: {fileID: 1469183950}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: screen2withwords
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1863,7 +1863,7 @@ GameObject:
   - component: {fileID: 1936971609}
   - component: {fileID: 1936971611}
   - component: {fileID: 1936971610}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: tree
   m_TagString: Untagged
   m_Icon: {fileID: 0}
