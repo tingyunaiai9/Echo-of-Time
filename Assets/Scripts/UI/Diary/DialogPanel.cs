@@ -355,7 +355,21 @@ public class DialogPanel : MonoBehaviour
             currentStreamingText = messageTextTransform.GetComponent<TMP_Text>();
             if (currentStreamingText != null)
             {
-                currentStreamingText.text = "俺在思考……";
+                switch (timeline)
+                {
+                    case 0:
+                        currentStreamingText.text = "日记上显现出神秘的诗篇……";
+                        break;
+                    case 1:
+                        currentStreamingText.text = "日记中浮现出梦幻的画卷……";
+                        break;
+                    case 2:
+                        currentStreamingText.text = "日记上跳出了奇怪的代码……";
+                        break;
+                    default:
+                        currentStreamingText.text = "思考中……";
+                        break;
+                }
             }
         }
 
