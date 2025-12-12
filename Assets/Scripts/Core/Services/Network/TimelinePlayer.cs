@@ -68,6 +68,42 @@ public class TimelinePlayer : NetworkBehaviour
             ClueBoard.Reset();
             SceneDirector.Instance?.TryLoadTimelineNow();
             UIManager.Instance?.CloseDiary();
+
+            // 尝试重置玩家位置到新场景的 SpawnPoint
+            StartCoroutine(ResetPlayerPosition());
+        }
+    }
+
+    private System.Collections.IEnumerator ResetPlayerPosition()
+    {
+        // 等待一帧，确保场景加载开始或完成（如果是同步加载）
+        // 由于 SceneDirector 是异步加载，这里可能需要更稳健的等待逻辑
+        // 但通常 SpawnPoint 是随场景加载的，我们可以尝试轮询几次
+        
+        Transform spawnPoint = null;
+        float timeout = 5f;
+        float timer = 0f;
+
+        while (spawnPoint == null && timer < timeout)
+        {
+            var obj = GameObject.Find("SpawnPoint");
+            if (obj != null) spawnPoint = obj.transform;
+            
+            if (spawnPoint == null) yield return null;
+            timer += Time.deltaTime;
+        }
+
+        if (spawnPoint != null)
+        {
+            Vector3 newPos = transform.position;
+            newPos.x = spawnPoint.position.x;
+            // 保持 Y 和 Z 不变，或者根据需求调整
+            transform.position = newPos;
+            Debug.Log($"[TimelinePlayer] Player position reset to SpawnPoint X: {newPos.x}");
+        }
+        else
+        {
+            Debug.LogWarning("[TimelinePlayer] SpawnPoint not found in new scene.");
         }
     }
 
