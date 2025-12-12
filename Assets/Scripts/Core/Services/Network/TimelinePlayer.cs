@@ -25,9 +25,7 @@ public class TimelinePlayer : NetworkBehaviour
     [SyncVar(hook = nameof(OnVisibilityChanged))]
     public bool isVisible = false; // 初始不可见（只能看自己）
 
-    /// <summary>
-    /// 本地玩家的单例引用，方便全局访问
-    /// </summary>
+    // 本地玩家的单例引用，方便全局访问
     public static TimelinePlayer Local { get; private set; }
 
     [Server]
@@ -68,6 +66,48 @@ public class TimelinePlayer : NetworkBehaviour
             ClueBoard.Reset();
             SceneDirector.Instance?.TryLoadTimelineNow();
             UIManager.Instance?.CloseDiary();
+
+            // 注意：位置重置逻辑已移交至 SceneDirector 在场景加载完成后调用
+            // 避免因 OnLevelChanged 触发时机早于场景加载而导致的问题
+        }
+    }
+
+    // 供外部（如 SceneDirector）调用，在场景加载完成后重置玩家位置
+    public void TriggerResetPosition()
+    {
+        StartCoroutine(ResetPlayerPosition());
+    }
+
+    private System.Collections.IEnumerator ResetPlayerPosition()
+    {
+        // 等待一帧，确保场景加载开始或完成（如果是同步加载）
+        // 由于 SceneDirector 是异步加载，这里可能需要更稳健的等待逻辑
+        // 但通常 SpawnPoint 是随场景加载的，我们可以尝试轮询几次
+        
+        Transform spawnPoint = null;
+        float timeout = 5f;
+        float timer = 0f;
+
+        while (spawnPoint == null && timer < timeout)
+        {
+            var obj = GameObject.Find("SpawnPoint");
+            if (obj != null) spawnPoint = obj.transform;
+            
+            if (spawnPoint == null) yield return null;
+            timer += Time.deltaTime;
+        }
+
+        if (spawnPoint != null)
+        {
+            Vector3 newPos = transform.position;
+            newPos.x = spawnPoint.position.x;
+            // 保持 Y 和 Z 不变，或者根据需求调整
+            transform.position = newPos;
+            Debug.Log($"[TimelinePlayer] Player position reset to SpawnPoint X: {newPos.x}");
+        }
+        else
+        {
+            Debug.LogWarning("[TimelinePlayer] SpawnPoint not found in new scene.");
         }
     }
 
