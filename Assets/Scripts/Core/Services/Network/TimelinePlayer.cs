@@ -25,9 +25,7 @@ public class TimelinePlayer : NetworkBehaviour
     [SyncVar(hook = nameof(OnVisibilityChanged))]
     public bool isVisible = false; // 初始不可见（只能看自己）
 
-    /// <summary>
-    /// 本地玩家的单例引用，方便全局访问
-    /// </summary>
+    // 本地玩家的单例引用，方便全局访问
     public static TimelinePlayer Local { get; private set; }
 
     [Server]
@@ -69,9 +67,15 @@ public class TimelinePlayer : NetworkBehaviour
             SceneDirector.Instance?.TryLoadTimelineNow();
             UIManager.Instance?.CloseDiary();
 
-            // 尝试重置玩家位置到新场景的 SpawnPoint
-            StartCoroutine(ResetPlayerPosition());
+            // 注意：位置重置逻辑已移交至 SceneDirector 在场景加载完成后调用
+            // 避免因 OnLevelChanged 触发时机早于场景加载而导致的问题
         }
+    }
+
+    // 供外部（如 SceneDirector）调用，在场景加载完成后重置玩家位置
+    public void TriggerResetPosition()
+    {
+        StartCoroutine(ResetPlayerPosition());
     }
 
     private System.Collections.IEnumerator ResetPlayerPosition()
