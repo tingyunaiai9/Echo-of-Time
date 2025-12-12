@@ -162,6 +162,20 @@ public class ClueBoard : MonoBehaviour
             }
         }
     }
+
+    public static void Reset()
+    {
+        if (s_instance != null)
+        {
+            // 删除所有子对象
+            foreach (Transform child in s_instance.contentParent)
+            {
+                GameObject.Destroy(child.gameObject);
+            }
+            // 重置位置索引
+            s_instance.currentPositionIndex = 0;
+        }
+    }
 }
 
 /* 线索条目数据结构 */
