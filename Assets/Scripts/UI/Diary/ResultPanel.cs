@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Events;
 
 public class ResultPanel : MonoBehaviour
 {
@@ -17,7 +18,7 @@ public class ResultPanel : MonoBehaviour
     [Tooltip("需要匹配的正确答案")]
     public string correctAnswer = "";
     [Tooltip("按层数配置的正确答案列表，第1层索引0，第2层索引1，以此类推")]
-    public List<string> levelAnswers = new List<string>() { "南山", "归去" }; // 初始第一层答案
+    public List<string> levelAnswers = new List<string>() { "南山", "归去" }; // 初始前两层答案
 
     private TMP_Text confirmButtonText;
     private bool isConfirmButtonCooldown;
@@ -216,7 +217,7 @@ public class ResultPanel : MonoBehaviour
         return correctAnswer;
     }
 
-    public static void ResetConfirmButtonForNewLevel()
+    public static void Reset()
     {
         if (s_instance == null)
         {

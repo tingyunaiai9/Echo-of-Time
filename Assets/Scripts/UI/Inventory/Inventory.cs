@@ -109,7 +109,7 @@ public abstract class Inventory : MonoBehaviour
         if (itemEntries.TryGetValue(item.itemId, out entry))
         {
             // Item 已存在，更新数量等信息
-            Debug.Log($"[{GetType().Name}.CreateOrUpdateItemUI] 更新现有物品条目: {item.itemName}");
+            Debug.Log($"[{GetType().Name}.CreateOrUpdateItemUI] 更新现有物品条目: {item.itemId}");
             UpdateEntryUI(entry, item);
         }
         else
@@ -143,7 +143,7 @@ public abstract class Inventory : MonoBehaviour
             return;
         }
 
-        Debug.Log($"[{GetType().Name}.OnItemClicked] 点击了物品: {item.itemName}");
+        Debug.Log($"[{GetType().Name}.OnItemClicked] 点击了物品: {item.itemId}");
         ShowDetail(item);
     }
 
@@ -166,8 +166,8 @@ public abstract class Inventory : MonoBehaviour
             {
                 detailIcon.color = Color.white;  // 确保图标不透明
                 detailIcon.sprite = item.icon;
+                detailIcon.preserveAspect = true; // ← 新增：保持图片原比例
                 detailIcon.enabled = true;
-
             }
             else
             {
@@ -178,7 +178,7 @@ public abstract class Inventory : MonoBehaviour
         // 设置名称
         if (detailName != null)
         {
-            detailName.text = item.itemName;
+            detailName.text = item.itemId;
         }
 
         // 设置描述
@@ -189,7 +189,7 @@ public abstract class Inventory : MonoBehaviour
                 : item.description;
         }
 
-        Debug.Log($"[{GetType().Name}.ShowDetail] 已显示详情: {item.itemName}");
+        Debug.Log($"[{GetType().Name}.ShowDetail] 已显示详情: {item.itemId}");
     }
 
     /* 隐藏详情栏 */
@@ -204,57 +204,31 @@ public abstract class Inventory : MonoBehaviour
     /* 更新条目 UI */
     protected virtual void UpdateEntryUI(GameObject entry, InventoryItem item)
     {
-        // 严格查找 Icon（只查直接子对象）
+        // 查找 Icon
         Transform iconTransform = entry.transform.Find("Icon");
         if (iconTransform != null)
         {
-            var icon = iconTransform.GetComponent<Image>();
-            if (icon != null && item.icon != null)
+            var iconImage = iconTransform.GetComponent<Image>();
+            if (iconImage != null && item.icon != null)
             {
-                icon.sprite = item.icon;
-                icon.enabled = true;
-                Debug.Log($"[{GetType().Name}.UpdateEntryUI] 图标已设置: {item.icon.name}");
+                iconImage.sprite = item.icon;
+                iconImage.preserveAspect = true; // ← 新增：保持图片原比例
+                iconImage.enabled = true;
             }
-            else if (icon != null)
-            {
-                icon.enabled = false;
-                Debug.Log($"[{GetType().Name}.UpdateEntryUI] 无图标，隐藏 Image");
-            }
-        }
-        else
-        {
-            Debug.LogWarning($"[{GetType().Name}.UpdateEntryUI] 未找到名为 'Icon' 的子对象！");
         }
 
-        // 严格查找 Name（只查直接子对象）
-        Transform nameTransform = entry.transform.Find("Name");
-        if (nameTransform != null)
-        {
-            var nameText = nameTransform.GetComponent<TextMeshProUGUI>();
-            if (nameText != null)
-            {
-                nameText.text = item.itemName;
-                Debug.Log($"[{GetType().Name}.UpdateEntryUI] 名称已设置: {item.itemName}");
-            }
-        }
-        else
-        {
-            Debug.LogWarning($"[{GetType().Name}.UpdateEntryUI] 未找到名为 'Name' 的子对象！");
-        }
-
-        // 查找 Quantity（可选）
+        // 查找 Quantity（显示在右下角）
         Transform quantityTransform = entry.transform.Find("Quantity");
         if (quantityTransform != null)
         {
-            var quantityText = quantityTransform.GetComponent<Text>();
-            if (quantityText != null && item.quantity > 1)
+            var quantityText = quantityTransform.GetComponent<TextMeshProUGUI>();
+            
+            if (quantityText != null)
             {
-                quantityText.text = $"x{item.quantity}";
-                quantityText.enabled = true;
-            }
-            else if (quantityText != null)
-            {
-                quantityText.enabled = false;
+                // 只有数量大于1时才显示计数，否则隐藏
+                bool showCount = item.quantity > 1;
+                quantityText.text = showCount ? item.quantity.ToString() : "";
+                quantityText.enabled = showCount;
             }
         }
     }

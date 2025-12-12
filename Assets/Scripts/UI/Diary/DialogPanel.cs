@@ -40,6 +40,8 @@ public class DialogPanel : MonoBehaviour
 
     [Tooltip("不同时间线头像图片")]
     public Sprite[] avatarSprites = new Sprite[3]; // 不同时间线的头像图片
+    [Tooltip("默认头像图片")]
+    public Sprite defaultAvatarSprite;
 
     private static DialogPanel s_instance;
 
@@ -355,7 +357,21 @@ public class DialogPanel : MonoBehaviour
             currentStreamingText = messageTextTransform.GetComponent<TMP_Text>();
             if (currentStreamingText != null)
             {
-                currentStreamingText.text = "俺在思考……";
+                switch (timeline)
+                {
+                    case 0:
+                        currentStreamingText.text = "日记上显现出神秘的诗篇……";
+                        break;
+                    case 1:
+                        currentStreamingText.text = "日记中浮现出梦幻的画卷……";
+                        break;
+                    case 2:
+                        currentStreamingText.text = "日记上跳出了奇怪的代码……";
+                        break;
+                    default:
+                        currentStreamingText.text = "思考中……";
+                        break;
+                }
             }
         }
 
@@ -443,6 +459,7 @@ public class DialogPanel : MonoBehaviour
                 }
                 else
                 {
+                    avatarImage.sprite = defaultAvatarSprite;
                     Debug.LogWarning($"[DialogPanel.CreateChatMessage] Avatar 图片未设置，Timeline: {timeline}，数组长度: {avatarSprites.Length}");
                 }
             }
@@ -552,6 +569,7 @@ public class DialogPanel : MonoBehaviour
                 }
                 else
                 {
+                    avatarImage.sprite = defaultAvatarSprite;
                     Debug.LogWarning($"[DialogPanel.CreateChatImage] Avatar 图片未设置，Timeline: {timeline}，数组长度: {avatarSprites.Length}");
                 }
             }
@@ -559,6 +577,22 @@ public class DialogPanel : MonoBehaviour
 
         // 将消息放置在聊天内容的末尾
         newImageMessage.transform.SetAsLastSibling();
+    }
+
+    public static void Reset()
+    {
+        if (s_instance != null)
+        {
+            // 清空聊天内容
+            foreach (Transform child in s_instance.chatContent)
+            {
+                Destroy(child.gameObject);
+            }
+            s_instance.currentStreamingText = null;
+            s_instance.currentStreamingMessageGO = null;
+            s_instance.streamQueue.Clear();
+            s_instance.isStreaming = false;
+        }
     }
 
     /* 根据 timeline 获取时间线名称 */
