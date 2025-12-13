@@ -11,15 +11,6 @@ namespace Game.Gameplay.Puzzle.Light2
 
         private GameObject screenCanvas;
 
-        private void Awake()
-        {
-            // Ensure it's hidden initially, waiting for Light2Tree to wake it up
-            if (gameObject.activeSelf)
-            {
-                gameObject.SetActive(false);
-            }
-        }
-
         protected override void Start()
         {
             base.Start();
