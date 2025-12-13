@@ -21,14 +21,18 @@ namespace Game.Gameplay.Puzzle.Paint2
 
         void Update()
         {
-            if (!activated && Paint2Manager.Instance != null && Paint2Manager.Instance.isCompassSolved)
+            if (!activated && Paint2Manager.Instance != null)
             {
-                activated = true;
-                foreach (var f in fragments)
+                // Fragments become visible only when BOTH the compass puzzle is solved AND the clue is found
+                if (Paint2Manager.Instance.isCompassSolved && Paint2Manager.Instance.isClueFound)
                 {
-                    if (f != null) f.SetActive(true);
+                    activated = true;
+                    foreach (var f in fragments)
+                    {
+                        if (f != null) f.SetActive(true);
+                    }
+                    Debug.Log("[Paint2SceneFragments] Fragments activated (Compass Solved + Clue Found).");
                 }
-                Debug.Log("[Paint2SceneFragments] Fragments activated.");
             }
         }
     }
