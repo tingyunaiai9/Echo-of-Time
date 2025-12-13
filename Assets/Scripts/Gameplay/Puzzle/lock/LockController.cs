@@ -44,9 +44,9 @@ public class LockController : MonoBehaviour
             isUnlocked = true;
 
             // Notify Manager
-            if (Poem2Manager.Instance != null)
+            if (Poem2NetManager.Instance != null)
             {
-                Poem2Manager.Instance.CmdSetLockUnlocked(true);
+                Poem2NetManager.Instance.CmdSetLockUnlocked(true);
             }
 
             StartCoroutine(PlayUnlockAnimation());
@@ -127,9 +127,9 @@ public class LockController : MonoBehaviour
         }
 
         // Check Scroll State after opening
-        if (Poem2Manager.Instance != null)
+        if (Poem2NetManager.Instance != null)
         {
-            bool hasScroll = Poem2Manager.Instance.isScrollPlacedInAncient;
+            bool hasScroll = Poem2NetManager.Instance.isScrollPlacedInAncient;
             
             if (scrollInsideBox != null)
             {

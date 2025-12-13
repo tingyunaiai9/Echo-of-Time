@@ -4160,7 +4160,7 @@ GameObject:
   - component: {fileID: 1766814044}
   - component: {fileID: 1766814047}
   - component: {fileID: 1766814046}
-  - component: {fileID: 1766814045}
+  - component: {fileID: 1766814048}
   m_Layer: 5
   m_Name: PoemPanel
   m_TagString: Untagged
@@ -4189,23 +4189,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1766814045
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1766814043}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 747af9ad6d8734893ad96f9a6dd368a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PoemManager
-  totalNotesRequired: 5
-  PanelRoot: {fileID: 1766814043}
-  DrawerPanel: {fileID: 222388687}
-  animationDuration: 1
-  easeType: 4
 --- !u!114 &1766814046
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4244,6 +4227,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1766814043}
   m_CullTransparentMesh: 1
+--- !u!114 &1766814048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1766814043}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2abcfa0e2a43845cb85f2073e3552ef6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Poem1Manager
+  totalNotesRequired: 5
+  panelRoot: {fileID: 1766814043}
+  drawerPanel: {fileID: 222388687}
+  animationDuration: 1
+  easeType: 4
 --- !u!1 &1806226428
 GameObject:
   m_ObjectHideFlags: 0
