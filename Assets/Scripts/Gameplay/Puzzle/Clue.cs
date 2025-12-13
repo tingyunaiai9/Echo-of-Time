@@ -55,7 +55,7 @@ public class Clue : Interaction
 
         if (canvas != null)
         {
-            canvas.ShowClue(clueIcon, clueDescription);
+            canvas.ShowClue(clueImage, clueDescription);
         }
         else
         {
