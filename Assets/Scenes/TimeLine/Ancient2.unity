@@ -1267,7 +1267,7 @@ GameObject:
   - component: {fileID: 1356401723}
   - component: {fileID: 1356401722}
   m_Layer: 7
-  m_Name: bamboo_slips_1
+  m_Name: BambooScroll
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
