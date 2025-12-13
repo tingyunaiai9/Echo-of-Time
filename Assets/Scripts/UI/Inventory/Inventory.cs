@@ -209,11 +209,21 @@ public abstract class Inventory : MonoBehaviour
         if (iconTransform != null)
         {
             var iconImage = iconTransform.GetComponent<Image>();
-            if (iconImage != null && item.icon != null)
+            if (iconImage != null)
             {
-                iconImage.sprite = item.icon;
-                iconImage.preserveAspect = true; // ← 新增：保持图片原比例
-                iconImage.enabled = true;
+                // 检查 Sprite 是否存在且未被销毁
+                if (item.icon != null)
+                {
+                    iconImage.sprite = item.icon;
+                    iconImage.preserveAspect = true; // ← 新增：保持图片原比例
+                    iconImage.enabled = true;
+                }
+                else
+                {
+                    // 如果 Sprite 已销毁或为空，隐藏 Image 以免显示白色方块
+                    iconImage.enabled = false;
+                    iconImage.sprite = null;
+                }
             }
         }
 
