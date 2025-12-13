@@ -851,11 +851,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 834418270}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e89fb3f20512b64194b8bd27bab949a, type: 3}
+  m_Script: {fileID: 11500000, guid: c529dc3ac9ca5bd4fb757a49ce409846, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::InteractToOpenPuzzle
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Gameplay.Puzzle.Poem2.FuturePoemPuzzle
+  notificationController: {fileID: 0}
   puzzleSceneName: Poem2
-  closeExistingBeforeOpen: 0
 --- !u!1 &843299854
 GameObject:
   m_ObjectHideFlags: 0
