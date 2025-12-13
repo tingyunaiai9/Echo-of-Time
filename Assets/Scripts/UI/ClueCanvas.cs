@@ -16,7 +16,11 @@ public class ClueCanvas : MonoBehaviour
 
     private void Awake()
     {
-        // 初始化时隐藏，或者由场景状态决定
+        // 游戏开始时，确保 Content 面板是隐藏的，但 ClueCanvas 本身保持激活以便被查找
+        if (contentPanel != null)
+        {
+            contentPanel.SetActive(false);
+        }
     }
 
     public void ShowClue(Sprite icon, string description)
