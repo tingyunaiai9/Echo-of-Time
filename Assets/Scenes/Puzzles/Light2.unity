@@ -344,6 +344,7 @@ MonoBehaviour:
   coverGroups: 04000000
   goldenColor: {r: 1, g: 0.84, b: 0, a: 1}
   outlineWidth: 1.5
+  isActivated: 0
 --- !u!1 &32613857
 GameObject:
   m_ObjectHideFlags: 0
@@ -437,6 +438,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99cce6a603b89be409b56ba869d514d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PrunePanel
+  words: []
   cursorTexture: {fileID: 2800000, guid: 800e72f09ea981141a79c6501275ddee, type: 3}
   cursorTexturePressed: {fileID: 2800000, guid: 732666e4ca1097b40b5b570f8f583e9e, type: 3}
   hotspot: {x: 0, y: 0}
@@ -1539,6 +1541,7 @@ MonoBehaviour:
   coverGroups: 0d000000
   goldenColor: {r: 1, g: 0.84, b: 0, a: 1}
   outlineWidth: 1.5
+  isActivated: 0
 --- !u!1 &365944775
 GameObject:
   m_ObjectHideFlags: 0
@@ -3134,6 +3137,7 @@ MonoBehaviour:
   coverGroups: 12000000
   goldenColor: {r: 1, g: 0.84, b: 0, a: 1}
   outlineWidth: 1.5
+  isActivated: 0
 --- !u!1 &679044832
 GameObject:
   m_ObjectHideFlags: 0
@@ -3576,6 +3580,7 @@ MonoBehaviour:
   coverGroups: 08000000
   goldenColor: {r: 1, g: 0.84, b: 0, a: 1}
   outlineWidth: 1.5
+  isActivated: 0
 --- !u!1 &693005683
 GameObject:
   m_ObjectHideFlags: 0
@@ -4651,7 +4656,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 1
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 1699317037}
   m_PlaneDistance: 11
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -4662,7 +4667,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 231567723
-  m_SortingOrder: 0
+  m_SortingOrder: 110
   m_TargetDisplay: 0
 --- !u!224 &923700002
 RectTransform:
@@ -6354,6 +6359,7 @@ MonoBehaviour:
   coverGroups: 10000000
   goldenColor: {r: 1, g: 0.84, b: 0, a: 1}
   outlineWidth: 1.5
+  isActivated: 0
 --- !u!1 &1212537199
 GameObject:
   m_ObjectHideFlags: 0
@@ -6614,6 +6620,7 @@ MonoBehaviour:
   coverGroups: 11000000
   goldenColor: {r: 1, g: 0.84, b: 0, a: 1}
   outlineWidth: 1.5
+  isActivated: 0
 --- !u!1 &1292018831
 GameObject:
   m_ObjectHideFlags: 0
@@ -7030,6 +7037,7 @@ MonoBehaviour:
   coverGroups: 0a0000000d000000
   goldenColor: {r: 1, g: 0.84, b: 0, a: 1}
   outlineWidth: 1.5
+  isActivated: 0
 --- !u!1 &1352664256
 GameObject:
   m_ObjectHideFlags: 0
@@ -9100,6 +9108,7 @@ MonoBehaviour:
   coverGroups: 01000000
   goldenColor: {r: 1, g: 0.84, b: 0, a: 1}
   outlineWidth: 1.5
+  isActivated: 0
 --- !u!1 &1646380877
 GameObject:
   m_ObjectHideFlags: 0
@@ -9515,6 +9524,7 @@ GameObject:
   - component: {fileID: 1699317038}
   - component: {fileID: 1699317037}
   - component: {fileID: 1699317036}
+  - component: {fileID: 1699317039}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -9529,7 +9539,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1699317035}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &1699317037
 Camera:
   m_ObjectHideFlags: 0
@@ -9596,6 +9606,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1699317039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1699317035}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalCameraData
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_AllowHDROutput: 1
+  m_UseScreenCoordOverride: 0
+  m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_TaaSettings:
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
+  m_Version: 2
 --- !u!1 &1716058698
 GameObject:
   m_ObjectHideFlags: 0
@@ -11889,6 +11943,7 @@ MonoBehaviour:
   coverGroups: 0e000000
   goldenColor: {r: 1, g: 0.84, b: 0, a: 1}
   outlineWidth: 1.5
+  isActivated: 0
 --- !u!1 &2054668890
 GameObject:
   m_ObjectHideFlags: 0
@@ -12422,6 +12477,7 @@ MonoBehaviour:
   coverGroups: 14000000
   goldenColor: {r: 1, g: 0.84, b: 0, a: 1}
   outlineWidth: 1.5
+  isActivated: 0
 --- !u!1 &2131117754
 GameObject:
   m_ObjectHideFlags: 0

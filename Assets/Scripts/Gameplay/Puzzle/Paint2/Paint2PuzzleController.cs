@@ -35,8 +35,28 @@ namespace Game.Gameplay.Puzzle.Paint2
         {
             if (notificationController == null)
             {
-                notificationController = NotificationController.Instance;
-                if (notificationController == null) notificationController = FindFirstObjectByType<NotificationController>();
+                // 优先查找当前场景中的 NotificationController
+                var controllers = FindObjectsByType<NotificationController>(FindObjectsSortMode.None);
+                foreach (var controller in controllers)
+                {
+                    if (controller.gameObject.scene == gameObject.scene)
+                    {
+                        notificationController = controller;
+                        break;
+                    }
+                }
+
+                // 如果当前场景没有，则使用全局单例
+                if (notificationController == null)
+                {
+                    notificationController = NotificationController.Instance;
+                }
+
+                // 最后尝试任意查找
+                if (notificationController == null) 
+                {
+                    notificationController = FindFirstObjectByType<NotificationController>();
+                }
             }
 
             InitializeMasks();

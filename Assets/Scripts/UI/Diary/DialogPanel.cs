@@ -579,6 +579,22 @@ public class DialogPanel : MonoBehaviour
         newImageMessage.transform.SetAsLastSibling();
     }
 
+    public static void Reset()
+    {
+        if (s_instance != null)
+        {
+            // 清空聊天内容
+            foreach (Transform child in s_instance.chatContent)
+            {
+                Destroy(child.gameObject);
+            }
+            s_instance.currentStreamingText = null;
+            s_instance.currentStreamingMessageGO = null;
+            s_instance.streamQueue.Clear();
+            s_instance.isStreaming = false;
+        }
+    }
+
     /* 根据 timeline 获取时间线名称 */
     private string GetTimelineName(int timeline)
     {
