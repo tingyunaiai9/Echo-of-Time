@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 89aad54315fdbf84292caf6ae3439274
+guid: bec7bc51a6d44184b94ebef62cbb5d73
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -45,10 +45,10 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 0
+  spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 290
+  spritePixelsToUnits: 300
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -102,7 +102,7 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 4740
-        width: 486
+        width: 504
         height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -112,8 +112,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: feb89e2822db4af4b8b5e669ccd32ed5
-      internalID: 35794690
+      spriteID: 3ea835396d7dd1d48abb7bbcd7e268c2
+      internalID: -1863114548
       vertices: []
       indices: 
       edges: []
@@ -122,9 +122,9 @@ TextureImporter:
       name: future_walk_1
       rect:
         serializedVersion: 2
-        x: 486
+        x: 504
         y: 4740
-        width: 486
+        width: 504
         height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -134,8 +134,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 472a03b9f12debe468442a497f0c4965
-      internalID: -1303664110
+      spriteID: f52ce5173c9e23e4d9e3fa35427993fb
+      internalID: -997781043
       vertices: []
       indices: 
       edges: []
@@ -144,9 +144,9 @@ TextureImporter:
       name: future_walk_2
       rect:
         serializedVersion: 2
-        x: 972
+        x: 1008
         y: 4740
-        width: 486
+        width: 504
         height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -156,8 +156,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: dfdb6f2e46b0d334f957acdcfa37d7c8
-      internalID: -26408479
+      spriteID: 472472e540be4ce43a6d2e02f390281c
+      internalID: 840632408
       vertices: []
       indices: 
       edges: []
@@ -166,9 +166,9 @@ TextureImporter:
       name: future_walk_3
       rect:
         serializedVersion: 2
-        x: 1458
+        x: 1512
         y: 4740
-        width: 486
+        width: 504
         height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -178,8 +178,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: dea366553ea30fd4d9bc831f2ab19855
-      internalID: 1057417425
+      spriteID: 343bde530e1fa0b4688b19ab53c4b851
+      internalID: -59388660
       vertices: []
       indices: 
       edges: []
@@ -188,9 +188,9 @@ TextureImporter:
       name: future_walk_4
       rect:
         serializedVersion: 2
-        x: 1944
+        x: 2016
         y: 4740
-        width: 486
+        width: 504
         height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -200,8 +200,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b4c506fbc28bef44b955d1fb8a3a39d4
-      internalID: -279315260
+      spriteID: 27ba17051ae869d4ba54c63358a5c2c8
+      internalID: -416735503
       vertices: []
       indices: 
       edges: []
@@ -210,9 +210,9 @@ TextureImporter:
       name: future_walk_5
       rect:
         serializedVersion: 2
-        x: 2430
+        x: 2520
         y: 4740
-        width: 486
+        width: 504
         height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -222,8 +222,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 75e83031d36bc3c47841b260688084f8
-      internalID: 668010371
+      spriteID: a2e963496501d4e44a501a4ccef4bd38
+      internalID: -1164472916
       vertices: []
       indices: 
       edges: []
@@ -234,7 +234,7 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 3555
-        width: 486
+        width: 504
         height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -244,8 +244,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 90f8ae06313efc9478fb5c921457be41
-      internalID: 190465748
+      spriteID: 3e87aebfb11af7b47bb47d7bf0c01ae9
+      internalID: -203514224
       vertices: []
       indices: 
       edges: []
@@ -254,9 +254,9 @@ TextureImporter:
       name: future_walk_7
       rect:
         serializedVersion: 2
-        x: 486
+        x: 504
         y: 3555
-        width: 486
+        width: 504
         height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -266,8 +266,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 542b5bc5a8eaa704d85850bedfc991ac
-      internalID: 302728935
+      spriteID: 80a10c4ea42a1d2438eecdaff4e477e1
+      internalID: 395714602
       vertices: []
       indices: 
       edges: []
@@ -276,9 +276,9 @@ TextureImporter:
       name: future_walk_8
       rect:
         serializedVersion: 2
-        x: 972
+        x: 1008
         y: 3555
-        width: 486
+        width: 504
         height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -288,8 +288,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 887a4c3771412094b8111f528dc93ec9
-      internalID: 1861128512
+      spriteID: 91631bea0bd4f2d4d8164683c5e6a2f1
+      internalID: -534127728
       vertices: []
       indices: 
       edges: []
@@ -298,9 +298,9 @@ TextureImporter:
       name: future_walk_9
       rect:
         serializedVersion: 2
-        x: 1458
+        x: 1512
         y: 3555
-        width: 486
+        width: 504
         height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -310,8 +310,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0199412f8ae410f41900328f1373cac0
-      internalID: 2012866116
+      spriteID: 3f64fa9f292eb024a94230ed5663659b
+      internalID: -883771078
       vertices: []
       indices: 
       edges: []
@@ -320,9 +320,9 @@ TextureImporter:
       name: future_walk_10
       rect:
         serializedVersion: 2
-        x: 1944
+        x: 2016
         y: 3555
-        width: 486
+        width: 504
         height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -332,8 +332,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 67613876c44ae5744bf321161f8fa79c
-      internalID: -1934647977
+      spriteID: 9e86b28b350707a4997680a8400b592f
+      internalID: -372704657
       vertices: []
       indices: 
       edges: []
@@ -342,9 +342,9 @@ TextureImporter:
       name: future_walk_11
       rect:
         serializedVersion: 2
-        x: 2430
+        x: 2520
         y: 3555
-        width: 486
+        width: 504
         height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -354,8 +354,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9b7bd9658135df642bcf7c5d213717ee
-      internalID: -1970157187
+      spriteID: ba383fe717edc344381076fe7dd00146
+      internalID: -1768368938
       vertices: []
       indices: 
       edges: []
@@ -366,7 +366,7 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 2370
-        width: 486
+        width: 504
         height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -376,8 +376,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ed049ac0fd927bc4d9657db1843a9988
-      internalID: 1941830064
+      spriteID: 5fe52d5615b7d7b4a8af52678dc31b20
+      internalID: -136326
       vertices: []
       indices: 
       edges: []
@@ -386,9 +386,9 @@ TextureImporter:
       name: future_walk_13
       rect:
         serializedVersion: 2
-        x: 486
+        x: 504
         y: 2370
-        width: 486
+        width: 504
         height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -398,8 +398,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 598e6542007cd4e44a5688016794ef89
-      internalID: -509995949
+      spriteID: 070c773661542b64d9c604b5e75ebaa6
+      internalID: -862192471
       vertices: []
       indices: 
       edges: []
@@ -408,9 +408,9 @@ TextureImporter:
       name: future_walk_14
       rect:
         serializedVersion: 2
-        x: 972
+        x: 1008
         y: 2370
-        width: 486
+        width: 504
         height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -420,8 +420,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8c0e0ce0930e9754e88f629343dc351f
-      internalID: 496069123
+      spriteID: bcfe2da1ad4102b45a81439e68f2ef89
+      internalID: 1512838690
       vertices: []
       indices: 
       edges: []
@@ -430,9 +430,9 @@ TextureImporter:
       name: future_walk_15
       rect:
         serializedVersion: 2
-        x: 1458
+        x: 1512
         y: 2370
-        width: 486
+        width: 504
         height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -442,8 +442,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 46d22c92c31dd7f4883e539768588bc6
-      internalID: -291510522
+      spriteID: 1035f187400c5e84b80db1b014668587
+      internalID: -243403865
       vertices: []
       indices: 
       edges: []
@@ -452,9 +452,9 @@ TextureImporter:
       name: future_walk_16
       rect:
         serializedVersion: 2
-        x: 1944
+        x: 2016
         y: 2370
-        width: 486
+        width: 504
         height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -464,8 +464,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c21123823efe54344be1807821bca86d
-      internalID: -1372850263
+      spriteID: 586ad3e5b834b49438865d6a560cf1d9
+      internalID: 227434280
       vertices: []
       indices: 
       edges: []
@@ -474,9 +474,9 @@ TextureImporter:
       name: future_walk_17
       rect:
         serializedVersion: 2
-        x: 2430
+        x: 2520
         y: 2370
-        width: 486
+        width: 504
         height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -486,8 +486,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c540cc285d44ea64d9302179deb92986
-      internalID: -630275275
+      spriteID: 58164fac02831744d9774d2442e9c12f
+      internalID: 1907861524
       vertices: []
       indices: 
       edges: []
@@ -498,7 +498,7 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 1185
-        width: 486
+        width: 504
         height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -508,8 +508,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c449b829a9dcf1045ac1a5518235c86a
-      internalID: -538407545
+      spriteID: 1ae5bd128f4e6bd408989c38c2e944a9
+      internalID: -1825262927
       vertices: []
       indices: 
       edges: []
@@ -518,9 +518,9 @@ TextureImporter:
       name: future_walk_19
       rect:
         serializedVersion: 2
-        x: 486
+        x: 504
         y: 1185
-        width: 486
+        width: 504
         height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -530,8 +530,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 046b6374f927e684aa1b8d396d2442b8
-      internalID: -639784333
+      spriteID: b7942cb347b08ce42b6974c73a4dcb1a
+      internalID: -994975366
       vertices: []
       indices: 
       edges: []
@@ -540,9 +540,9 @@ TextureImporter:
       name: future_walk_20
       rect:
         serializedVersion: 2
-        x: 972
+        x: 1008
         y: 1185
-        width: 486
+        width: 504
         height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -552,8 +552,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9f7c42c42114b164bb225f0454505e2a
-      internalID: -1592148363
+      spriteID: 39f8d1069a682324b974b96ee933b4ce
+      internalID: -627786329
       vertices: []
       indices: 
       edges: []
@@ -562,9 +562,9 @@ TextureImporter:
       name: future_walk_21
       rect:
         serializedVersion: 2
-        x: 1458
+        x: 1512
         y: 1185
-        width: 486
+        width: 504
         height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -574,8 +574,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0dc32b15f4310a94695c51b782f4a09a
-      internalID: 357112105
+      spriteID: 57c2ff7867fe6b447ab999ea508619ea
+      internalID: -346380471
       vertices: []
       indices: 
       edges: []
@@ -584,9 +584,9 @@ TextureImporter:
       name: future_walk_22
       rect:
         serializedVersion: 2
-        x: 1944
+        x: 2016
         y: 1185
-        width: 486
+        width: 504
         height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -596,8 +596,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8f45c9589fed17540aee6fb39d5aca88
-      internalID: -1154601424
+      spriteID: 430f5d7d2fa9be4429abd99412ae5132
+      internalID: 2074390397
       vertices: []
       indices: 
       edges: []
@@ -606,9 +606,9 @@ TextureImporter:
       name: future_walk_23
       rect:
         serializedVersion: 2
-        x: 2430
+        x: 2520
         y: 1185
-        width: 486
+        width: 504
         height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -618,8 +618,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7af731f5976aa404bbedcedeedc0ca0b
-      internalID: 1495594483
+      spriteID: 697d4b94024236a479d91131671078b9
+      internalID: -1214740853
       vertices: []
       indices: 
       edges: []
@@ -630,7 +630,7 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 486
+        width: 504
         height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -640,8 +640,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f76b3ad7a6c2fa84981a8a5013ace720
-      internalID: 1113226349
+      spriteID: 1e80b508df621484d9c98e323d574dd3
+      internalID: -133343046
       vertices: []
       indices: 
       edges: []
@@ -650,9 +650,9 @@ TextureImporter:
       name: future_walk_25
       rect:
         serializedVersion: 2
-        x: 486
+        x: 504
         y: 0
-        width: 486
+        width: 504
         height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -662,8 +662,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c2b83af6be854d740bf931782ef121d6
-      internalID: -2066995843
+      spriteID: 6c4ab998c33fc0647a982d05c15c82b4
+      internalID: -577677099
       vertices: []
       indices: 
       edges: []
@@ -672,9 +672,9 @@ TextureImporter:
       name: future_walk_26
       rect:
         serializedVersion: 2
-        x: 972
+        x: 1008
         y: 0
-        width: 486
+        width: 504
         height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -684,8 +684,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 04a4b0f155740084cbe692b75b78db0f
-      internalID: 858697340
+      spriteID: beec062653aaff0488b892dfbbee1864
+      internalID: 385773289
       vertices: []
       indices: 
       edges: []
@@ -694,9 +694,9 @@ TextureImporter:
       name: future_walk_27
       rect:
         serializedVersion: 2
-        x: 1458
+        x: 1512
         y: 0
-        width: 486
+        width: 504
         height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -706,8 +706,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 75c1981068c2fb24a994cb6000a1d2eb
-      internalID: 171985911
+      spriteID: f5c53dc70dc2666478806017ab132970
+      internalID: 685345690
       vertices: []
       indices: 
       edges: []
@@ -716,9 +716,9 @@ TextureImporter:
       name: future_walk_28
       rect:
         serializedVersion: 2
-        x: 1944
+        x: 2016
         y: 0
-        width: 486
+        width: 504
         height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -728,8 +728,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 80711ee81e7f2e8428a6df7cfaf285e5
-      internalID: -1071396188
+      spriteID: bf197497c662e1d4a9cf9a03cc5d7ecb
+      internalID: -763987963
       vertices: []
       indices: 
       edges: []
@@ -738,9 +738,9 @@ TextureImporter:
       name: future_walk_29
       rect:
         serializedVersion: 2
-        x: 2430
+        x: 2520
         y: 0
-        width: 486
+        width: 504
         height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -750,8 +750,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 615709e48e1f5c64c928d514238ce2ea
-      internalID: 681543496
+      spriteID: fbbc6585dfc6ab84db51c5b2b23fab73
+      internalID: 1448491748
       vertices: []
       indices: 
       edges: []
@@ -760,7 +760,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 555e4a20edebf954485d4d77a3baa966
+    spriteID: 443d9d603f6cf444193c8e5f1e25ee2f
     internalID: 0
     vertices: []
     indices: 
@@ -770,38 +770,38 @@ TextureImporter:
     spriteCustomMetadata:
       entries:
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":6.0,"y":5.0},"gridSpriteSize":{"x":486.0,"y":1185.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":6.0,"y":5.0},"gridSpriteSize":{"x":504.0,"y":1185.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      future_walk_0: 35794690
-      future_walk_1: -1303664110
-      future_walk_10: -1934647977
-      future_walk_11: -1970157187
-      future_walk_12: 1941830064
-      future_walk_13: -509995949
-      future_walk_14: 496069123
-      future_walk_15: -291510522
-      future_walk_16: -1372850263
-      future_walk_17: -630275275
-      future_walk_18: -538407545
-      future_walk_19: -639784333
-      future_walk_2: -26408479
-      future_walk_20: -1592148363
-      future_walk_21: 357112105
-      future_walk_22: -1154601424
-      future_walk_23: 1495594483
-      future_walk_24: 1113226349
-      future_walk_25: -2066995843
-      future_walk_26: 858697340
-      future_walk_27: 171985911
-      future_walk_28: -1071396188
-      future_walk_29: 681543496
-      future_walk_3: 1057417425
-      future_walk_4: -279315260
-      future_walk_5: 668010371
-      future_walk_6: 190465748
-      future_walk_7: 302728935
-      future_walk_8: 1861128512
-      future_walk_9: 2012866116
+      future_walk_0: -1863114548
+      future_walk_1: -997781043
+      future_walk_10: -372704657
+      future_walk_11: -1768368938
+      future_walk_12: -136326
+      future_walk_13: -862192471
+      future_walk_14: 1512838690
+      future_walk_15: -243403865
+      future_walk_16: 227434280
+      future_walk_17: 1907861524
+      future_walk_18: -1825262927
+      future_walk_19: -994975366
+      future_walk_2: 840632408
+      future_walk_20: -627786329
+      future_walk_21: -346380471
+      future_walk_22: 2074390397
+      future_walk_23: -1214740853
+      future_walk_24: -133343046
+      future_walk_25: -577677099
+      future_walk_26: 385773289
+      future_walk_27: 685345690
+      future_walk_28: -763987963
+      future_walk_29: 1448491748
+      future_walk_3: -59388660
+      future_walk_4: -416735503
+      future_walk_5: -1164472916
+      future_walk_6: -203514224
+      future_walk_7: 395714602
+      future_walk_8: -534127728
+      future_walk_9: -883771078
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

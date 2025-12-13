@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: fb304912e38e8a842a14e470584ef478
+guid: 4d7b1d6c5d0927f40a3220d4aae85a05
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -45,10 +45,10 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 0
+  spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 400
+  spritePixelsToUnits: 300
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -97,13 +97,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: image1_0
+      name: ancient_walk_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 6004
-        width: 940
-        height: 1501
+        y: 4740
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -112,20 +112,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b9afdc51b9e033c4c8ccc04adb9578c4
-      internalID: 611413157
+      spriteID: 48ae1706bf019b846894522d6413fc4b
+      internalID: -209654393
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: image1_1
+      name: ancient_walk_1
       rect:
         serializedVersion: 2
-        x: 940
-        y: 6004
-        width: 940
-        height: 1501
+        x: 504
+        y: 4740
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -134,20 +134,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 512925e9071259a4f9f14a6b3fa84376
-      internalID: 1583463993
+      spriteID: 8d31d23830f282341a1d7f21e1ddc096
+      internalID: 1591733784
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: image1_2
+      name: ancient_walk_2
       rect:
         serializedVersion: 2
-        x: 1880
-        y: 6004
-        width: 940
-        height: 1501
+        x: 1008
+        y: 4740
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -156,20 +156,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ae580fcc123dece4ba043b6503b68354
-      internalID: 2220396
+      spriteID: 8a7614f07c821c24ea24fa1557285974
+      internalID: -590478660
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: image1_3
+      name: ancient_walk_3
       rect:
         serializedVersion: 2
-        x: 2820
-        y: 6004
-        width: 940
-        height: 1501
+        x: 1512
+        y: 4740
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -178,20 +178,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 040ccaea409d0cd4187637f2ce7be1c9
-      internalID: -246386659
+      spriteID: d9a70386d35cc6147b3a402c1143eec8
+      internalID: -959667082
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: image1_4
+      name: ancient_walk_4
       rect:
         serializedVersion: 2
-        x: 3760
-        y: 6004
-        width: 940
-        height: 1501
+        x: 2016
+        y: 4740
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -200,20 +200,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e0c13389ef366c9479fda739bfdfeb2c
-      internalID: 1310909000
+      spriteID: 137bc21f8dc8841419556c08677edb37
+      internalID: 1334172998
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: image1_5
+      name: ancient_walk_5
       rect:
         serializedVersion: 2
-        x: 4700
-        y: 6004
-        width: 940
-        height: 1501
+        x: 2520
+        y: 4740
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -222,152 +222,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: baca7b16d9c3aa843a98f91350c28620
-      internalID: 843700752
+      spriteID: 69b7cb87762ffa241bf44aa736d74ef0
+      internalID: 547433703
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: image1_6
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 4503
-        width: 940
-        height: 1501
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e8b44f035743bea4eae0223065971817
-      internalID: -202560413
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: image1_7
-      rect:
-        serializedVersion: 2
-        x: 940
-        y: 4503
-        width: 940
-        height: 1501
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 34c2c9305ded46940986c33a6a9ae0ee
-      internalID: -1536837644
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: image1_8
-      rect:
-        serializedVersion: 2
-        x: 1880
-        y: 4503
-        width: 940
-        height: 1501
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7af2fb9e0a9315e4483351b3b80b34a2
-      internalID: -1733934380
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: image1_9
-      rect:
-        serializedVersion: 2
-        x: 2820
-        y: 4503
-        width: 940
-        height: 1501
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: c5ff12616cdc68743920584549be1142
-      internalID: -1805360087
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: image1_10
-      rect:
-        serializedVersion: 2
-        x: 3760
-        y: 4503
-        width: 940
-        height: 1501
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: da925d9924682ba48b30399076437410
-      internalID: -1091966292
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: image1_11
-      rect:
-        serializedVersion: 2
-        x: 4700
-        y: 4503
-        width: 940
-        height: 1501
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6ad77fe8fa139494ca06211f60517bc0
-      internalID: 858463211
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: image1_12
+      name: ancient_walk_6
       rect:
         serializedVersion: 2
         x: 0
-        y: 3002
-        width: 940
-        height: 1501
+        y: 3555
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -376,20 +244,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 178ecc2c1b39d414da397874820328a1
-      internalID: 2065221717
+      spriteID: 573f47817afca054aab148ac940197bf
+      internalID: 950622381
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: image1_13
+      name: ancient_walk_7
       rect:
         serializedVersion: 2
-        x: 940
-        y: 3002
-        width: 940
-        height: 1501
+        x: 504
+        y: 3555
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -398,20 +266,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e683764e84210c042b029ba1e534c336
-      internalID: -589881030
+      spriteID: cbbf6e47b6be91a4a8841623f1b52982
+      internalID: 1489654370
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: image1_14
+      name: ancient_walk_8
       rect:
         serializedVersion: 2
-        x: 1880
-        y: 3002
-        width: 940
-        height: 1501
+        x: 1008
+        y: 3555
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -420,20 +288,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 47a5c9e9f20be44428b098998c329f8b
-      internalID: -1799015263
+      spriteID: d4dc457af32ce9641b953fd41156ea20
+      internalID: 423904690
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: image1_15
+      name: ancient_walk_9
       rect:
         serializedVersion: 2
-        x: 2820
-        y: 3002
-        width: 940
-        height: 1501
+        x: 1512
+        y: 3555
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -442,20 +310,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c714d8e7e45cd264eafed008e2eb19e9
-      internalID: 1643656458
+      spriteID: 1bd130ad133606c4fa648600a8a41cbf
+      internalID: 1907801053
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: image1_16
+      name: ancient_walk_10
       rect:
         serializedVersion: 2
-        x: 3760
-        y: 3002
-        width: 940
-        height: 1501
+        x: 2016
+        y: 3555
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -464,20 +332,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 83552d49a39834e4b97b25cbb88d6743
-      internalID: -638035098
+      spriteID: 875f19f52c90e164995f30889fe780e4
+      internalID: 1539834486
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: image1_17
+      name: ancient_walk_11
       rect:
         serializedVersion: 2
-        x: 4700
-        y: 3002
-        width: 940
-        height: 1501
+        x: 2520
+        y: 3555
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -486,152 +354,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 01106b980717ba9468f9b72775bef4f0
-      internalID: -415587527
+      spriteID: 056d07857e47cf148a0589d23606943e
+      internalID: 35020196
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: image1_18
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 1501
-        width: 940
-        height: 1501
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6d85e57afd364eb40bd687fa42ec5dbf
-      internalID: -1524828995
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: image1_19
-      rect:
-        serializedVersion: 2
-        x: 940
-        y: 1501
-        width: 940
-        height: 1501
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9adf54d4e04ed7e4691fc0367f569705
-      internalID: -1878748222
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: image1_20
-      rect:
-        serializedVersion: 2
-        x: 1880
-        y: 1501
-        width: 940
-        height: 1501
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9c7dcd329e4835a4eb7793944117db7a
-      internalID: -673489922
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: image1_21
-      rect:
-        serializedVersion: 2
-        x: 2820
-        y: 1501
-        width: 940
-        height: 1501
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4992751a7f9afcd4a98c9af10591c12d
-      internalID: 987919289
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: image1_22
-      rect:
-        serializedVersion: 2
-        x: 3760
-        y: 1501
-        width: 940
-        height: 1501
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 04ef85ca5c506f044b42b3a068882a4d
-      internalID: -479708809
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: image1_23
-      rect:
-        serializedVersion: 2
-        x: 4700
-        y: 1501
-        width: 940
-        height: 1501
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9bd888f26a96c5a4d862ffaee03d3678
-      internalID: -1584181140
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: image1_24
+      name: ancient_walk_12
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 940
-        height: 1501
+        y: 2370
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -640,20 +376,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6f7ad9e9fc1ab4d41b0650f163732a74
-      internalID: -2086637462
+      spriteID: dd95e21c31f7e7f42ace30bfc709a51e
+      internalID: 757586812
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: image1_25
+      name: ancient_walk_13
       rect:
         serializedVersion: 2
-        x: 940
-        y: 0
-        width: 940
-        height: 1501
+        x: 504
+        y: 2370
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -662,20 +398,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fea1ff553ca27584caf6601baf2f8951
-      internalID: 1059521574
+      spriteID: d40963a7f1f0db148884b860072245f1
+      internalID: 2138470030
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: image1_26
+      name: ancient_walk_14
       rect:
         serializedVersion: 2
-        x: 1880
-        y: 0
-        width: 940
-        height: 1501
+        x: 1008
+        y: 2370
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -684,20 +420,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0db286ed99dfad34ba73cd9e8a482598
-      internalID: 35525486
+      spriteID: 919a47b4cdfe8de47b61a8dc2e8f9518
+      internalID: 983991336
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: image1_27
+      name: ancient_walk_15
       rect:
         serializedVersion: 2
-        x: 2820
-        y: 0
-        width: 940
-        height: 1501
+        x: 1512
+        y: 2370
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -706,20 +442,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e5f8ed8c8acc76a48a48c5a50e6a4314
-      internalID: -1457739578
+      spriteID: 9c4febbacabf20b4b809bd7f53c58a60
+      internalID: -630437181
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: image1_28
+      name: ancient_walk_16
       rect:
         serializedVersion: 2
-        x: 3760
-        y: 0
-        width: 940
-        height: 1501
+        x: 2016
+        y: 2370
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -728,20 +464,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6fda3c3439f393e48adb1500d8a44164
-      internalID: 323781280
+      spriteID: 7a4b90171efc9104497e2c2d59be0b63
+      internalID: -1864110437
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: image1_29
+      name: ancient_walk_17
       rect:
         serializedVersion: 2
-        x: 4700
-        y: 0
-        width: 940
-        height: 1501
+        x: 2520
+        y: 2370
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -750,8 +486,272 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6513cb11d3e22734cb4f87b35586252f
-      internalID: 2098815018
+      spriteID: f283f8217c2a01544984f4242a98030f
+      internalID: -1240391198
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ancient_walk_18
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1185
+        width: 504
+        height: 1185
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 00b7d6eaa6149c1458d4efd6d25efa27
+      internalID: 1165222934
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ancient_walk_19
+      rect:
+        serializedVersion: 2
+        x: 504
+        y: 1185
+        width: 504
+        height: 1185
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d6f51b4d383eb54449d845200d9604ce
+      internalID: -200633010
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ancient_walk_20
+      rect:
+        serializedVersion: 2
+        x: 1008
+        y: 1185
+        width: 504
+        height: 1185
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 92d50026ed079e34aa59d21c47c9d328
+      internalID: -580713387
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ancient_walk_21
+      rect:
+        serializedVersion: 2
+        x: 1512
+        y: 1185
+        width: 504
+        height: 1185
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 499a72e9d20d0a543bb23ceca5808b85
+      internalID: -713449420
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ancient_walk_22
+      rect:
+        serializedVersion: 2
+        x: 2016
+        y: 1185
+        width: 504
+        height: 1185
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c6d903541f7436d48b248dc25bd7cd7a
+      internalID: -2050426648
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ancient_walk_23
+      rect:
+        serializedVersion: 2
+        x: 2520
+        y: 1185
+        width: 504
+        height: 1185
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 745d4ded7c113174cbf56e07dd27dcc6
+      internalID: -1442336371
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ancient_walk_24
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 504
+        height: 1185
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: de8cdecceec734d48b4efabbef4804b7
+      internalID: 766075481
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ancient_walk_25
+      rect:
+        serializedVersion: 2
+        x: 504
+        y: 0
+        width: 504
+        height: 1185
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7165f9034044edd46ac55ced5bbb2bdd
+      internalID: 1791768116
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ancient_walk_26
+      rect:
+        serializedVersion: 2
+        x: 1008
+        y: 0
+        width: 504
+        height: 1185
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b48f358beb8fdfd40bdc68aff84e885c
+      internalID: 2111437990
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ancient_walk_27
+      rect:
+        serializedVersion: 2
+        x: 1512
+        y: 0
+        width: 504
+        height: 1185
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25f83a549af6e174a91bf810a69b2e48
+      internalID: 60702579
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ancient_walk_28
+      rect:
+        serializedVersion: 2
+        x: 2016
+        y: 0
+        width: 504
+        height: 1185
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1eeee80e9b7988449a139280df90eeb0
+      internalID: -638857100
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ancient_walk_29
+      rect:
+        serializedVersion: 2
+        x: 2520
+        y: 0
+        width: 504
+        height: 1185
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f4c4c2a85cdbb59478aaf84db5d59cee
+      internalID: -261351506
       vertices: []
       indices: 
       edges: []
@@ -760,7 +760,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 612cf30c720f34548a9d0b504058751c
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -770,38 +770,38 @@ TextureImporter:
     spriteCustomMetadata:
       entries:
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":6.0,"y":5.0},"gridSpriteSize":{"x":940.0,"y":1501.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":6.0,"y":5.0},"gridSpriteSize":{"x":504.0,"y":1185.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      image1_0: 611413157
-      image1_1: 1583463993
-      image1_10: -1091966292
-      image1_11: 858463211
-      image1_12: 2065221717
-      image1_13: -589881030
-      image1_14: -1799015263
-      image1_15: 1643656458
-      image1_16: -638035098
-      image1_17: -415587527
-      image1_18: -1524828995
-      image1_19: -1878748222
-      image1_2: 2220396
-      image1_20: -673489922
-      image1_21: 987919289
-      image1_22: -479708809
-      image1_23: -1584181140
-      image1_24: -2086637462
-      image1_25: 1059521574
-      image1_26: 35525486
-      image1_27: -1457739578
-      image1_28: 323781280
-      image1_29: 2098815018
-      image1_3: -246386659
-      image1_4: 1310909000
-      image1_5: 843700752
-      image1_6: -202560413
-      image1_7: -1536837644
-      image1_8: -1733934380
-      image1_9: -1805360087
+      ancient_walk_0: -209654393
+      ancient_walk_1: 1591733784
+      ancient_walk_10: 1539834486
+      ancient_walk_11: 35020196
+      ancient_walk_12: 757586812
+      ancient_walk_13: 2138470030
+      ancient_walk_14: 983991336
+      ancient_walk_15: -630437181
+      ancient_walk_16: -1864110437
+      ancient_walk_17: -1240391198
+      ancient_walk_18: 1165222934
+      ancient_walk_19: -200633010
+      ancient_walk_2: -590478660
+      ancient_walk_20: -580713387
+      ancient_walk_21: -713449420
+      ancient_walk_22: -2050426648
+      ancient_walk_23: -1442336371
+      ancient_walk_24: 766075481
+      ancient_walk_25: 1791768116
+      ancient_walk_26: 2111437990
+      ancient_walk_27: 60702579
+      ancient_walk_28: -638857100
+      ancient_walk_29: -261351506
+      ancient_walk_3: -959667082
+      ancient_walk_4: 1334172998
+      ancient_walk_5: 547433703
+      ancient_walk_6: 950622381
+      ancient_walk_7: 1489654370
+      ancient_walk_8: 423904690
+      ancient_walk_9: 1907801053
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
