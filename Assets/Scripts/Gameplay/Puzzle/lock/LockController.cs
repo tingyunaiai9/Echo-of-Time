@@ -1,6 +1,7 @@
 using UnityEngine;
 using Game.UI;
 using Game.Gameplay.Puzzle.Poem2;
+using Events;
 
 public class LockController : MonoBehaviour
 {
@@ -48,6 +49,10 @@ public class LockController : MonoBehaviour
             {
                 Poem2NetManager.Instance.CmdSetLockUnlocked(true);
             }
+            EventBus.LocalPublish(new PuzzleCompletedEvent
+            {
+                sceneName = "Lock"
+            });
 
             StartCoroutine(PlayUnlockAnimation());
         }

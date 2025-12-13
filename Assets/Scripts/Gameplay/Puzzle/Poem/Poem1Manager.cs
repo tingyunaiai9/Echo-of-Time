@@ -44,6 +44,11 @@ public class Poem1Manager : BasePoemManager
         // 设置完成标志
         MarkPuzzleCompleted();
 
+        EventBus.LocalPublish(new PuzzleCompletedEvent
+        {
+            sceneName = "Poem1"
+        });
+
         if (panelRoot == null)
         {
             Debug.LogWarning("[Poem1Manager] panelRoot 未设置，无法播放动画");
