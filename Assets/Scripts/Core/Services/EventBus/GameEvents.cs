@@ -74,6 +74,12 @@ namespace Events
     /*
      * 谜题与进度相关事件
      */
+    // 谜题完成时发布
+    public class PuzzleCompletedEvent
+    {
+        public string sceneName;
+    }
+
     // 玩家回答正确时发布
     public class AnswerCorrectEvent
     {

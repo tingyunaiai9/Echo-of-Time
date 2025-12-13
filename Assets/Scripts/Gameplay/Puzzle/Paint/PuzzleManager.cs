@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Events;
 
 /*
  * 拼画管理器：管理遮罩和碎片的绑定，处理完成逻辑
@@ -110,6 +111,10 @@ public class PuzzleManager : MonoBehaviour
         {
             puzzlePanel.ShowSuccessPanel();
         }
+        EventBus.LocalPublish(new PuzzleCompletedEvent
+        {
+            sceneName = "Paint"
+        });
     }
 
     /* 获取进度 */

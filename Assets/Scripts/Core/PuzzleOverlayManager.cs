@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Game.UI;
+using Events;
 
 /*
  * PuzzleOverlayManager
@@ -49,6 +51,10 @@ public class PuzzleOverlayManager : MonoBehaviour
     [Tooltip("相机移动到锚点的插值时长（秒）；为 0 则瞬移。")]
     [SerializeField] private float cameraMoveLerpDuration = 0f;
 
+    [Header("Completion Options")]
+    [Tooltip("用于提示谜题已完成的通知 UI 控制器")]
+    public NotificationController notificationUI;
+
     [Header("Debug")] [SerializeField] private bool verboseLog = true;
 
     // 事件：外部可订阅
@@ -58,6 +64,9 @@ public class PuzzleOverlayManager : MonoBehaviour
 
     // 堆栈结构保存打开的谜题场景顺序
     private readonly Stack<PuzzleContext> puzzleStack = new Stack<PuzzleContext>();
+
+    // 已完成的谜题集合，避免重复打开
+    private readonly HashSet<string> completedPuzzles = new HashSet<string>();
 
     // 正在进行的加载/卸载操作保护
     private bool busy = false;
@@ -69,6 +78,7 @@ public class PuzzleOverlayManager : MonoBehaviour
     {
         InitializeSingleton();
         initialActiveScene = SceneManager.GetActiveScene();
+        EventBus.Subscribe<PuzzleCompletedEvent>(e => MarkPuzzleCompleted(e.sceneName));
     }
 
     // Like NetworkManager
@@ -113,6 +123,21 @@ public class PuzzleOverlayManager : MonoBehaviour
         }
         if (string.IsNullOrEmpty(sceneName)) return;
 
+        // 若该谜题已完成，提示并不再打开
+        if (completedPuzzles.Contains(sceneName))
+        {
+            if (notificationUI != null)
+            {
+                notificationUI.ShowNotification($"{sceneName}谜题已完成");
+            }
+            else if (verboseLog)
+            {
+                Debug.Log("[PuzzleOverlay] 谜题已完成: " + sceneName);
+            }
+            return;
+        }
+        Debug.Log("打开过的谜题列表: " + string.Join(", ", completedPuzzles));
+
         // 若不允许堆栈且已有则先关闭
         if (!allowStack && HasAnyPuzzleOpen)
         {
@@ -142,6 +167,17 @@ public class PuzzleOverlayManager : MonoBehaviour
         }
         if (!HasAnyPuzzleOpen) return;
         StartCoroutine(CoCloseAll());
+    }
+
+    /// <summary>
+    /// 标记指定谜题已完成，后续调用 OpenPuzzle 时将直接提示已完成而不再打开。
+    /// 由各谜题在完成时调用。
+    /// </summary>
+    public void MarkPuzzleCompleted(string sceneName)
+    {
+        if (string.IsNullOrEmpty(sceneName)) return;
+        completedPuzzles.Add(sceneName);
+        if (verboseLog) Debug.Log("[PuzzleOverlay] 记录谜题完成: " + sceneName);
     }
 
     private IEnumerator CoOpenPuzzle(string sceneName)

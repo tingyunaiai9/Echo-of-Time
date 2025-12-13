@@ -38,6 +38,11 @@ public class Poem2Manager : BasePoemManager
         Image consoleImage = consolePanelTransform.Find("ConsoleImage")?.GetComponent<Image>();
         Sprite icon = consoleImage.sprite;
 
+        EventBus.LocalPublish(new PuzzleCompletedEvent
+        {
+            sceneName = "Poem2"
+        });
+
         // 发布 ClueDiscoveredEvent 事件
         EventBus.LocalPublish(new ClueDiscoveredEvent
         {
