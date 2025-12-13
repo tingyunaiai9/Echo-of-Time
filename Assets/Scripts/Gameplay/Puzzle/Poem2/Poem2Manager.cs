@@ -1,49 +1,58 @@
 using UnityEngine;
-using Mirror;
+using UnityEngine.UI;
+using Events;
 
-namespace Game.Gameplay.Puzzle.Poem2
+/*
+ * 诗词谜题二号管理器
+ * 完成时让奖励面板淡入出现
+ */
+public class Poem2Manager : BasePoemManager
 {
-    public class Poem2Manager : NetworkBehaviour
+    [Header("面板配置")]
+    [Tooltip("根对象（用于显示/隐藏）")]
+    public GameObject panelRoot;
+
+    [Tooltip("完成后显示的控制台面板")]
+    public GameObject consolePanel;
+
+    protected override GameObject PanelRoot => panelRoot;
+    protected override GameObject DrawerPanel => consolePanel;
+
+    protected override void InitializePanels()
     {
-        public static Poem2Manager Instance { get; private set; }
+        if (panelRoot == null)
+            panelRoot = gameObject;
 
-        [SyncVar(hook = nameof(OnScrollPlacedChanged))]
-        public bool isScrollPlacedInAncient = false;
-
-        [SyncVar(hook = nameof(OnLockUnlockedChanged))]
-        public bool isLockUnlockedInModern = false;
-
-        private void Awake()
+        if (consolePanel != null)
         {
-            if (Instance == null) Instance = this;
-            else Destroy(gameObject);
+            // 确保控制台面板初始时隐藏且透明
+            consolePanel.SetActive(false);
         }
+    }
 
-        // Command to set scroll placed (called by Ancient player)
-        [Command(requiresAuthority = false)]
-        public void CmdSetScrollPlaced(bool value)
-        {
-            isScrollPlacedInAncient = value;
-        }
+    protected override void OnPuzzleCompleted()
+    {
 
-        // Command to set lock unlocked (called by Modern player)
-        [Command(requiresAuthority = false)]
-        public void CmdSetLockUnlocked(bool value)
-        {
-            isLockUnlockedInModern = value;
-        }
+        // 获取 ConsolePanel 下的 ConsoleImage
+        Transform consolePanelTransform = s_instance.transform.parent.Find("ConsolePanel");
+        Image consoleImage = consolePanelTransform.Find("ConsoleImage")?.GetComponent<Image>();
+        Sprite icon = consoleImage.sprite;
 
-        // Hooks for state changes if needed (e.g., to update UI or objects immediately)
-        void OnScrollPlacedChanged(bool oldVal, bool newVal)
+        // 发布 ClueDiscoveredEvent 事件
+        EventBus.LocalPublish(new ClueDiscoveredEvent
         {
-            // Optional: Trigger events or update objects locally
-            Debug.Log($"Poem2: Scroll Placed changed to {newVal}");
-        }
+            isKeyClue = true,
+            playerNetId = 0,
+            clueId = "console_clue",
+            clueText = "拼好5首诗句后抽屉中的一幅画。",
+            clueDescription = "这幅画可能隐藏着重要的线索。",
+            icon = icon,
+            image = icon // 假设 image 和 icon 是相同的
+        });
 
-        void OnLockUnlockedChanged(bool oldVal, bool newVal)
-        {
-            // Optional: Trigger events
-            Debug.Log($"Poem2: Lock Unlocked changed to {newVal}");
-        }
+        // 打开控制台面板
+        ConsolePanel.TogglePanel();
+
+
     }
 }
