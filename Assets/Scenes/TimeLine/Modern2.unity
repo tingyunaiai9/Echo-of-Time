@@ -561,7 +561,9 @@ GameObject:
   m_Component:
   - component: {fileID: 872927303}
   - component: {fileID: 872927304}
-  m_Layer: 0
+  - component: {fileID: 872927306}
+  - component: {fileID: 872927305}
+  m_Layer: 8
   m_Name: tree
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -641,6 +643,43 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &872927305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 872927302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08063b9cd8fd79b408347a9b08d678c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Gameplay.Puzzle.Light2.Light2Tree
+  timeline: 0
+  puzzleSceneName: Light2
+  screenObject: {fileID: 0}
+  notificationController: {fileID: 0}
+--- !u!65 &872927306
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 872927302}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 4.4505634, y: 5.782452, z: 0.2}
+  m_Center: {x: 10.563579, y: 0.6214378, z: 0}
 --- !u!1 &889656434
 GameObject:
   m_ObjectHideFlags: 0
@@ -958,7 +997,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1151637471}
   - component: {fileID: 1151637472}
-  m_Layer: 0
+  - component: {fileID: 1151637474}
+  - component: {fileID: 1151637473}
+  m_Layer: 8
   m_Name: pot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1038,6 +1079,43 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!65 &1151637473
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1151637470}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9766607, y: 2.2898054, z: 0.2}
+  m_Center: {x: 10.878366, y: -2.8273544, z: 0}
+--- !u!114 &1151637474
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1151637470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee1cfe285acaecd4c8eaa1f1c360fb10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Gameplay.Puzzle.Light2.Light2Pot
+  timeline: 1
+  seedItemId: Light2Seed
+  treeObject: {fileID: 872927302}
+  notificationController: {fileID: 0}
 --- !u!1 &1311505132
 GameObject:
   m_ObjectHideFlags: 0

@@ -16,10 +16,10 @@ namespace Events
     {
         public uint playerNetId;
         public string itemId;
-        public string itemName;
-        public string description;
+        public int instanceId; // 物体实例 ID
         public Sprite icon;
-        public int quantity = 1;
+        public string description;
+        public int quantity;
     }
 
     // 聊天消息更新事件

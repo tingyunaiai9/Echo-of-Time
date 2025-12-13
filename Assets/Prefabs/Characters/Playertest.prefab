@@ -332,7 +332,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -152841799
-  m_SortingLayer: 3
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: -714485973, guid: 4e0cda97a18004455b2c3b752135ea93, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -445,7 +445,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -152841799
-  m_SortingLayer: 3
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: -714485973, guid: 4e0cda97a18004455b2c3b752135ea93, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -468,7 +468,7 @@ Animator:
   m_GameObject: {fileID: 5176982767601172365}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: d3690727e8917441a992d47de29b382c, type: 2}
+  m_Controller: {fileID: 22100000, guid: bed565ebd5557bd47a428761c9529126, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -558,7 +558,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -152841799
-  m_SortingLayer: 3
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: 611413157, guid: fb304912e38e8a842a14e470584ef478, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

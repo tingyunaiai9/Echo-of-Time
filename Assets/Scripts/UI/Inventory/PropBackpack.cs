@@ -32,13 +32,12 @@ public class PropBackpack : Inventory
             var newItem = new InventoryItem
             {
                 itemId = item.itemId,
-                itemName = string.IsNullOrEmpty(item.itemName) ? item.itemId : item.itemName,
                 description = item.description,  // 保存描述
                 quantity = Mathf.Max(1, item.quantity),
                 icon = item.icon
             };
             _items[item.itemId] = newItem;
-            Debug.Log($"[PropBackpack.AddOrUpdateItem] 添加新物品: {newItem.itemName}, 数量: {newItem.quantity}");
+            Debug.Log($"[PropBackpack.AddOrUpdateItem] 添加新物品: {newItem.itemId}, 数量: {newItem.quantity}");
             CreateOrUpdateItemUI(newItem);
         }
     }
@@ -76,9 +75,8 @@ public class PropBackpack : Inventory
         var item = new InventoryItem
         {
             itemId = e.itemId,
-            itemName = e.itemId,
             description = e.description,
-            quantity = e.quantity,
+            quantity = Mathf.Max(1, e.quantity), // 强制最小数量为 1
             icon = e.icon
         };
         AddOrUpdateItem(item);
