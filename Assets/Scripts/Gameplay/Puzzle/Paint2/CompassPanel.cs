@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using System.Collections;
 using TMPro;
 using Game.Gameplay.Puzzle.Paint2;
+using Events;
 
 public class CompassPanel : MonoBehaviour, IPointerClickHandler
 {
@@ -343,6 +344,11 @@ public class CompassPanel : MonoBehaviour, IPointerClickHandler
             }
             LeanTween.alphaCanvas(resultCanvasGroup, 1f, 0.5f);
         }
+
+        EventBus.LocalPublish(new PuzzleCompletedEvent
+        {
+            sceneName = "Compass"
+        });
     }
 
      /* 重置旋转状态，清空计数并重置所有数字显示 */

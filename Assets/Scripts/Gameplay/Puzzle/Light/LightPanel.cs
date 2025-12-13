@@ -235,6 +235,10 @@ public class LightPanel : MonoBehaviour
         Image consoleImage = consolePanelTransform.Find("ConsoleImage")?.GetComponent<Image>();    
         Sprite icon = consoleImage.sprite;
     
+        EventBus.LocalPublish(new PuzzleCompletedEvent
+        {
+            sceneName = "Light"
+        });
         // 发布 ClueDiscoveredEvent 事件
         EventBus.LocalPublish(new ClueDiscoveredEvent
         {

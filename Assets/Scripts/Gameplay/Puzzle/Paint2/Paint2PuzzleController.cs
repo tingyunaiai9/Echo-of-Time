@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Game.UI;
+using Events;
 
 namespace Game.Gameplay.Puzzle.Paint2
 {
@@ -194,6 +195,10 @@ namespace Game.Gameplay.Puzzle.Paint2
                 if (correctPieces >= totalPieces)
                 {
                     onPuzzleComplete?.Invoke();
+                    EventBus.LocalPublish(new PuzzleCompletedEvent
+                    {
+                        sceneName = "Paint2"
+                    });
                 }
             }
         }

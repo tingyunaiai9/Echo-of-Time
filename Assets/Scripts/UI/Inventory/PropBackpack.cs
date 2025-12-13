@@ -7,7 +7,7 @@ using Events;
  */
 public class PropBackpack : Inventory
 {
-    readonly Dictionary<string, InventoryItem> _items = new Dictionary<string, InventoryItem>();
+    static readonly Dictionary<string, InventoryItem> _items = new Dictionary<string, InventoryItem>();
 
     /* 添加或更新道具 */
     public void AddOrUpdateItem(InventoryItem item)
@@ -80,5 +80,14 @@ public class PropBackpack : Inventory
             icon = e.icon
         };
         AddOrUpdateItem(item);
+    }
+
+    public static int GetPropCount(string itemId)
+    {
+        if (_items.TryGetValue(itemId, out var item))
+        {
+            return item.quantity;
+        }
+        return 0;
     }
 }

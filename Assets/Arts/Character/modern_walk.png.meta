@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 4e0cda97a18004455b2c3b752135ea93
+guid: 1d2097858a01ea745b3a11e9e473793e
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -45,10 +45,10 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 0
+  spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 400
+  spritePixelsToUnits: 300
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -97,13 +97,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ancient_sprite_0
+      name: modern_walk_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 7505
-        width: 992
-        height: 1501
+        y: 4740
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -112,20 +112,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d650b46a1535a475c83c3134f4f1bca0
-      internalID: -714485973
+      spriteID: bd08e1fd45fce134aaf74d5a0eccb260
+      internalID: 414707009
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ancient_sprite_1
+      name: modern_walk_1
       rect:
         serializedVersion: 2
-        x: 992
-        y: 7505
-        width: 992
-        height: 1501
+        x: 504
+        y: 4740
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -134,20 +134,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3e6ce5f89e3304025ba879c6d615546b
-      internalID: 2113129898
+      spriteID: bec4f6b9065841046bb629328925a799
+      internalID: 825178217
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ancient_sprite_2
+      name: modern_walk_2
       rect:
         serializedVersion: 2
-        x: 1984
-        y: 7505
-        width: 992
-        height: 1501
+        x: 1008
+        y: 4740
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -156,20 +156,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f2a3cc766b4c447adaef073654492122
-      internalID: 1277984521
+      spriteID: 4aa1b0a1c76ad8d47a79ed0e3099a630
+      internalID: -954652832
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ancient_sprite_3
+      name: modern_walk_3
       rect:
         serializedVersion: 2
-        x: 2976
-        y: 7505
-        width: 992
-        height: 1501
+        x: 1512
+        y: 4740
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -178,20 +178,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: afd39be1363674d24b58c3ca576dddd4
-      internalID: 1016907360
+      spriteID: 99c5cf03364d9024fbf3948118796700
+      internalID: 1892482588
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ancient_sprite_4
+      name: modern_walk_4
       rect:
         serializedVersion: 2
-        x: 3968
-        y: 7505
-        width: 992
-        height: 1501
+        x: 2016
+        y: 4740
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -200,20 +200,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3eb0b5b94f72a49f5a7ed9017c0a3939
-      internalID: -554833139
+      spriteID: d69f6b4643b78aa4490fb2ccc78c6748
+      internalID: -1287958699
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ancient_sprite_5
+      name: modern_walk_5
       rect:
         serializedVersion: 2
-        x: 0
-        y: 6004
-        width: 992
-        height: 1501
+        x: 2520
+        y: 4740
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -222,108 +222,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: aff28451af98e4d398679d05e5292012
-      internalID: -443820685
+      spriteID: 36ba02043836eef4f8adb8e1a432eb9c
+      internalID: -412555339
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ancient_sprite_6
-      rect:
-        serializedVersion: 2
-        x: 992
-        y: 6004
-        width: 992
-        height: 1501
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 06593a98e27a94c2cadd84410c3850b1
-      internalID: -1973647918
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ancient_sprite_7
-      rect:
-        serializedVersion: 2
-        x: 1984
-        y: 6004
-        width: 992
-        height: 1501
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 14d25b43f7ba741468d3813ba81a75c5
-      internalID: -1996157546
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ancient_sprite_8
-      rect:
-        serializedVersion: 2
-        x: 2976
-        y: 6004
-        width: 992
-        height: 1501
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b25805e4d7d3c408084f5c1bc9a92f1d
-      internalID: -1081684290
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ancient_sprite_9
-      rect:
-        serializedVersion: 2
-        x: 3968
-        y: 6004
-        width: 992
-        height: 1501
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 882170d134b61462c8b74b567314fbff
-      internalID: -464552208
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ancient_sprite_10
+      name: modern_walk_6
       rect:
         serializedVersion: 2
         x: 0
-        y: 4503
-        width: 992
-        height: 1501
+        y: 3555
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -332,20 +244,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f40731c1bcd0b43618671ea2aac22808
-      internalID: 562759487
+      spriteID: e25e2d75b55aac5449dcf3d5367e1a72
+      internalID: -131632518
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ancient_sprite_11
+      name: modern_walk_7
       rect:
         serializedVersion: 2
-        x: 992
-        y: 4503
-        width: 992
-        height: 1501
+        x: 504
+        y: 3555
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -354,20 +266,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ae68e9a88dad3416c8d3f6be00056c62
-      internalID: -639858330
+      spriteID: add63966ab3d6ac44844cf319935cbc5
+      internalID: 110283013
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ancient_sprite_12
+      name: modern_walk_8
       rect:
         serializedVersion: 2
-        x: 1984
-        y: 4503
-        width: 992
-        height: 1501
+        x: 1008
+        y: 3555
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -376,20 +288,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a35f4d92a4f1f433e8adf4e4ba48d4d2
-      internalID: 561277813
+      spriteID: a0b9d8afb78e39749a047c3ca2a55e46
+      internalID: -1502022858
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ancient_sprite_13
+      name: modern_walk_9
       rect:
         serializedVersion: 2
-        x: 2976
-        y: 4503
-        width: 992
-        height: 1501
+        x: 1512
+        y: 3555
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -398,20 +310,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8f44103d96a504173ad2faa1fca9e69d
-      internalID: -597572023
+      spriteID: a0b3f095a4b36784aa0399529fefb4c2
+      internalID: 472762979
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ancient_sprite_14
+      name: modern_walk_10
       rect:
         serializedVersion: 2
-        x: 3968
-        y: 4503
-        width: 992
-        height: 1501
+        x: 2016
+        y: 3555
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -420,20 +332,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9c06782f148ba40c4b022c63d6cbc517
-      internalID: -768727043
+      spriteID: 270473619bd2c99408a58052e0ba7cad
+      internalID: -798629531
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ancient_sprite_15
+      name: modern_walk_11
       rect:
         serializedVersion: 2
-        x: 0
-        y: 3002
-        width: 992
-        height: 1501
+        x: 2520
+        y: 3555
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -442,108 +354,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 56b6db97aa42b4c7493cabd7fc4a1327
-      internalID: 1591746448
+      spriteID: 2d88780fa8672e1489a9a1f869c8e8ca
+      internalID: -432335794
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ancient_sprite_16
-      rect:
-        serializedVersion: 2
-        x: 992
-        y: 3002
-        width: 992
-        height: 1501
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e05be48bda3904a15a16bdf262557953
-      internalID: 129779988
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ancient_sprite_17
-      rect:
-        serializedVersion: 2
-        x: 1984
-        y: 3002
-        width: 992
-        height: 1501
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1b2b4deb9124d45feae9d365c2302a6c
-      internalID: 479826014
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ancient_sprite_18
-      rect:
-        serializedVersion: 2
-        x: 2976
-        y: 3002
-        width: 992
-        height: 1501
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 38e3687a49db043ae81900524a0d912d
-      internalID: 589878881
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ancient_sprite_19
-      rect:
-        serializedVersion: 2
-        x: 3968
-        y: 3002
-        width: 992
-        height: 1501
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ff9130a63d4a042c39e649ba839f5c9e
-      internalID: 1446340271
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ancient_sprite_20
+      name: modern_walk_12
       rect:
         serializedVersion: 2
         x: 0
-        y: 1501
-        width: 992
-        height: 1501
+        y: 2370
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -552,20 +376,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 74cfd15cb8a76444a86a144996a3e26b
-      internalID: -1206317701
+      spriteID: f54e23e708f585149ba50506c1de0c0e
+      internalID: -989106134
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ancient_sprite_21
+      name: modern_walk_13
       rect:
         serializedVersion: 2
-        x: 992
-        y: 1501
-        width: 992
-        height: 1501
+        x: 504
+        y: 2370
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -574,20 +398,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2b85fd65e984c4df49a432c413e63f94
-      internalID: 1809342945
+      spriteID: d18b4cb47eb646145bf02994f4c7cc10
+      internalID: 1935272280
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ancient_sprite_22
+      name: modern_walk_14
       rect:
         serializedVersion: 2
-        x: 1984
-        y: 1501
-        width: 992
-        height: 1501
+        x: 1008
+        y: 2370
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -596,20 +420,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5e594a1c6b02a42bfbab3482397f840a
-      internalID: 2122882583
+      spriteID: c5fc609e4ac87874380f22f32576dbe1
+      internalID: -1024116163
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ancient_sprite_23
+      name: modern_walk_15
       rect:
         serializedVersion: 2
-        x: 2976
-        y: 1501
-        width: 992
-        height: 1501
+        x: 1512
+        y: 2370
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -618,20 +442,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 768815bdfec884c0b8d3aa87304c2864
-      internalID: 1903180032
+      spriteID: 954f5dc62ad578941aa5a790dcf8be76
+      internalID: -755139233
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ancient_sprite_24
+      name: modern_walk_16
       rect:
         serializedVersion: 2
-        x: 3968
-        y: 1501
-        width: 992
-        height: 1501
+        x: 2016
+        y: 2370
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -640,20 +464,174 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bd3149100809a41bb936644f9af5ac91
-      internalID: -1186914239
+      spriteID: 7b66266b8d2f8df4fa52be88f13e74eb
+      internalID: 2127188199
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ancient_sprite_25
+      name: modern_walk_17
+      rect:
+        serializedVersion: 2
+        x: 2520
+        y: 2370
+        width: 504
+        height: 1185
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 523f37dc1c5d2ab47b227caed74a43a0
+      internalID: -801526442
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: modern_walk_18
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1185
+        width: 504
+        height: 1185
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 690e0b38b6c542e4b96a0dc18eb0741f
+      internalID: 2146312842
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: modern_walk_19
+      rect:
+        serializedVersion: 2
+        x: 504
+        y: 1185
+        width: 504
+        height: 1185
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6dd646f3fff1be04585694b98239ea5f
+      internalID: 883797152
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: modern_walk_20
+      rect:
+        serializedVersion: 2
+        x: 1008
+        y: 1185
+        width: 504
+        height: 1185
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b5109ce2c4de1b8409a11e240177fecb
+      internalID: 1190293099
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: modern_walk_21
+      rect:
+        serializedVersion: 2
+        x: 1512
+        y: 1185
+        width: 504
+        height: 1185
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4c49f04207202824899a633888b9dc7a
+      internalID: -1678622796
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: modern_walk_22
+      rect:
+        serializedVersion: 2
+        x: 2016
+        y: 1185
+        width: 504
+        height: 1185
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: de5cdd686e3da6a47a507a2f8b0eddc6
+      internalID: 1154460172
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: modern_walk_23
+      rect:
+        serializedVersion: 2
+        x: 2520
+        y: 1185
+        width: 504
+        height: 1185
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 238c8cd1cfd75d0498009f37fad5a1dd
+      internalID: -573938908
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: modern_walk_24
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 992
-        height: 1501
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -662,20 +640,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2c1e57a648b5d4be497a7979b8b0ef22
-      internalID: -1973464927
+      spriteID: 0f996f911c050ee41a350bc317d1a09f
+      internalID: -22975203
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ancient_sprite_26
+      name: modern_walk_25
       rect:
         serializedVersion: 2
-        x: 992
+        x: 504
         y: 0
-        width: 992
-        height: 1501
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -684,20 +662,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 650d72aea3da5451292ed2b1a3b807b4
-      internalID: 1831380980
+      spriteID: 6483a5169262c0b4ebe2a3a3ee894f22
+      internalID: -1365668369
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ancient_sprite_27
+      name: modern_walk_26
       rect:
         serializedVersion: 2
-        x: 1984
+        x: 1008
         y: 0
-        width: 992
-        height: 1501
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -706,20 +684,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 220c9b059fe4b49ee95b65a3dba30177
-      internalID: -14480104
+      spriteID: bf946402c7742b84d9c580bc2ae65cc2
+      internalID: -2080258160
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ancient_sprite_28
+      name: modern_walk_27
       rect:
         serializedVersion: 2
-        x: 2976
+        x: 1512
         y: 0
-        width: 992
-        height: 1501
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -728,20 +706,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9ceadf8c73a964227877a73e77067ebb
-      internalID: 1029321614
+      spriteID: f727a07670b4d27408f47375f70077ad
+      internalID: -1867741717
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ancient_sprite_29
+      name: modern_walk_28
       rect:
         serializedVersion: 2
-        x: 3968
+        x: 2016
         y: 0
-        width: 992
-        height: 1501
+        width: 504
+        height: 1185
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -750,8 +728,30 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bb554753866d44f668ec399b1fe2f062
-      internalID: -1666376
+      spriteID: 3527a01a0e61b6f4f84a6a35ecf13156
+      internalID: 528819930
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: modern_walk_29
+      rect:
+        serializedVersion: 2
+        x: 2520
+        y: 0
+        width: 504
+        height: 1185
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 860a1932187dfff4b90c0ea02434dc9a
+      internalID: -687531244
       vertices: []
       indices: 
       edges: []
@@ -760,7 +760,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: c11f1acea02e146c79c910b6fe965048
+    spriteID: e500a592e47450c439d254f9aec6ea08
     internalID: 0
     vertices: []
     indices: 
@@ -770,38 +770,38 @@ TextureImporter:
     spriteCustomMetadata:
       entries:
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":992.0,"y":1501.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":6.0,"y":5.0},"gridSpriteSize":{"x":504.0,"y":1185.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      ancient_sprite_0: -714485973
-      ancient_sprite_1: 2113129898
-      ancient_sprite_10: 562759487
-      ancient_sprite_11: -639858330
-      ancient_sprite_12: 561277813
-      ancient_sprite_13: -597572023
-      ancient_sprite_14: -768727043
-      ancient_sprite_15: 1591746448
-      ancient_sprite_16: 129779988
-      ancient_sprite_17: 479826014
-      ancient_sprite_18: 589878881
-      ancient_sprite_19: 1446340271
-      ancient_sprite_2: 1277984521
-      ancient_sprite_20: -1206317701
-      ancient_sprite_21: 1809342945
-      ancient_sprite_22: 2122882583
-      ancient_sprite_23: 1903180032
-      ancient_sprite_24: -1186914239
-      ancient_sprite_25: -1973464927
-      ancient_sprite_26: 1831380980
-      ancient_sprite_27: -14480104
-      ancient_sprite_28: 1029321614
-      ancient_sprite_29: -1666376
-      ancient_sprite_3: 1016907360
-      ancient_sprite_4: -554833139
-      ancient_sprite_5: -443820685
-      ancient_sprite_6: -1973647918
-      ancient_sprite_7: -1996157546
-      ancient_sprite_8: -1081684290
-      ancient_sprite_9: -464552208
+      modern_walk_0: 414707009
+      modern_walk_1: 825178217
+      modern_walk_10: -798629531
+      modern_walk_11: -432335794
+      modern_walk_12: -989106134
+      modern_walk_13: 1935272280
+      modern_walk_14: -1024116163
+      modern_walk_15: -755139233
+      modern_walk_16: 2127188199
+      modern_walk_17: -801526442
+      modern_walk_18: 2146312842
+      modern_walk_19: 883797152
+      modern_walk_2: -954652832
+      modern_walk_20: 1190293099
+      modern_walk_21: -1678622796
+      modern_walk_22: 1154460172
+      modern_walk_23: -573938908
+      modern_walk_24: -22975203
+      modern_walk_25: -1365668369
+      modern_walk_26: -2080258160
+      modern_walk_27: -1867741717
+      modern_walk_28: 528819930
+      modern_walk_29: -687531244
+      modern_walk_3: 1892482588
+      modern_walk_4: -1287958699
+      modern_walk_5: -412555339
+      modern_walk_6: -131632518
+      modern_walk_7: 110283013
+      modern_walk_8: -1502022858
+      modern_walk_9: 472762979
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
