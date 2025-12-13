@@ -1260,7 +1260,7 @@ GameObject:
   - component: {fileID: 1469183953}
   - component: {fileID: 1469183952}
   - component: {fileID: 1469183951}
-  - component: {fileID: 1469183950}
+  - component: {fileID: 1469183954}
   m_Layer: 8
   m_Name: screen2withwords
   m_TagString: Untagged
@@ -1268,19 +1268,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!114 &1469183950
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1469183949}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca5269e3278fe65478e9b30922f4122e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Game.Gameplay.Puzzle.Light2.Light2Screen
-  screenCanvasName: ScreenCanvas
 --- !u!65 &1469183951
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1378,6 +1365,23 @@ Transform:
   - {fileID: 879742341}
   m_Father: {fileID: 1446064582}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1469183954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1469183949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74c289d1144714a2081d9d81afeaf8ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Clue
+  clueText: "\u5E94\u63ED\u4E4B\u5929\u5E72"
+  clueDescription: "\u672A\u65AB\u4E4B\u6728\uFF0C\u5929\u5E72\u6709\u4E03\uFF1A\u4E1C\u56ED\u4E4B\u6811\uFF0C\u679D\u6761\u8F7D\u8363\uFF1B\u751F\u4E8E\u5B50\u534A\uFF0C\u4E11\u65F6\u521D\u840C\uFF1B\u6843\u854A\u672A\u7EFD\uFF0C\u8302\u7136\u81F3\u8FB0\u3002\u98DE\u5F71\u53C8\u901D\uFF0C\u664C\u5348\u5F52\u571F\u3002"
+  clueIcon: {fileID: 21300000, guid: ce2c04154ab168c4dbcf0dd0c0792a89, type: 3}
+  clueImage: {fileID: 21300000, guid: ce2c04154ab168c4dbcf0dd0c0792a89, type: 3}
+  discovered: 0
 --- !u!1 &1473154494
 GameObject:
   m_ObjectHideFlags: 0
