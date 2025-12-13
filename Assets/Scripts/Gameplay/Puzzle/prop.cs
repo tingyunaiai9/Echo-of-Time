@@ -61,8 +61,9 @@ public class prop : Interaction
             description = itemDescription,
             quantity = pickupQuantity
         };
+        // 仅在本地发布，避免跨网络传输 Sprite 导致崩溃
         EventBus.LocalPublish(evt);
-        EventBus.Publish(evt);
+        // EventBus.Publish(evt); // 移除网络广播
         Debug.Log($"[prop.OnInteract] 已发布 ItemPickedUpEvent - itemId: {evt.itemId}, instanceId: {evt.instanceId}, quantity: {evt.quantity}, icon: {(evt.icon != null ? evt.icon.name : "null")}");
     }
 }
