@@ -41,13 +41,8 @@ namespace Game.Gameplay.Puzzle.Poem2
             }
 
             // Logic to place scroll
-            // 1. Check if player has scroll
-            if (!Inventory.HasPropItem(requiredItemId))
-            {
-                if (notificationController != null)
-                    notificationController.ShowNotification("你还没有拾取竹简。\nYou haven't picked up the bamboo scroll yet.");
-                return;
-            }
+            // Simplified: No inventory check required as per user request.
+            // Just assume player places it or activates it.
             
             // 2. Place scroll
             hasPlacedScroll = true;

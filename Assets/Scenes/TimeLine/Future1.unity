@@ -188,6 +188,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::prop
   itemIcon: {fileID: 21300000, guid: 1a2af524d2f908b45bf4b6d1102252ad, type: 3}
   itemDisplayName: mirror
+  pickupQuantity: 1
   itemDescription: mirror used  for light puzzle
 --- !u!212 &143908082
 SpriteRenderer:
@@ -828,6 +829,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::prop
   itemIcon: {fileID: 21300000, guid: 1a2af524d2f908b45bf4b6d1102252ad, type: 3}
   itemDisplayName: mirror
+  pickupQuantity: 1
   itemDescription: mirror used  for light puzzle
 --- !u!1 &1019093743
 GameObject:
@@ -1035,6 +1037,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::prop
   itemIcon: {fileID: 21300000, guid: 1a2af524d2f908b45bf4b6d1102252ad, type: 3}
   itemDisplayName: mirror
+  pickupQuantity: 1
   itemDescription: mirror used  for light puzzle
 --- !u!212 &1274538903
 SpriteRenderer:
@@ -1351,6 +1354,37 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 5.0573316, y: 2.5233083, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1889713202
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1889713203}
+  m_Layer: 0
+  m_Name: SpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1889713203
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1889713202}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -11, y: -3.37, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2050582372
 GameObject:
   m_ObjectHideFlags: 0
@@ -1450,3 +1484,4 @@ SceneRoots:
   - {fileID: 725112776}
   - {fileID: 1446064582}
   - {fileID: 1163278606}
+  - {fileID: 1889713203}

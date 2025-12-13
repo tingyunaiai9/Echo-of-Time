@@ -105,6 +105,12 @@ public class SceneDirector : Singleton<SceneDirector>
         // 将在线主场景设为 Active，时间线场景只是内容补充
         Scene online = SceneManager.GetSceneByName(onlineMainScene);
         if (online.IsValid()) SceneManager.SetActiveScene(online);
+
+        // 场景加载完成后，重置玩家位置到 SpawnPoint
+        if (TimelinePlayer.Local != null)
+        {
+            TimelinePlayer.Local.TriggerResetPosition();
+        }
     }
 
     public string GetSceneName(int timeline, int level)

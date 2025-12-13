@@ -258,7 +258,7 @@ GameObject:
   - component: {fileID: 161056879}
   - component: {fileID: 161056878}
   - component: {fileID: 161056881}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Triangle3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -278,7 +278,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::prop
   itemIcon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  itemDisplayName: triangle3
+  itemDisplayName: triangle
+  pickupQuantity: 1
   itemDescription: this is a magic prop...
 --- !u!212 &161056879
 SpriteRenderer:
@@ -681,6 +682,37 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!1 &447029832
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 447029833}
+  m_Layer: 0
+  m_Name: SpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &447029833
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 447029832}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -11, y: -3.37, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &600582288
 GameObject:
   m_ObjectHideFlags: 0
@@ -783,7 +815,7 @@ GameObject:
   - component: {fileID: 614983974}
   - component: {fileID: 614983973}
   - component: {fileID: 614983976}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Triangle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -804,6 +836,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::prop
   itemIcon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   itemDisplayName: triangle
+  pickupQuantity: 1
   itemDescription: this is a magic prop...
 --- !u!212 &614983974
 SpriteRenderer:
@@ -1343,7 +1376,7 @@ GameObject:
   - component: {fileID: 1630545461}
   - component: {fileID: 1630545460}
   - component: {fileID: 1630545463}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Triangle2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1363,7 +1396,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::prop
   itemIcon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  itemDisplayName: triangle2
+  itemDisplayName: triangle
+  pickupQuantity: 1
   itemDescription: this is a magic prop...
 --- !u!212 &1630545461
 SpriteRenderer:
@@ -1496,7 +1530,7 @@ GameObject:
   - component: {fileID: 1641003795}
   - component: {fileID: 1641003794}
   - component: {fileID: 1641003797}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Triangle1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1516,7 +1550,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::prop
   itemIcon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  itemDisplayName: triangle1
+  itemDisplayName: triangle
+  pickupQuantity: 1
   itemDescription: this is a magic prop...
 --- !u!212 &1641003795
 SpriteRenderer:
@@ -2371,5 +2406,6 @@ SceneRoots:
   - {fileID: 2101598151}
   - {fileID: 1703718525}
   - {fileID: 1743906326}
+  - {fileID: 447029833}
   - {fileID: 404588162}
   - {fileID: 1431357624}
