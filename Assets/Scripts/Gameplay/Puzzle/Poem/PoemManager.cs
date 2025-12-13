@@ -1,107 +1,70 @@
 using UnityEngine;
-using TMPro;
 using Events;
-using System.Collections;
 
 /*
- * 诗词谜题管理器
- * 管理游戏进度和完成检测，支持静态方法控制面板开关
+ * 诗词谜题基类
+ * 提供通用的计数、面板开关、冻结事件发布等逻辑
+ * 具体的动画与完成逻辑由子类实现
  */
-public class PoemManager : MonoBehaviour
+public abstract class BasePoemManager : MonoBehaviour
 {
     [Header("配置")]
     [Tooltip("需要匹配的总数")]
     public int totalNotesRequired = 5;
 
-    [Tooltip("根对象（用于显示/隐藏）")]
-    public GameObject PanelRoot;
+    protected int matchedCount = 0;
 
-    [Header("动画配置")]
-    [Tooltip("完成后的目标面板（DrawerPanel）")]
-    public GameObject DrawerPanel;
+    // 静态变量（当前活动的诗词管理器单例）
+    protected static BasePoemManager s_instance;
+    protected static bool s_isOpen;
+    protected static bool s_initialized = false;
+    protected static bool s_isPuzzleCompleted = false;
 
-    [Tooltip("向上移动的动画时长（秒）")]
-    public float animationDuration = 1f;
-
-    [Tooltip("动画缓动类型")]
-    public LeanTweenType easeType = LeanTweenType.easeInOutQuad;
-
-    private int matchedCount = 0;
-
-    // 静态变量
-    private static PoemManager s_instance;
-    private static bool s_isOpen;
-    private static GameObject s_root;
-    private static bool s_initialized = false;
-    
-    // 谜题完成标志
-    private static bool s_isPuzzleCompleted = false;
-
-    void Awake()
+    protected virtual void Awake()
     {
         s_instance = this;
-        
-        // 如果未指定根对象,使用当前GameObject
-        if (PanelRoot == null)
-            PanelRoot = gameObject;
-
-        // 强制重置静态状态，确保每次进入场景都是新的开始
-        s_root = PanelRoot;
         s_initialized = false;
         s_isOpen = false;
-        s_isPuzzleCompleted = false; 
-        matchedCount = 0; // 重置匹配计数
+        s_isPuzzleCompleted = false;
+        matchedCount = 0;
 
-        // 确保 DrawerPanel 初始时关闭
-        if (DrawerPanel != null)
-        {
-            DrawerPanel.SetActive(false);
-        }
+        // 让子类做额外的初始化（如关闭特定面板）
+        InitializePanels();
     }
 
-    void Start()
+    protected virtual void Start()
     {
         // 场景加载时强制打开面板
-        // 无论之前状态如何，只要作为谜题场景加载，就应该显示
-        if (s_root != null)
-        {
-            s_root.SetActive(true);
-            s_isOpen = true;
-            s_initialized = true;
-            Debug.Log("[PoemManager.Start] 场景加载完成，强制打开面板");
-            
-            // 确保发布冻结事件（以防万一）
-            EventBus.LocalPublish(new FreezeEvent { isOpen = true });
-        }
+        OpenPanel();
     }
 
-    void OnDestroy()
+    protected virtual void OnDestroy()
     {
-        // 若当前实例绑定的根等于静态引用则清理静态状态
-        if (PanelRoot != null && s_root == PanelRoot)
+        if (s_instance == this)
         {
-            s_root = null;
+            s_instance = null;
             s_isOpen = false;
             s_initialized = false;
-            s_instance = null;
-            s_isPuzzleCompleted = false; 
+            s_isPuzzleCompleted = false;
         }
 
-        // 取消所有LeanTween动画
-        LeanTween.cancel(PanelRoot);
+        // 取消所有 LeanTween 动画
+        if (PanelRoot != null)
+        {
+            LeanTween.cancel(PanelRoot);
+        }
 
         // 确保在销毁时恢复玩家移动控制
-        // 防止场景卸载后玩家仍处于冻结状态
         EventBus.LocalPublish(new FreezeEvent { isOpen = false });
     }
 
     /*
      * 当有纸条匹配成功时调用
      */
-    public void OnNoteMatched()
+    public virtual void OnNoteMatched()
     {
         matchedCount++;
-        Debug.Log($"[PoemManager] 已匹配: {matchedCount}/{totalNotesRequired}");
+        Debug.Log($"[{GetType().Name}] 已匹配: {matchedCount}/{totalNotesRequired}");
 
         // 检查是否完成
         if (matchedCount >= totalNotesRequired)
@@ -111,109 +74,104 @@ public class PoemManager : MonoBehaviour
     }
 
     /*
-     * 谜题完成时调用
+     * 子类实现谜题完成后的具体逻辑
      */
-    private void OnPuzzleCompleted()
+    protected abstract void OnPuzzleCompleted();
+
+    /*
+     * 供子类在 Awake 时做额外初始化（默认无操作）
+     */
+    protected virtual void InitializePanels() { }
+
+    /*
+     * 标记谜题完成（供子类调用）
+     */
+    protected void MarkPuzzleCompleted()
     {
-        Debug.Log("[PoemManager] 谜题完成！开始播放动画");
-
-        // 设置完成标志
         s_isPuzzleCompleted = true;
-
-        // 获取 PoemPanel 的 RectTransform
-        RectTransform poemRect = PanelRoot.GetComponent<RectTransform>();
-
-        // 计算向上移动的距离（2/3的高度）
-        float moveDistance = poemRect.rect.height * 2f / 3f;
-        Vector2 targetPosition = poemRect.anchoredPosition + new Vector2(0, moveDistance);
-
-        // 激活 DrawerPanel
-        if (DrawerPanel != null)
-        {
-            DrawerPanel.SetActive(true);
-        }
-
-        // 使用 LeanTween 播放向上移动动画
-        LeanTween.value(PanelRoot, poemRect.anchoredPosition, targetPosition, animationDuration)
-            .setOnUpdate((Vector2 val) =>
-            {
-                poemRect.anchoredPosition = val;
-            })
-            .setEase(easeType)
-            .setOnComplete(() =>
-            {
-                Debug.Log("[PoemManager] 动画完成");
-            });
     }
 
     // ============ 静态面板控制方法 ============
 
-    /*
-     * 切换面板开关状态
-     */
     public static void TogglePanel()
     {
+        if (s_instance == null)
+        {
+            Debug.LogWarning("[BasePoemManager] 无法切换面板：实例为空");
+            return;
+        }
+
         if (s_isOpen)
             ClosePanel();
         else
             OpenPanel();
     }
 
-    /*
-     * 打开诗词谜题面板
-     */
     public static void OpenPanel()
     {
-        if (s_root == null)
+        if (s_instance == null)
         {
-            Debug.LogWarning("[PoemManager] 无法打开面板：根对象为空");
+            Debug.LogWarning("[BasePoemManager] 无法打开面板：实例为空");
+            return;
+        }
+
+        GameObject root = s_instance.PanelRoot;
+        if (root == null)
+        {
+            Debug.LogWarning("[BasePoemManager] 无法打开面板：根对象为空");
             return;
         }
 
         s_isOpen = true;
-        s_root.SetActive(true);
+        s_initialized = true;
+        root.SetActive(true);
 
         // 如果谜题已完成，同时打开 DrawerPanel
-        if (s_isPuzzleCompleted && s_instance != null && s_instance.DrawerPanel != null)
+        if (s_isPuzzleCompleted && s_instance.DrawerPanel != null)
         {
             s_instance.DrawerPanel.SetActive(true);
-            Debug.Log("[PoemManager] 谜题已完成，同时打开 DrawerPanel");
+            Debug.Log("[BasePoemManager] 谜题已完成，同时打开 DrawerPanel");
         }
 
         // 禁用玩家移动
         EventBus.LocalPublish(new FreezeEvent { isOpen = true });
     }
 
-    /*
-     * 关闭诗词谜题面板
-     */
     public static void ClosePanel()
     {
-        if (s_root == null)
+        if (s_instance == null)
         {
-            Debug.LogWarning("[PoemManager] 无法关闭面板：根对象为空");
+            Debug.LogWarning("[BasePoemManager] 无法关闭面板：实例为空");
+            return;
+        }
+
+        GameObject root = s_instance.PanelRoot;
+        if (root == null)
+        {
+            Debug.LogWarning("[BasePoemManager] 无法关闭面板：根对象为空");
             return;
         }
         
         s_isOpen = false;
-        s_root.SetActive(false);
+        root.SetActive(false);
 
         // 如果谜题已完成，同时关闭 DrawerPanel
-        if (s_isPuzzleCompleted && s_instance != null && s_instance.DrawerPanel != null)
+        if (s_isPuzzleCompleted && s_instance.DrawerPanel != null)
         {
             s_instance.DrawerPanel.SetActive(false);
-            Debug.Log("[PoemManager] 谜题已完成，同时关闭 DrawerPanel");
+            Debug.Log("[BasePoemManager] 谜题已完成，同时关闭 DrawerPanel");
         }
 
         // 恢复玩家移动
         EventBus.LocalPublish(new FreezeEvent { isOpen = false });
     }
 
-    /*
-     * 获取谜题是否已完成
-     */
     public static bool IsPuzzleCompleted()
     {
         return s_isPuzzleCompleted;
     }
+
+    // 子类需要提供的面板引用
+    protected abstract GameObject PanelRoot { get; }
+    protected abstract GameObject DrawerPanel { get; }
 }

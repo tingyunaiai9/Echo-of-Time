@@ -51,9 +51,9 @@ namespace Game.Gameplay.Puzzle.Poem2
             //    scrollVisualInBox.SetActive(true);
 
             // 3. Update Manager
-            if (Poem2Manager.Instance != null)
+            if (Poem2NetManager.Instance != null)
             {
-                Poem2Manager.Instance.CmdSetScrollPlaced(true);
+                Poem2NetManager.Instance.CmdSetScrollPlaced(true);
             }
 
             if (notificationController != null)

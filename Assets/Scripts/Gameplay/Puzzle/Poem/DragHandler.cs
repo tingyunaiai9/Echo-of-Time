@@ -169,7 +169,7 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         gameObject.SetActive(false);
 
         // 通知谜题管理器
-        PoemManager puzzleManager = FindFirstObjectByType<PoemManager>();
+        BasePoemManager puzzleManager = FindFirstObjectByType<BasePoemManager>();
         if (puzzleManager != null)
         {
             puzzleManager.OnNoteMatched();

@@ -26,14 +26,14 @@ namespace Game.Gameplay.Puzzle.Poem2
         {
             base.OnInteract(player);
 
-            if (Poem2Manager.Instance == null)
+            if (Poem2NetManager.Instance == null)
             {
                 Debug.LogError("Poem2Manager instance not found!");
                 return;
             }
 
-            bool ancientDone = Poem2Manager.Instance.isScrollPlacedInAncient;
-            bool modernDone = Poem2Manager.Instance.isLockUnlockedInModern;
+            bool ancientDone = Poem2NetManager.Instance.isScrollPlacedInAncient;
+            bool modernDone = Poem2NetManager.Instance.isLockUnlockedInModern;
 
             if (!ancientDone)
             {
