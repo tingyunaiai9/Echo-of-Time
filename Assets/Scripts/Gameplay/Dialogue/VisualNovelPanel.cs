@@ -14,6 +14,7 @@ public class VisualNovelPanel : MonoBehaviour
     public Image leftPortrait; // 左侧立绘
     public Image rightPortrait; // 右侧立绘
     public Button continueButton; // 点击继续的全屏按钮
+    public Button skipButton; // 跳过剧情按钮
 
     private Queue<DialogueLine> _currentLines = new Queue<DialogueLine>();
     private bool _isTyping = false;
@@ -27,6 +28,7 @@ public class VisualNovelPanel : MonoBehaviour
         Instance = this;
         panelRoot.SetActive(false);
         continueButton.onClick.AddListener(OnContinueClicked);
+        skipButton.onClick.AddListener(EndDialogue);
         
         // 订阅剧情开始事件
         EventBus.Subscribe<StartDialogueEvent>(OnStartDialogue);
