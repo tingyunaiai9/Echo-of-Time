@@ -49,6 +49,19 @@ public class Clue : Interaction
             });
         }
 
+        // 查找并显示 ClueCanvas
+        GameObject canvasObj = GameObject.Find("ClueCanvas");
+        ClueCanvas canvas = canvasObj != null ? canvasObj.GetComponent<ClueCanvas>() : null;
+
+        if (canvas != null)
+        {
+            canvas.ShowClue(clueIcon, clueDescription);
+        }
+        else
+        {
+            Debug.LogWarning("ClueCanvas not found in the scene!");
+        }
+
         Debug.Log($"调查线索 -> 对象: {gameObject.name}, 玩家: {who}\n内容: {clueText}");
     }
 }
