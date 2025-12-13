@@ -253,6 +253,11 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     
         Sprite icon = consoleImage.sprite;
     
+        EventBus.LocalPublish(new PuzzleCompletedEvent
+        {
+            sceneName = "Light2"
+        });
+
         // 发布 ClueDiscoveredEvent 事件
         EventBus.LocalPublish(new ClueDiscoveredEvent
         {
