@@ -12,7 +12,6 @@ public class VisualNovelPanel : MonoBehaviour
     public TextMeshProUGUI nameText; // 名字文本
     public TextMeshProUGUI contentText; // 内容文本
     public Image leftPortrait; // 左侧立绘
-    public Image rightPortrait; // 右侧立绘
     public Button continueButton; // 点击继续的全屏按钮
     public Button skipButton; // 跳过剧情按钮
 
@@ -89,20 +88,9 @@ public class VisualNovelPanel : MonoBehaviour
         // 简单的立绘逻辑：有图就显示，没图就隐藏
         if (line.characterSprite != null)
         {
-            if (line.isLeft)
-            {
-                leftPortrait.sprite = line.characterSprite;
-                leftPortrait.gameObject.SetActive(true);
-                leftPortrait.color = Color.white; // 亮起
-                rightPortrait.color = Color.gray; // 另一侧变暗
-            }
-            else
-            {
-                rightPortrait.sprite = line.characterSprite;
-                rightPortrait.gameObject.SetActive(true);
-                rightPortrait.color = Color.white;
-                leftPortrait.color = Color.gray;
-            }
+            leftPortrait.sprite = line.characterSprite;
+            leftPortrait.gameObject.SetActive(true);
+            leftPortrait.color = Color.white; // 亮起
         }
         // 如果不需要立绘变化，可以保留上一张，或者根据需求隐藏
     }
