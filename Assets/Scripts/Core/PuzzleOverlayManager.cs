@@ -144,7 +144,7 @@ public class PuzzleOverlayManager : MonoBehaviour
             ClosePuzzle();
         }
 
-        if (sceneName == "Light" && PropBackpack.GetPropCount("mirror") <= 5){
+        if (sceneName == "Light" && PropBackpack.GetPropCount("mirror") <= 4){
             if (notificationUI != null)
             {
                 notificationUI.ShowNotification($"你还没有找到足够的镜子来解开这个谜题。");
