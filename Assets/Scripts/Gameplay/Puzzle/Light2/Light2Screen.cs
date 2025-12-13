@@ -6,13 +6,26 @@ namespace Game.Gameplay.Puzzle.Light2
     public class Light2Screen : Interaction
     {
         [Header("UI Settings")]
-        [Tooltip("The Canvas or UI Panel to show when interacting with the screen")]
-        public GameObject screenCanvas;
+        [Tooltip("The name of the Canvas object in GameBase scene")]
+        public string screenCanvasName = "ScreenCanvas";
+
+        private GameObject screenCanvas;
+
+        private void Awake()
+        {
+            // Ensure it's hidden initially, waiting for Light2Tree to wake it up
+            if (gameObject.activeSelf)
+            {
+                gameObject.SetActive(false);
+            }
+        }
 
         protected override void Start()
         {
             base.Start();
             
+            FindCanvas();
+
             // Ensure canvas is hidden at start
             if (screenCanvas != null)
             {
@@ -20,9 +33,34 @@ namespace Game.Gameplay.Puzzle.Light2
             }
         }
 
+        private void FindCanvas()
+        {
+            if (screenCanvas != null) return;
+
+            // 1. Try finding active object
+            screenCanvas = GameObject.Find(screenCanvasName);
+
+            // 2. If not found, try finding inactive object (slower but necessary if it starts hidden)
+            if (screenCanvas == null)
+            {
+                Canvas[] canvases = Resources.FindObjectsOfTypeAll<Canvas>();
+                foreach (Canvas c in canvases)
+                {
+                    // Check if it's a scene object (not an asset) and matches name
+                    if (c.gameObject.scene.IsValid() && c.name == screenCanvasName)
+                    {
+                        screenCanvas = c.gameObject;
+                        break;
+                    }
+                }
+            }
+        }
+
         public override void OnInteract(PlayerController player)
         {
             base.OnInteract(player);
+
+            if (screenCanvas == null) FindCanvas();
 
             if (screenCanvas != null)
             {
@@ -30,7 +68,7 @@ namespace Game.Gameplay.Puzzle.Light2
             }
             else
             {
-                Debug.LogWarning("Light2Screen: Screen Canvas is not assigned!");
+                Debug.LogWarning($"Light2Screen: Screen Canvas '{screenCanvasName}' not found in any scene!");
             }
         }
 
