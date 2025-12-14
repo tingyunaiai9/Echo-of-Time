@@ -144,6 +144,17 @@ public class PuzzleOverlayManager : MonoBehaviour
             ClosePuzzle();
         }
 
+        if (sceneName == "Light" && PropBackpack.GetPropCount("mirror") <= 4){
+            if (notificationUI != null)
+            {
+                notificationUI.ShowNotification($"你还没有找到足够的镜子来解开这个谜题。");
+            }
+            else if (verboseLog)
+            {
+                Debug.Log("[PuzzleOverlay] 镜子数量不足，无法打开谜题: " + sceneName);
+            }
+            return;
+        }
         StartCoroutine(CoOpenPuzzle(sceneName));
     }
 
