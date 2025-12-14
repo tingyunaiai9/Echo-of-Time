@@ -54,6 +54,7 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     void Awake()
     {
         s_instance = this;
+    
         // 如果未设置光标图片，输出警告
         if (cursorTexture == null)
         {
@@ -63,7 +64,7 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         {
             Debug.LogWarning("[PrunePanel] 未设置 cursorTexturePressed！");
         }
-
+    
         // 在 macOS 上预先缩放光标纹理
         if (Application.platform == RuntimePlatform.OSXPlayer || 
             Application.platform == RuntimePlatform.OSXEditor)
@@ -71,13 +72,13 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             if (cursorTexture != null)
             {
                 scaledCursorTexture = ScaleTexture(cursorTexture, macOSScale);
-                scaledHotspot = hotspot * macOSScale;
+                scaledHotspot = new Vector2(scaledCursorTexture.width / 2f, scaledCursorTexture.height / 2f); // 设置热点为中心
             }
             
             if (cursorTexturePressed != null)
             {
                 scaledCursorTexturePressed = ScaleTexture(cursorTexturePressed, macOSScale);
-                scaledHotspotPressed = hotspotPressed * macOSScale;
+                scaledHotspotPressed = new Vector2(scaledCursorTexturePressed.width / 2f, scaledCursorTexturePressed.height / 2f); // 设置热点为中心
             }
         }
         else
@@ -85,11 +86,11 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             // Windows 平台直接使用原始纹理
             scaledCursorTexture = cursorTexture;
             scaledCursorTexturePressed = cursorTexturePressed;
-            scaledHotspot = hotspot;
-            scaledHotspotPressed = hotspotPressed;
+            scaledHotspot = cursorTexture != null ? new Vector2(cursorTexture.width / 2f, cursorTexture.height / 2f) : Vector2.zero; // 设置热点为中心
+            scaledHotspotPressed = cursorTexturePressed != null ? new Vector2(cursorTexturePressed.width / 2f, cursorTexturePressed.height / 2f) : Vector2.zero; // 设置热点为中心
         }
     }
-
+    
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.P))

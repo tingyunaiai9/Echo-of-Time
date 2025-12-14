@@ -264,7 +264,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u6843\\n\u82B1\\n\u6D41\\n\u6C34\\n\u7A85\\n\u7136\\n\u53BB\\n \\n\u522B\\n\u6709\\n\u5929\\n\u5730\\n\u975E\\n\u4EBA\\n\u95F4"
+  m_text: "\u505C\\n\u9A96\\n\u8D4F\\n\u5C3D\\n\u6843\\n\u82B1\\n\u666F\\n\\n\u4E00\\n\u8DEF\\n\u6625\\n\u98CE\\n\u9001\\n\u9152\\n\u9999\\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
   m_sharedMaterial: {fileID: -8588852133097181418, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
@@ -679,7 +679,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u6811\n\u6DF1\n\u65F6\n\u89C1\n\u9E7F\n\n\u6EAA\n\u5348\n\u4E0D\n\u95FB\n\u949F"
+  m_text: "\u4E91\\n\u8377\\n\u5341\\n\u91CC\\n\u9999\\n\u98CE\\n\u9001\\n\\n\u6C34\\n\u9601\\n\u4E09\\n\u66F4\\n\u6708\\n\u8272\\n\u51C9\\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
   m_sharedMaterial: {fileID: -8588852133097181418, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
@@ -793,7 +793,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 900, y: 600}
+  m_SizeDelta: {x: 1100, y: 600}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &137540075
 MonoBehaviour:
@@ -815,7 +815,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 930df7e07a37c46a7bfe74083e2f5353, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a21056882bac5469fa61c47d915b35bc, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1609,7 +1609,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1486200735131179702, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -841.7767
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1486200735131179702, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1629,11 +1629,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1486200735131179702, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 9.8721695
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1486200735131179702, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 11.510548
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1486200735131179702, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2269,7 +2269,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u60A0\\n\u60A0\\n\u51FA\\n\u5C71\\n\u6C34\\n \\n\u6D69\\n\u6D69\\n\u65E0\\n\u505C\\n\u6CE8"
+  m_text: "\u65E5\\n\u66AE\\n\u4E61\\n\u5173\\n\u4F55\\n\u5904\\n\u662F\\n \\n\u70DF\\n\u6CE2\\n\u6C5F\\n\u4E0A\\n\u4F7F\\n\u4EBA\\n\u6101\\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
   m_sharedMaterial: {fileID: -8588852133097181418, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
@@ -2764,7 +2764,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u6625\n\u6F6E\n\u5E26\n\u96E8\n\u665A\n\u6765\n\u6025\n\n\u91CE\n\u6E21\n\u65E0\n\u4EBA\n\u821F\n\u81EA\n\u6A2A"
+  m_text: "\u65E0\\n\u8FB9\\n\u843D\\n\u6728\\n\u8427\\n\u8427\\n\u4E0B\\n\\n\u4E0D\\n\u5C3D\\n\u957F\\n\u6C5F\\n\u6EDA\\n\u6EDA\\n\u6765\\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
   m_sharedMaterial: {fileID: -8588852133097181418, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
@@ -2900,7 +2900,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u660E\n\u6708\n\u677E\n\u95F4\n\u7167\n\n\u6E05\n\u6CC9\n\u77F3\n\u4E0A\n\u6D41"
+  m_text: "\u5BD2\\n\u6885\\n\u6620\\n\u96EA\\n\u51DD\\n\u6E05\\n\u8273\\n\\n\u6653\\n\u972D\\n\u7B3C\\n\u677E\\n\u8574\\n\u6697\\n\u9999\\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
   m_sharedMaterial: {fileID: -8588852133097181418, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
@@ -3196,7 +3196,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u6C5F\n\u78A7\n\u9E1F\n\u903E\n\u767D\n\n\u5C71\n\u9752\n\u82B1\n\u6B32\n\u71C3"
+  m_text: "\u65E7\\n\u65F6\\n\u738B\\n\u8C22\\n\u5802\\n\u524D\\n\u71D5\\n\\n\u98DE\\n\u5165\\n\u5BFB\\n\u5E38\\n\u767E\\n\u59D3\\n\u5BB6\\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
   m_sharedMaterial: {fileID: -8588852133097181418, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
@@ -3332,7 +3332,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u665A\n\u6765\n\u5C71\n\u98CE\n\u626B\n\u843D\n\u82F1\n\n\u4E94\n\u8272\n\u8679\n\u9713\n\u660E\n\u7EFF\n\u82D4"
+  m_text: "\u83CA\\n\u7BF1\\n\u758F\\n\u5F71\\n\u6447\\n\u971C\\n\u8272\\n\\n\u677E\\n\u5F84\\n\u5BD2\\n\u70DF\\n\u9501\\n\u972D\\n\u5149\\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
   m_sharedMaterial: {fileID: -8588852133097181418, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
@@ -4207,7 +4207,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u6C34\n\u5317\n\u539F\n\u5357\n\u8349\n\u8272\n\u65B0\n\n\u96EA\n\u6D88\n\u98CE\n\u6696\n\u4E0D\n\u751F\n\u5C18"
+  m_text: "\u6C34\\n\u5149\\n\u6F4B\\n\u6EDF\\n\u6674\\n\u65B9\\n\u597D\\n\\n\u5C71\\n\u8272\\n\u7A7A\\n\u8499\\n\u96E8\\n\u4EA6\\n\u5947\\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
   m_sharedMaterial: {fileID: -8588852133097181418, guid: 9d24403649b8c4340b72fff566c13891, type: 2}

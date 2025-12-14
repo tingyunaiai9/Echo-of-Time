@@ -129,11 +129,12 @@ public class LocalTestLauncher : MonoBehaviour
             return;
         }
 
-        tp.timeline = testTimelineIndex;
         tp.currentLevel = testLevelIndex;
+        tp.timeline = testTimelineIndex;
+        
         Debug.Log($"[LocalTestLauncher] 已为本地玩家分配时间线 {testTimelineIndex}, 层级 {testLevelIndex}");
 
-        // 5️⃣ 直接加载对应时间线场景
+        // 5️⃣ 尝试加载（如果属性变化已触发加载，SceneDirector 会自动忽略重复请求）
         SceneDirector.Instance.TryLoadTimelineNow();
     }
 

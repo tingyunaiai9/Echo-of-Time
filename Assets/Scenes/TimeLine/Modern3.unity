@@ -592,7 +592,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1422658940}
   - component: {fileID: 1422658941}
-  m_Layer: 0
+  - component: {fileID: 1422658942}
+  - component: {fileID: 1422658943}
+  m_Layer: 7
   m_Name: book
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -639,7 +641,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 0b051f72c945ecc4e83647618c6344ad, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -672,6 +674,44 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!65 &1422658942
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1422658939}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.22, y: 0.23, z: 0.2}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1422658943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1422658939}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74c289d1144714a2081d9d81afeaf8ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Clue
+  clueText: "\u9EA6\u514B\u767D\n"
+  clueDescription: "\u8FD9\u662F\u4E00\u672C\u4E5F\u662F\u552F\u4E00\u4E00\u672C\u88AB\u7FFB\u5F97\u8D77\u6BDB\u7684\u300A\u9EA6\u514B\u767D\u300B\u5E73\u88C5\u4E66\u3002\u4E66\u9875\u88AB\u66B4\u529B\u5730\u6298\u5728\u7B2C\u4E94\u5E55\u7B2C\u4E94\u573A\uFF0C\u7EB8\u5F20\u8FB9\u7F18\u5448\u73B0\u51FA\u88AB\u706B\u820C\u8214\u8210\u8FC7\u7684\u5377\u66F2\u548C\u70AD\u5316\uFF0C\u6563\u53D1\u7740\u4E00\u80A1\u9648\u65E7\u7684\u70DF\u718F\u5473\u3002\n\n\u7126\u75D5\u6700\u6DF1\u7684\u5730\u65B9\uFF0C\u6070\u597D\u8986\u76D6\u4E86\u90A3\u6BB5\u8457\u540D\u7684\u72EC\u767D\u3002\u4F60\u8D39\u529B\u8FA8\u8BA4\uFF0C\u624D\u4ECE\u7070\u70EC\u8FB9\u7F18\u8BFB\u51FA\u90A3\u884C\u5B57\uFF1A\u201C\u7184\u706D\u5427\uFF0C\u7184\u706D\u5427\uFF0C\u77ED\u547D\u4E4B\u70DB\uFF01\u201D"
+  clueIcon: {fileID: 21300000, guid: 749d6f67692f2674d9bbdfb1a9afdd75, type: 3}
+  clueImage: {fileID: -1700606432, guid: 36578f07ea50e54429742b478bdae1f3, type: 3}
+  discovered: 0
 --- !u!1 &1446064581
 GameObject:
   m_ObjectHideFlags: 0
@@ -766,7 +806,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1584854312}
   - component: {fileID: 1584854313}
-  m_Layer: 0
+  - component: {fileID: 1584854314}
+  - component: {fileID: 1584854315}
+  m_Layer: 7
   m_Name: clock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -813,7 +855,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 0b051f72c945ecc4e83647618c6344ad, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -846,6 +888,44 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!65 &1584854314
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1584854311}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.09, y: 1.03, z: 0.2}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1584854315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1584854311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74c289d1144714a2081d9d81afeaf8ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Clue
+  clueText: 
+  clueDescription: "\u4E00\u5EA7\u6C89\u91CD\u7684\u7EA2\u6728\u5EA7\u949F\uFF0C\u6DF1\u7EA2\u8272\u7684\u6728\u7EB9\u50CF\u662F\u4E00\u5C42\u51DD\u56FA\u7684\u8840\u75C2\u3002\u73BB\u7483\u9762\u7F69\u5E03\u6EE1\u88C2\u7EB9\uFF0C\u539F\u672C\u8D1F\u8D23\u7EF4\u6301\u5F8B\u52A8\u7684\u9EC4\u94DC\u949F\u6446\u5DF2\u7ECF\u4ECE\u6839\u90E8\u7531\u4E8E\u91D1\u5C5E\u75B2\u52B3\u800C\u5F7B\u5E95\u65AD\u88C2\uFF0C\u9893\u7136\u5730\u6A2A\u5C38\u5728\u949F\u7BB1\u5E95\u90E8\u3002\n\n\u6307\u9488\u6C38\u8FDC\u505C\u5728\u4E86\u90A3\u4E00\u523B\u3002\u5728\u949F\u5EA7\u5E95\u90E8\u7684\u94DC\u94ED\u724C\u4E0A\uFF0C\u6709\u4EBA\u7528\u9510\u5668\u523B\u4E0B\u4E86\u4E00\u884C\u6F66\u8349\u4E14\u5145\u6EE1\u6068\u610F\u7684\u5B57\uFF1A\u201C\u9F7F\u8F6E\u7EC8\u5C06\u54AC\u5408\u8FC7\u7D27\uFF0C\u5D29\u65AD\u5F7C\u6B64\u3002\u5373\u4F7F\u6052\u5E38\u5982\u65F6\u95F4\uFF0C\u4E5F\u7EC8\u4F1A\u8D70\u5411\u81EA\u6211\u5D29\u89E3\u7684\u6BC1\u706D\u3002\u201D"
+  clueIcon: {fileID: 21300000, guid: 01aedbf502e9435448ee9ef0624c9f3b, type: 3}
+  clueImage: {fileID: 325058131, guid: 36578f07ea50e54429742b478bdae1f3, type: 3}
+  discovered: 0
 --- !u!1 &1669697316
 GameObject:
   m_ObjectHideFlags: 0
@@ -856,7 +936,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1669697317}
   - component: {fileID: 1669697318}
-  m_Layer: 0
+  - component: {fileID: 1669697319}
+  - component: {fileID: 1669697320}
+  m_Layer: 7
   m_Name: picture
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -903,7 +985,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 0b051f72c945ecc4e83647618c6344ad, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -936,6 +1018,44 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!65 &1669697319
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1669697316}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.83, y: 1.1, z: 0.2}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1669697320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1669697316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74c289d1144714a2081d9d81afeaf8ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Clue
+  clueText: 
+  clueDescription: "\u4E00\u5F20\u5E74\u8F7B\u5973\u5B69\u7684\u9ED1\u767D\u8BC1\u4EF6\u7167\uFF0C\u88AB\u5E84\u91CD\u5730\u5B89\u653E\u5728\u9ED1\u8272\u76F8\u6846\u4E2D\u3002\u7167\u7247\u91CC\u7684\u5979\u7559\u7740\u9F50\u8033\u77ED\u53D1\uFF0C\u773C\u795E\u6E05\u6F88\u800C\u70BD\u70ED\uFF0C\u5634\u89D2\u4F3C\u4E4E\u8FD8\u5E26\u7740\u5BF9\u53D8\u9769\u7684\u61A7\u61AC\u2014\u2014\u90A3\u662F\u5C1A\u672A\u89C1\u8BC6\u8FC7\u6B7B\u4EA1\u7684\u773C\u795E\u3002\n\n\u7167\u7247\u80CC\u9762\uFF0C\u7528\u94A2\u7B14\u7528\u529B\u5730\u5199\u7740\u4E00\u884C\u9898\u6CE8\uFF0C\u7B14\u5C16\u751A\u81F3\u5212\u7834\u4E86\u76F8\u7EB8\uFF1A\u201C\u5BC4\u610F\u5BD2\u661F\u8343\u4E0D\u5BDF\uFF0C\u6211\u4EE5\u6211\u8840\u8350\u8F69\u8F95\u3002\u201D\n\n\u5728\u201C\u8840\u201D\u5B57\u7684\u4E00\u6487\u4E0A\uFF0C\u8986\u76D6\u7740\u4E00\u6EF4\u65E9\u5DF2\u6C27\u5316\u53D8\u9ED1\u7684\u3001\u771F\u6B63\u7684\u9648\u65E7\u8840\u8FF9\u3002\u8FD9\u4E0D\u4EC5\u662F\u8A93\u8A00\uFF0C\u66F4\u662F\u4E00\u4EFD\u5DF2\u5151\u73B0\u7684\u8C22\u5E55\u3002"
+  clueIcon: {fileID: 21300000, guid: aadd154993b6dfe43b510fca39a62e47, type: 3}
+  clueImage: {fileID: -1996017247, guid: 36578f07ea50e54429742b478bdae1f3, type: 3}
+  discovered: 0
 --- !u!1 &2020498369
 GameObject:
   m_ObjectHideFlags: 0
