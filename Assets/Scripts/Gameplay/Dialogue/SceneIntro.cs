@@ -18,7 +18,7 @@ public class SceneIntro : MonoBehaviour
     [Tooltip("是否只播放一次（防止重复进入场景时再次触发）")]
     public bool playOnce = true;
 
-    private static bool hasPlayed = false; // 静态变量，跨场景保留
+    private bool hasPlayed = false;
 
     void Start()
     {
@@ -61,7 +61,7 @@ public class SceneIntro : MonoBehaviour
         }
     }
 
-    // 可选：提供重置方法，用于调试
+    // 提供重置方法，用于调试
     [ContextMenu("重置播放状态")]
     void ResetPlayState()
     {
