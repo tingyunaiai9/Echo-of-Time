@@ -4,6 +4,9 @@ using System.Collections.Generic;
 [System.Serializable]
 public class DialogueLine
 {
+    [Tooltip("是否为叙述（将隐藏名字和立绘）")]
+    public bool isNarration = false;
+
     [Tooltip("说话者名字")]
     public string speakerName;
     
