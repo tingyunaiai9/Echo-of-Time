@@ -26,6 +26,10 @@ public class PuzzleManager : MonoBehaviour
     [Tooltip("拼图完成后获得的线索图片")]
     public Sprite clueSprite;
 
+    [Header("共享线索设置")]
+    [Tooltip("拼图完成后获得的共享线索图片")]
+    public Sprite sharedClueSprite;
+
     [Tooltip("线索的名字")]
     public string clueName = "一幅画";
 
@@ -144,6 +148,22 @@ public class PuzzleManager : MonoBehaviour
         else
         {
             Debug.LogWarning("[PuzzleManager] 未设置线索图片或名称，无法发布线索。");
+        }
+
+        // 共享图片线索到便签墙（参考 UIManager Minus 键流程）
+        if (sharedClueSprite != null)
+        {
+            int timeline = TimelinePlayer.Local != null ? TimelinePlayer.Local.timeline : 0;
+            byte[] spriteBytes = ImageUtils.CompressSpriteToJpegBytes(sharedClueSprite, 80);
+            if (spriteBytes != null)
+            {
+                ClueBoard.AddClueEntry(timeline, spriteBytes);
+                Debug.Log($"[PuzzleManager] 已共享线索图片到便签墙，大小：{spriteBytes.Length} 字节");
+            }
+            else
+            {
+                Debug.LogError("[PuzzleManager] 线索图片压缩失败，未能共享到便签墙。");
+            }
         }
     }
 
