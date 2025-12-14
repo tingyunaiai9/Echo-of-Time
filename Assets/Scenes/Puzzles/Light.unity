@@ -484,6 +484,81 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 224042171}
   m_CullTransparentMesh: 1
+--- !u!1 &312860261
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 312860262}
+  - component: {fileID: 312860264}
+  - component: {fileID: 312860263}
+  m_Layer: 5
+  m_Name: PetalImage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &312860262
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 312860261}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2123841886}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 613, y: -450}
+  m_SizeDelta: {x: 110, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &312860263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 312860261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 847ecfded0cc2488ab7fae4fee104464, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &312860264
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 312860261}
+  m_CullTransparentMesh: 1
 --- !u!1 &390851723
 GameObject:
   m_ObjectHideFlags: 0
@@ -2388,6 +2463,7 @@ RectTransform:
   - {fileID: 490483907}
   - {fileID: 2133649167}
   - {fileID: 2019563744}
+  - {fileID: 312860262}
   m_Father: {fileID: 1324334997}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -2449,23 +2525,30 @@ MonoBehaviour:
   MirrorSlotPrefab: {fileID: 1904580698853253649, guid: fe2f7a01e41194ed2bc2fc61187141b0, type: 3}
   mirrorSlots:
   - xindex: 1
-    yindex: 2
-    direction: 3
-  - xindex: 1
-    yindex: 0
+    yindex: 1
     direction: 1
   - xindex: 3
-    yindex: 0
+    yindex: 1
+    direction: 1
+  - xindex: 8
+    yindex: 1
+    direction: 1
+  - xindex: 6
+    yindex: 2
     direction: 2
-  - xindex: 3
+  - xindex: 8
     yindex: 2
     direction: 0
-  - xindex: 5
-    yindex: 0
-    direction: 1
-  - xindex: 7
-    yindex: 3
+  - xindex: 3
+    yindex: 4
     direction: 0
+  - xindex: 6
+    yindex: 4
+    direction: 3
+  - xindex: 10
+    yindex: 4
+    direction: 1
+  mirrorSlotAnswers: 0300000004000000050000000700000008000000
 --- !u!1 &2133649166
 GameObject:
   m_ObjectHideFlags: 0
