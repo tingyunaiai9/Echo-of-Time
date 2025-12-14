@@ -338,8 +338,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LocalTestLauncher
   enableLocalTestMode: 0
-  testTimelineIndex: 0
-  testLevelIndex: 1
+  testTimelineIndex: 1
+  testLevelIndex: 2
 --- !u!1 &611270528
 GameObject:
   m_ObjectHideFlags: 0
@@ -786,7 +786,9 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  modernCompassClueId: ModernCompass
   isCompassSolved: 0
+  isClueFound: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
