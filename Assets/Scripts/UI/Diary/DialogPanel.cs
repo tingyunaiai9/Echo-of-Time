@@ -132,7 +132,9 @@ public class DialogPanel : MonoBehaviour
         // Timeline 0, 2 (及其他): DeepSeek
         if (timeline == 1)
         {
-            StartCoroutine(ImageGenCoroutine(userInput));
+            // 添加民国风格的 Prompt 前缀
+            string stylePrompt = $"一张民国时期的黑白素描，复古风格，线条粗糙，旧纸张质感，{userInput}";
+            StartCoroutine(ImageGenCoroutine(stylePrompt));
         }
         else
         {

@@ -38,6 +38,7 @@ public class CluePanel : Inventory
             icon = icon,
             image = image
         };
+        Debug.Log($"[CluePanel.AddClue] 线索描述为: {clueDescription}");
         CreateOrUpdateItemUI(item);
     }
 

@@ -625,6 +625,9 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   puzzlePanel: {fileID: 353986452}
+  clueSprite: {fileID: 21300000, guid: 47cfc86ad61ce1644965b64bde04ac97, type: 3}
+  clueName: "\u4E00\u5E45\u753B"
+  clueDescription: "\u4E00\u5E45\u753B\uFF0C\u4E0A\u9762\u8FD8\u5370\u7740\u4E00\u884C\u5B57\uFF0C\u8FDC\u773A\u2026\u2026\uFF1F"
 --- !u!114 &353986454
 MonoBehaviour:
   m_ObjectHideFlags: 0
