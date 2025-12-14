@@ -57,7 +57,21 @@ public class ClueBoard : MonoBehaviour
 
     public static void AddClueEntry(int timeline, byte[] imageBytes, bool publish = true)
     {
-        if (s_instance == null) return;
+        // 懒加载实例，防止 Awake 尚未执行或对象未激活导致静态实例为空
+        if (s_instance == null)
+        {
+            s_instance = Object.FindObjectOfType<ClueBoard>(true);
+            if (s_instance == null)
+            {
+                Debug.LogWarning("[ClueBoard] AddClueEntry 调用时未找到 ClueBoard 实例，条目未创建。");
+                return;
+            }
+            else
+            {
+                Debug.Log("[ClueBoard] 懒加载 ClueBoard 实例成功，继续添加条目。");
+            }
+        }
+
         s_instance.CreateClueEntry(timeline, imageBytes);
         if (publish)
         {

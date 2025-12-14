@@ -626,6 +626,7 @@ MonoBehaviour:
         m_CallState: 2
   puzzlePanel: {fileID: 353986452}
   clueSprite: {fileID: 21300000, guid: 47cfc86ad61ce1644965b64bde04ac97, type: 3}
+  sharedClueSprite: {fileID: 21300000, guid: f81d93b1171e21948841cfe599000627, type: 3}
   clueName: "\u4E00\u5E45\u753B"
   clueDescription: "\u4E00\u5E45\u753B\uFF0C\u4E0A\u9762\u8FD8\u5370\u7740\u4E00\u884C\u5B57\uFF0C\u8FDC\u773A\u2026\u2026\uFF1F"
 --- !u!114 &353986454
@@ -2369,7 +2370,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1486200735131179702, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -841.7767
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1486200735131179702, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2389,11 +2390,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1486200735131179702, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.5981291
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1486200735131179702, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.676975
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1486200735131179702, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2410,6 +2411,10 @@ PrefabInstance:
     - target: {fileID: 8871418275385414889, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: m_Name
       value: TipPanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 8871418275385414889, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
