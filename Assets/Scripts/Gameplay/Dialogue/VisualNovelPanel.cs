@@ -23,6 +23,8 @@ public class VisualNovelPanel : MonoBehaviour
     private Queue<DialogueLine> _currentLines = new Queue<DialogueLine>();
     private bool _isTyping = false;
     private string _targetContent = "";
+    private Vector2 _originalContentPosition;
+    private Vector2 _originalContentSizeDelta;
 
     // 单例方便调用
     public static VisualNovelPanel Instance { get; private set; }
@@ -30,6 +32,8 @@ public class VisualNovelPanel : MonoBehaviour
     void Awake()
     {
         Instance = this;
+        _originalContentPosition = contentText.rectTransform.anchoredPosition;
+        _originalContentSizeDelta = contentText.rectTransform.sizeDelta;
         panelRoot.SetActive(false);
         continueButton.onClick.AddListener(OnContinueClicked);
         skipButton.onClick.AddListener(EndDialogue);
@@ -76,12 +80,30 @@ public class VisualNovelPanel : MonoBehaviour
         }
 
         DialogueLine line = _currentLines.Dequeue();
-        
-        // 设置名字
-        nameText.text = line.speakerName;
 
-        // 设置立绘
-        UpdatePortraits(line);
+        if (line.isNarration)
+        {
+            // 是叙述，隐藏名字和立绘，调整内容框
+            nameText.gameObject.SetActive(false);
+            leftPortrait.gameObject.SetActive(false);
+
+            var rectTransform = contentText.rectTransform;
+            rectTransform.anchoredPosition = new Vector2(_originalContentPosition.x - 200f, _originalContentPosition.y + 30f);
+            rectTransform.sizeDelta = new Vector2(_originalContentSizeDelta.x + 200f, _originalContentSizeDelta.y);
+        }
+        else
+        {
+            // 是对话，恢复原样
+            nameText.gameObject.SetActive(true);
+            contentText.rectTransform.anchoredPosition = _originalContentPosition;
+            contentText.rectTransform.sizeDelta = _originalContentSizeDelta;
+            
+            // 设置名字
+            nameText.text = line.speakerName;
+
+            // 设置立绘
+            UpdatePortraits(line);
+        }
 
         // 打字机效果
         StopAllCoroutines();
