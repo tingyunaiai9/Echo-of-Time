@@ -375,8 +375,17 @@ public class DialogPanel : MonoBehaviour
                         break;
                 }
             }
+            Transform backgroundTransform = currentStreamingMessage.transform.Find("Background");
+            Transform avatarTransform = backgroundTransform?.Find("Avatar");
+            if (avatarTransform != null)
+            {
+                Image avatarImage = avatarTransform.GetComponent<Image>();
+                if (avatarImage != null)
+                {
+                    avatarImage.sprite = defaultAvatarSprite;
+                }
+            }
         }
-
         Transform typeTextTransform = currentStreamingMessage.transform.Find("TypeText");
         if (typeTextTransform != null)
         {
