@@ -15,6 +15,11 @@ public class VisualNovelPanel : MonoBehaviour
     public Button continueButton; // 点击继续的全屏按钮
     public Button skipButton; // 跳过剧情按钮
 
+    [Header("角色默认立绘")]
+    public Sprite modernSprite; // 叙白
+    public Sprite ancientSprite; // 云归
+    public Sprite futureSprite; // 恨水
+
     private Queue<DialogueLine> _currentLines = new Queue<DialogueLine>();
     private bool _isTyping = false;
     private string _targetContent = "";
@@ -85,14 +90,38 @@ public class VisualNovelPanel : MonoBehaviour
 
     void UpdatePortraits(DialogueLine line)
     {
-        // 简单的立绘逻辑：有图就显示，没图就隐藏
-        if (line.characterSprite != null)
+        Sprite spriteToDisplay = null;
+
+        // 根据名字匹配预设的立绘
+        switch (line.speakerName)
         {
-            leftPortrait.sprite = line.characterSprite;
+            case "叙白":
+                spriteToDisplay = modernSprite;
+                break;
+            case "云归":
+                spriteToDisplay = ancientSprite;
+                break;
+            case "恨水":
+                spriteToDisplay = futureSprite;
+                break;
+            default:
+                // 如果不是预设的名字，则使用在对话行中单独指定的立绘
+                spriteToDisplay = line.characterSprite;
+                break;
+        }
+
+        // 如果有可显示的立绘，则更新UI
+        if (spriteToDisplay != null)
+        {
+            leftPortrait.sprite = spriteToDisplay;
             leftPortrait.gameObject.SetActive(true);
             leftPortrait.color = Color.white; // 亮起
         }
-        // 如果不需要立绘变化，可以保留上一张，或者根据需求隐藏
+        else
+        {
+            // 否则隐藏立绘
+            leftPortrait.gameObject.SetActive(false);
+        }
     }
 
     IEnumerator TypeContent(string content)
