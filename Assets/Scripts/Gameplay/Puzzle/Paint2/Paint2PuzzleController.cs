@@ -142,9 +142,7 @@ namespace Game.Gameplay.Puzzle.Paint2
             if (areMissingPiecesActive) return;
 
             // Check if player has enough fragments
-            // 背包目前还没有实现相同物品的计数功能，因此这里的计数可以先注释掉，暂时就是看背包里只要有碎片就把所有碎片解锁。
-            // if (Inventory.GetPropCount(missingPieceItemId) >= requiredMissingPieceCount)
-            if (Inventory.HasPropItem(missingPieceItemId))
+            if (PropBackpack.GetPropCount(missingPieceItemId) >= requiredMissingPieceCount)
             {
                 ActivateMissingPieces();
             }
