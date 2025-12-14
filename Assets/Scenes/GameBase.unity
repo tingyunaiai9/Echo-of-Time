@@ -2371,6 +2371,18 @@ PrefabInstance:
       propertyPath: skipButton
       value: 
       objectReference: {fileID: 1651436975}
+    - target: {fileID: 8369865629149708635, guid: a20b80bcca5039c4cbbbd7ed5b4a3634, type: 3}
+      propertyPath: futureSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 7717086a58934af4b8f2ab6767cbc6b2, type: 3}
+    - target: {fileID: 8369865629149708635, guid: a20b80bcca5039c4cbbbd7ed5b4a3634, type: 3}
+      propertyPath: modernSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 6e50048b8c7089044844c68bab8e91a1, type: 3}
+    - target: {fileID: 8369865629149708635, guid: a20b80bcca5039c4cbbbd7ed5b4a3634, type: 3}
+      propertyPath: ancientSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5195def285221f349ac1c974dbb4ace0, type: 3}
     - target: {fileID: 8827984521895200448, guid: a20b80bcca5039c4cbbbd7ed5b4a3634, type: 3}
       propertyPath: m_Name
       value: VisualNovelPanel
