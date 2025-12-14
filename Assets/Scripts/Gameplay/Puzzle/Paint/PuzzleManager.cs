@@ -22,6 +22,16 @@ public class PuzzleManager : MonoBehaviour
     [Tooltip("拼画面板管理器，用于显示成功反馈")]
     public PuzzlePanel puzzlePanel;
 
+    [Header("线索设置")]
+    [Tooltip("拼图完成后获得的线索图片")]
+    public Sprite clueSprite;
+
+    [Tooltip("线索的名字")]
+    public string clueName = "一幅画";
+
+    [Tooltip("线索的描述")]
+    public string clueDescription = "一幅画，上面还印着一行字，远眺……？";
+
     // 存储遮罩映射
     private Dictionary<int, PuzzleMask> masks = new Dictionary<int, PuzzleMask>();
     private int correctPieces = 0;
@@ -115,6 +125,26 @@ public class PuzzleManager : MonoBehaviour
         {
             sceneName = "Paint"
         });
+
+        // 发布 ClueDiscoveredEvent 事件
+        if (clueSprite != null && !string.IsNullOrEmpty(clueName))
+        {
+            EventBus.LocalPublish(new ClueDiscoveredEvent
+            {
+                isKeyClue = true,
+                playerNetId = 0, // 本地事件，此字段可能无影响
+                clueId = clueName, // 使用线索名作为唯一ID
+                clueText = clueName,
+                clueDescription = clueDescription,
+                icon = clueSprite,
+                image = clueSprite // 大图和小图使用同一个
+            });
+            Debug.Log($"[PuzzleManager] 已发布线索发现事件: {clueName}");
+        }
+        else
+        {
+            Debug.LogWarning("[PuzzleManager] 未设置线索图片或名称，无法发布线索。");
+        }
     }
 
     /* 获取进度 */
