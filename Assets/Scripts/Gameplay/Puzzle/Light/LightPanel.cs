@@ -289,8 +289,11 @@ public class LightPanel : MonoBehaviour
     }
 
     /*
-     * 检查谜题是否完成
-     */
+        * 检查谜题是否完成
+        */
+    private float puzzleCompletionTimer = 0f; // 谜题完成计时器
+    private bool isWaitingForCompletion = false; // 是否正在等待完成
+
     private void CheckPuzzleCompletion()
     {
         if (mirrorSlotAnswers == null || mirrorSlotAnswers.Length == 0)
@@ -300,6 +303,7 @@ public class LightPanel : MonoBehaviour
             return;
 
         // 检查所有答案镜槽是否都被激活
+        bool allActivated = true;
         foreach (int answerIndex in mirrorSlotAnswers)
         {
             // 将 Inspector 中的索引（从 1 开始）转换为数组索引（从 0 开始）
@@ -309,25 +313,57 @@ public class LightPanel : MonoBehaviour
             if (arrayIndex < 0 || arrayIndex >= generatedMirrorSlots.Length)
             {
                 Debug.LogWarning($"[LightPanel] 答案索引 {answerIndex} 超出范围，有效范围为 (1-{generatedMirrorSlots.Length})");
-                return;
+                allActivated = false;
+                break;
             }
 
             GameObject mirrorSlot = generatedMirrorSlots[arrayIndex];
             if (mirrorSlot == null)
             {
-                return;
+                allActivated = false;
+                break;
             }
 
             // 检查镜槽是否被激活（通过 BoxCollider2D.enabled 判断）
             BoxCollider2D collider = mirrorSlot.GetComponent<BoxCollider2D>();
             if (collider == null || !collider.enabled)
             {
-                return; // 有镜槽未激活，谜题未完成
+                allActivated = false;
+                break;
             }
         }
 
-        // 所有答案镜槽都已激活，谜题完成
-        OnPuzzleCompleted();
+        // 如果所有镜槽都已激活
+        if (allActivated)
+        {
+            if (!isWaitingForCompletion)
+            {
+                // 第一次检测到所有镜槽激活，开始计时
+                isWaitingForCompletion = true;
+                puzzleCompletionTimer = 0f;
+                Debug.Log("[LightPanel] 所有答案镜槽已激活，1秒后完成谜题");
+            }
+            else
+            {
+                // 继续计时
+                puzzleCompletionTimer += Time.deltaTime;
+                if (puzzleCompletionTimer >= 0.5f)
+                {
+                    // 0.5秒后调用完成函数
+                    OnPuzzleCompleted();
+                }
+            }
+        }
+        else
+        {
+            // 如果有镜槽未激活，重置计时器
+            if (isWaitingForCompletion)
+            {
+                isWaitingForCompletion = false;
+                puzzleCompletionTimer = 0f;
+                Debug.Log("[LightPanel] 有镜槽未激活，重置计时器");
+            }
+        }
     }
 
     // ============ 静态面板控制方法 ============
