@@ -46,7 +46,7 @@ public class Poem1Manager : BasePoemManager
 
         EventBus.LocalPublish(new PuzzleCompletedEvent
         {
-            sceneName = "Poem1"
+            sceneName = "Poem"
         });
 
         if (panelRoot == null)
