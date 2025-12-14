@@ -1149,7 +1149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca5269e3278fe65478e9b30922f4122e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Gameplay.Puzzle.Light2.Light2Screen
-  screenCanvas: {fileID: 0}
+  screenCanvasName: ScreenCanvas
 --- !u!65 &1469183951
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1443,7 +1443,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1808775741
 MonoBehaviour:
   m_ObjectHideFlags: 0
