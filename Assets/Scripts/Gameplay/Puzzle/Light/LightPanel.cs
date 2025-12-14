@@ -34,9 +34,12 @@ public class LightPanel : MonoBehaviour
     [Header("镜槽预制体")]
     public GameObject MirrorSlotPrefab;
 
-    [Header("镜槽配置（索引从0开始）")]
-    [Tooltip("镜槽数组配置")]
+    [Header("镜槽配置（索引从1开始）")]
+    [Tooltip("镜槽数组配置，xindex 和 yindex 从 1 开始计数")]
     public MirrorSlot[] mirrorSlots = new MirrorSlot[10];
+
+    [Tooltip("镜槽答案数组，填写 mirrorSlots 中的序号（从 1 开始）")]
+    public int[] mirrorSlotAnswers = new int[5];
 
     // 静态变量
     private static LightPanel s_instance;
@@ -55,6 +58,9 @@ public class LightPanel : MonoBehaviour
     private const float GRID_END_Y = -887f;   // 最后一个格子右下角 Y 坐标
     
     private Transform backgroundTransform; // Background 容器
+    
+    // 记录生成的镜槽游戏对象列表，顺序与 mirrorSlots 数组对应
+    private GameObject[] generatedMirrorSlots;
     
     void Awake()
     {
@@ -130,20 +136,29 @@ public class LightPanel : MonoBehaviour
         float cellWidth = (GRID_END_X - GRID_START_X) / GRID_COLS;
         float cellHeight = (GRID_END_Y - GRID_START_Y) / GRID_ROWS;
 
+        // 初始化生成镜槽数组
+        generatedMirrorSlots = new GameObject[mirrorSlots.Length];
+
         // 遍历镜槽数组并绘制
-        foreach (var slot in mirrorSlots)
+        for (int i = 0; i < mirrorSlots.Length; i++)
         {
+            var slot = mirrorSlots[i];
+            if (slot.xindex == 0 && slot.yindex == 0) continue; // 跳过未配置的槽
+        // 将 Inspector 中的索引（从 1 开始）转换为数组索引（从 0 开始）
+        int arrayXIndex = slot.xindex - 1;
+        int arrayYIndex = slot.yindex - 1;
+
             // 检查索引是否在有效范围内
-            if (slot.xindex < 0 || slot.xindex >= GRID_COLS ||
-                slot.yindex < 0 || slot.yindex >= GRID_ROWS)
+            if (arrayXIndex < 0 || arrayXIndex >= GRID_COLS ||
+                arrayYIndex < 0 || arrayYIndex >= GRID_ROWS)
             {
-                Debug.LogWarning($"[LightPanel] 镜槽索引越界: ({slot.xindex}, {slot.yindex})");
+                Debug.LogWarning($"[LightPanel] 镜槽索引越界: ({slot.xindex}, {slot.yindex})，有效范围为 (1-{GRID_COLS}, 1-{GRID_ROWS})");
                 continue;
             }
 
             // 计算格子中心坐标（相对于 Background）
-            float centerX = GRID_START_X + (slot.xindex + 0.5f) * cellWidth;
-            float centerY = GRID_START_Y + (slot.yindex + 0.5f) * cellHeight;
+            float centerX = GRID_START_X + (arrayXIndex + 0.5f) * cellWidth;
+            float centerY = GRID_START_Y + (arrayYIndex + 0.5f) * cellHeight;
 
             // 实例化镜槽预制体，直接作为 Background 的子对象
             GameObject mirrorSlot = Instantiate(MirrorSlotPrefab, backgroundTransform);
@@ -194,7 +209,10 @@ public class LightPanel : MonoBehaviour
                     image.color = grayColor;
                 }
 
-                Debug.Log($"[LightPanel] 绘制镜槽: 索引({slot.xindex}, {slot.yindex}), " +
+                // 保存到数组中
+                generatedMirrorSlots[i] = mirrorSlot;
+
+                Debug.Log($"[LightPanel] 绘制镜槽[{i}]: 索引({slot.xindex}, {slot.yindex}), " +
                          $"位置({centerX:F2}, {centerY:F2}), 旋转{rotationAngle}°");
             }
             else
@@ -257,11 +275,59 @@ public class LightPanel : MonoBehaviour
     
     void Update()
     {
+        // 检查谜题是否完成
+        if (!s_isPuzzleCompleted)
+        {
+            CheckPuzzleCompletion();
+        }
+
         if (Input.GetKeyDown(KeyCode.P))
         {
             ConsolePanel.TogglePanel();
             Debug.Log("[LightPanel] P键按下，切换控制台面板。");
         }
+    }
+
+    /*
+     * 检查谜题是否完成
+     */
+    private void CheckPuzzleCompletion()
+    {
+        if (mirrorSlotAnswers == null || mirrorSlotAnswers.Length == 0)
+            return;
+
+        if (generatedMirrorSlots == null)
+            return;
+
+        // 检查所有答案镜槽是否都被激活
+        foreach (int answerIndex in mirrorSlotAnswers)
+        {
+            // 将 Inspector 中的索引（从 1 开始）转换为数组索引（从 0 开始）
+            int arrayIndex = answerIndex - 1;
+
+            // 检查索引是否有效
+            if (arrayIndex < 0 || arrayIndex >= generatedMirrorSlots.Length)
+            {
+                Debug.LogWarning($"[LightPanel] 答案索引 {answerIndex} 超出范围，有效范围为 (1-{generatedMirrorSlots.Length})");
+                return;
+            }
+
+            GameObject mirrorSlot = generatedMirrorSlots[arrayIndex];
+            if (mirrorSlot == null)
+            {
+                return;
+            }
+
+            // 检查镜槽是否被激活（通过 BoxCollider2D.enabled 判断）
+            BoxCollider2D collider = mirrorSlot.GetComponent<BoxCollider2D>();
+            if (collider == null || !collider.enabled)
+            {
+                return; // 有镜槽未激活，谜题未完成
+            }
+        }
+
+        // 所有答案镜槽都已激活，谜题完成
+        OnPuzzleCompleted();
     }
 
     // ============ 静态面板控制方法 ============

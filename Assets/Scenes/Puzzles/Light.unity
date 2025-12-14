@@ -2449,23 +2449,30 @@ MonoBehaviour:
   MirrorSlotPrefab: {fileID: 1904580698853253649, guid: fe2f7a01e41194ed2bc2fc61187141b0, type: 3}
   mirrorSlots:
   - xindex: 1
-    yindex: 2
-    direction: 3
-  - xindex: 1
-    yindex: 0
+    yindex: 1
     direction: 1
   - xindex: 3
-    yindex: 0
+    yindex: 1
+    direction: 1
+  - xindex: 8
+    yindex: 1
+    direction: 1
+  - xindex: 6
+    yindex: 2
     direction: 2
-  - xindex: 3
+  - xindex: 8
     yindex: 2
     direction: 0
-  - xindex: 5
-    yindex: 0
-    direction: 1
-  - xindex: 7
-    yindex: 3
+  - xindex: 3
+    yindex: 4
     direction: 0
+  - xindex: 6
+    yindex: 4
+    direction: 3
+  - xindex: 10
+    yindex: 4
+    direction: 1
+  mirrorSlotAnswers: 0300000004000000050000000700000008000000
 --- !u!1 &2133649166
 GameObject:
   m_ObjectHideFlags: 0
