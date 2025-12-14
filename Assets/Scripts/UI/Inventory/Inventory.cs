@@ -156,6 +156,7 @@ public abstract class Inventory : MonoBehaviour
             return;
         }
 
+        Debug.Log($"[{GetType().Name}.ShowDetail] 显示物品详情: {item.description}");
         // 显示侧边栏
         detailSideBar.SetActive(true);
 
