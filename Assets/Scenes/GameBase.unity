@@ -2464,11 +2464,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: tipWords.Array.size
-      value: 5
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: tipImages.Array.size
-      value: 5
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: 'tipWords.Array.data[0]'
@@ -2491,6 +2491,26 @@ PrefabInstance:
       value: "\u4F7F\u7528\u6309\u952E F \u4E0E\u573A\u666F\u4E2D\u7684\u673A\u5173/\u7269\u54C1/\u7EBF\u7D22\u8FDB\u884C\u4EA4\u4E92"
       objectReference: {fileID: 0}
     - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+      propertyPath: 'tipWords.Array.data[5]'
+      value: "\u4E0E\u573A\u666F\u4E2D\u7684\u7269\u54C1/\u7EBF\u7D22\u4EA4\u4E92\u540E\uFF0C\u7269\u54C1/\u7EBF\u7D22\u4F1A\u8FDB\u5165\u80CC\u5305"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+      propertyPath: 'tipWords.Array.data[6]'
+      value: "\u80CC\u5305\u9875\u9762\u53F3\u4FA7\u53EF\u4EE5\u67E5\u770B\u7269\u54C1/\u7EBF\u7D22\u8BE6\u60C5"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+      propertyPath: 'tipWords.Array.data[7]'
+      value: "\u70B9\u51FB\u5DE6\u4FA7\u6309\u94AE\uFF0C\u53EF\u4EE5\u5207\u6362\u7269\u54C1/\u7EBF\u7D22\u680F"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+      propertyPath: 'tipWords.Array.data[8]'
+      value: "\u7EBF\u7D22\u5206\u4E3A\u79C1\u6709\u7EBF\u7D22\u4E0E\u5171\u4EAB\u7EBF\u7D22\uFF0C\u79C1\u6709\u7EBF\u7D22\u4F1A\u8FDB\u5165\u80CC\u5305"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+      propertyPath: 'tipWords.Array.data[9]'
+      value: "\u5171\u4EAB\u7EBF\u7D22\u4F1A\u663E\u793A\u5728\u65E5\u8BB0\u7684\u7EBF\u7D22\u754C\u9762\uFF0C\u4E09\u4EBA\u5171\u4EAB"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: 'tipImages.Array.data[0]'
       value: 
       objectReference: {fileID: 21300000, guid: c3aab2b09528ee84eab87b3b3223ad5e, type: 3}
@@ -2510,6 +2530,26 @@ PrefabInstance:
       propertyPath: 'tipImages.Array.data[4]'
       value: 
       objectReference: {fileID: 21300000, guid: 7fa9b9b3f736c294e999d612e67970e6, type: 3}
+    - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+      propertyPath: 'tipImages.Array.data[5]'
+      value: 
+      objectReference: {fileID: 21300000, guid: e16e272d62050354c8493381c320910f, type: 3}
+    - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+      propertyPath: 'tipImages.Array.data[6]'
+      value: 
+      objectReference: {fileID: 21300000, guid: d5a580494cd1f9943b4c4dbc837c32cd, type: 3}
+    - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+      propertyPath: 'tipImages.Array.data[7]'
+      value: 
+      objectReference: {fileID: 21300000, guid: f8901c76e353dc945bcbec6b3635264d, type: 3}
+    - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+      propertyPath: 'tipImages.Array.data[8]'
+      value: 
+      objectReference: {fileID: 21300000, guid: b9f98e2e011ab7645a3377e1a4dc033f, type: 3}
+    - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+      propertyPath: 'tipImages.Array.data[9]'
+      value: 
+      objectReference: {fileID: 21300000, guid: a55de27effc4889468cd7952b0e7441e, type: 3}
     - target: {fileID: 8871418275385414889, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: m_Name
       value: TipPanel
