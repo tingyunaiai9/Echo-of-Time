@@ -2464,11 +2464,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: tipWords.Array.size
-      value: 10
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: tipImages.Array.size
-      value: 10
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: 'tipWords.Array.data[0]'
@@ -2550,6 +2550,38 @@ PrefabInstance:
       propertyPath: 'tipImages.Array.data[9]'
       value: 
       objectReference: {fileID: 21300000, guid: a55de27effc4889468cd7952b0e7441e, type: 3}
+    - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+      propertyPath: 'tipWords.Array.data[10]'
+      value: "\u65E5\u8BB0\u89E3\u8C1C\u754C\u9762\u53F3\u4FA7\u663E\u793A\u672C\u5C42\u5173\u952E\u7EBF\u7D22"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+      propertyPath: 'tipWords.Array.data[11]'
+      value: "\u4E09\u4F4D\u73A9\u5BB6\u53EF\u4EE5\u5728\u65E5\u8BB0\u89E3\u5BC6\u754C\u9762\u5DE6\u4FA7\u8FDB\u884C\u4EA4\u6D41"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+      propertyPath: 'tipWords.Array.data[12]'
+      value: "\u53D1\u9001\u7684\u4FE1\u606F\u4F1A\u8F6C\u5316\u4E3A\u4E0D\u540C\u6A21\u6001\u7684\u6D88\u606F"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+      propertyPath: 'tipWords.Array.data[13]'
+      value: "\u7ED3\u5408\u7EBF\u7D22\u4E0E\u4EA4\u6D41\u4FE1\u606F\uFF0C\u4E09\u4EBA\u5171\u540C\u731C\u51FA\u4E8C\u5B57\u5173\u952E\u8BCD\u5373\u53EF\u901A\u5173\u672C\u5C42"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+      propertyPath: 'tipImages.Array.data[10]'
+      value: 
+      objectReference: {fileID: 21300000, guid: 4c93d8c7570d82943b8ffbef123a15e8, type: 3}
+    - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+      propertyPath: 'tipImages.Array.data[11]'
+      value: 
+      objectReference: {fileID: 21300000, guid: a5349018b5b15fb4385c3c6723be447c, type: 3}
+    - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+      propertyPath: 'tipImages.Array.data[12]'
+      value: 
+      objectReference: {fileID: 21300000, guid: 4b706922609fd5a46b840908d4274c93, type: 3}
+    - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+      propertyPath: 'tipImages.Array.data[13]'
+      value: 
+      objectReference: {fileID: 21300000, guid: b150e277b987dc94296ff819be61b52b, type: 3}
     - target: {fileID: 8871418275385414889, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: m_Name
       value: TipPanel
