@@ -101,3 +101,15 @@
 ![](pic/light_future1_2.png)
 
 镜子会改变光路，请将光路折射到目标上
+
+## 第二层 停云所归
+
+### 剪枝 Modern2
+
+![](pic/light2_modern2_1.png)
+
+修剪青铜树枝叶，将特定汉字露出
+
+![](pic/light2_modern2_2.png)
+
+使用鼠标单击可以剪去枝叶
