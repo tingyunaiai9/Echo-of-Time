@@ -29,6 +29,6 @@ public class Note : MonoBehaviour
         if (noteImage == null) return;
         Debug.Log($"[{GetType().Name}.OnClickViewImage] 点击查看大图");
 
-        ClueImagePanel.OnClickViewImage(noteImage.sprite);
+        //ClueImagePanel.OnClickViewImage(noteImage.sprite);
     }
 }
