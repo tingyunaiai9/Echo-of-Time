@@ -632,7 +632,7 @@ MonoBehaviour:
   - {fileID: 1877450494}
   - {fileID: 104084921}
   - {fileID: 1207032005}
-  testMode: 1
+  testMode: 0
 --- !u!1 &832302364
 GameObject:
   m_ObjectHideFlags: 0
@@ -1549,6 +1549,7 @@ MonoBehaviour:
   seedItemId: Light2Seed
   treeObject: {fileID: 0}
   notificationController: {fileID: 0}
+  testMode: 0
 --- !u!1 &1450972424
 GameObject:
   m_ObjectHideFlags: 0

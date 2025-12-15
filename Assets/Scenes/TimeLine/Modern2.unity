@@ -1214,7 +1214,7 @@ MonoBehaviour:
   seedItemId: Light2Seed
   treeObject: {fileID: 872927302}
   notificationController: {fileID: 0}
-  testMode: 1
+  testMode: 0
 --- !u!1 &1311505132
 GameObject:
   m_ObjectHideFlags: 0
