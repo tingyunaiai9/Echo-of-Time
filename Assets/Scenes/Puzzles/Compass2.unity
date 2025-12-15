@@ -561,6 +561,7 @@ MonoBehaviour:
   rotationDuration: 0.3
   middleTargetRotations: 1
   outerTargetRotations: 2
+  completionDialogueTrigger: {fileID: 0}
 --- !u!1 &729214282
 GameObject:
   m_ObjectHideFlags: 0
@@ -773,7 +774,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 231567723
-  m_SortingOrder: 0
+  m_SortingOrder: 300
   m_TargetDisplay: 0
 --- !u!224 &788943387
 RectTransform:
