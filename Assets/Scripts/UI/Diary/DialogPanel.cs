@@ -14,7 +14,6 @@ using System.Collections; // 用于协程
 using System;
 using System.IO;
 using System.Net.Http;
-using UnityEditor.EditorTools;
 
 /*
  * 日记对话面板控制组件
