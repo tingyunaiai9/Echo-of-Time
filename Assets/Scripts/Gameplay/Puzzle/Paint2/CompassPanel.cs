@@ -349,6 +349,17 @@ public class CompassPanel : MonoBehaviour, IPointerClickHandler
         {
             sceneName = "Compass"
         });
+
+        EventBus.LocalPublish(new ClueDiscoveredEvent
+        {
+            isKeyClue = true,
+            playerNetId = 0,
+            clueId = "compass_clue",
+            clueText = "转动指南针完成后，显现出的图案。",
+            clueDescription = "这个图案似乎隐藏着某种意义。",
+            icon = ResultImage.GetComponent<Image>()?.sprite,
+            image = ResultImage.GetComponent<Image>()?.sprite
+        });
     }
 
      /* 重置旋转状态，清空计数并重置所有数字显示 */
