@@ -750,6 +750,56 @@ Transform:
   - {fileID: 1860403776}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1484602945
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1484602947}
+  - component: {fileID: 1484602946}
+  m_Layer: 0
+  m_Name: EndSceneIntro
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1484602946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1484602945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca39e41701b7b2f4faaa8885e70567a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SceneIntro
+  introDialogues:
+  - {fileID: 11400000, guid: 509e8760b6358e14b9795994729c189e, type: 2}
+  - {fileID: 11400000, guid: 3ea4b6d6e80e0a748a04b7ad109f16c3, type: 2}
+  - {fileID: 11400000, guid: 46177b266be6f6945b8103d698f87df4, type: 2}
+  delaySeconds: 0.5
+  playOnce: 1
+--- !u!4 &1484602947
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1484602945}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.00005}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1554800106
 GameObject:
   m_ObjectHideFlags: 0
@@ -1248,3 +1298,4 @@ SceneRoots:
   - {fileID: 1446064582}
   - {fileID: 76633007}
   - {fileID: 1554800108}
+  - {fileID: 1484602947}

@@ -420,6 +420,56 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &839916748
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 839916750}
+  - component: {fileID: 839916749}
+  m_Layer: 0
+  m_Name: EndSceneIntro
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &839916749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 839916748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca39e41701b7b2f4faaa8885e70567a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SceneIntro
+  introDialogues:
+  - {fileID: 11400000, guid: 1f1a7560833ec9b4d88a212b84138b5f, type: 2}
+  - {fileID: 11400000, guid: 3ea4b6d6e80e0a748a04b7ad109f16c3, type: 2}
+  - {fileID: 11400000, guid: 6d17684081dac7d44808f993ae1e9a7c, type: 2}
+  delaySeconds: 0.5
+  playOnce: 1
+--- !u!4 &839916750
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 839916748}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.00005}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1116656147
 GameObject:
   m_ObjectHideFlags: 0
@@ -1212,3 +1262,4 @@ SceneRoots:
   - {fileID: 1732551157}
   - {fileID: 685621244}
   - {fileID: 1391478655}
+  - {fileID: 839916750}
