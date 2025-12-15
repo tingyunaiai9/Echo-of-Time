@@ -2069,7 +2069,8 @@ GameObject:
   - component: {fileID: 1748013975}
   - component: {fileID: 1748013977}
   - component: {fileID: 1748013976}
-  m_Layer: 0
+  - component: {fileID: 1748013978}
+  m_Layer: 7
   m_Name: Note
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2133,7 +2134,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 0b051f72c945ecc4e83647618c6344ad, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2166,6 +2167,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!65 &1748013978
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1748013974}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 10.239999, y: 6.3599997, z: 0.19999999}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1867364943
 GameObject:
   m_ObjectHideFlags: 0
