@@ -10,6 +10,8 @@ public class UIManager : Singleton<UIManager>
     public GameObject DiaryPanel;
     [Tooltip("背包界面游戏对象")]
     public GameObject InventoryPanel;
+    [Tooltip("指南界面游戏对象")]
+    public GameObject TipPanel;
 
     [Tooltip("主 UI 画布（包含日记按钮等常驻 UI），用于在谜题中隐藏")]
     public Canvas mainCanvas;
@@ -120,6 +122,18 @@ public class UIManager : Singleton<UIManager>
             }
             EventBus.LocalPublish(new FreezeEvent { isOpen = DiaryPanel.activeSelf });
             Debug.Log("[UIManager] F1键按下，切换日记页面。");
+        }
+
+        // 指南开关（H键）
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            if (TipPanel!= null)
+            {
+                bool isActive = TipPanel.activeSelf;
+                TipPanel.SetActive(!isActive);
+            }
+            EventBus.LocalPublish(new FreezeEvent { isOpen = TipPanel.activeSelf });
+            Debug.Log("[UIManager] H键按下，切换指南页面。");
         }
     }
 
