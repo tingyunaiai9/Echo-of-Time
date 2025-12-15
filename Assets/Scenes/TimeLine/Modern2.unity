@@ -841,6 +841,70 @@ MonoBehaviour:
   clueIcon: {fileID: 21300000, guid: 9c95d2eb9cc0aeb4e82d5e5526db59cb, type: 3}
   clueImage: {fileID: 21300000, guid: 115d3ae99c4ab544f9e2036c868b1519, type: 3}
   discovered: 0
+--- !u!1 &1032389097
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1032389098}
+  m_Layer: 0
+  m_Name: Handkerchief
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1032389098
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1032389097}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1855082963}
+  m_Father: {fileID: 1446064582}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1060643175
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1060643176}
+  m_Layer: 0
+  m_Name: Seed
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1060643176
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1060643175}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1394514148}
+  m_Father: {fileID: 1446064582}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1135488577
 GameObject:
   m_ObjectHideFlags: 0
@@ -1150,6 +1214,7 @@ MonoBehaviour:
   seedItemId: Light2Seed
   treeObject: {fileID: 872927302}
   notificationController: {fileID: 0}
+  testMode: 1
 --- !u!1 &1311505132
 GameObject:
   m_ObjectHideFlags: 0
@@ -1470,12 +1535,12 @@ GameObject:
   - component: {fileID: 1394514150}
   - component: {fileID: 1394514149}
   m_Layer: 8
-  m_Name: handkerchief (1)
+  m_Name: Seed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1394514148
 Transform:
   m_ObjectHideFlags: 0
@@ -1489,7 +1554,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 1446064582}
+  m_Father: {fileID: 1060643176}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1394514149
 MonoBehaviour:
@@ -1505,6 +1570,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::prop
   itemIcon: {fileID: 21300000, guid: ea5fa0f4ef67e3044a6e2b3ff5590010, type: 3}
   itemDisplayName: "\u4E00\u9897\u679C\u5B9E"
+  internalItemId: 
   pickupQuantity: 1
   itemDescription: "\u4E0A\u9762\u5199\u7740\u5F52\u4E8E\u5C18\u571F\uFF0C\u8FD9\u662F\u6BCF\u4E2A\u679C\u5B9E\u7684\u5F52\u5BBF\u3002"
 --- !u!65 &1394514150
@@ -1626,9 +1692,9 @@ Transform:
   - {fileID: 1151637471}
   - {fileID: 1345128461}
   - {fileID: 1135488578}
-  - {fileID: 1855082963}
-  - {fileID: 1394514148}
   - {fileID: 872927303}
+  - {fileID: 1032389098}
+  - {fileID: 1060643176}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1641866469
@@ -1734,12 +1800,12 @@ GameObject:
   - component: {fileID: 1855082964}
   - component: {fileID: 1855082966}
   m_Layer: 8
-  m_Name: handkerchief
+  m_Name: Handkerchief
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1855082963
 Transform:
   m_ObjectHideFlags: 0
@@ -1753,7 +1819,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 1446064582}
+  m_Father: {fileID: 1032389098}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1855082964
 MonoBehaviour:
