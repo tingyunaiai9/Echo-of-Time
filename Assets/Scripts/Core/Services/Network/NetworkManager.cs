@@ -567,6 +567,12 @@ public class EchoNetworkManager : Mirror.NetworkManager
         _currentLevel++;
         Debug.Log($"[NetworkManager] 所有玩家均已答对！正在进入第 {_currentLevel} 层...");
 
+        // 如果进入第3层，揭示所有玩家（去除遮罩/不可见状态）
+        if (_currentLevel == 3)
+        {
+            ServerRevealAllPlayers();
+        }
+
         // 清空答对列表，为下一层做准备
         _answeredConnections.Clear();
 

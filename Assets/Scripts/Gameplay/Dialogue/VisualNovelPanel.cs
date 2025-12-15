@@ -12,6 +12,7 @@ public class VisualNovelPanel : MonoBehaviour
     public TextMeshProUGUI nameText; // 名字文本
     public TextMeshProUGUI contentText; // 内容文本
     public Image leftPortrait; // 左侧立绘
+    public Image backgroundImage; // 剧情背景（位于剧情之下、场景之上）
     public Button continueButton; // 点击继续的全屏按钮
     public Button skipButton; // 跳过剧情按钮
 
@@ -25,6 +26,7 @@ public class VisualNovelPanel : MonoBehaviour
     private string _targetContent = "";
     private Vector2 _originalContentPosition;
     private Vector2 _originalContentSizeDelta;
+    private Sprite _lastBackgroundSprite;
 
     // 单例方便调用
     public static VisualNovelPanel Instance { get; private set; }
@@ -80,6 +82,21 @@ public class VisualNovelPanel : MonoBehaviour
         }
 
         DialogueLine line = _currentLines.Dequeue();
+        // 设置背景图：本行有则用本行，没有则沿用上一行
+        if (backgroundImage != null)
+        {
+            Sprite bg = line.backgroundSprite != null ? line.backgroundSprite : _lastBackgroundSprite;
+            if (bg != null)
+            {
+                backgroundImage.sprite = bg;
+                backgroundImage.gameObject.SetActive(true);
+                _lastBackgroundSprite = bg;
+            }
+            else
+            {
+                backgroundImage.gameObject.SetActive(false);
+            }
+        }
 
         if (line.isNarration)
         {

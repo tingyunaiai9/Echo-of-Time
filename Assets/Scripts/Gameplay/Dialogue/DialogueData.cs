@@ -4,6 +4,9 @@ using System.Collections.Generic;
 [System.Serializable]
 public class DialogueLine
 {
+    [Tooltip("剧情背景（可选，不设则沿用上一个）")]
+    public Sprite backgroundSprite;
+
     [Tooltip("是否为叙述（将隐藏名字和立绘）")]
     public bool isNarration = false;
 

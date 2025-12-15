@@ -129,12 +129,6 @@ public class LocalTestLauncher : MonoBehaviour
             return;
         }
 
-        // 关键修改：先设置层级，再设置时间线
-        // 原因：TimelinePlayer 可能在 timeline 属性变化时自动触发场景加载。
-        // 如果先设置 timeline (此时 level 默认为 1)，会立即加载 Level 1。
-        // 随后设置 level 为 2，又会加载 Level 2。由于 SceneDirector 卸载异步场景需要时间，导致两层叠加。
-        // 先设置 level (此时 timeline 为 -1)，通常不会触发有效加载。
-        // 再设置 timeline，此时 level 已是目标值，只会加载正确的目标场景。
         tp.currentLevel = testLevelIndex;
         tp.timeline = testTimelineIndex;
         
