@@ -537,7 +537,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 879e76c591ec9a44ebe8379d39408b0e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1695,6 +1695,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1609606014}
   - component: {fileID: 1609606013}
+  - component: {fileID: 1609606015}
   m_Layer: 0
   m_Name: bg
   m_TagString: Background
@@ -1775,6 +1776,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1609606015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1609606012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74c289d1144714a2081d9d81afeaf8ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Clue
+  clueText: 
+  clueDescription: "\u4E00\u5F20\u6CDB\u9EC4\u53D1\u8106\u7684\u4FBF\u7B7E\u7EB8\uFF0C\u8FB9\u7F18\u5DF2\u7ECF\u78E8\u635F\u8D77\u6BDB\u3002\u4E0A\u9762\u7528\u892A\u8272\u7684\u84DD\u8272\u94A2\u7B14\u6C34\u5306\u5306\u5199\u5C31\u51E0\u884C\u5B57\uFF0C\u5B57\u8FF9\u56E0\u4E3A\u5E74\u4EE3\u4E45\u8FDC\u548C\u53D7\u6F6E\u800C\u663E\u5F97\u6709\u4E9B\u6D07\u5F00\uFF0C\u900F\u7740\u4E00\u80A1\u7126\u6025\u6216\u662F\u671F\u5F85\u7684\u60C5\u7EEA\u3002\n\n\u4FE1\u7684\u6838\u5FC3\u5185\u5BB9\u662F\u2014\u2014\u201C\u660E\u65E5\u5C06____\uFF0C\u65E7\u5B85\u67F4\u95E8\u52FF\u9501\u201D\u3002\u4F60\u52AA\u529B\u8FA8\u8BA4\u58A8\u6E0D\u8FB9\u7F18\u6B8B\u7559\u7684\u7B14\u89E6\uFF0C\u80FD\u9690\u7EA6\u770B\u5230\u4E00\u4E2A\u201C\u5F52\u201D\u7684\u6837\u5B50\n\n\u53E6\u4E00\u5F20\u770B\u4F3C\u7A7A\u767D\u7684\u4FBF\u7B7E\uFF0C\u4E0A\u9762\u6CA1\u6709\u6B63\u6587\uFF0C\u53EA\u7B28\u62D9\u5730\u7528\u6D46\u7CCA\u8D34\u7740\u4E00\u5F20\u88AB\u526A\u788E\u7684\u65E7\u56FE\u6848\uFF0C\u5B83\u4F3C\u4E4E\u4E0D\u5E94\u5C5E\u4E8E\u4F60\u8FD9\u4E2A\u65F6\u4EE3\u3002\u5C3D\u7BA1\u56FE\u6848\u6B8B\u7834\uFF0C\u4F60\u4F9D\u7136\u80FD\u4F9D\u7A00\u8FA8\u8BA4\uFF1A\u4E00\u7FA4\u98DE\u9E1F\u6B63\u6247\u52A8\u7FC5\u8180\uFF0C\u6295\u5411\u8FDC\u65B9\u8302\u5BC6\u7684\u68EE\u6797"
+  clueIcon: {fileID: 0}
+  clueImage: {fileID: 0}
+  discovered: 0
 --- !u!1 &1706591593
 GameObject:
   m_ObjectHideFlags: 0
@@ -1896,6 +1914,7 @@ Transform:
   m_Children:
   - {fileID: 2007704338}
   - {fileID: 1706591594}
+  - {fileID: 1748013975}
   - {fileID: 1510683341}
   - {fileID: 1356401720}
   - {fileID: 1867364944}
@@ -2039,6 +2058,114 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.45, y: 1.25, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1748013974
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1748013975}
+  - component: {fileID: 1748013977}
+  - component: {fileID: 1748013976}
+  m_Layer: 0
+  m_Name: Note
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1748013975
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1748013974}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -7.57, y: -4.6, z: 0}
+  m_LocalScale: {x: 0.09, y: 0.09, z: 0.09}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 1732551157}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1748013976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1748013974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74c289d1144714a2081d9d81afeaf8ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Clue
+  clueText: 
+  clueDescription: "\u4E00\u5F20\u6CDB\u9EC4\u53D1\u8106\u7684\u4FBF\u7B7E\u7EB8\uFF0C\u8FB9\u7F18\u5DF2\u7ECF\u78E8\u635F\u8D77\u6BDB\u3002\u4E0A\u9762\u7528\u892A\u8272\u7684\u84DD\u8272\u94A2\u7B14\u6C34\u5306\u5306\u5199\u5C31\u51E0\u884C\u5B57\uFF0C\u5B57\u8FF9\u56E0\u4E3A\u5E74\u4EE3\u4E45\u8FDC\u548C\u53D7\u6F6E\u800C\u663E\u5F97\u6709\u4E9B\u6D07\u5F00\uFF0C\u900F\u7740\u4E00\u80A1\u7126\u6025\u6216\u662F\u671F\u5F85\u7684\u60C5\u7EEA\u3002\n\u4FE1\u7684\u6838\u5FC3\u5185\u5BB9\u662F\u2014\u2014\u201C\u660E\u65E5\u5C06____\uFF0C\u65E7\u5B85\u67F4\u95E8\u52FF\u9501\u201D\u3002\n\u4F60\u52AA\u529B\u8FA8\u8BA4\u58A8\u6E0D\u8FB9\u7F18\u6B8B\u7559\u7684\u7B14\u89E6\uFF0C\u80FD\u9690\u7EA6\u770B\u5230\n\u53E6\u4E00\u5F20\u770B\u4F3C\u7A7A\u767D\u7684\u4FBF\u7B7E\uFF0C\u4E0A\u9762\u6CA1\u6709\u6B63\u6587\uFF0C\u53EA\u7B28\u62D9\u5730\u7528\u6D46\u7CCA\u8D34\u7740\u4E00\u5F20\u4F60\u6CA1\u89C1\u8FC7\u7684\u6837\u5F0F\u7684\u56FE\u7247\uFF0C\u5B83\u6216\u8BB8\u4E0D\u5E94\u5C5E\u4E8E\u4F60\u8FD9\u4E2A\u5E74\u4EE3\u3002\u5C3D\u7BA1\u652F\u79BB\u7834\u788E\uFF0C\u4ECD\u80FD\u62FC\u51D1\u51FA\u90AE\u7968\u7684\u56FE\u6848\uFF1A\u4E00\u7FA4\u98DE\u9E1F\u6B63\u6247\u52A8\u7FC5\u8180\uFF0C\u6295\u5411\u8FDC\u65B9\u8302\u5BC6\u7684\u68EE\u6797"
+  clueIcon: {fileID: 21300000, guid: 2842884631e310c43a2004f92815b506, type: 3}
+  clueImage: {fileID: 21300000, guid: 0a88cef52d1864a4f98591f035af2ba8, type: 3}
+  discovered: 0
+--- !u!212 &1748013977
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1748013974}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: -2047065139
+  m_SortingLayer: 2
+  m_SortingOrder: 200
+  m_Sprite: {fileID: 21300000, guid: 2842884631e310c43a2004f92815b506, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 28.8, y: 10.799999}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
 --- !u!1 &1867364943
 GameObject:
   m_ObjectHideFlags: 0
