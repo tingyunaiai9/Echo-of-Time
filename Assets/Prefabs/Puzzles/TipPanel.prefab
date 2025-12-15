@@ -670,7 +670,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8871418275385414889}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.78735876, y: 0.78735876, z: 0.78735876}
   m_ConstrainProportionsScale: 0
@@ -737,5 +737,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TipManager
   tipImages:
-  - {fileID: 0}
-  currentImage: {fileID: 0}
+  - {fileID: 21300000, guid: a3b4be2b710c949f5b37246ccc06f897, type: 3}
+  - {fileID: 21300000, guid: 5fea164fa73ba4f21b7ad14d12ee610a, type: 3}
+  tipWords:
+  - "\u5C06\u6563\u843D\u7684\u8BD7\u53E5\u4EE5\u7279\u5B9A\u7684\u987A\u5E8F\u8FDB\u884C\u6392\u5E8F"
+  - "\u6B63\u786E\u5339\u914D\u7684\u8BD7\u53E5\u4F1A\u663E\u793A\u7EFF\u8272\u5E76\u505C\u7559\u5728\u6B63\u786E\u4F4D\u7F6E"
+  currentImage: {fileID: 7353890072608378224}
+  currentText: {fileID: 988860972435564367}
