@@ -122,7 +122,7 @@ public class Compass2Panel : MonoBehaviour, IPointerClickHandler
         {
             sceneName = "Compass2"
         });
-
+    
         EventBus.LocalPublish(new ClueDiscoveredEvent
         {
             isKeyClue = true,
@@ -133,5 +133,54 @@ public class Compass2Panel : MonoBehaviour, IPointerClickHandler
             icon = OuterImage.GetComponent<Image>()?.sprite,
             image = OuterImage.GetComponent<Image>()?.sprite
         });
+    
+        // 添加绿色透明遮罩
+        AddGreenOverlay(InnerImage);
+        AddGreenOverlay(MiddleImage);
+        AddGreenOverlay(OuterImage);
+
+        if (TimelinePlayer.Local != null)
+        {
+            Sprite sprite = Resources.Load<Sprite>("Clue_Compass2");
+            int timeline = TimelinePlayer.Local.timeline;
+            // 压缩图片，避免过大
+            byte[] spriteBytes = ImageUtils.CompressSpriteToJpegBytes(sprite, 80);
+            Debug.Log($"[UIManager] 线索图片压缩成功，大小：{spriteBytes.Length} 字节");
+            ClueBoard.AddClueEntry(timeline, spriteBytes);
+        }
+
     }
-}
+    
+    // 为指定的图像添加绿色透明遮罩
+    private void AddGreenOverlay(RectTransform image)
+    {
+        if (image == null) return;
+    
+        // 获取或添加 CanvasGroup 组件
+        CanvasGroup canvasGroup = image.GetComponent<CanvasGroup>();
+        if (canvasGroup == null)
+        {
+            canvasGroup = image.gameObject.AddComponent<CanvasGroup>();
+        }
+    
+        // 设置初始透明度为 0
+        canvasGroup.alpha = 0f;
+    
+        // 添加绿色遮罩
+        Image overlay = image.GetComponent<Image>();
+        if (overlay == null)
+        {
+            overlay = image.gameObject.AddComponent<Image>();
+        }
+        overlay.color = new Color(0f, 1f, 0f, 0.5f); // 半透明绿色
+    
+        // 动画：渐显 -> 等待 -> 渐隐
+        LeanTween.alphaCanvas(canvasGroup, 1f, 0.5f).setOnComplete(() =>
+        {
+            LeanTween.alphaCanvas(canvasGroup, 0f, 0.5f).setOnComplete(() =>
+            {
+                // 动画结束后移除遮罩
+                Destroy(overlay);
+            });
+        });
+    }}

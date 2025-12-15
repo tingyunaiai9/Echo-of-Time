@@ -49,18 +49,17 @@ public class Poem1Manager : BasePoemManager
             sceneName = "Poem"
         });
 
-        if (panelRoot == null)
+        if (TimelinePlayer.Local != null)
         {
-            Debug.LogWarning("[Poem1Manager] panelRoot 未设置，无法播放动画");
-            return;
+            Sprite sprite = Resources.Load<Sprite>("Clue_Poem1");
+            int timeline = TimelinePlayer.Local.timeline;
+            // 压缩图片，避免过大
+            byte[] spriteBytes = ImageUtils.CompressSpriteToJpegBytes(sprite, 80);
+            Debug.Log($"[UIManager] 线索图片压缩成功，大小：{spriteBytes.Length} 字节");
+            ClueBoard.AddClueEntry(timeline, spriteBytes);
         }
 
         RectTransform poemRect = panelRoot.GetComponent<RectTransform>();
-        if (poemRect == null)
-        {
-            Debug.LogWarning("[Poem1Manager] panelRoot 缺少 RectTransform");
-            return;
-        }
 
         // 计算向上移动的距离（2/3的高度）
         float moveDistance = poemRect.rect.height * 2f / 3f;
