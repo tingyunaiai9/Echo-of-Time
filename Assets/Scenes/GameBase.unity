@@ -2464,15 +2464,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: tipWords.Array.size
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: tipImages.Array.size
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: 'tipWords.Array.data[0]'
-      value: "\u6B63\u786E\u5339\u914D\u7684\u8BD7\u53E5\u4F1A\u663E\u793A\u7EFF\u8272\u5E76\u505C\u7559\u5728\u6B63\u786E\u4F4D\u7F6E"
+      value: "\u4E09\u4F4D\u73A9\u5BB6\u5728\u5404\u81EA\u7684\u65F6\u95F4\u7EBF\u4E2D\u8FDB\u884C\u7EBF\u7D22\u6536\u96C6\u4E0E\u89E3\u8C1C\uFF0C\u5408\u4F5C\u901A\u5173"
       objectReference: {fileID: 0}
     - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: 'tipWords.Array.data[1]'
@@ -2481,6 +2481,14 @@ PrefabInstance:
     - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: 'tipWords.Array.data[2]'
       value: "\u4F7F\u7528\u6309\u952E A/D \u79FB\u52A8\u6E38\u620F\u89D2\u8272"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+      propertyPath: 'tipWords.Array.data[3]'
+      value: "\u89D2\u8272\u9760\u8FD1\u573A\u666F\u4E2D\u53EF\u4EA4\u4E92\u88C5\u7F6E\u65F6\u4F1A\u6709\u9AD8\u4EAE\u663E\u793A"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+      propertyPath: 'tipWords.Array.data[4]'
+      value: "\u4F7F\u7528\u6309\u952E F \u4E0E\u573A\u666F\u4E2D\u7684\u673A\u5173/\u7269\u54C1/\u7EBF\u7D22\u8FDB\u884C\u4EA4\u4E92"
       objectReference: {fileID: 0}
     - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: 'tipImages.Array.data[0]'
@@ -2494,6 +2502,14 @@ PrefabInstance:
       propertyPath: 'tipImages.Array.data[2]'
       value: 
       objectReference: {fileID: 21300000, guid: a902729cf4045a44eb9dd6b511401f58, type: 3}
+    - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+      propertyPath: 'tipImages.Array.data[3]'
+      value: 
+      objectReference: {fileID: 21300000, guid: 7fa9b9b3f736c294e999d612e67970e6, type: 3}
+    - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+      propertyPath: 'tipImages.Array.data[4]'
+      value: 
+      objectReference: {fileID: 21300000, guid: 7fa9b9b3f736c294e999d612e67970e6, type: 3}
     - target: {fileID: 8871418275385414889, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: m_Name
       value: TipPanel
