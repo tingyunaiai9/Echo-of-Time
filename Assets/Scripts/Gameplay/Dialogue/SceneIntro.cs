@@ -19,7 +19,35 @@ public class SceneIntro : MonoBehaviour
     [Tooltip("是否只播放一次（防止重复进入场景时再次触发）")]
     public bool playOnce = true;
 
+    [Header("结束配置")]
+    [Tooltip("剧情播放完毕后显示的 Game Over 面板")]
+    public GameObject gameOverPanel;
+
     private bool hasPlayed = false;
+
+    void Awake()
+    {
+        // 确保开始时面板是隐藏的
+        if (gameOverPanel != null)
+        {
+            // 如果面板里有多余的 EventSystem，销毁它以防报错
+            var es = gameOverPanel.GetComponentInChildren<UnityEngine.EventSystems.EventSystem>();
+            if (es != null)
+            {
+                // 立即销毁，防止 Update 报错
+                if (es.gameObject == gameOverPanel)
+                {
+                    DestroyImmediate(es); // 如果组件在 Panel 上，只销毁组件
+                }
+                else
+                {
+                    DestroyImmediate(es.gameObject); // 否则销毁子物体
+                }
+            }
+            
+            gameOverPanel.SetActive(false);
+        }
+    }
 
     void Start()
     {
@@ -66,15 +94,22 @@ public class SceneIntro : MonoBehaviour
                 }
                 EventBus.Unsubscribe<DialogueEndEvent>(onEnd);
             }
-
-            if (playOnce)
-            {
-                hasPlayed = true;
-            }
         }
         else
         {
             Debug.LogWarning("[SceneIntro] 未设置 introDialogues！");
+        }
+
+        // 剧情播放完毕，显示 Game Over 面板
+        if (gameOverPanel != null)
+        {
+            Debug.Log("[SceneIntro] 剧情结束，显示 Game Over 面板");
+            gameOverPanel.SetActive(true);
+        }
+
+        if (playOnce)
+        {
+            hasPlayed = true;
         }
     }
 
@@ -85,4 +120,4 @@ public class SceneIntro : MonoBehaviour
         hasPlayed = false;
         Debug.Log("[SceneIntro] 播放状态已重置");
     }
-} 
+}
