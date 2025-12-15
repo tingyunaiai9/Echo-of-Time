@@ -39,10 +39,6 @@ public class Compass2Panel : MonoBehaviour, IPointerClickHandler
     [Tooltip("外圈需要的旋转次数")]
     public int outerTargetRotations = 2;
 
-    [Header("剧情触发")]
-    [Tooltip("完成后激活的剧情触发器物体")]
-    public GameObject completionDialogueTrigger;
-
     private bool isPuzzleCompleted = false;
 
     void Update()
@@ -144,19 +140,23 @@ public class Compass2Panel : MonoBehaviour, IPointerClickHandler
         AddGreenOverlay(MiddleImage);
         AddGreenOverlay(OuterImage);
 
-        if (TimelinePlayer.Local != null)
+
+        // 查找名为 "EndSceneIntro" 的物体并激活
+        var intros = Resources.FindObjectsOfTypeAll<SceneIntro>();
+        foreach (var intro in intros)
         {
-            Sprite sprite = Resources.Load<Sprite>("Clue_Compass2");
-            int timeline = TimelinePlayer.Local.timeline;
-            // 压缩图片，避免过大
-            byte[] spriteBytes = ImageUtils.CompressSpriteToJpegBytes(sprite, 80);
-            Debug.Log($"[UIManager] 线索图片压缩成功，大小：{spriteBytes.Length} 字节");
-            ClueBoard.AddClueEntry(timeline, spriteBytes);
+            if (intro.gameObject.scene.IsValid() && intro.gameObject.name == "EndSceneIntro")
+            {
+                Debug.Log("[Compass2Panel] 找到 EndSceneIntro，正在激活...");
+                intro.gameObject.SetActive(true);
+                break;
+            }
         }
 
-        if (completionDialogueTrigger != null)
+        // 自动退出谜题场景
+        if (PuzzleOverlayManager.Instance != null)
         {
-            completionDialogueTrigger.SetActive(true);
+            PuzzleOverlayManager.Instance.ClosePuzzle();
         }
 
     }
