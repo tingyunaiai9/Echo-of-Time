@@ -484,7 +484,7 @@ MonoBehaviour:
   evaluationMethod: 0
   evaluationInterval: 3
   timeInterpolationGui: 0
-  skipRelay: 1
+  skipRelay: 0
   maxPlayers: 3
   roomNamespace: EchoOfTime
 --- !u!4 &611270532
