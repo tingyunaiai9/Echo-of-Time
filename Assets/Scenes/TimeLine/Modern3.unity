@@ -779,7 +779,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca39e41701b7b2f4faaa8885e70567a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneIntro
-  introDialogue: {fileID: 11400000, guid: da4928567b72bdf4bb7bc7a269ec75eb, type: 2}
+  introDialogues:
+  - {fileID: 11400000, guid: da4928567b72bdf4bb7bc7a269ec75eb, type: 2}
   delaySeconds: 0.5
   playOnce: 1
 --- !u!4 &1554800108
