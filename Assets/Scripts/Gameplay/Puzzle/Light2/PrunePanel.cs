@@ -10,6 +10,12 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     [Header("文字答案设置")]
     public List<Word> words = new List<Word>();
 
+    [Header("Rewards")]
+    [Tooltip("Name of the Handkerchief object to find in the scene")]
+    public string handkerchiefObjectName = "handkerchief";
+    [Tooltip("Name of the Seed object to find in the scene")]
+    public string seedObjectName = "seed";
+
     [Header("光标配置")]
     [Tooltip("进入 Panel 时显示的光标图片（默认状态）")]
     public Texture2D cursorTexture;
@@ -236,53 +242,38 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     {
         // 设置完成标志
         s_isPuzzleCompleted = true;
-    
-        // 获取 ConsolePanel 下的 ConsoleImage
-        Transform consolePanelTransform = s_instance.transform.parent.Find("ConsolePanel");
-        if (consolePanelTransform == null)
+
+        // Activate rewards
+        if (s_instance != null)
         {
-            Debug.LogError("[PrunePanel] 未找到 ConsolePanel");
-            return;
+            ActivateRewardObject(s_instance.handkerchiefObjectName);
+            ActivateRewardObject(s_instance.seedObjectName);
         }
-    
-        Image consoleImage = consolePanelTransform.Find("ConsoleImage")?.GetComponent<Image>();
-        if (consoleImage == null)
-        {
-            Debug.LogError("[PrunePanel] 未找到 ConsoleImage");
-            return;
-        }
-    
-        Sprite icon = consoleImage.sprite;
-    
+
         EventBus.LocalPublish(new PuzzleCompletedEvent
         {
             sceneName = "Light2"
         });
+    }
 
-        // 发布 ClueDiscoveredEvent 事件
-        EventBus.LocalPublish(new ClueDiscoveredEvent
-        {
-            isKeyClue = true,
-            playerNetId = 0,
-            clueId = "console_clue",
-            clueText = "拼好5首诗句后抽屉中的一幅画。",
-            clueDescription = "这幅画可能隐藏着重要的线索。",
-            icon = icon,
-            image = icon // 假设 image 和 icon 是相同的
-        });
+    private static void ActivateRewardObject(string objectName)
+    {
+        if (string.IsNullOrEmpty(objectName)) return;
 
-        if (TimelinePlayer.Local != null)
+        GameObject obj = GameObject.Find(objectName);
+        if (obj != null)
         {
-            Sprite sprite = Resources.Load<Sprite>("Clue_Prune");
-            int timeline = TimelinePlayer.Local.timeline;
-            // 压缩图片，避免过大
-            byte[] spriteBytes = ImageUtils.CompressSpriteToJpegBytes(sprite, 80);
-            Debug.Log($"[UIManager] 线索图片压缩成功，大小：{spriteBytes.Length} 字节");
-            ClueBoard.AddClueEntry(timeline, spriteBytes);
+            obj.SetActive(true);
+            foreach (Transform child in obj.transform)
+            {
+                child.gameObject.SetActive(true);
+            }
+            Debug.Log($"[PrunePanel] Activated reward object: {objectName}");
         }
-
-        // 打开控制台面板
-        ConsolePanel.TogglePanel();
+        else
+        {
+            Debug.LogWarning($"[PrunePanel] Could not find reward object: {objectName}");
+        }
     }
     
     /*
@@ -312,6 +303,6 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             }
         }
     
-        Debug.Log($"[PrunePanel] 金黄色单词数量: {goldenCount}/{totalCount}");
+        //Debug.Log($"[PrunePanel] 金黄色单词数量: {goldenCount}/{totalCount}");
         return goldenCount == totalCount && totalCount > 0;
     }}

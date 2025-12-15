@@ -20,6 +20,9 @@ namespace Game.Gameplay.Puzzle.Light2
         [Header("Notification")]
         public NotificationController notificationController;
 
+        [Header("Debug")]
+        public bool testMode = false;
+
         private bool localIsPlanted = false;
 
         protected override void Start()
@@ -46,9 +49,10 @@ namespace Game.Gameplay.Puzzle.Light2
             {
                 if (treeObject != null)
                 {
-                    if (treeObject.activeSelf != isPlanted)
+                    bool shouldShow = isPlanted || testMode;
+                    if (treeObject.activeSelf != shouldShow)
                     {
-                        treeObject.SetActive(isPlanted);
+                        treeObject.SetActive(shouldShow);
                     }
                 }
 
