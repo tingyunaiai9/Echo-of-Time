@@ -60,7 +60,7 @@ public class ClueBoard : MonoBehaviour
         // 懒加载实例，防止 Awake 尚未执行或对象未激活导致静态实例为空
         if (s_instance == null)
         {
-            s_instance = Object.FindObjectOfType<ClueBoard>(true);
+            s_instance = Object.FindFirstObjectByType<ClueBoard>();
             if (s_instance == null)
             {
                 Debug.LogWarning("[ClueBoard] AddClueEntry 调用时未找到 ClueBoard 实例，条目未创建。");
@@ -161,7 +161,12 @@ public class ClueBoard : MonoBehaviour
                         float targetWidth = 280f;
                         float aspectRatio = (float)texture.height / texture.width;
                         float targetHeight = targetWidth * aspectRatio;
-                        
+                        if (targetHeight > 200f)
+                        {
+                            targetHeight = 200f;
+                            targetWidth = targetHeight / aspectRatio;
+                        }
+                        Debug.Log($"[ClueBoard]设置图片高度为{targetHeight}，宽度为{targetWidth}以适应");
                         RectTransform imageRect = imageTransform.GetComponent<RectTransform>();
                         if (imageRect != null)
                         {
