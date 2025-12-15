@@ -7,6 +7,9 @@ public class KeyPanel : MonoBehaviour
     [Tooltip("重要线索图片")]
     public Image KeyImage;
     private static KeyPanel s_instance;
+    [Header("DetailBar 大图查看")]
+    [SerializeField] GameObject imageViewer;       // 弹出层/大图面板
+    [SerializeField] Image imageViewerImage;       // 用于显示大图的 Image
 
     void Awake()
     {
@@ -43,6 +46,21 @@ public class KeyPanel : MonoBehaviour
             rectTransform.sizeDelta = new Vector2(targetWidth, targetHeight);            
             Debug.Log($"[KeyPanel.OnClueDiscovered] 重要线索已更新: {e.clueId}, 尺寸设置为 {targetWidth}x{targetHeight}，透明度已设置为 1");
         }
+    }
+
+    public void OnClickViewImage()
+    {
+        if (KeyImage == null || imageViewer == null) return;
+        Debug.Log($"[{GetType().Name}.OnClickViewImage] 点击查看大图");
+
+        if (imageViewerImage == null)
+            imageViewerImage = imageViewer.GetComponentInChildren<Image>(true);
+
+        imageViewerImage.sprite = KeyImage.sprite;
+        imageViewer.SetActive(true);
+        imageViewerImage.gameObject.SetActive(true);
+        // imageViewerImage.SetNativeSize();     // 按需：用容器自适配可移除
+
     }
 
     public static void Reset()

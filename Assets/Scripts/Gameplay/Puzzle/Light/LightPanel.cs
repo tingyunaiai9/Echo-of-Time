@@ -268,7 +268,18 @@ public class LightPanel : MonoBehaviour
             icon = icon,
             image = icon // 假设 image 和 icon 是相同的
         });
-    
+
+        // 同步线索到日记
+        if (TimelinePlayer.Local != null)
+        {
+            Sprite sprite = Resources.Load<Sprite>("Clue_Light1");
+            int timeline = TimelinePlayer.Local.timeline;
+            // 压缩图片，避免过大
+            byte[] spriteBytes = ImageUtils.CompressSpriteToJpegBytes(sprite, 80);
+            Debug.Log($"[UIManager] 线索图片压缩成功，大小：{spriteBytes.Length} 字节");
+            ClueBoard.AddClueEntry(timeline, spriteBytes);
+        }
+
         // 打开控制台面板
         ConsolePanel.TogglePanel();
     }

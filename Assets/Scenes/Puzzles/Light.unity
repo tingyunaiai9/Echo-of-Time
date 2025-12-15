@@ -577,8 +577,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TipManager
   tipImages:
-  - {fileID: 0}
-  currentImage: {fileID: 0}
+  - {fileID: 21300000, guid: ef4c3ae47ba1347488df0a063ed05272, type: 3}
+  - {fileID: 21300000, guid: 21d1f9cf956418c46946491c60bce04e, type: 3}
+  tipWords:
+  - "\u5C06\u6563\u843D\u7684\u955C\u5B50\u63D2\u5165\u7279\u5B9A\u7684\u51F9\u69FD"
+  - "\u955C\u5B50\u4F1A\u6539\u53D8\u5149\u8DEF\uFF0C\u8BF7\u5C06\u5149\u8DEF\u6298\u5C04\u5230\u76EE\u6807\u4E0A"
+  currentImage: {fileID: 77323016}
+  currentText: {fileID: 162444433}
 --- !u!1 &490483906
 GameObject:
   m_ObjectHideFlags: 0
