@@ -8,10 +8,23 @@ namespace Game.Gameplay.Puzzle.Paint2
         [Tooltip("List of fragment objects in the scene to enable when compass is solved")]
         public List<GameObject> fragments;
 
+        [Header("Debug")]
+        public bool testMode = false;
+
         private bool activated = false;
 
         void Start()
         {
+            if (testMode)
+            {
+                activated = true;
+                foreach (var f in fragments)
+                {
+                    if (f != null) f.SetActive(true);
+                }
+                return;
+            }
+
             // Ensure they are hidden initially
             foreach (var f in fragments)
             {

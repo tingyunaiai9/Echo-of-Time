@@ -26,9 +26,26 @@ public class Note : MonoBehaviour
 
     public void OnClickViewImage()
     {
-        if (noteImage == null) return;
+        if (noteImage == null || noteImage.sprite == null)
+        {
+            Debug.LogWarning($"[{GetType().Name}.OnClickViewImage] noteImage 或其 sprite 未设置");
+            return;
+        }
+
         Debug.Log($"[{GetType().Name}.OnClickViewImage] 点击查看大图");
 
-        //ClueImagePanel.OnClickViewImage(noteImage.sprite);
+        // 查找另一个场景中的 ClueImagePanel（包括非激活对象）
+        ClueImagePanel clueImagePanel = FindFirstObjectByType<ClueImagePanel>();
+        if (clueImagePanel == null)
+        {
+            Debug.LogError("[Note.OnClickViewImage] 无法找到 ClueImagePanel");
+            return;
+        }
+
+        // 激活 ClueImagePanel
+        clueImagePanel.gameObject.SetActive(true);
+
+        // 设置 ClueImagePanel 的图片
+        ClueImagePanel.SetClueImage(noteImage.sprite);
     }
 }

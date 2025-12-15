@@ -673,7 +673,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74c289d1144714a2081d9d81afeaf8ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Clue
-  clueText: 
+  clueText: "\u88C2\u5F00\u7684\u74F7\u76C6"
   clueDescription: "\u4E00\u4E2A\u66FE\u7ECF\u7CBE\u7F8E\u7684\u9752\u82B1\u74F7\u76C6\uFF0C\u5982\u4ECA\u5DF2\u88C2\u6210\u51E0\u5927\u5757\uFF0C\u867D\u7136\u52C9\u5F3A\u62FC\u51D1\u5728\u4E00\u8D77\uFF0C\u4F46\u5DE8\u5927\u7684\u88C2\u7F1D\u5982\u540C\u4E00\u5F20\u5F20\u9965\u6E34\u7684\u5634\u3002\u76C6\u5E95\u79EF\u7740\u539A\u539A\u7684\u7070\u5C18\u548C\u6B7B\u53BB\u7684\u6606\u866B\u58F3\uFF0C\u65E9\u5DF2\u6CA1\u6709\u4E86\u4E00\u4E1D\u6C34\u6C14\u3002\n\n\u4EFB\u4F55\u4E00\u6EF4\u6C34\u90FD\u4F1A\u4ECE\u88C2\u7F1D\u4E2D\u6D41\u51FA\uFF0C\u6D88\u5931\u5728\u6CE5\u571F\u91CC\uFF0C\u6CA1\u6709\u7559\u4E0B\u4EFB\u4F55\u75D5\u8FF9\u3002\u5B83\u4EFF\u4F5B\u5728\u65E0\u58F0\u5730\u5632\u5F04\uFF1A\u201C\u7559\u4E0D\u4F4F\u6D41\u6C34\uFF0C\u7559\u4E0D\u4F4F\u5149\u9634\uFF0C\u7559\u4E0D\u4F4F\u4E00\u5207\u3002\u5230\u5934\u6765\uFF0C\u4EC0\u4E48\u4E5F\u4E0D\u5269\u4E0B\u3002\u201D"
   clueIcon: {fileID: 21300000, guid: 7ac438e0620932f41910e15c457c6248, type: 3}
   clueImage: {fileID: 82373090, guid: c99ad85bd61c9f04898785e208980aa8, type: 3}
@@ -737,7 +737,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1451862975}
   - component: {fileID: 1451862976}
-  m_Layer: 0
+  - component: {fileID: 1451862978}
+  - component: {fileID: 1451862977}
+  m_Layer: 8
   m_Name: door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -753,7 +755,7 @@ Transform:
   m_GameObject: {fileID: 1451862974}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -3, z: 0}
+  m_LocalPosition: {x: -0.5, y: -3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -784,7 +786,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 0b051f72c945ecc4e83647618c6344ad, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -817,108 +819,41 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &1471232504
-GameObject:
+--- !u!65 &1451862977
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1471232508}
-  - component: {fileID: 1471232507}
-  - component: {fileID: 1471232506}
-  - component: {fileID: 1471232505}
-  m_Layer: 5
-  m_Name: Canvas
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1471232505
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1471232504}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.GraphicRaycaster
-  m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
-  m_BlockingMask:
+  m_GameObject: {fileID: 1451862974}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
---- !u!114 &1471232506
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1471232504}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
-  m_UiScaleMode: 0
-  m_ReferencePixelsPerUnit: 100
-  m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
-  m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
-  m_PhysicalUnit: 3
-  m_FallbackScreenDPI: 96
-  m_DefaultSpriteDPI: 96
-  m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
---- !u!223 &1471232507
-Canvas:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1471232504}
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
-  m_PixelPerfect: 0
-  m_ReceivesEvents: 1
-  m_OverrideSorting: 0
-  m_OverridePixelPerfect: 0
-  m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 25
-  m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_TargetDisplay: 0
---- !u!224 &1471232508
-RectTransform:
+  m_Size: {x: 1.164895, y: 10.799999, z: 0.2}
+  m_Center: {x: 13.817553, y: 0, z: 0}
+--- !u!114 &1451862978
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1471232504}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1084669786}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0, y: 0}
+  m_GameObject: {fileID: 1451862974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e89fb3f20512b64194b8bd27bab949a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractToOpenPuzzle
+  puzzleSceneName: Compass2
+  closeExistingBeforeOpen: 0
 --- !u!1 &1485027719
 GameObject:
   m_ObjectHideFlags: 0
@@ -1044,7 +979,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74c289d1144714a2081d9d81afeaf8ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Clue
-  clueText: 
+  clueText: "\u7B7E\u7B52"
   clueDescription: "\u4E00\u4E2A\u88AB\u65E0\u6570\u53CC\u624B\u629A\u6478\u5F97\u6CB9\u5149\u53D1\u4EAE\u7684\u7AF9\u5236\u7B7E\u7B52\uFF0C\u91CC\u9762\u88C5\u7740\u6EE1\u6EE1\u5F53\u5F53\u7684\u7AF9\u7B7E\u3002\u4F60\u968F\u610F\u6447\u6643\u4E86\u51E0\u4E0B\uFF0C\u4E00\u652F\u7B7E\u5B64\u96F6\u96F6\u5730\u6389\u4E86\u51FA\u6765\uFF0C\u843D\u5728\u5730\u4E0A\u53D1\u51FA\u6E05\u8106\u7684\u54CD\u58F0\u3002\n\n\u6361\u8D77\u7EC6\u770B\uFF0C\u7B7E\u5934\u4E0A\u8D6B\u7136\u523B\u7740\u523A\u773C\u7684\u6731\u7EA2\u8272\u5C0F\u5B57\uFF1A\u201C\u4E0B\u4E0B\u201D\u3002\n\n\u7B7E\u6587\u7684\u58A8\u8FF9\u5DF2\u6709\u4E9B\u6A21\u7CCA\uFF0C\u4F46\u90A3\u51E0\u53E5\u8BD7\u4F9D\u7136\u6E05\u6670\u53EF\u8FA8\uFF0C\u5E26\u7740\u4E00\u79CD\u770B\u7834\u7EA2\u5C18\u7684\u51B3\u7EDD\uFF1A\u201C\u6F2B\u63FE\u82F1\u96C4\u6CEA\uFF0C\u76F8\u79BB\u5904\u58EB\u5BB6\u3002\u2026\u2026\u8D64\u6761\u6761\u6765\u53BB\u65E0\u7275\u6302\u3002\u201D"
   clueIcon: {fileID: 21300000, guid: cd9d38ecc5a41c9488387cd067ba6f4e, type: 3}
   clueImage: {fileID: 1315739501, guid: c99ad85bd61c9f04898785e208980aa8, type: 3}
@@ -1565,7 +1500,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74c289d1144714a2081d9d81afeaf8ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Clue
-  clueText: 
+  clueText: "\u5706\u5F62\u94DC\u955C"
   clueDescription: "\u4E00\u9762\u4E0D\u77E5\u5C5E\u4E8E\u4F55\u8BB8\u5E74\u4EE3\u7684\u5706\u5F62\u94DC\u955C\uFF0C\u8FB9\u7F18\u7684\u96D5\u82B1\u5DF2\u7ECF\u78E8\u635F\u3002\u955C\u9762\u88AB\u4E00\u5C42\u539A\u539A\u7684\u94DC\u7EFF\u548C\u6C61\u57A2\u8986\u76D6\uFF0C\u5B8C\u5168\u5931\u53BB\u4E86\u91D1\u5C5E\u7684\u5149\u6CFD\u3002\n\n\u62FF\u8D77\u955C\u5B50\u671F\u5F85\uFF0C\u5374\u6CA1\u6709\u672C\u5E94\u51FA\u73B0\u7684\u5012\u5F71\uFF0C\u955C\u4E2D\u53EA\u6709\u4E00\u7247\u6DF7\u6C8C\u7684\u7070\u6697\uFF0C\u4EC0\u4E48\u4E5F\u7167\u4E0D\u51FA\u6765\u2014\u2014\u6CA1\u6709\u8138\u5E9E\uFF0C\u6CA1\u6709\u5149\u5F71\uFF0C\u751A\u81F3\u8FDE\u4F60\u5B58\u5728\u7684\u8BC1\u660E\u90FD\u6CA1\u6709\u3002\n\n\u955C\u5B50\u80CC\u9762\u523B\u7740\u4E00\u9996\u8457\u540D\u7684\u4F5B\u5048\uFF0C\u5B57\u8FF9\u53E4\u6734\u82CD\u52B2\uFF1A\u201C\u83E9\u63D0\u672C\u975E\u6811\uFF0C\u660E\u955C\u4EA6\u975E\u53F0\u3002\u672C\u6765\u65E0\u4E00\u7269\uFF0C\u4F55\u5904\u60F9\u5C18\u57C3\u3002\u201D "
   clueIcon: {fileID: 21300000, guid: 2450bcf1a54a86345b0a389f619e3dd3, type: 3}
   clueImage: {fileID: -1721415244, guid: c99ad85bd61c9f04898785e208980aa8, type: 3}

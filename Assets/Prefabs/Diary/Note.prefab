@@ -96,11 +96,11 @@ MonoBehaviour:
     m_Right: 10
     m_Top: 10
     m_Bottom: 10
-  m_ChildAlignment: 0
+  m_ChildAlignment: 4
   m_Spacing: 0
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 1
+  m_ChildControlWidth: 0
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
@@ -117,10 +117,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8134149528ea489ab36de3f255c4b20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Note
-  noteTitleText: {fileID: 0}
-  noteImage: {fileID: 0}
-  imageViewer: {fileID: 0}
-  imageViewerImage: {fileID: 0}
+  noteTitleText: {fileID: 5977916565324604669}
+  noteImage: {fileID: 8911217028162284633}
+  viewImageButton: {fileID: 3979981546433562108}
 --- !u!1 &2775496296913218965
 GameObject:
   m_ObjectHideFlags: 0
@@ -276,7 +275,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 30}
+  m_SizeDelta: {x: 280, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6482639432384562725
 CanvasRenderer:
@@ -413,7 +412,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 200}
+  m_SizeDelta: {x: 280, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8498010448754395675
 CanvasRenderer:

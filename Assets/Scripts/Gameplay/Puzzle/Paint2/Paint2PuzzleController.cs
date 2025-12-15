@@ -20,6 +20,11 @@ namespace Game.Gameplay.Puzzle.Paint2
         [Header("事件")]
         public UnityEngine.Events.UnityEvent onPuzzleComplete;
 
+        [Header("Rewards")]
+        public GameObject noteObject;
+        [Tooltip("Name of the Note object to find in the scene if noteObject is not assigned")]
+        public string noteObjectName = "Note";
+
         private Dictionary<int, PuzzleMask> masks = new Dictionary<int, PuzzleMask>();
         
         private int correctPieces = 0;
@@ -34,6 +39,16 @@ namespace Game.Gameplay.Puzzle.Paint2
 
         void Start()
         {
+            // Try to find Note object by name if not assigned
+            if (noteObject == null && !string.IsNullOrEmpty(noteObjectName))
+            {
+                noteObject = GameObject.Find(noteObjectName);
+                if (noteObject == null)
+                {
+                    Debug.LogWarning($"[Paint2] Could not find Note object with name '{noteObjectName}' in loaded scenes.");
+                }
+            }
+
             if (notificationController == null)
             {
                 // 优先查找当前场景中的 NotificationController
@@ -65,6 +80,8 @@ namespace Game.Gameplay.Puzzle.Paint2
             
             // Check inventory and activate missing pieces if needed
             CheckMissingPieces();
+
+
         }
 
         void OnEnable()
@@ -141,8 +158,11 @@ namespace Game.Gameplay.Puzzle.Paint2
         {
             if (areMissingPiecesActive) return;
 
+            int currentCount = PropBackpack.GetPropCount(missingPieceItemId);
+            Debug.Log($"[Paint2] Checking missing pieces. ItemID: '{missingPieceItemId}', CurrentCount: {currentCount}, Required: {requiredMissingPieceCount}");
+
             // Check if player has enough fragments
-            if (PropBackpack.GetPropCount(missingPieceItemId) >= requiredMissingPieceCount)
+            if (currentCount >= requiredMissingPieceCount)
             {
                 ActivateMissingPieces();
             }
@@ -192,6 +212,16 @@ namespace Game.Gameplay.Puzzle.Paint2
                 // Missing pieces are active, check full completion
                 if (correctPieces >= totalPieces)
                 {
+                    if (noteObject != null)
+                    {
+                        noteObject.SetActive(true);
+                        // Also activate all children to ensure visibility if the user used the "Active Root, Inactive Child" setup
+                        foreach (Transform child in noteObject.transform)
+                        {
+                            child.gameObject.SetActive(true);
+                        }
+                    }
+
                     onPuzzleComplete?.Invoke();
                     EventBus.LocalPublish(new PuzzleCompletedEvent
                     {
@@ -201,4 +231,4 @@ namespace Game.Gameplay.Puzzle.Paint2
             }
         }
     }
-}
+}             
