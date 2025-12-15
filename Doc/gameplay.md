@@ -2,6 +2,12 @@
 
 ## 基本玩法
 
+### 界面
+
+![](pic/basic_HUD.png)
+
+单击或使用快捷键，打开背包等界面
+
 ### 移动
 
 ![](pic/basic_movement.png)
