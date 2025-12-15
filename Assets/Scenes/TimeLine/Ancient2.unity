@@ -1082,9 +1082,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::prop
   itemIcon: {fileID: 21300000, guid: f86bbfe52546b4f4e959f9b91f170956, type: 3}
-  itemDisplayName: PaintFragment
+  itemDisplayName: "\u753B\u7684\u788E\u7247"
   pickupQuantity: 1
-  itemDescription: this is a magic prop...
+  itemDescription: "\u4E00\u7247\u788E\u7247\uFF0C\u6216\u8BB8\u53EF\u4EE5\u62FC\u5728\u54EA\u91CC\uFF1F"
 --- !u!65 &1207032008
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1359,9 +1359,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::prop
   itemIcon: {fileID: 21300000, guid: fc71222b8778e6947b9d922095f13d36, type: 3}
-  itemDisplayName: BambooScroll
+  itemDisplayName: "\u7AF9\u7B80"
   pickupQuantity: 1
-  itemDescription: this is a magic prop...
+  itemDescription: "\u7AF9\u7B80\uFF0C\u4E0A\u9762\u4F3C\u4E4E\u5199\u7740\u4E00\u4E9B\u5B57\uFF0C\u6216\u8BB8\u5E94\u8BE5\u628A\u5B83\u4EEC\u6536\u8D77\u6765\uFF1F"
 --- !u!65 &1356401723
 BoxCollider:
   m_ObjectHideFlags: 0
