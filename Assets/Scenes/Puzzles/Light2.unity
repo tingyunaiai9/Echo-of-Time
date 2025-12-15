@@ -442,10 +442,8 @@ MonoBehaviour:
   words:
   - {fileID: 1618483944}
   - {fileID: 354101922}
-  - {fileID: 1195276143}
   - {fileID: 1254146431}
   - {fileID: 2129755374}
-  - {fileID: 2049671768}
   - {fileID: 25969136}
   handkerchiefObjectName: Handkerchief
   seedObjectName: Seed
@@ -12984,6 +12982,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+      propertyPath: 'tipWords.Array.data[0]'
+      value: "\u4FEE\u526A\u9752\u94DC\u6811\u679D\u53F6\uFF0C\u5C06\u7279\u5B9A\u6C49\u5B57\u9732\u51FA"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+      propertyPath: 'tipWords.Array.data[1]'
+      value: "\u4F7F\u7528\u9F20\u6807\u5355\u51FB\u53EF\u4EE5\u526A\u53BB\u679D\u53F6"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+      propertyPath: 'tipImages.Array.data[0]'
+      value: 
+      objectReference: {fileID: 21300000, guid: a9b8ad066c8abcd42ba0bd0aa5bf7733, type: 3}
+    - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+      propertyPath: 'tipImages.Array.data[1]'
+      value: 
+      objectReference: {fileID: 21300000, guid: fe4d56f785e1b5241928033eddb34789, type: 3}
     - target: {fileID: 8871418275385414889, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: m_Name
       value: TipPanel

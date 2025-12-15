@@ -360,9 +360,20 @@ public class CompassPanel : MonoBehaviour, IPointerClickHandler
             icon = ResultImage.GetComponent<Image>()?.sprite,
             image = ResultImage.GetComponent<Image>()?.sprite
         });
+
+        if (TimelinePlayer.Local != null)
+        {
+            Sprite sprite = Resources.Load<Sprite>("Clue_Compass1");
+            int timeline = TimelinePlayer.Local.timeline;
+            // 压缩图片，避免过大
+            byte[] spriteBytes = ImageUtils.CompressSpriteToJpegBytes(sprite, 80);
+            Debug.Log($"[UIManager] 线索图片压缩成功，大小：{spriteBytes.Length} 字节");
+            ClueBoard.AddClueEntry(timeline, spriteBytes);
+        }
+
     }
 
-     /* 重置旋转状态，清空计数并重置所有数字显示 */
+    /* 重置旋转状态，清空计数并重置所有数字显示 */
     public void ResetRotation()
     {
         // 重置当前步骤索引
