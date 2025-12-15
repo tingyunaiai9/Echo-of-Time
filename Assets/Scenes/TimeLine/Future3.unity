@@ -610,7 +610,7 @@ GameObject:
   - component: {fileID: 909809609}
   - component: {fileID: 909809608}
   - component: {fileID: 909809610}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Tinplate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -741,7 +741,7 @@ GameObject:
   - component: {fileID: 1411942687}
   - component: {fileID: 1411942688}
   - component: {fileID: 1411942689}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Sisyphus
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1030,7 +1030,7 @@ GameObject:
   - component: {fileID: 1839320998}
   - component: {fileID: 1839320999}
   - component: {fileID: 1839321000}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: medicine_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
