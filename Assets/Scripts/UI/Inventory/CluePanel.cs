@@ -22,7 +22,7 @@ public class CluePanel : Inventory
     Sprite currentDetailImage;                     // 当前选中线索的大图
 
     /* 添加线索 */
-    public new void AddClue(string clueId, string clueText, string clueDescription = "", Sprite icon = null, Sprite image = null)
+    public void AddClue(string clueId, string clueText, string clueDescription = "", Sprite icon = null, Sprite image = null)
     {
         if (string.IsNullOrEmpty(clueId)) return;
         if (!_clueIds.Add(clueId)) return; // 已存在则忽略

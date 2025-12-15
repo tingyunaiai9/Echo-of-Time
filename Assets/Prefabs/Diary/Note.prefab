@@ -117,9 +117,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8134149528ea489ab36de3f255c4b20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Note
-  noteTitleText: {fileID: 0}
-  noteImage: {fileID: 0}
-  viewImageButton: {fileID: 0}
+  noteTitleText: {fileID: 5977916565324604669}
+  noteImage: {fileID: 8911217028162284633}
+  viewImageButton: {fileID: 3979981546433562108}
 --- !u!1 &2775496296913218965
 GameObject:
   m_ObjectHideFlags: 0
