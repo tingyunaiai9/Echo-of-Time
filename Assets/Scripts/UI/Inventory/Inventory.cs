@@ -179,7 +179,7 @@ public abstract class Inventory : MonoBehaviour
         // 设置名称
         if (detailName != null)
         {
-            detailName.text = item.itemId;
+            detailName.text = !string.IsNullOrEmpty(item.itemName) ? item.itemName : item.itemId;
         }
 
         // 设置描述
