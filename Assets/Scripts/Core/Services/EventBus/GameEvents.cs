@@ -36,23 +36,22 @@ namespace Events
         public int timeline; // 时间线（0=Ancient, 1=Modern, 2=Future）
     }
 
-    // 日记线索共享事件
-    
-    public class ClueSharedEvent
-    {
-        public byte[] imageData;
-        public int timeline; // 时间线（0=Ancient, 1=Modern, 2=Future）
-    }
-
-
     public class InventoryUpdatedEvent
     {
         public uint playerNetId;
         public string[] inventoryItems;
     }
 
+    // 日记线索共享事件
+
+    public class ClueSharedEvent
+    {
+        public byte[] imageData;
+        public int timeline; // 时间线（0=Ancient, 1=Modern, 2=Future）
+    }
+
     // 线索被发现时发布
-    
+
     public class ClueDiscoveredEvent
     {
         public bool isKeyClue = false;
