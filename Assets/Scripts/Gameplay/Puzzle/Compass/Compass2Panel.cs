@@ -39,6 +39,10 @@ public class Compass2Panel : MonoBehaviour, IPointerClickHandler
     [Tooltip("外圈需要的旋转次数")]
     public int outerTargetRotations = 2;
 
+    [Header("剧情触发")]
+    [Tooltip("完成后激活的剧情触发器物体")]
+    public GameObject completionDialogueTrigger;
+
     private bool isPuzzleCompleted = false;
 
     void Update()
@@ -118,6 +122,7 @@ public class Compass2Panel : MonoBehaviour, IPointerClickHandler
     private void OnPuzzleCompleted()
     {
         Debug.Log("[Compass2Panel] 谜题完成！");
+
         EventBus.LocalPublish(new PuzzleCompletedEvent
         {
             sceneName = "Compass2"
@@ -147,6 +152,11 @@ public class Compass2Panel : MonoBehaviour, IPointerClickHandler
             byte[] spriteBytes = ImageUtils.CompressSpriteToJpegBytes(sprite, 80);
             Debug.Log($"[UIManager] 线索图片压缩成功，大小：{spriteBytes.Length} 字节");
             ClueBoard.AddClueEntry(timeline, spriteBytes);
+        }
+
+        if (completionDialogueTrigger != null)
+        {
+            completionDialogueTrigger.SetActive(true);
         }
 
     }
