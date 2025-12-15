@@ -92,6 +92,11 @@ namespace Events
         public StartDialogueEvent(DialogueData data) { this.data = data; }
     }
 
+    // 剧情结束事件
+    public class DialogueEndEvent
+    {
+    }
+
 
 
     /*

@@ -118,6 +118,7 @@ public class Compass2Panel : MonoBehaviour, IPointerClickHandler
     private void OnPuzzleCompleted()
     {
         Debug.Log("[Compass2Panel] 谜题完成！");
+
         EventBus.LocalPublish(new PuzzleCompletedEvent
         {
             sceneName = "Compass2"
@@ -139,14 +140,23 @@ public class Compass2Panel : MonoBehaviour, IPointerClickHandler
         AddGreenOverlay(MiddleImage);
         AddGreenOverlay(OuterImage);
 
-        if (TimelinePlayer.Local != null)
+
+        // 查找名为 "EndSceneIntro" 的物体并激活
+        var intros = Resources.FindObjectsOfTypeAll<SceneIntro>();
+        foreach (var intro in intros)
         {
-            Sprite sprite = Resources.Load<Sprite>("Clue_Compass2");
-            int timeline = TimelinePlayer.Local.timeline;
-            // 压缩图片，避免过大
-            byte[] spriteBytes = ImageUtils.CompressSpriteToJpegBytes(sprite, 80);
-            Debug.Log($"[UIManager] 线索图片压缩成功，大小：{spriteBytes.Length} 字节");
-            ClueBoard.AddClueEntry(timeline, spriteBytes);
+            if (intro.gameObject.scene.IsValid() && intro.gameObject.name == "EndSceneIntro")
+            {
+                Debug.Log("[Compass2Panel] 找到 EndSceneIntro，正在激活...");
+                intro.gameObject.SetActive(true);
+                break;
+            }
+        }
+
+        // 自动退出谜题场景
+        if (PuzzleOverlayManager.Instance != null)
+        {
+            PuzzleOverlayManager.Instance.ClosePuzzle();
         }
 
     }
