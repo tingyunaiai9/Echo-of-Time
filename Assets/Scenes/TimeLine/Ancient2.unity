@@ -166,9 +166,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::prop
   itemIcon: {fileID: 21300000, guid: f86bbfe52546b4f4e959f9b91f170956, type: 3}
-  itemDisplayName: PaintFragment
+  itemDisplayName: "\u753B\u7684\u788E\u7247"
+  internalItemId: PaintFragment
   pickupQuantity: 1
-  itemDescription: this is a magic prop...
+  itemDescription: "\u4E00\u7247\u788E\u7247\uFF0C\u6216\u8BB8\u53EF\u4EE5\u62FC\u5728\u54EA\u91CC\uFF1F"
 --- !u!65 &104084924
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -248,6 +249,38 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &158816612
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 158816613}
+  m_Layer: 5
+  m_Name: note
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &158816613
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 158816612}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1748013975}
+  m_Father: {fileID: 1732551157}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &169166526
 GameObject:
   m_ObjectHideFlags: 0
@@ -599,6 +632,7 @@ MonoBehaviour:
   - {fileID: 1877450494}
   - {fileID: 104084921}
   - {fileID: 1207032005}
+  testMode: 0
 --- !u!1 &832302364
 GameObject:
   m_ObjectHideFlags: 0
@@ -646,9 +680,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::prop
   itemIcon: {fileID: 21300000, guid: f86bbfe52546b4f4e959f9b91f170956, type: 3}
-  itemDisplayName: PaintFragment
+  itemDisplayName: "\u753B\u7684\u788E\u7247"
+  internalItemId: PaintFragment
   pickupQuantity: 1
-  itemDescription: this is a magic prop...
+  itemDescription: "\u4E00\u7247\u788E\u7247\uFF0C\u6216\u8BB8\u53EF\u4EE5\u62FC\u5728\u54EA\u91CC\uFF1F"
 --- !u!65 &832302367
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -756,7 +791,7 @@ Transform:
   m_GameObject: {fileID: 872913237}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -7.13, y: -1.93, z: 0}
+  m_LocalPosition: {x: -7.13, y: -1.84, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1082,9 +1117,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::prop
   itemIcon: {fileID: 21300000, guid: f86bbfe52546b4f4e959f9b91f170956, type: 3}
-  itemDisplayName: PaintFragment
+  itemDisplayName: "\u753B\u7684\u788E\u7247"
+  internalItemId: PaintFragment
   pickupQuantity: 1
-  itemDescription: this is a magic prop...
+  itemDescription: "\u4E00\u7247\u788E\u7247\uFF0C\u6216\u8BB8\u53EF\u4EE5\u62FC\u5728\u54EA\u91CC\uFF1F"
 --- !u!65 &1207032008
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1282,7 +1318,7 @@ Transform:
   m_GameObject: {fileID: 1356401719}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.89, y: -4.02, z: 0}
+  m_LocalPosition: {x: -3.89, y: -4.07, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1359,9 +1395,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::prop
   itemIcon: {fileID: 21300000, guid: fc71222b8778e6947b9d922095f13d36, type: 3}
-  itemDisplayName: BambooScroll
+  itemDisplayName: "\u7AF9\u7B80"
+  internalItemId: 
   pickupQuantity: 1
-  itemDescription: this is a magic prop...
+  itemDescription: "\u7AF9\u7B80\uFF0C\u4E0A\u9762\u4F3C\u4E4E\u5199\u7740\u4E00\u4E9B\u5B57\uFF0C\u6216\u8BB8\u5E94\u8BE5\u628A\u5B83\u4EEC\u6536\u8D77\u6765\uFF1F"
 --- !u!65 &1356401723
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1512,6 +1549,7 @@ MonoBehaviour:
   seedItemId: Light2Seed
   treeObject: {fileID: 0}
   notificationController: {fileID: 0}
+  testMode: 0
 --- !u!1 &1450972424
 GameObject:
   m_ObjectHideFlags: 0
@@ -1541,7 +1579,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca39e41701b7b2f4faaa8885e70567a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneIntro
-  introDialogue: {fileID: 11400000, guid: e08f6a9e5febed04e9fdf845b0f40a94, type: 2}
+  introDialogues:
+  - {fileID: 11400000, guid: e08f6a9e5febed04e9fdf845b0f40a94, type: 2}
   delaySeconds: 0.5
   playOnce: 1
 --- !u!4 &1450972426
@@ -1914,7 +1953,6 @@ Transform:
   m_Children:
   - {fileID: 2007704338}
   - {fileID: 1706591594}
-  - {fileID: 1748013975}
   - {fileID: 1510683341}
   - {fileID: 1356401720}
   - {fileID: 1867364944}
@@ -1929,6 +1967,7 @@ Transform:
   - {fileID: 442478106}
   - {fileID: 169166527}
   - {fileID: 563959830}
+  - {fileID: 158816613}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1736989402
@@ -2076,7 +2115,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1748013975
 Transform:
   m_ObjectHideFlags: 0
@@ -2087,10 +2126,10 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -7.57, y: -4.6, z: 0}
-  m_LocalScale: {x: 0.09, y: 0.09, z: 0.09}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 1732551157}
+  m_Father: {fileID: 158816613}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1748013976
 MonoBehaviour:
@@ -2186,7 +2225,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 10.239999, y: 6.3599997, z: 0.19999999}
+  m_Size: {x: 1.02, y: 0.63, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1867364943
 GameObject:
@@ -2325,9 +2364,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::prop
   itemIcon: {fileID: 21300000, guid: f86bbfe52546b4f4e959f9b91f170956, type: 3}
-  itemDisplayName: PaintFragment
+  itemDisplayName: "\u753B\u7684\u788E\u7247"
+  internalItemId: PaintFragment
   pickupQuantity: 1
-  itemDescription: this is a magic prop...
+  itemDescription: "\u4E00\u7247\u788E\u7247\uFF0C\u6216\u8BB8\u53EF\u4EE5\u62FC\u5728\u54EA\u91CC\uFF1F"
 --- !u!65 &1877450497
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2439,9 +2479,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::prop
   itemIcon: {fileID: 21300000, guid: f86bbfe52546b4f4e959f9b91f170956, type: 3}
-  itemDisplayName: PaintFragment
+  itemDisplayName: "\u753B\u7684\u788E\u7247"
+  internalItemId: PaintFragment
   pickupQuantity: 1
-  itemDescription: this is a magic prop...
+  itemDescription: "\u4E00\u7247\u788E\u7247\uFF0C\u6216\u8BB8\u53EF\u4EE5\u62FC\u5728\u54EA\u91CC\uFF1F"
 --- !u!65 &1878763288
 BoxCollider:
   m_ObjectHideFlags: 0

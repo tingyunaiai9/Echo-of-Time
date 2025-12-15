@@ -10,6 +10,9 @@ public class prop : Interaction
     [Tooltip("物品显示名称，留空则使用 GameObject 名称")]
     public string itemDisplayName;
 
+    [Tooltip("物品内部ID，用于程序逻辑判定。如果留空则使用显示名称")]
+    public string internalItemId;
+
     [Tooltip("拾取时获得的数量")]
     public int pickupQuantity = 1;
 
@@ -49,7 +52,10 @@ public class prop : Interaction
         Debug.Log($"[prop.OnInteract] 玩家 {(player != null ? player.gameObject.name : "Unknown")} 拾取物品: {gameObject.name}");
 
         uint pid = player != null ? player.netId : 0u;
-        string displayId = string.IsNullOrEmpty(itemDisplayName) ? gameObject.name : itemDisplayName;
+        
+        // Determine ID: Internal ID > Display Name > GameObject Name
+        string displayId = !string.IsNullOrEmpty(internalItemId) ? internalItemId : 
+                          (!string.IsNullOrEmpty(itemDisplayName) ? itemDisplayName : gameObject.name);
 
         // 发布事件
         var evt = new ItemPickedUpEvent

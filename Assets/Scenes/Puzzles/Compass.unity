@@ -611,6 +611,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+      propertyPath: 'tipWords.Array.data[0]'
+      value: "\u4F7F\u7528\u9F20\u6807\u5355\u51FB\u7F57\u76D8\u5916\u5708\u7684\u53F3\u4FA7/\u5DE6\u4FA7\u53EF\u4EE5\u65CB\u8F6C\u7F57\u76D8"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+      propertyPath: 'tipWords.Array.data[1]'
+      value: "\u4EE5\u6B63\u786E\u7684\u65B9\u5411\u65CB\u8F6C\u6B63\u786E\u7684\u6B21\u6570\u540E\uFF0C\u754C\u9762\u4E0A\u65B9\u4F1A\u51FA\u73B0\u6570\u5B57"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+      propertyPath: 'tipImages.Array.data[0]'
+      value: 
+      objectReference: {fileID: 21300000, guid: 4828cb8a93c402045b5c474bd6d548be, type: 3}
+    - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+      propertyPath: 'tipImages.Array.data[1]'
+      value: 
+      objectReference: {fileID: 21300000, guid: d2abd71689b7a6c4a94039cdff748bf8, type: 3}
     - target: {fileID: 8871418275385414889, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: m_Name
       value: TipPanel

@@ -187,9 +187,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::prop
   itemIcon: {fileID: 21300000, guid: 1a2af524d2f908b45bf4b6d1102252ad, type: 3}
-  itemDisplayName: mirror
+  itemDisplayName: "\u955C\u5B50"
+  internalItemId: mirror
   pickupQuantity: 1
-  itemDescription: mirror used  for light puzzle
+  itemDescription: "\u5149\u6D01\u7684\u955C\u5B50\uFF0C\u53CD\u5C04\u6027\u5F88\u597D"
 --- !u!212 &143908082
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -568,9 +569,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::prop
   itemIcon: {fileID: 21300000, guid: 1a2af524d2f908b45bf4b6d1102252ad, type: 3}
-  itemDisplayName: mirror
+  itemDisplayName: "\u955C\u5B50"
+  internalItemId: mirror
   pickupQuantity: 1
-  itemDescription: mirror used  for light puzzle
+  itemDescription: "\u5149\u6D01\u7684\u955C\u5B50\uFF0C\u53CD\u5C04\u6027\u5F88\u597D"
 --- !u!212 &699477570
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -845,9 +847,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::prop
   itemIcon: {fileID: 21300000, guid: 1a2af524d2f908b45bf4b6d1102252ad, type: 3}
-  itemDisplayName: mirror
+  itemDisplayName: "\u955C\u5B50"
+  internalItemId: mirror
   pickupQuantity: 1
-  itemDescription: mirror used  for light puzzle
+  itemDescription: "\u5149\u6D01\u7684\u955C\u5B50\uFF0C\u53CD\u5C04\u6027\u5F88\u597D"
 --- !u!1 &1019093743
 GameObject:
   m_ObjectHideFlags: 0
@@ -967,7 +970,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca39e41701b7b2f4faaa8885e70567a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneIntro
-  introDialogue: {fileID: 11400000, guid: 9cbb4cefbe1ebf0488711d6fce30340e, type: 2}
+  introDialogues:
+  - {fileID: 11400000, guid: 6ed46b60752cac94d8dd610826d5780c, type: 2}
+  - {fileID: 11400000, guid: 9cbb4cefbe1ebf0488711d6fce30340e, type: 2}
   delaySeconds: 0.5
   playOnce: 1
 --- !u!4 &1163278606
@@ -1053,9 +1058,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::prop
   itemIcon: {fileID: 21300000, guid: 1a2af524d2f908b45bf4b6d1102252ad, type: 3}
-  itemDisplayName: mirror
+  itemDisplayName: "\u955C\u5B50"
+  internalItemId: mirror
   pickupQuantity: 1
-  itemDescription: mirror used  for light puzzle
+  itemDescription: "\u5149\u6D01\u7684\u955C\u5B50\uFF0C\u53CD\u5C04\u6027\u5F88\u597D"
 --- !u!212 &1274538903
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1313,9 +1319,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::prop
   itemIcon: {fileID: 21300000, guid: 1a2af524d2f908b45bf4b6d1102252ad, type: 3}
-  itemDisplayName: mirror
+  itemDisplayName: "\u955C\u5B50"
+  internalItemId: mirror
   pickupQuantity: 1
-  itemDescription: mirror used  for light puzzle
+  itemDescription: "\u5149\u6D01\u7684\u955C\u5B50\uFF0C\u53CD\u5C04\u6027\u5F88\u597D"
 --- !u!212 &1488600634
 SpriteRenderer:
   m_ObjectHideFlags: 0

@@ -1,6 +1,7 @@
 using UnityEngine;
 using Events;
 using Mirror;
+using System.Collections.Generic;
 
 /*
  * 场景开场剧情触发器
@@ -9,8 +10,8 @@ using Mirror;
 public class SceneIntro : MonoBehaviour
 {
     [Header("剧情配置")]
-    [Tooltip("拖入该场景的开场剧情数据")]
-    public DialogueData introDialogue;
+    [Tooltip("拖入该场景的开场剧情数据（支持多个，依次播放）")]
+    public List<DialogueData> introDialogues = new List<DialogueData>();
 
     [Tooltip("延迟播放时间（秒），给玩家适应场景的时间")]
     public float delaySeconds = 0.5f;
@@ -45,10 +46,26 @@ public class SceneIntro : MonoBehaviour
         yield return new WaitForSeconds(delaySeconds);
 
         // 触发剧情
-        if (introDialogue != null)
+        if (introDialogues != null && introDialogues.Count > 0)
         {
-            Debug.Log($"[SceneIntro] 播放场景剧情: {introDialogue.name}");
-            EventBus.LocalPublish(new StartDialogueEvent(introDialogue));
+            foreach (var dialogue in introDialogues)
+            {
+                if (dialogue == null) continue;
+
+                Debug.Log($"[SceneIntro] 播放场景剧情: {dialogue.name}");
+                EventBus.LocalPublish(new StartDialogueEvent(dialogue));
+
+                // 等待剧情结束
+                bool finished = false;
+                System.Action<DialogueEndEvent> onEnd = e => finished = true;
+                EventBus.Subscribe<DialogueEndEvent>(onEnd);
+
+                while (!finished)
+                {
+                    yield return null;
+                }
+                EventBus.Unsubscribe<DialogueEndEvent>(onEnd);
+            }
 
             if (playOnce)
             {
@@ -57,7 +74,7 @@ public class SceneIntro : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("[SceneIntro] 未设置 introDialogue！");
+            Debug.LogWarning("[SceneIntro] 未设置 introDialogues！");
         }
     }
 

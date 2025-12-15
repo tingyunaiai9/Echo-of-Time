@@ -200,5 +200,6 @@ public class VisualNovelPanel : MonoBehaviour
         Debug.Log("剧情结束");
         // 这里可以发送一个剧情结束事件，恢复玩家控制
         EventBus.LocalPublish(new FreezeEvent {isOpen = false});
+        EventBus.LocalPublish(new DialogueEndEvent());
     }
 }
