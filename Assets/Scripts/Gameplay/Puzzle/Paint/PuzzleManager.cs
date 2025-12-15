@@ -22,6 +22,9 @@ public class PuzzleManager : MonoBehaviour
     [Tooltip("拼画面板管理器，用于显示成功反馈")]
     public PuzzlePanel puzzlePanel;
 
+    [Tooltip("拼图完成后要打开的 ConsolePanel 面板（在 Canvas 下）")]
+    public GameObject consolePanel;
+
     [Header("线索设置")]
     [Tooltip("拼图完成后获得的线索图片")]
     public Sprite clueSprite;
@@ -125,6 +128,15 @@ public class PuzzleManager : MonoBehaviour
         {
             puzzlePanel.ShowSuccessPanel();
         }
+
+        // 打开 ConsolePanel（如果已绑定）
+        if (consolePanel != null)
+        {
+            consolePanel.SetActive(true);
+            Debug.Log("[PuzzleManager] 已打开 ConsolePanel");
+        }
+
+
         EventBus.LocalPublish(new PuzzleCompletedEvent
         {
             sceneName = "Paint"
@@ -165,6 +177,8 @@ public class PuzzleManager : MonoBehaviour
                 Debug.LogError("[PuzzleManager] 线索图片压缩失败，未能共享到便签墙。");
             }
         }
+        // 打开控制台面板
+        ConsolePanel.TogglePanel();
     }
 
     /* 获取进度 */
