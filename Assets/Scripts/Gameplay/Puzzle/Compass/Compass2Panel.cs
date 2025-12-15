@@ -133,5 +133,16 @@ public class Compass2Panel : MonoBehaviour, IPointerClickHandler
             icon = OuterImage.GetComponent<Image>()?.sprite,
             image = OuterImage.GetComponent<Image>()?.sprite
         });
+
+        if (TimelinePlayer.Local != null)
+        {
+            Sprite sprite = Resources.Load<Sprite>("Clue_Compass2");
+            int timeline = TimelinePlayer.Local.timeline;
+            // 压缩图片，避免过大
+            byte[] spriteBytes = ImageUtils.CompressSpriteToJpegBytes(sprite, 80);
+            Debug.Log($"[UIManager] 线索图片压缩成功，大小：{spriteBytes.Length} 字节");
+            ClueBoard.AddClueEntry(timeline, spriteBytes);
+        }
+
     }
 }
