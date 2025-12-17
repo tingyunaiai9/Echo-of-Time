@@ -52,6 +52,16 @@ public class PaintManager : MonoBehaviour
         Debug.Log($"[PuzzleManager] 初始化完成，共 {totalPieces} 块碎片");
     }
 
+    void Update()
+    {
+        // 内置作弊功能，按 P 键直接完成拼图
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            Debug.Log("[PuzzleManager] P键按下，触发拼图完成效果");
+            OnPuzzleComplete();
+        }
+    }
+
     /* 初始化遮罩 */
     void InitializeMasks()
     {

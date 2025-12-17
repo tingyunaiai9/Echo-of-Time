@@ -382,18 +382,18 @@ public class LightPanel : MonoBehaviour
     /*
      * 切换面板开关状态
      */
-    public static void TogglePanel()
+/*     public static void TogglePanel()
     {
         if (s_isOpen)
             ClosePanel();
         else
             OpenPanel();
-    }
+    } */
 
     /*
      * 打开光线谜题面板
      */
-    public static void OpenPanel()
+/*     public static void OpenPanel()
     {
         if (s_root == null)
         {
@@ -408,11 +408,11 @@ public class LightPanel : MonoBehaviour
         // 禁用玩家移动
         EventBus.LocalPublish(new FreezeEvent { isOpen = true });
     }
-
+ */
     /*
      * 关闭光线谜题面板
      */
-    public static void ClosePanel()
+/*     public static void ClosePanel()
     {
         if (s_root == null)
         {
@@ -427,12 +427,12 @@ public class LightPanel : MonoBehaviour
         // 恢复玩家移动
         EventBus.LocalPublish(new FreezeEvent { isOpen = false });
     }
-
+ */
     /*
      * 获取谜题是否已完成
      */
-    public static bool IsPuzzleCompleted()
+/*     public static bool IsPuzzleCompleted()
     {
         return s_isPuzzleCompleted;
     }
-}
+ */}

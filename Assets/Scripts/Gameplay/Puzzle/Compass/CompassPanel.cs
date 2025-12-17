@@ -32,7 +32,6 @@ public class CompassPanel : Puzzle, IPointerClickHandler
     private RectTransform panelTransform;
     private Canvas canvas;
 
-
     private Outline outerOutline;
     private Outline innerOutline;
     private bool outerOutlineOriginalEnabled;
@@ -52,7 +51,7 @@ public class CompassPanel : Puzzle, IPointerClickHandler
     private Coroutine flashCoroutine;
     private bool isPuzzleCompleted = false; // 标记谜题是否已完成
 
-    public override void Awake()
+    public void Awake()
     {
         panelTransform = GetComponent<RectTransform>();
         canvas = GetComponentInParent<Canvas>();
@@ -368,7 +367,7 @@ public class CompassPanel : Puzzle, IPointerClickHandler
     }
 
     /* 重置旋转状态，清空计数并重置所有数字显示 */
-    public override void ResetPuzzle()
+    public void ResetPuzzle()
     {
         // 重置当前步骤索引
         stepIndex = 0;

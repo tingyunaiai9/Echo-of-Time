@@ -14,8 +14,6 @@ public abstract class Puzzle : MonoBehaviour
     [Tooltip("Indicates whether the puzzle is completed.")]
     public bool isCompleted = false;
 
-    // 初始化谜题的抽象方法
-    public abstract void Awake();
 
     // 所有谜题内置作弊功能，按 P 键直接完成谜题
     public void Update()
@@ -30,6 +28,5 @@ public abstract class Puzzle : MonoBehaviour
     // 处理谜题完成的抽象方法
     public abstract void OnPuzzleCompleted();
 
-    public abstract void ResetPuzzle();
 }
         
