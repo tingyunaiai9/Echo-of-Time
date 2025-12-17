@@ -101,8 +101,8 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     {
         if (Input.GetKeyDown(KeyCode.P))
         {
-            ConsolePanel.TogglePanel();
-            Debug.Log("[LightPanel] P键按下，切换控制台面板。");
+            ConsolePanel.OpenPanel();
+            Debug.Log("[LightPanel] P键按下，触发谜题完成效果");
         }
         if (AreAllWordsGolden() && !s_isPuzzleCompleted)
         {

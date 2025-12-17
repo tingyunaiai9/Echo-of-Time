@@ -37,7 +37,7 @@ public class Poem1Manager : BasePoemManager
         }
     }
 
-    protected override void OnPuzzleCompleted()
+    public override void OnPuzzleCompleted()
     {
         Debug.Log("[Poem1Manager] 谜题完成！开始播放上移动画");
 

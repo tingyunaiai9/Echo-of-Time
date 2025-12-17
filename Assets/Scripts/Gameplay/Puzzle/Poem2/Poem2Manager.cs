@@ -30,7 +30,7 @@ public class Poem2Manager : BasePoemManager
         }
     }
 
-    protected override void OnPuzzleCompleted()
+    public override void OnPuzzleCompleted()
     {
 
         // 获取 ConsolePanel 下的 ConsoleImage
