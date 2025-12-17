@@ -85,7 +85,7 @@ public class SceneIntro : MonoBehaviour
 
                 // 等待剧情结束
                 bool finished = false;
-                System.Action<DialogueEndEvent> onEnd = e => finished = true;
+                System.Action<DialogueEndEvent> onEnd = e => {finished = true;};
                 EventBus.Subscribe<DialogueEndEvent>(onEnd);
 
                 while (!finished)
@@ -94,6 +94,7 @@ public class SceneIntro : MonoBehaviour
                 }
                 EventBus.Unsubscribe<DialogueEndEvent>(onEnd);
             }
+            EventBus.LocalPublish(new IntroEndEvent());
         }
         else
         {

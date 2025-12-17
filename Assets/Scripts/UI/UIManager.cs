@@ -30,6 +30,20 @@ public class UIManager : Singleton<UIManager>
             }
         }
         InitializeAllUI();
+        EventBus.Subscribe<IntroEndEvent>(OnIntroEnd);
+    }
+
+    public void OnIntroEnd(IntroEndEvent evt)
+    {
+        int level = TimelinePlayer.Local.currentLevel;
+        // 根据当前关卡决定是否显示提示面板
+        if (level == 1)
+        {
+            if (TipPanel != null)
+            {
+                TipPanel.SetActive(true);
+            }
+        }
     }
 
     protected override void OnDestroy()
