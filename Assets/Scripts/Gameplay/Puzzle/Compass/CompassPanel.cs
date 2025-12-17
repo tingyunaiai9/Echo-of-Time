@@ -207,7 +207,7 @@ public class CompassPanel : MonoBehaviour, IPointerClickHandler
     }
 
     // 当步骤完成或方向错误时调用
-    // success 为 true 时显示绿色并前进到下一步骤；为 false 时显示红色并重置当前步骤进度
+    // success 为 true 时显示绿色并前进到下一步骤；为 false 时显示红色并重置所有步骤进度
     private void OnCorrectRotation(bool success)
     {
         // 取消已有闪烁协程，避免颜色冲突
@@ -247,7 +247,8 @@ public class CompassPanel : MonoBehaviour, IPointerClickHandler
         else
         {
             flashCoroutine = StartCoroutine(FlashOutlines(Color.red, 0.5f));
-            Debug.Log("[PaintPanel] 方向错误，已闪红并重置当前步骤进度");
+            ResetRotation();
+            Debug.Log("[PaintPanel] 方向错误，已闪红并重置所有步骤进度");
         }
     }
 
