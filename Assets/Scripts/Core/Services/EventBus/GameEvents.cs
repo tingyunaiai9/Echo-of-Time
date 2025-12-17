@@ -97,6 +97,10 @@ namespace Events
     {
     }
 
+    public class IntroEndEvent
+    {
+    }
+
 
 
     /*

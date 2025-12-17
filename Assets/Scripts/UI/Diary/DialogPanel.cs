@@ -68,23 +68,21 @@ public class DialogPanel : MonoBehaviour
             chatContent = transform.Find("LeftPanel/ChatPanel/ChatScrollView/Viewport/Content");
         if (inputField == null)
             inputField = transform.Find("LeftPanel/InputPanel/InputField").GetComponent<TMP_InputField>();
-        if (sendButton == null)
-            sendButton = transform.Find("LeftPanel/InputPanel/SendButton").GetComponent<Button>();
         
-        // 绑定按钮事件
-        sendButton.onClick.AddListener(OnSendButtonClicked);
-
         EventBus.Subscribe<ChatMessageUpdatedEvent>(OnChatMessageUpdated);
         EventBus.Subscribe<ChatImageUpdatedEvent>(OnChatImageUpdated);
-        //EventBus.Subscribe<AnswerCorrectEvent>(OnReceiveAnswerCorrectEvent);
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+        {
+            OnSendButtonClicked();
+        }
     }
 
     void OnDestroy()
     {
-        if (sendButton != null)
-        {
-            sendButton.onClick.RemoveListener(OnSendButtonClicked);
-        }
         EventBus.Unsubscribe<ChatMessageUpdatedEvent>(OnChatMessageUpdated);
         EventBus.Unsubscribe<ChatImageUpdatedEvent>(OnChatImageUpdated);
         //EventBus.Unsubscribe<AnswerCorrectEvent>(OnReceiveAnswerCorrectEvent);
@@ -103,7 +101,7 @@ public class DialogPanel : MonoBehaviour
     }
     
     /* 发送按钮点击事件 */
-    private void OnSendButtonClicked()
+    public void OnSendButtonClicked()
     {
         Debug.Log("[DialogPanel] 发送按钮被点击");
         if (inputField == null || string.IsNullOrWhiteSpace(inputField.text))
