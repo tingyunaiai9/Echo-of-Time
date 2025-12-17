@@ -5,7 +5,7 @@ using Events;
 /*
  * 拼画管理器：管理遮罩和碎片的绑定，处理完成逻辑
  */
-public class PuzzleManager : MonoBehaviour
+public class PaintManager : MonoBehaviour
 {
     [Header("容器（自动查找子对象）")]
     [Tooltip("遮罩容器（PuzzleMaskGroup）")]
