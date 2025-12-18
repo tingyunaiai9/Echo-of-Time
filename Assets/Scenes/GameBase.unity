@@ -145,18 +145,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6141973}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 938964671}
+  m_Father: {fileID: 1593173667}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 159.99998, y: -110}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 52, y: 52}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 1, y: 0}
 --- !u!114 &6141975
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1391,10 +1391,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogPanel
   chatMessagePrefab: {fileID: 1568691845952435987, guid: fadf74954cb214fac850b0902b404f97, type: 3}
+  firstChatMessagePrefab: {fileID: 251147701}
   chatImagePrefab: {fileID: 2541347803609357501, guid: e30d28c4cb92b734a8953a1e5b0c0308, type: 3}
-  chatContent: {fileID: 0}
-  inputField: {fileID: 0}
-  sendButton: {fileID: 0}
+  chatContent: {fileID: 378136887}
+  inputField: {fileID: 1583208594}
   avatarSprites:
   - {fileID: 21300000, guid: 32b53850aa4f648c3b9228ca7402c061, type: 3}
   - {fileID: 21300000, guid: 65ab37b7f1869482d97b31f1a3f8dfd2, type: 3}
@@ -1620,7 +1620,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77a1946da1e4a4068972024b7485178d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ClueBoard
-  Note: {fileID: 2122175214602278487, guid: ead8313a5e8424512836b48f45975133, type: 3}
+  Note_Image: {fileID: 2122175214602278487, guid: cbc7ec02be12447ff9b23e94e5652cd9, type: 3}
+  Note_Text: {fileID: 2122175214602278487, guid: 68db4bbcfe43f429894bae208a73a4d6, type: 3}
   contentParent: {fileID: 213636548}
 --- !u!114 &213636546
 MonoBehaviour:
@@ -1906,7 +1907,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3394063723965525264, guid: fadf74954cb214fac850b0902b404f97, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -38.42
+      value: -52.625
       objectReference: {fileID: 0}
     - target: {fileID: 4342435886203820752, guid: fadf74954cb214fac850b0902b404f97, type: 3}
       propertyPath: m_Sprite
@@ -1994,7 +1995,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7431000603917348852, guid: fadf74954cb214fac850b0902b404f97, type: 3}
       propertyPath: m_text
-      value: "\u4E07\u8C61\u7EB7\u7EAD\u7686\u662F\u5E7B\uFF0C\u771F\u5BB9\u5F85\u6211\u7B14\u4E2D\u73B0\u3002\\n\u5343\u8A00\u4E07\u8BED\u7686\u7A7A\u5984\uFF0C\u771F\u8A00\u552F\u6211\u4E3A\u4E16\u8BE0\u3002"
+      value: "\u5343\u8A00\u4E07\u8BED\u7686\u7A7A\u5984\uFF0C\u771F\u8A00\u552F\u6211\u4E3A\u4E16\u8BE0\u3002\\n\u4E07\u8C61\u7EB7\u7EAD\u7686\u662F\u5E7B\uFF0C\u771F\u5BB9\u5F85\u6211\u7B14\u4E2D\u73B0\u3002\\n\u6B32\u5C06\u5FC3\u8BED\u5316\u661F\u6587\uFF0C\u6697\u5BC4\u8367\u5C4F\u65E0\u5B57\u75D5\u3002"
       objectReference: {fileID: 0}
     - target: {fileID: 8310244620704353677, guid: fadf74954cb214fac850b0902b404f97, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2020,6 +2021,11 @@ PrefabInstance:
 --- !u!224 &251147700 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6375382068956985317, guid: fadf74954cb214fac850b0902b404f97, type: 3}
+  m_PrefabInstance: {fileID: 251147699}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &251147701 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1568691845952435987, guid: fadf74954cb214fac850b0902b404f97, type: 3}
   m_PrefabInstance: {fileID: 251147699}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &255870193
@@ -4929,6 +4935,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18ac1a8a69cdb4789871b2d7ae9c2b25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KeyPanel
+  KeyImageContainer: {fileID: 938964670}
   KeyImage: {fileID: 1593173668}
   imageViewer: {fileID: 1022776798}
   imageViewerImage: {fileID: 346526919}
@@ -5534,7 +5541,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &938964671
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5548,12 +5555,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1593173667}
-  - {fileID: 6141974}
   m_Father: {fileID: 1544016791}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 250, y: -300}
   m_SizeDelta: {x: 400, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &947051967
@@ -8556,7 +8562,7 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 50
-  m_ChildAlignment: 4
+  m_ChildAlignment: 1
   m_Spacing: 0
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
@@ -8796,7 +8802,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 6141974}
   m_Father: {fileID: 938964671}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -8817,7 +8824,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
