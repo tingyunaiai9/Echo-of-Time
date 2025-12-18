@@ -5,27 +5,23 @@ using System.Collections;
 using TMPro;
 using Events;
 
-public class Compass2Panel : MonoBehaviour, IPointerClickHandler
+public class Compass2Panel : Puzzle, IPointerClickHandler
 {
-    [Header("配置")]
+    [Header("图像配置")]
     [Tooltip("内圈图像对象")]
     public RectTransform InnerImage;
-
     [Tooltip("中圈图像对象")]
     public RectTransform MiddleImage;
-
     [Tooltip("外圈图像对象")]
     public RectTransform OuterImage;
 
+    [Header("圆环参数")]
     [Tooltip("圆环内半径")]
     public float innerRadius = 165f;
-
     [Tooltip("圆环外半径")]
     public float outerRadius = 350f;
-
     [Tooltip("旋转角度")]
     public float rotationAngle = 60f;
-
     [Tooltip("旋转动画时长（秒）")]
     public float rotationDuration = 0.3f;
 
@@ -40,15 +36,6 @@ public class Compass2Panel : MonoBehaviour, IPointerClickHandler
     public int outerTargetRotations = 2;
 
     private bool isPuzzleCompleted = false;
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            OnPuzzleCompleted();
-            Debug.Log("[Compass2Panel] 按下 P 键，触发谜题完成效果");
-        }
-    }
 
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -115,7 +102,7 @@ public class Compass2Panel : MonoBehaviour, IPointerClickHandler
         }
     }
 
-    private void OnPuzzleCompleted()
+    public override void OnPuzzleCompleted()
     {
         Debug.Log("[Compass2Panel] 谜题完成！");
 
@@ -193,4 +180,5 @@ public class Compass2Panel : MonoBehaviour, IPointerClickHandler
                 Destroy(overlay);
             });
         });
-    }}
+    }
+}

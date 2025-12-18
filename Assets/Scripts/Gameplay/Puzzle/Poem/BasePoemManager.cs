@@ -6,7 +6,7 @@ using Events;
  * 提供通用的计数、面板开关、冻结事件发布等逻辑
  * 具体的动画与完成逻辑由子类实现
  */
-public abstract class BasePoemManager : MonoBehaviour
+public abstract class BasePoemManager : Puzzle
 {
     [Header("配置")]
     [Tooltip("需要匹配的总数")]
@@ -76,7 +76,7 @@ public abstract class BasePoemManager : MonoBehaviour
     /*
      * 子类实现谜题完成后的具体逻辑
      */
-    protected abstract void OnPuzzleCompleted();
+    public abstract override void OnPuzzleCompleted();
 
     /*
      * 供子类在 Awake 时做额外初始化（默认无操作）
