@@ -38,15 +38,27 @@ public class Clue : Interaction
         {
             discovered = true;
 
-            EventBus.LocalPublish(new ClueDiscoveredEvent
+            if (clueText == "应揭之天干")
             {
-                playerNetId = pid,
-                clueId = gameObject.name,
-                clueText = clueText,
-                clueDescription = clueDescription,
-                icon = clueIcon,
-                image = clueImage
-            });
+                ClueBoard.AddClueEntry(TimelinePlayer.Local.timeline, clueDescription, SharedClueType.Text);
+            }
+            else if (clueText == "罗盘")
+            {
+                ClueBoard.AddClueEntry(TimelinePlayer.Local.timeline, ImageUtils.CompressSpriteToJpegBytes(clueImage, 80), SharedClueType.Image);
+            }
+            else
+            {
+                EventBus.LocalPublish(new ClueDiscoveredEvent
+                {
+                    isKeyClue = true,
+                    playerNetId = pid,
+                    clueId = gameObject.name,
+                    clueText = clueText,
+                    clueDescription = clueDescription,
+                    icon = clueIcon,
+                    image = clueImage
+                });
+            }
         }
 
         // 查找并显示 ClueCanvas

@@ -5,7 +5,7 @@ using Events;
 /*
  * 拼画管理器：管理遮罩和碎片的绑定，处理完成逻辑
  */
-public class PuzzleManager : MonoBehaviour
+public class PaintManager : MonoBehaviour
 {
     [Header("容器（自动查找子对象）")]
     [Tooltip("遮罩容器（PuzzleMaskGroup）")]
@@ -50,6 +50,16 @@ public class PuzzleManager : MonoBehaviour
         InitializePieces();
         
         Debug.Log($"[PuzzleManager] 初始化完成，共 {totalPieces} 块碎片");
+    }
+
+    void Update()
+    {
+        // 内置作弊功能，按 P 键直接完成拼图
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            Debug.Log("[PuzzleManager] P键按下，触发拼图完成效果");
+            OnPuzzleComplete();
+        }
     }
 
     /* 初始化遮罩 */

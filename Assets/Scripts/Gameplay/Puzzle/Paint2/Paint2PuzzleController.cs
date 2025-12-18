@@ -80,13 +80,24 @@ namespace Game.Gameplay.Puzzle.Paint2
             
             // Check inventory and activate missing pieces if needed
             CheckMissingPieces();
-
-
         }
 
         void OnEnable()
         {
             CheckMissingPieces();
+        }
+
+        void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                Debug.Log("[Paint2] P键按下，触发拼图完成效果");
+                // Simulate completing all pieces
+                while (correctPieces < totalPieces)
+                {
+                    OnPieceCorrect(correctPieces + 1);
+                }
+            }
         }
 
         void InitializeMasks()

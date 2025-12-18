@@ -1188,6 +1188,7 @@ MonoBehaviour:
   seedItemId: Light2Seed
   treeObject: {fileID: 1936971607}
   notificationController: {fileID: 0}
+  testMode: 1
 --- !u!212 &1456438082
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1592,6 +1593,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0c7b720e9b26b964d99520656631571f, type: 2}
   delaySeconds: 0.5
   playOnce: 1
+  gameOverPanel: {fileID: 0}
 --- !u!4 &1808775742
 Transform:
   m_ObjectHideFlags: 0

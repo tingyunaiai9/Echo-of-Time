@@ -101,8 +101,9 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     {
         if (Input.GetKeyDown(KeyCode.P))
         {
-            ConsolePanel.TogglePanel();
-            Debug.Log("[LightPanel] P键按下，切换控制台面板。");
+            // ConsolePanel.OpenPanel();
+            OnPuzzleCompleted();
+            Debug.Log("[LightPanel] P键按下，触发谜题完成效果");
         }
         if (AreAllWordsGolden() && !s_isPuzzleCompleted)
         {
@@ -250,6 +251,22 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             ActivateRewardObject(s_instance.seedObjectName);
         }
 
+        // 激活所有挂载 Clue 脚本的游戏对象
+        Clue[] allClues = Resources.FindObjectsOfTypeAll<Clue>();
+        
+        foreach (Clue clue in allClues)
+        {
+            // 排除预制体，只激活场景中的对象
+            if (clue.gameObject.scene.isLoaded)
+            {
+                if (!clue.gameObject.activeSelf)
+                {
+                    clue.gameObject.SetActive(true);
+                    Debug.Log($"[PrunePanel] 激活线索对象: {clue.gameObject.name}");
+                }
+            }
+        }
+        
         EventBus.LocalPublish(new PuzzleCompletedEvent
         {
             sceneName = "Light2"

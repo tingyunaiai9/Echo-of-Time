@@ -66,6 +66,16 @@ public class StartMenuController : MonoBehaviour
         Debug.Log("[StartMenuController] 收到 GameStartedEvent");
         HideRolePanelImmediate();
 
+        // 显示加载进度条
+        if (progressPanel != null)
+        {
+            progressPanel.SetActive(true);
+            if (progressSlider != null) progressSlider.value = 0.5f;
+            if (progressText != null) progressText.text = "加载中...";
+        }
+
+        // 确保 UI 在场景切换时保留（直到加载完成）
+        DontDestroyOnLoad(transform.root.gameObject);
     }
 
     private void OnRoomProgress(RoomProgressEvent e)
