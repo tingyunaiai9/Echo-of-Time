@@ -1620,7 +1620,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77a1946da1e4a4068972024b7485178d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ClueBoard
-  Note: {fileID: 2122175214602278487, guid: ead8313a5e8424512836b48f45975133, type: 3}
+  Note: {fileID: 2122175214602278487, guid: cbc7ec02be12447ff9b23e94e5652cd9, type: 3}
   contentParent: {fileID: 213636548}
 --- !u!114 &213636546
 MonoBehaviour:
