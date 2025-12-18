@@ -42,6 +42,10 @@ public class Clue : Interaction
             {
                 ClueBoard.AddClueEntry(TimelinePlayer.Local.timeline, clueDescription, SharedClueType.Text);
             }
+            else if (clueText == "罗盘")
+            {
+                ClueBoard.AddClueEntry(TimelinePlayer.Local.timeline, ImageUtils.CompressSpriteToJpegBytes(clueImage, 80), SharedClueType.Image);
+            }
             else
             {
                 EventBus.LocalPublish(new ClueDiscoveredEvent
