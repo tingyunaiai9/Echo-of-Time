@@ -60,15 +60,24 @@ public class ClueBoard : MonoBehaviour
         // 懒加载实例，防止 Awake 尚未执行或对象未激活导致静态实例为空
         if (s_instance == null)
         {
-            s_instance = Object.FindFirstObjectByType<ClueBoard>();
+            // 使用 Resources.FindObjectsOfTypeAll 查找包括未激活的对象
+            ClueBoard[] allBoards = Resources.FindObjectsOfTypeAll<ClueBoard>();
+
+            foreach (var board in allBoards)
+            {
+                // 排除预制体，只查找场景中的对象
+                if (board.gameObject.scene.isLoaded)
+                {
+                    s_instance = board;
+                    Debug.Log("[ClueBoard] 懒加载 ClueBoard 实例成功（包括非激活对象）");
+                    break;
+                }
+            }
+
             if (s_instance == null)
             {
                 Debug.LogWarning("[ClueBoard] AddClueEntry 调用时未找到 ClueBoard 实例，条目未创建。");
                 return;
-            }
-            else
-            {
-                Debug.Log("[ClueBoard] 懒加载 ClueBoard 实例成功，继续添加条目。");
             }
         }
 
