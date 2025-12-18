@@ -1142,6 +1142,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1391008353}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: SetFrozen
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &103104750
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1277,7 +1289,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1391008353}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: EmitFreezeEvent
+        m_MethodName: SetFrozen
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2394,7 +2406,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 47.900005, y: 1}
-  m_SizeDelta: {x: 893, y: 200}
+  m_SizeDelta: {x: 893, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &445640122
 CanvasGroup:
@@ -3142,7 +3154,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1391008353}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: EmitFreezeEvent
+        m_MethodName: SetFrozen
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3416,7 +3428,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8076052440418853614, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: EmitFreezeEvent
+      value: SetFrozen
       objectReference: {fileID: 0}
     - target: {fileID: 8076052440418853614, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
@@ -3862,7 +3874,7 @@ GameObject:
   - component: {fileID: 571766756}
   - component: {fileID: 571766755}
   m_Layer: 5
-  m_Name: Button
+  m_Name: CloseButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3934,6 +3946,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1050238863}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1391008353}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: SetFrozen
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4224,10 +4248,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 445640121}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 446.5, y: -100}
-  m_SizeDelta: {x: 693, y: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &640899353
 CanvasRenderer:
@@ -5427,7 +5451,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1391008353}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: EmitFreezeEvent
+        m_MethodName: SetFrozen
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5975,7 +5999,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1050238864
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6570,7 +6594,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1391008353}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: EmitFreezeEvent
+        m_MethodName: SetFrozen
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7770,6 +7794,7 @@ MonoBehaviour:
   InventoryPanel: {fileID: 255870193}
   TipPanel: {fileID: 534900696}
   mainCanvas: {fileID: 1829174780}
+  UIFrozen: 0
 --- !u!4 &1391008354
 Transform:
   m_ObjectHideFlags: 0

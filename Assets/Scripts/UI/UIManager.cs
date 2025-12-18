@@ -1,9 +1,7 @@
 using UnityEngine;
 using Events; // 引入事件命名空间
 
-/*
- * UI管理器，协调所有UI系统的显示和交互
- */
+// UI管理器，协调所有UI系统的显示和交互
 public class UIManager : Singleton<UIManager>
 {
     [Tooltip("日记界面游戏对象")]
@@ -32,7 +30,6 @@ public class UIManager : Singleton<UIManager>
                 mainCanvas = GetComponentInParent<Canvas>();
             }
         }
-        InitializeAllUI();
         EventBus.Subscribe<IntroEndEvent>(OnIntroEnd);
     }
 
@@ -54,7 +51,7 @@ public class UIManager : Singleton<UIManager>
         base.OnDestroy();
     }
 
-    /* 每帧更新 */
+    // 每帧更新
     void Update()
     {
         HandleUIInput();
@@ -78,9 +75,7 @@ public class UIManager : Singleton<UIManager>
         SetFrozen(anyOpen);
     }
 
-    /// <summary>
     /// 设置主 UI（如日记按钮）的可见性/交互性
-    /// </summary>
     public void SetMainUIActive(bool active)
     {
         if (mainCanvas != null)
@@ -104,9 +99,7 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
-    /// <summary>
     /// 关闭日记面板
-    /// </summary>
     public void CloseDiary()
     {
         if (DiaryPanel != null && DiaryPanel.activeSelf)
@@ -117,9 +110,14 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
-    /* 处理所有 UI 相关的按键 */
+    // 处理所有 UI 相关的按键
     private void HandleUIInput()
     {
+        if (UIFrozen)
+        {
+            // 如果已经冻结，则不处理打开操作
+            return;
+        }
         // 背包开关 (B键)
         if (Input.GetKeyDown(KeyCode.B))
         {
@@ -222,10 +220,5 @@ public class UIManager : Singleton<UIManager>
             Debug.Log($"[UIManager] 线索图片压缩成功，大小：{spriteBytes.Length} 字节");
             ClueBoard.AddClueEntry(timeline, spriteBytes, SharedClueType.Image);
         }
-    }
-
-    public void InitializeAllUI()
-    {
-        // 初始化 UI 面板...
     }
 }
