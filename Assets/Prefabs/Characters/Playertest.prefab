@@ -57,8 +57,8 @@ MonoBehaviour:
   syncInterval: 0
   moveSpeed: 3
   rotationSpeed: 720
-  interactionBoxSize: {x: 2.1, y: 5.99, z: 2.1}
-  interactionOffset: {x: 0, y: 1.91, z: 0}
+  interactionBoxSize: {x: 2.1, y: 7.08, z: 2.1}
+  interactionOffset: {x: 0, y: 3.31, z: 0}
   interactableLayer:
     serializedVersion: 2
     m_Bits: 384
