@@ -1727,6 +1727,7 @@ MonoBehaviour:
   clueImageDisplay: {fileID: 1451569422}
   clueDescriptionText: {fileID: 640899354}
   contentPanel: {fileID: 1050238863}
+  notificationUI: {fileID: 1403563514}
 --- !u!114 &234273444
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3034,7 +3035,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8827984521895200448, guid: a20b80bcca5039c4cbbbd7ed5b4a3634, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

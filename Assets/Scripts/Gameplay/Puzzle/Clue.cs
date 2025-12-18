@@ -1,5 +1,6 @@
 using UnityEngine;
 using Events;
+using Game.UI;
 
 /*
  * 调查类：调查线索，仅反馈信息，不会消失
@@ -79,7 +80,7 @@ public class Clue : Interaction
 
         if (canvas != null)
         {
-            canvas.ShowClue(clueImage, clueDescription);
+            canvas.ShowClue(clueText, clueImage, clueDescription);
         }
         else
         {
