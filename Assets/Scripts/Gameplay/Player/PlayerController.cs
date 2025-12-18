@@ -164,6 +164,16 @@ public class PlayerController : NetworkBehaviour
     void OnBackpackStateChanged(FreezeEvent e)
     {
         isBackpackOpen = e.isOpen;
+        if (isBackpackOpen)
+        {
+            // 停止移动
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector3.zero;
+            }
+            // 停止动画
+            UpdateAnimation(0f);
+        }
     }
 
     /* 更新动画状态和朝向 */
