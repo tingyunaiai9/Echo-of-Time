@@ -46,6 +46,18 @@ public class Clue : Interaction
             {
                 ClueBoard.AddClueEntry(TimelinePlayer.Local.timeline, ImageUtils.CompressSpriteToJpegBytes(clueImage, 80), SharedClueType.Image);
             }
+            else if (clueText == "对照表")
+            {
+                EventBus.LocalPublish(new ClueDiscoveredEvent
+                {
+                    playerNetId = pid,
+                    clueId = gameObject.name,
+                    clueText = clueText,
+                    clueDescription = clueDescription,
+                    icon = clueIcon,
+                    image = clueImage
+                });
+            }
             else
             {
                 EventBus.LocalPublish(new ClueDiscoveredEvent
