@@ -2909,8 +2909,12 @@ PrefabInstance:
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 5627921096561003496, guid: a20b80bcca5039c4cbbbd7ed5b4a3634, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 835.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5627921096561003496, guid: a20b80bcca5039c4cbbbd7ed5b4a3634, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -200
+      value: -183.6
       objectReference: {fileID: 0}
     - target: {fileID: 8166014050741585361, guid: a20b80bcca5039c4cbbbd7ed5b4a3634, type: 3}
       propertyPath: m_Pivot.x
