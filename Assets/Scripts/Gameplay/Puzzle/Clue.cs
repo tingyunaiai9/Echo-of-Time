@@ -38,15 +38,27 @@ public class Clue : Interaction
         {
             discovered = true;
 
-            EventBus.LocalPublish(new ClueDiscoveredEvent
+            if (clueText == "应揭之天干")
             {
-                playerNetId = pid,
-                clueId = gameObject.name,
-                clueText = clueText,
-                clueDescription = clueDescription,
-                icon = clueIcon,
-                image = clueImage
-            });
+                ClueBoard.AddClueEntry(TimelinePlayer.Local.timeline, clueDescription, SharedClueType.Text);
+            }
+            else if (clueText == "罗盘")
+            {
+                ClueBoard.AddClueEntry(TimelinePlayer.Local.timeline, ImageUtils.CompressSpriteToJpegBytes(clueImage, 80), SharedClueType.Image);
+            }
+            else
+            {
+                EventBus.LocalPublish(new ClueDiscoveredEvent
+                {
+                    isKeyClue = true,
+                    playerNetId = pid,
+                    clueId = gameObject.name,
+                    clueText = clueText,
+                    clueDescription = clueDescription,
+                    icon = clueIcon,
+                    image = clueImage
+                });
+            }
         }
 
         // 查找并显示 ClueCanvas
@@ -56,13 +68,6 @@ public class Clue : Interaction
         if (canvas != null)
         {
             canvas.ShowClue(clueImage, clueDescription);
-            
-            Sprite sprite = clueImage;
-            int timeline = TimelinePlayer.Local.timeline;
-            // 压缩图片，避免过大
-            byte[] spriteBytes = ImageUtils.CompressSpriteToJpegBytes(sprite, 80);
-            Debug.Log($"[UIManager] 线索图片压缩成功，大小：{spriteBytes.Length} 字节");
-            ClueBoard.AddClueEntry(timeline, spriteBytes);
         }
         else
         {
