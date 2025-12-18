@@ -1391,10 +1391,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogPanel
   chatMessagePrefab: {fileID: 1568691845952435987, guid: fadf74954cb214fac850b0902b404f97, type: 3}
+  firstChatMessagePrefab: {fileID: 251147701}
   chatImagePrefab: {fileID: 2541347803609357501, guid: e30d28c4cb92b734a8953a1e5b0c0308, type: 3}
-  chatContent: {fileID: 0}
-  inputField: {fileID: 0}
-  sendButton: {fileID: 0}
+  chatContent: {fileID: 378136887}
+  inputField: {fileID: 1583208594}
   avatarSprites:
   - {fileID: 21300000, guid: 32b53850aa4f648c3b9228ca7402c061, type: 3}
   - {fileID: 21300000, guid: 65ab37b7f1869482d97b31f1a3f8dfd2, type: 3}
@@ -1906,7 +1906,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3394063723965525264, guid: fadf74954cb214fac850b0902b404f97, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -38.42
+      value: -52.625
       objectReference: {fileID: 0}
     - target: {fileID: 4342435886203820752, guid: fadf74954cb214fac850b0902b404f97, type: 3}
       propertyPath: m_Sprite
@@ -1994,7 +1994,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7431000603917348852, guid: fadf74954cb214fac850b0902b404f97, type: 3}
       propertyPath: m_text
-      value: "\u4E07\u8C61\u7EB7\u7EAD\u7686\u662F\u5E7B\uFF0C\u771F\u5BB9\u5F85\u6211\u7B14\u4E2D\u73B0\u3002\\n\u5343\u8A00\u4E07\u8BED\u7686\u7A7A\u5984\uFF0C\u771F\u8A00\u552F\u6211\u4E3A\u4E16\u8BE0\u3002"
+      value: "\u5343\u8A00\u4E07\u8BED\u7686\u7A7A\u5984\uFF0C\u771F\u8A00\u552F\u6211\u4E3A\u4E16\u8BE0\u3002\\n\u4E07\u8C61\u7EB7\u7EAD\u7686\u662F\u5E7B\uFF0C\u771F\u5BB9\u5F85\u6211\u7B14\u4E2D\u73B0\u3002\\n\u6B32\u5C06\u5FC3\u8BED\u5316\u661F\u6587\uFF0C\u6697\u5BC4\u8367\u5C4F\u65E0\u5B57\u75D5\u3002"
       objectReference: {fileID: 0}
     - target: {fileID: 8310244620704353677, guid: fadf74954cb214fac850b0902b404f97, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2020,6 +2020,11 @@ PrefabInstance:
 --- !u!224 &251147700 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6375382068956985317, guid: fadf74954cb214fac850b0902b404f97, type: 3}
+  m_PrefabInstance: {fileID: 251147699}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &251147701 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1568691845952435987, guid: fadf74954cb214fac850b0902b404f97, type: 3}
   m_PrefabInstance: {fileID: 251147699}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &255870193

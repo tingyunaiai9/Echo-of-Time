@@ -60,7 +60,7 @@ public class TimelinePlayer : NetworkBehaviour
         // 仅在本地玩家上重置本地UI（提交按钮从“正确！”恢复为“提交”）
         if (isLocalPlayer)
         {
-            DialogPanel.Reset();
+            DialogPanel.ResetMessage();
             KeyPanel.Reset();
             ResultPanel.Reset();
             ClueBoard.Reset();
