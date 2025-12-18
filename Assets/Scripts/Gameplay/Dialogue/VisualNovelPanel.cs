@@ -54,7 +54,7 @@ public class VisualNovelPanel : MonoBehaviour
     private void OnStartDialogue(StartDialogueEvent evt)
     {
         Debug.Log("OnStartDialogue() - 已收到开始剧情事件！");
-        EventBus.LocalPublish(new FreezeEvent {isOpen = true}); // 暂停游戏
+        UIManager.Instance?.SetFrozen(true); // 暂停游戏
         StartDialogue(evt.data);
     }
 
@@ -198,8 +198,8 @@ public class VisualNovelPanel : MonoBehaviour
     {
         panelRoot.SetActive(false);
         Debug.Log("剧情结束");
-        // 这里可以发送一个剧情结束事件，恢复玩家控制
-        EventBus.LocalPublish(new FreezeEvent {isOpen = false});
+        // 这里可以恢复玩家控制
+        UIManager.Instance?.SetFrozen(false);
         EventBus.LocalPublish(new DialogueEndEvent());
     }
 }

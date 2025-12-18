@@ -63,7 +63,7 @@ public class TimelinePlayer : NetworkBehaviour
             DialogPanel.ResetMessage();
             KeyPanel.Reset();
             ResultPanel.Reset();
-            ClueBoard.Reset();
+            // ClueBoard.Reset();
             SceneDirector.Instance?.TryLoadTimelineNow();
             UIManager.Instance?.CloseDiary();
 
