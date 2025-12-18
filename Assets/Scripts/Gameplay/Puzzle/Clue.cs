@@ -38,16 +38,23 @@ public class Clue : Interaction
         {
             discovered = true;
 
-            EventBus.LocalPublish(new ClueDiscoveredEvent
+            if (clueText == "应揭之天干")
             {
-                isKeyClue = true,
-                playerNetId = pid,
-                clueId = gameObject.name,
-                clueText = clueText,
-                clueDescription = clueDescription,
-                icon = clueIcon,
-                image = clueImage
-            });
+                ClueBoard.AddClueEntry(TimelinePlayer.Local.timeline, clueDescription, SharedClueType.Text);
+            }
+            else
+            {
+                EventBus.LocalPublish(new ClueDiscoveredEvent
+                {
+                    isKeyClue = true,
+                    playerNetId = pid,
+                    clueId = gameObject.name,
+                    clueText = clueText,
+                    clueDescription = clueDescription,
+                    icon = clueIcon,
+                    image = clueImage
+                });
+            }
         }
 
         // 查找并显示 ClueCanvas

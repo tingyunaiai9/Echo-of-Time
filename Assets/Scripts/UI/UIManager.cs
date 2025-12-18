@@ -190,16 +190,23 @@ public class UIManager : Singleton<UIManager>
             }
         }
         // 添加测试线索条目 (Minus键)
-        if (Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadMinus))
+        if (Input.GetKeyDown(KeyCode.Minus) && Input.GetKey(KeyCode.LeftShift))
         {
-            Debug.Log("[UIManager] Minus键按下，添加测试线索条目。");
+            Debug.Log("[UIManager] Shift + Minus键按下，添加测试文字共享线索条目。");
+            int timeline = TimelinePlayer.Local.timeline;
+            string clueText = "未斫之木，天干有七：东园之树，枝条载荣；生于子半，丑时初萌；桃蕊未绽，茂然至辰。飞影又逝，晌午归土。";
+            ClueBoard.AddClueEntry(timeline, clueText, SharedClueType.Text);
+        }
+        else if (Input.GetKeyDown(KeyCode.Minus))
+        {
+            Debug.Log("[UIManager] Minus键按下，添加测试图片共享线索条目。");
             
             Sprite sprite = Resources.Load<Sprite>("Clue_Poem1");
             int timeline = TimelinePlayer.Local.timeline;
             // 压缩图片，避免过大
             byte[] spriteBytes = ImageUtils.CompressSpriteToJpegBytes(sprite, 80);
             Debug.Log($"[UIManager] 线索图片压缩成功，大小：{spriteBytes.Length} 字节");
-            ClueBoard.AddClueEntry(timeline, spriteBytes);
+            ClueBoard.AddClueEntry(timeline, spriteBytes, SharedClueType.Image);
         }
     }
 

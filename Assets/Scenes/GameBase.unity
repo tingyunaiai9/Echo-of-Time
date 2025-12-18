@@ -1620,7 +1620,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77a1946da1e4a4068972024b7485178d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ClueBoard
-  Note: {fileID: 2122175214602278487, guid: cbc7ec02be12447ff9b23e94e5652cd9, type: 3}
+  Note_Image: {fileID: 2122175214602278487, guid: cbc7ec02be12447ff9b23e94e5652cd9, type: 3}
+  Note_Text: {fileID: 2122175214602278487, guid: 68db4bbcfe43f429894bae208a73a4d6, type: 3}
   contentParent: {fileID: 213636548}
 --- !u!114 &213636546
 MonoBehaviour:
@@ -5540,7 +5541,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &938964671
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5556,9 +5557,9 @@ RectTransform:
   - {fileID: 1593173667}
   m_Father: {fileID: 1544016791}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 250, y: -300}
   m_SizeDelta: {x: 400, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &947051967
@@ -8561,7 +8562,7 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 50
-  m_ChildAlignment: 4
+  m_ChildAlignment: 1
   m_Spacing: 0
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
