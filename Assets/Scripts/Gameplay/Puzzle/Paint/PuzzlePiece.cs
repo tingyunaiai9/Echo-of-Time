@@ -24,7 +24,7 @@ public class PuzzlePiece : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
     private Canvas canvas;
-    private PuzzleManager puzzleManager;
+    private PaintManager puzzleManager;
     private Paint2PuzzleController paint2Manager;
     private bool isPlaced = false;
     private Vector2 originalPosition; // 记录初始位置
@@ -36,7 +36,7 @@ public class PuzzlePiece : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         rectTransform = GetComponent<RectTransform>();
         canvasGroup = GetComponent<CanvasGroup>();
         canvas = GetComponentInParent<Canvas>();
-        puzzleManager = GetComponentInParent<PuzzleManager>();
+        puzzleManager = GetComponentInParent<PaintManager>();
         paint2Manager = GetComponentInParent<Paint2PuzzleController>();
         
         originalPosition = rectTransform.anchoredPosition;

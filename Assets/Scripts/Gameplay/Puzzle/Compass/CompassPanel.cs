@@ -6,12 +6,17 @@ using TMPro;
 using Game.Gameplay.Puzzle.Paint2;
 using Events;
 
-public class CompassPanel : MonoBehaviour, IPointerClickHandler
+public class CompassPanel : Puzzle, IPointerClickHandler
 {
-    [Header("配置")]
+    [Header("图像配置")]
     [Tooltip("外圈图像对象")]
     public RectTransform OuterImage;
-
+    [Tooltip("内圈图像对象（自动查找）")]
+    public RectTransform InnerImage;
+    [Tooltip("结果图像对象")]
+    public RectTransform ResultImage;
+    
+    [Header("圆环参数")]
     [Tooltip("圆环内半径")]
     public float innerRadius = 220f;
 
@@ -27,11 +32,6 @@ public class CompassPanel : MonoBehaviour, IPointerClickHandler
     private RectTransform panelTransform;
     private Canvas canvas;
 
-    // 新增成员：InnerImage 与 Outline 引用
-    [Tooltip("内圈图像对象（自动查找）")]
-    public RectTransform InnerImage;
-    [Tooltip("结果图像对象")]
-    public RectTransform ResultImage;
     private Outline outerOutline;
     private Outline innerOutline;
     private bool outerOutlineOriginalEnabled;
@@ -51,7 +51,7 @@ public class CompassPanel : MonoBehaviour, IPointerClickHandler
     private Coroutine flashCoroutine;
     private bool isPuzzleCompleted = false; // 标记谜题是否已完成
 
-    void Awake()
+    public void Awake()
     {
         panelTransform = GetComponent<RectTransform>();
         canvas = GetComponentInParent<Canvas>();
@@ -108,14 +108,6 @@ public class CompassPanel : MonoBehaviour, IPointerClickHandler
         }
     }
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            OnPuzzleCompleted();
-            Debug.Log("[CompassPanel] 按下 P 键，触发谜题完成效果");
-        }
-    }
     public void OnPointerClick(PointerEventData eventData)
     {
         if (InnerImage == null)
@@ -207,7 +199,7 @@ public class CompassPanel : MonoBehaviour, IPointerClickHandler
     }
 
     // 当步骤完成或方向错误时调用
-    // success 为 true 时显示绿色并前进到下一步骤；为 false 时显示红色并重置当前步骤进度
+    // success 为 true 时显示绿色并前进到下一步骤；为 false 时显示红色并重置所有步骤进度
     private void OnCorrectRotation(bool success)
     {
         // 取消已有闪烁协程，避免颜色冲突
@@ -247,7 +239,8 @@ public class CompassPanel : MonoBehaviour, IPointerClickHandler
         else
         {
             flashCoroutine = StartCoroutine(FlashOutlines(Color.red, 0.5f));
-            Debug.Log("[PaintPanel] 方向错误，已闪红并重置当前步骤进度");
+            ResetPuzzle();
+            Debug.Log("[PaintPanel] 方向错误，已闪红并重置所有步骤进度");
         }
     }
 
@@ -300,7 +293,7 @@ public class CompassPanel : MonoBehaviour, IPointerClickHandler
         flashCoroutine = null;
     }
 
-    private void OnPuzzleCompleted()
+    public override void OnPuzzleCompleted()
     {
         // 确保 InnerImage 和 OuterImage 存在
         if (InnerImage != null)
@@ -374,13 +367,13 @@ public class CompassPanel : MonoBehaviour, IPointerClickHandler
     }
 
     /* 重置旋转状态，清空计数并重置所有数字显示 */
-    public void ResetRotation()
+    public void ResetPuzzle()
     {
         // 重置当前步骤索引
         stepIndex = 0;
         stepProgress = 0;
         isPuzzleCompleted = false; // 重置完成标志
-
+    
         // 重置所有数字文本为 "?"
         for (int i = 0; i < digitTexts.Length; i++)
         {
@@ -389,7 +382,44 @@ public class CompassPanel : MonoBehaviour, IPointerClickHandler
                 digitTexts[i].text = "?";
             }
         }
-
-        Debug.Log("CompassPanel: 旋转状态已重置");
-    }
-}
+    
+        // 激活 InnerImage 和 OuterImage，取消激活 ResultImage
+        if (InnerImage != null)
+        {
+            InnerImage.gameObject.SetActive(true);
+            // 重置 InnerImage 的透明度
+            CanvasGroup innerCanvasGroup = InnerImage.GetComponent<CanvasGroup>();
+            if (innerCanvasGroup != null)
+            {
+                innerCanvasGroup.alpha = 1f;
+            }
+            // 重置 InnerImage 的旋转
+            InnerImage.localEulerAngles = Vector3.zero;
+        }
+    
+        if (OuterImage != null)
+        {
+            OuterImage.gameObject.SetActive(true);
+            // 重置 OuterImage 的透明度
+            CanvasGroup outerCanvasGroup = OuterImage.GetComponent<CanvasGroup>();
+            if (outerCanvasGroup != null)
+            {
+                outerCanvasGroup.alpha = 1f;
+            }
+            // 重置 OuterImage 的旋转
+            OuterImage.localEulerAngles = Vector3.zero;
+        }
+    
+        if (ResultImage != null)
+        {
+            ResultImage.gameObject.SetActive(false);
+            // 重置 ResultImage 的透明度（以备下次使用）
+            CanvasGroup resultCanvasGroup = ResultImage.GetComponent<CanvasGroup>();
+            if (resultCanvasGroup != null)
+            {
+                resultCanvasGroup.alpha = 0f;
+            }
+        }
+    
+        Debug.Log("[CompassPanel] 旋转状态、图像激活状态和旋转角度已重置");
+    }}

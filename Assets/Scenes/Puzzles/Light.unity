@@ -502,7 +502,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &390851724
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2295,8 +2295,8 @@ MonoBehaviour:
   PanelRoot: {fileID: 0}
   MirrorSlotPrefab: {fileID: 1904580698853253649, guid: fe2f7a01e41194ed2bc2fc61187141b0, type: 3}
   mirrorSlots:
-  - xindex: 1
-    yindex: 1
+  - xindex: 10
+    yindex: 2
     direction: 1
   - xindex: 3
     yindex: 1

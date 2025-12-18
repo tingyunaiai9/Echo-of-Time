@@ -1,10 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Events;
+using UnityEngine.InputSystem;
 
 public class KeyPanel : MonoBehaviour
 {
     [Tooltip("重要线索图片")]
+    public GameObject KeyImageContainer;
     public Image KeyImage;
     private static KeyPanel s_instance;
     [Header("DetailBar 大图查看")]
@@ -31,12 +33,8 @@ public class KeyPanel : MonoBehaviour
         if (e.isKeyClue && e.image != null)
         {
             KeyImage.sprite = e.image;
-            
-            // 设置透明度为完全不透明
-            Color color = KeyImage.color;
-            color.a = 1f;
-            KeyImage.color = color;
-            
+            KeyImageContainer.SetActive(true);
+                        
             // 设置宽度为 400pt，高度根据原始比例计算
             float targetWidth = 400f;
             float aspectRatio = (float)e.image.texture.height / e.image.texture.width;
@@ -71,6 +69,8 @@ public class KeyPanel : MonoBehaviour
             Color color = s_instance.KeyImage.color;
             color.a = 0f;
             s_instance.KeyImage.color = color;
+            s_instance.KeyImageContainer.SetActive(false);
+            Debug.Log("[KeyPanel.Reset] 关键线索面板已重置");
         }
     }
 }

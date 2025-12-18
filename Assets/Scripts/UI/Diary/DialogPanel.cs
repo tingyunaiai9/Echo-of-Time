@@ -22,21 +22,19 @@ using System.Net.Http;
 
 public class DialogPanel : MonoBehaviour
 {
-    [Tooltip("聊天消息预制体（包含MessageText和TypeText两个子对象）")]
+    [Header("聊天区域组件引用")]
+    [Tooltip("聊天消息预制体")]
     public GameObject chatMessagePrefab;
-
+    [Tooltip("第一条聊天消息预制体")]
+    public GameObject firstChatMessagePrefab;
     [Tooltip("聊天图片预制体")]
     public GameObject chatImagePrefab;
-
     [Tooltip("聊天消息容器（Vertical Layout Group）")]
     public Transform chatContent;
 
+    [Header("输入区域组件引用")]
     [Tooltip("输入框组件")]
     public TMP_InputField inputField;
-
-    [Tooltip("发送按钮")]
-    public Button sendButton;
-
     [Tooltip("不同时间线头像图片")]
     public Sprite[] avatarSprites = new Sprite[3]; // 不同时间线的头像图片
     [Tooltip("默认头像图片")]
@@ -68,23 +66,51 @@ public class DialogPanel : MonoBehaviour
             chatContent = transform.Find("LeftPanel/ChatPanel/ChatScrollView/Viewport/Content");
         if (inputField == null)
             inputField = transform.Find("LeftPanel/InputPanel/InputField").GetComponent<TMP_InputField>();
-        if (sendButton == null)
-            sendButton = transform.Find("LeftPanel/InputPanel/SendButton").GetComponent<Button>();
         
-        // 绑定按钮事件
-        sendButton.onClick.AddListener(OnSendButtonClicked);
-
         EventBus.Subscribe<ChatMessageUpdatedEvent>(OnChatMessageUpdated);
         EventBus.Subscribe<ChatImageUpdatedEvent>(OnChatImageUpdated);
-        //EventBus.Subscribe<AnswerCorrectEvent>(OnReceiveAnswerCorrectEvent);
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+        {
+            OnSendButtonClicked();
+        }
+    }
+
+    void OnEnable()
+    {
+        Debug.Log("[DialogPanel] 日记对话面板已初始化并启用");
+        if (firstChatMessagePrefab != null && chatContent != null)
+        {
+            // 添加第一条欢迎消息
+            Transform messageTextTransform = firstChatMessagePrefab.transform.Find("MessageText");
+            TMP_Text messageText = messageTextTransform.GetComponent<TMP_Text>();
+            if (TimelinePlayer.Local != null)
+            {
+                int timeline = TimelinePlayer.Local.timeline;
+                switch (timeline)
+                {
+                    case 0:
+                        messageText.text = "千言万语皆空妄，真言唯我为世诠。";
+                        break;
+                    case 1:
+                        messageText.text = "万象纷纭皆是幻，真容待我笔中现。";
+                        break;
+                    case 2:
+                        messageText.text = "欲将心语化星文，暗寄荧屏无字痕。";
+                        break;
+                    default:
+                        messageText.text = "欢迎来到桃花源";
+                        break;
+                }
+            } 
+        }
     }
 
     void OnDestroy()
     {
-        if (sendButton != null)
-        {
-            sendButton.onClick.RemoveListener(OnSendButtonClicked);
-        }
         EventBus.Unsubscribe<ChatMessageUpdatedEvent>(OnChatMessageUpdated);
         EventBus.Unsubscribe<ChatImageUpdatedEvent>(OnChatImageUpdated);
         //EventBus.Unsubscribe<AnswerCorrectEvent>(OnReceiveAnswerCorrectEvent);
@@ -103,7 +129,7 @@ public class DialogPanel : MonoBehaviour
     }
     
     /* 发送按钮点击事件 */
-    private void OnSendButtonClicked()
+    public void OnSendButtonClicked()
     {
         Debug.Log("[DialogPanel] 发送按钮被点击");
         if (inputField == null || string.IsNullOrWhiteSpace(inputField.text))
@@ -589,22 +615,23 @@ public class DialogPanel : MonoBehaviour
         newImageMessage.transform.SetAsLastSibling();
     }
 
-    public static void Reset()
+    public static void ResetMessage()
     {
         if (s_instance != null)
         {
-            // 清空聊天内容
-            foreach (Transform child in s_instance.chatContent)
+            // 清空聊天内容，但保留第一条消息
+            int childCount = s_instance.chatContent.childCount;
+            for (int i = childCount - 1; i >= 1; i--) // 从最后一个开始，保留索引0（第一条消息）
             {
-                Destroy(child.gameObject);
+                Destroy(s_instance.chatContent.GetChild(i).gameObject);
             }
+            
             s_instance.currentStreamingText = null;
             s_instance.currentStreamingMessageGO = null;
             s_instance.streamQueue.Clear();
             s_instance.isStreaming = false;
         }
     }
-
     /* 根据 timeline 获取时间线名称 */
     private string GetTimelineName(int timeline)
     {
