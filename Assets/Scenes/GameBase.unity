@@ -7519,7 +7519,7 @@ MonoBehaviour:
   notificationPanel: {fileID: 1403563508}
   notificationText: {fileID: 1067849788}
   canvasGroup: {fileID: 1403563513}
-  startPosition: {x: 0, y: -500}
+  startPosition: {x: -600, y: 269.9498}
   targetPosition: {x: -464.5, y: 269.9498}
   slideDuration: 0.5
   stayDuration: 2
