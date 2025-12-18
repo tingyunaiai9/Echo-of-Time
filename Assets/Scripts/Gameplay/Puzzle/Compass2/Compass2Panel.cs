@@ -122,36 +122,48 @@ public class Compass2Panel : Puzzle, IPointerClickHandler
             image = OuterImage.GetComponent<Image>()?.sprite
         });
     
-        // 添加绿色透明遮罩
-        AddGreenOverlay(InnerImage);
-        AddGreenOverlay(MiddleImage);
-        AddGreenOverlay(OuterImage);
+        // 添加绿色透明遮罩，并在动画完成后激活 EndSceneIntro
+        int completedCount = 0;
+        int totalCount = 3;
 
-
-        // 查找名为 "EndSceneIntro" 的物体并激活
-        var intros = Resources.FindObjectsOfTypeAll<SceneIntro>();
-        foreach (var intro in intros)
+        System.Action onOverlayComplete = () =>
         {
-            if (intro.gameObject.scene.IsValid() && intro.gameObject.name == "EndSceneIntro")
+            completedCount++;
+            if (completedCount >= totalCount)
             {
-                Debug.Log("[Compass2Panel] 找到 EndSceneIntro，正在激活...");
-                intro.gameObject.SetActive(true);
-                break;
+                // 所有遮罩动画播放完毕后，激活 EndSceneIntro
+                var intros = Resources.FindObjectsOfTypeAll<SceneIntro>();
+                foreach (var intro in intros)
+                {
+                    if (intro.gameObject.scene.IsValid() && intro.gameObject.name == "EndSceneIntro")
+                    {
+                        Debug.Log("[Compass2Panel] 所有遮罩动画完成，找到 EndSceneIntro，正在激活...");
+                        intro.gameObject.SetActive(true);
+                        break;
+                    }
+                }
+
+                // 自动退出谜题场景
+                if (PuzzleOverlayManager.Instance != null)
+                {
+                    PuzzleOverlayManager.Instance.ClosePuzzle();
+                }
             }
-        }
+        };
 
-        // 自动退出谜题场景
-        if (PuzzleOverlayManager.Instance != null)
-        {
-            PuzzleOverlayManager.Instance.ClosePuzzle();
-        }
-
+        AddGreenOverlay(InnerImage, onOverlayComplete);
+        AddGreenOverlay(MiddleImage, onOverlayComplete);
+        AddGreenOverlay(OuterImage, onOverlayComplete);
     }
     
     // 为指定的图像添加绿色透明遮罩
-    private void AddGreenOverlay(RectTransform image)
+    private void AddGreenOverlay(RectTransform image, System.Action onComplete)
     {
-        if (image == null) return;
+        if (image == null)
+        {
+            onComplete?.Invoke();
+            return;
+        }
     
         // 获取或添加 CanvasGroup 组件
         CanvasGroup canvasGroup = image.GetComponent<CanvasGroup>();
@@ -178,6 +190,8 @@ public class Compass2Panel : Puzzle, IPointerClickHandler
             {
                 // 动画结束后移除遮罩
                 Destroy(overlay);
+                // 通知动画完成
+                onComplete?.Invoke();
             });
         });
     }
