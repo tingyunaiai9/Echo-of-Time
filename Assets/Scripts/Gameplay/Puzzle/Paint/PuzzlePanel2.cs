@@ -23,7 +23,7 @@ public class PuzzlePanel2 : MonoBehaviour
             s_isOpen = true;
             
             // 初始冻结玩家
-            EventBus.LocalPublish(new FreezeEvent { isOpen = true });
+            UIManager.Instance?.SetFrozen(true);
             
             Debug.Log("拼画面板已初始化为开启状态");
         }
@@ -32,7 +32,7 @@ public class PuzzlePanel2 : MonoBehaviour
     void OnDestroy() 
     {
         // 销毁时解冻玩家
-        EventBus.LocalPublish(new FreezeEvent { isOpen = false });
+        UIManager.Instance?.SetFrozen(false);
 
         if (s_instance == this)
         {
@@ -48,8 +48,8 @@ public class PuzzlePanel2 : MonoBehaviour
         s_isOpen = !s_isOpen;
         s_instance.puzzlePanel.SetActive(s_isOpen);
 
-        // 发布冻结事件，背包打开时禁用玩家移动
-        EventBus.LocalPublish(new FreezeEvent { isOpen = s_isOpen });
+        // 更新冻结状态
+        UIManager.Instance?.SetFrozen(s_isOpen);
 
         Debug.Log($"拼画面板: {(s_isOpen ? "打开" : "关闭")}");
     }

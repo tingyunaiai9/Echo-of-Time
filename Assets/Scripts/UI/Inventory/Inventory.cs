@@ -304,7 +304,7 @@ public abstract class Inventory : MonoBehaviour
             s_isOpen = false;
 
             // 发送事件解冻玩家
-            EventBus.LocalPublish(new FreezeEvent { isOpen = false });
+            UIManager.Instance?.SetFrozen(false);
 
             Debug.Log("[Inventory] 点击退出按钮，关闭背包");
         }
