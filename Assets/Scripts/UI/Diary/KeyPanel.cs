@@ -68,9 +68,6 @@ public class KeyPanel : MonoBehaviour
         if (s_instance != null)
         {
             s_instance.KeyImage.sprite = null;
-            Color color = s_instance.KeyImage.color;
-            color.a = 0f;
-            s_instance.KeyImage.color = color;
             s_instance.KeyImageContainer.SetActive(false);
             Debug.Log("[KeyPanel.Reset] 关键线索面板已重置");
         }
