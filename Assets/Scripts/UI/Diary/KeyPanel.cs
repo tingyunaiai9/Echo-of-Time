@@ -5,13 +5,15 @@ using UnityEngine.InputSystem;
 
 public class KeyPanel : MonoBehaviour
 {
-    [Tooltip("重要线索图片")]
+    [Header("重要线索图片显示")]
+    [Tooltip("重要线索图片容器")]
     public GameObject KeyImageContainer;
+    [Tooltip("重要线索图片")]
     public Image KeyImage;
     private static KeyPanel s_instance;
     [Header("DetailBar 大图查看")]
-    [SerializeField] GameObject imageViewer;       // 弹出层/大图面板
-    [SerializeField] Image imageViewerImage;       // 用于显示大图的 Image
+    [SerializeField] GameObject imageViewer;      
+    [SerializeField] Image imageViewerImage;      
 
     void Awake()
     {
