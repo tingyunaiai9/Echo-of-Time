@@ -2909,6 +2909,10 @@ PrefabInstance:
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 5627921096561003496, guid: a20b80bcca5039c4cbbbd7ed5b4a3634, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 5627921096561003496, guid: a20b80bcca5039c4cbbbd7ed5b4a3634, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 835.8
       objectReference: {fileID: 0}
