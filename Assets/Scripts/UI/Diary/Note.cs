@@ -42,6 +42,8 @@ public class Note : MonoBehaviour
             Debug.LogError("[Note.OnClickViewImage] 无法找到 ClueImagePanel");
             return;
         }
+
+        
     
         // 激活 ClueImagePanel
         clueImagePanel.gameObject.SetActive(true);
