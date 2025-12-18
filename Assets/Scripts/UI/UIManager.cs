@@ -16,6 +16,9 @@ public class UIManager : Singleton<UIManager>
     [Tooltip("主 UI 画布（包含日记按钮等常驻 UI），用于在谜题中隐藏")]
     public Canvas mainCanvas;
 
+    [Tooltip("当前是否有UI面板打开")]
+    public bool UIFrozen = false;
+
     protected override void Awake()
     {
         base.Awake();
@@ -58,10 +61,21 @@ public class UIManager : Singleton<UIManager>
         TestUI();
     }
 
-    // 供UI组件调用以触发冻结事件
-    public void EmitFreezeEvent(bool isOpen)
+    // 统一设置冻结状态，替代 FreezeEvent 发布
+    public void SetFrozen(bool isOpen)
     {
-        EventBus.LocalPublish(new FreezeEvent { isOpen = isOpen });
+        if (UIFrozen == isOpen) return;
+        UIFrozen = isOpen;
+        Debug.Log($"[UIManager] UIFrozen -> {UIFrozen}");
+    }
+
+    // 根据当前面板状态刷新冻结标记
+    private void RefreshFrozenState()
+    {
+        bool anyOpen = (DiaryPanel != null && DiaryPanel.activeSelf)
+                        || (InventoryPanel != null && InventoryPanel.activeSelf)
+                        || (TipPanel != null && TipPanel.activeSelf);
+        SetFrozen(anyOpen);
     }
 
     /// <summary>
@@ -98,7 +112,7 @@ public class UIManager : Singleton<UIManager>
         if (DiaryPanel != null && DiaryPanel.activeSelf)
         {
             DiaryPanel.SetActive(false);
-            EventBus.LocalPublish(new FreezeEvent { isOpen = false });
+            RefreshFrozenState();
             Debug.Log("[UIManager] CloseDiary called.");
         }
     }
@@ -122,7 +136,7 @@ public class UIManager : Singleton<UIManager>
                     InventoryPanel.SetActive(false);
                 }
             }
-            EventBus.LocalPublish(new FreezeEvent { isOpen = InventoryPanel.activeSelf });
+            RefreshFrozenState();
             Debug.Log("[UIManager] B键按下，切换背包。");
         }
 
@@ -134,7 +148,7 @@ public class UIManager : Singleton<UIManager>
                 bool isActive = DiaryPanel.activeSelf;
                 DiaryPanel.SetActive(!isActive);
             }
-            EventBus.LocalPublish(new FreezeEvent { isOpen = DiaryPanel.activeSelf });
+            RefreshFrozenState();
             Debug.Log("[UIManager] F1键按下，切换日记页面。");
         }
 
@@ -146,7 +160,7 @@ public class UIManager : Singleton<UIManager>
                 bool isActive = TipPanel.activeSelf;
                 TipPanel.SetActive(!isActive);
             }
-            EventBus.LocalPublish(new FreezeEvent { isOpen = TipPanel.activeSelf });
+            RefreshFrozenState();
             Debug.Log("[UIManager] H键按下，切换指南页面。");
         }
     }
