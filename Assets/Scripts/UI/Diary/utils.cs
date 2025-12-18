@@ -16,14 +16,18 @@ public static class ImageUtils
         Rect rect = sprite.rect;
         Texture2D tex = new Texture2D((int)rect.width, (int)rect.height, TextureFormat.RGB24, false);
 
-        Color[] pixels = srcTex.GetPixels(
-            Mathf.RoundToInt(rect.x),
-            Mathf.RoundToInt(rect.y),
-            Mathf.RoundToInt(rect.width),
-            Mathf.RoundToInt(rect.height)
-        );
-        tex.SetPixels(pixels);
+        // 使用 RenderTexture 中转，解决 Texture 不可读的问题
+        RenderTexture tmp = RenderTexture.GetTemporary(srcTex.width, srcTex.height, 0);
+        Graphics.Blit(srcTex, tmp);
+        
+        RenderTexture prev = RenderTexture.active;
+        RenderTexture.active = tmp;
+
+        tex.ReadPixels(rect, 0, 0);
         tex.Apply();
+
+        RenderTexture.active = prev;
+        RenderTexture.ReleaseTemporary(tmp);
 
         byte[] jpgBytes = tex.EncodeToJPG(quality);
 
