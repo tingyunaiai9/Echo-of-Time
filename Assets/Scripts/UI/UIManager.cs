@@ -4,6 +4,7 @@ using Events; // 引入事件命名空间
 // UI管理器，协调所有UI系统的显示和交互
 public class UIManager : Singleton<UIManager>
 {
+    [Header("UI面板")]
     [Tooltip("日记界面游戏对象")]
     public GameObject DiaryPanel;
     [Tooltip("背包界面游戏对象")]
@@ -13,7 +14,15 @@ public class UIManager : Singleton<UIManager>
 
     [Tooltip("主 UI 画布（包含日记按钮等常驻 UI），用于在谜题中隐藏")]
     public Canvas mainCanvas;
+    [Header("HUD按钮")]
+    [Tooltip("日记按钮游戏对象")]
+    public GameObject DiaryButton;
+    [Tooltip("背包按钮游戏对象")]
+    public GameObject InventoryButton;
+    [Tooltip("指南按钮游戏对象")]
+    public GameObject TipButton;
 
+    [Header("状态标记")]
     [Tooltip("当前是否有UI面板打开")]
     public bool UIFrozen = false;
 
@@ -63,7 +72,33 @@ public class UIManager : Singleton<UIManager>
     {
         if (UIFrozen == isOpen) return;
         UIFrozen = isOpen;
+        
+        // 根据冻结状态启用/禁用 HUD 按钮
+        SetHUDButtonsInteractable(!isOpen);
+        
         Debug.Log($"[UIManager] UIFrozen -> {UIFrozen}");
+    }
+
+    // 设置 HUD 按钮的可交互状态
+    private void SetHUDButtonsInteractable(bool interactable)
+    {
+        if (DiaryButton != null)
+        {
+            var button = DiaryButton.GetComponent<UnityEngine.UI.Button>();
+            if (button != null) button.interactable = interactable;
+        }
+        
+        if (InventoryButton != null)
+        {
+            var button = InventoryButton.GetComponent<UnityEngine.UI.Button>();
+            if (button != null) button.interactable = interactable;
+        }
+        
+        if (TipButton != null)
+        {
+            var button = TipButton.GetComponent<UnityEngine.UI.Button>();
+            if (button != null) button.interactable = interactable;
+        }
     }
 
     // 根据当前面板状态刷新冻结标记

@@ -7819,6 +7819,9 @@ MonoBehaviour:
   InventoryPanel: {fileID: 255870193}
   TipPanel: {fileID: 534900696}
   mainCanvas: {fileID: 1829174780}
+  DiaryButton: {fileID: 1155842141}
+  InventoryButton: {fileID: 163052456}
+  TipButton: {fileID: 532785116}
   UIFrozen: 0
 --- !u!4 &1391008354
 Transform:
