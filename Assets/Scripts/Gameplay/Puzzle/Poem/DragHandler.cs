@@ -3,6 +3,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
+using UnityEditor.EditorTools;
 
 /*
  * 小纸条拖拽处理脚本
@@ -16,6 +17,8 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
     [Header("引用")]
     public TMP_Text poemText;
+    [Tooltip("文字颜色")]
+    public Color poemColor = Color.black;
 
     [Header("检测配置")]
     [Tooltip("最大检测距离（像素）")]
@@ -36,6 +39,7 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         canvasGroup = GetComponent<CanvasGroup>();
         canvas = GetComponentInParent<Canvas>();
         poemText = GetComponentInChildren<TMP_Text>();
+        poemText.color = poemColor;
         
         originalPosition = rectTransform.anchoredPosition;
         originalParent = transform.parent;

@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Game.UI;
+
 
 public class ClueCanvas : MonoBehaviour
 {
@@ -13,6 +15,8 @@ public class ClueCanvas : MonoBehaviour
 
     [Tooltip("包含所有内容的面板（用于控制显示/隐藏）")]
     public GameObject contentPanel;
+    [Tooltip("通知UI面板")]
+    public NotificationController notificationUI;
 
     private void Awake()
     {
@@ -23,7 +27,7 @@ public class ClueCanvas : MonoBehaviour
         }
     }
 
-    public void ShowClue(Sprite icon, string description)
+    public void ShowClue(string clueText, Sprite icon, string description)
     {
         if (contentPanel != null) 
             contentPanel.SetActive(true);
@@ -41,6 +45,29 @@ public class ClueCanvas : MonoBehaviour
         {
             clueDescriptionText.text = description;
             // 宽度固定，长度随文字伸缩通常由 ContentSizeFitter 组件在场景中配置
+        }
+
+        // 显示通知消息
+        if (notificationUI != null)
+        {
+            string notificationMessage = "";
+            if (clueText == "应揭之天干")
+            {
+                notificationMessage = "已获得线索\"应揭之天干\"并添加至日记共享线索栏";
+            }
+            else if (clueText == "罗盘")
+            {
+                notificationMessage = "已获得线索\"罗盘\"并添加至日记共享线索栏";
+            }
+            else if (clueText == "对照表")
+            {
+                notificationMessage = "已获得线索\"ASCII对照表\"并添加至背包线索栏";
+            }
+            else
+            {
+                notificationMessage = $"已获得线索\"{clueText}\"并添加至背包关键线索";
+            }
+            notificationUI.ShowNotification(notificationMessage);
         }
     }
 
