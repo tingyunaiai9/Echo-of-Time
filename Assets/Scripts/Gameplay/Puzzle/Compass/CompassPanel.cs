@@ -361,7 +361,7 @@ public class CompassPanel : Puzzle, IPointerClickHandler
             // 压缩图片，避免过大
             byte[] spriteBytes = ImageUtils.CompressSpriteToJpegBytes(sprite, 80);
             Debug.Log($"[UIManager] 线索图片压缩成功，大小：{spriteBytes.Length} 字节");
-            ClueBoard.AddClueEntry(timeline, spriteBytes);
+            ClueBoard.AddClueEntry(timeline, spriteBytes, SharedClueType.Image);
         }
 
     }

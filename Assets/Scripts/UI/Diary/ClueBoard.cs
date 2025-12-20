@@ -70,12 +70,6 @@ public class ClueBoard : MonoBehaviour
         Debug.Log("[ClueBoard] 收到线索共享事件，已添加新线索条目");
     }
 
-    // 兼容旧调用：默认图片类型
-    public static void AddClueEntry(int timeline, byte[] imageBytes, bool publish = true)
-    {
-        AddClueEntry(timeline, imageBytes, SharedClueType.Image, publish);
-    }
-
     // 图片/文本统一入口（byte[] 版本）
     public static void AddClueEntry(int timeline, byte[] data, SharedClueType clueType, bool publish = true)
     {
@@ -124,12 +118,7 @@ public class ClueBoard : MonoBehaviour
         }
     }
 
-    // 文本版本便捷入口
-    public static void AddClueEntry(int timeline, string text, bool publish = true)
-    {
-        AddClueEntry(timeline, text, SharedClueType.Text, publish);
-    }
-
+    // 文本入口
     public static void AddClueEntry(int timeline, string text, SharedClueType clueType, bool publish = true)
     {
         if (!EnsureInstance()) return;
@@ -268,16 +257,16 @@ public class ClueBoard : MonoBehaviour
                 switch (timeline)
                 {
                     case 0:
-                        dateTextComponent.text = "Ancient";
+                        dateTextComponent.text = "古代";
                         break;
                     case 1:
-                        dateTextComponent.text = "Modern";
+                        dateTextComponent.text = "民国";
                         break;
                     case 2:
-                        dateTextComponent.text = "Future";
+                        dateTextComponent.text = "未来";
                         break;
                     default:
-                        dateTextComponent.text = "Unknown";
+                        dateTextComponent.text = "未知";
                         break;
                 }
             }
@@ -299,16 +288,3 @@ public class ClueBoard : MonoBehaviour
     }
 }
 
-/* 线索条目数据结构 */
-[System.Serializable]
-public class ClueEntryData
-{
-    public string date;
-    public string content;
-
-    public ClueEntryData(string date, string content)
-    {
-        this.date = date;
-        this.content = content;
-    }
-}

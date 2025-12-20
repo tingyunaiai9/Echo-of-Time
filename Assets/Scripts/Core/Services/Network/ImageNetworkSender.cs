@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using System;
+using Events;
 
 public class ImageNetworkSender : NetworkBehaviour
 {
@@ -123,7 +124,7 @@ public class ImageNetworkSender : NetworkBehaviour
 
         if (imageType == "Clue")
         {
-            ClueBoard.AddClueEntry(timeline, fullImage, publish: false);
+            ClueBoard.AddClueEntry(timeline, fullImage, SharedClueType.Image, publish: false);
         }
         else
         {
