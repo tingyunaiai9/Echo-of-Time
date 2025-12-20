@@ -60,33 +60,34 @@ public class ClueBoard : MonoBehaviour
             return;
         }else if (e.imageData != null)
         {
-            AddClueEntry(e.timeline, e.imageData, false);
+            AddClueEntry(e.timeline, e.level, e.imageData, false);
         }
         else
         {
-            AddClueEntry(e.timeline, e.text, false);
+            AddClueEntry(e.timeline, e.level, e.text, false);
         }
 
         Debug.Log("[ClueBoard] 收到线索共享事件，已添加新线索条目");
     }
 
     // 图片入口
-    public static void AddClueEntry(int timeline, byte[] data, bool publish = true)
+    public static void AddClueEntry(int timeline, int level, byte[] data, bool publish = true)
     {
         if (!EnsureInstance()) return;
-        s_instance.CreateClueEntry(timeline, data);
+        s_instance.CreateClueEntry(timeline, level, data);
         if (publish)
         {
             // 使用 ImageNetworkSender 分块发送大图，避免 Mirror 消息过大
             if (ImageNetworkSender.LocalInstance != null)
             {
-                ImageNetworkSender.LocalInstance.SendImage(data, timeline, "Clue");
+                ImageNetworkSender.LocalInstance.SendImage(data, timeline, level, "Clue");
             }
             else
             {
                 EventBus.Publish(new ClueSharedEvent
                 {
                     timeline = timeline,
+                    level = level,
                     imageData = data,
                 });
             }
@@ -94,16 +95,17 @@ public class ClueBoard : MonoBehaviour
     }
 
     // 文本入口
-    public static void AddClueEntry(int timeline, string text, bool publish = true)
+    public static void AddClueEntry(int timeline, int level, string text, bool publish = true)
     {
         if (!EnsureInstance()) return;
 
-        s_instance.CreateClueEntry(timeline, text);
+        s_instance.CreateClueEntry(timeline, level, text);
         if (publish)
         {
             EventBus.Publish(new ClueSharedEvent
             {
                 timeline = timeline,
+                level = level,
                 text = text,
             });
         }
@@ -136,12 +138,12 @@ public class ClueBoard : MonoBehaviour
     }
     
     /* 创建单个线索条目 - 图片 */
-    private void CreateClueEntry(int timeline, byte[] imageBytes)
+    private void CreateClueEntry(int timeline, int level, byte[] imageBytes)
     {
         if (contentParent == null || Note_Image == null) return;
         
         GameObject newNote = Instantiate(Note_Image, contentParent);
-        ApplyCommonLayout(newNote, timeline);
+        ApplyCommonLayout(newNote, timeline, level);
 
         // 处理共享图片
         if (imageBytes != null && imageBytes.Length > 0)
@@ -191,12 +193,12 @@ public class ClueBoard : MonoBehaviour
     }
 
     /* 创建单个线索条目 - 文本 */
-    private void CreateClueEntry(int timeline, string textContent)
+    private void CreateClueEntry(int timeline, int level, string textContent)
     {
         if (contentParent == null || Note_Text == null) return;
 
         GameObject newNote = Instantiate(Note_Text, contentParent);
-        ApplyCommonLayout(newNote, timeline);
+        ApplyCommonLayout(newNote, timeline, level);
 
         // 设置正文文本（找到第一个非 DateText 的 TMP_Text）
         TMP_Text[] texts = newNote.GetComponentsInChildren<TMP_Text>();
@@ -211,7 +213,7 @@ public class ClueBoard : MonoBehaviour
     }
 
     // 公共布局逻辑：位置与日期标签
-    private void ApplyCommonLayout(GameObject noteGO, int timeline)
+    private void ApplyCommonLayout(GameObject noteGO, int timeline, int level)
     {
         // 设置便签位置
         RectTransform rectTransform = noteGO.GetComponent<RectTransform>();
@@ -241,6 +243,21 @@ public class ClueBoard : MonoBehaviour
                         break;
                     default:
                         dateTextComponent.text = "未知";
+                        break;
+                }
+                switch(level)
+                {
+                    case 1:
+                        dateTextComponent.text += " - 第一层";
+                        break;
+                    case 2:
+                        dateTextComponent.text += " - 第二层";
+                        break;
+                    case 3:
+                        dateTextComponent.text += " - 第三层";
+                        break;
+                    default:
+                        dateTextComponent.text += " - 未知章节";
                         break;
                 }
             }

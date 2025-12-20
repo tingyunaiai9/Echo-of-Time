@@ -41,11 +41,11 @@ public class Clue : Interaction
 
             if (clueText == "应揭之天干")
             {
-                ClueBoard.AddClueEntry(TimelinePlayer.Local.timeline, clueDescription);
+                ClueBoard.AddClueEntry(TimelinePlayer.Local.timeline, TimelinePlayer.Local.currentLevel, clueDescription);
             }
             else if (clueText == "罗盘")
             {
-                ClueBoard.AddClueEntry(TimelinePlayer.Local.timeline, ImageUtils.CompressSpriteToJpegBytes(clueImage, 80));
+                ClueBoard.AddClueEntry(TimelinePlayer.Local.timeline, TimelinePlayer.Local.currentLevel, ImageUtils.CompressSpriteToJpegBytes(clueImage, 80));
             }
             else if (clueText == "对照表")
             {

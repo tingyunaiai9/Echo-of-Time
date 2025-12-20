@@ -47,6 +47,7 @@ namespace Events
         public byte[] imageData = null;
         public string text = null;
         public int timeline; // 时间线（0=Ancient, 1=Modern, 2=Future）
+        public int level; // 层数（1=第一层，2=第二层，3=第三层）
     }
 
     // 线索被发现时发布
