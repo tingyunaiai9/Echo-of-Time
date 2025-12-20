@@ -159,8 +159,10 @@ public class PlayerController : NetworkBehaviour
         AcquireBackgroundBounds();
 
         // 同步当前 UI 冻结状态
-        bool frozen = UIManager.Instance != null && UIManager.Instance.UIFrozen;
+        var uiMgr = FindFirstObjectByType<UIManager>();
+        bool frozen = uiMgr != null && uiMgr.UIFrozen;
         OnBackpackStateChanged(frozen);
+        
         // 初始化同步状态记录
         _lastSentIsWalking = _isWalking;
         _lastSentFlipX = _flipX;
@@ -339,7 +341,8 @@ public class PlayerController : NetworkBehaviour
         if (!isLocalPlayer) return;
 
         // 监测 UI 冻结状态变化
-        bool uiFrozen = UIManager.Instance != null && UIManager.Instance.UIFrozen;
+        var uiMgr = FindFirstObjectByType<UIManager>();
+        bool uiFrozen = uiMgr != null && uiMgr.UIFrozen;
         if (uiFrozen != isBackpackOpen)
         {
             OnBackpackStateChanged(uiFrozen);
