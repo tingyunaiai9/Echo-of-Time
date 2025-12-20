@@ -56,6 +56,7 @@ public class ImageNetworkSender : NetworkBehaviour
                 chunkIndex = i,
                 totalChunks = totalChunks,
                 timeline = timeline,
+                level = level,
                 chunkData = chunk,
                 imageType = imageType
             });
