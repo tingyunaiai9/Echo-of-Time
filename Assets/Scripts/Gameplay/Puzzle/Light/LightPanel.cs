@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using Events;
 
 /* 镜槽（MirrorSlot)结构体
@@ -10,6 +11,7 @@ public struct MirrorSlot
 {
     public int xindex;
     public int yindex;
+    public int number;
     public enum Direction
     {
         TOP_LEFT,
@@ -144,9 +146,9 @@ public class LightPanel : MonoBehaviour
         {
             var slot = mirrorSlots[i];
             if (slot.xindex == 0 && slot.yindex == 0) continue; // 跳过未配置的槽
-        // 将 Inspector 中的索引（从 1 开始）转换为数组索引（从 0 开始）
-        int arrayXIndex = slot.xindex - 1;
-        int arrayYIndex = slot.yindex - 1;
+            // 将 Inspector 中的索引（从 1 开始）转换为数组索引（从 0 开始）
+            int arrayXIndex = slot.xindex - 1;
+            int arrayYIndex = slot.yindex - 1;
 
             // 检查索引是否在有效范围内
             if (arrayXIndex < 0 || arrayXIndex >= GRID_COLS ||
@@ -209,11 +211,31 @@ public class LightPanel : MonoBehaviour
                     image.color = grayColor;
                 }
 
+                // 在镜槽中央添加数字文本
+                GameObject textObj = new GameObject("NumberText");
+                textObj.transform.SetParent(mirrorSlot.transform, false);
+                
+                TextMeshProUGUI numberText = textObj.AddComponent<TextMeshProUGUI>();
+                numberText.text = slot.number.ToString();
+                numberText.fontSize = 60;
+                numberText.alignment = TextAlignmentOptions.Center;
+                numberText.color = Color.black;
+                
+                // 设置 RectTransform 使其填充整个父对象
+                RectTransform textRect = textObj.GetComponent<RectTransform>();
+                textRect.anchorMin = Vector2.zero;
+                textRect.anchorMax = Vector2.one;
+                textRect.sizeDelta = Vector2.zero;
+                textRect.anchoredPosition = Vector2.zero;
+                
+                // 反向旋转文本，使其始终保持正向显示
+                textRect.localRotation = Quaternion.Euler(0, 0, -rotationAngle);
+
                 // 保存到数组中
                 generatedMirrorSlots[i] = mirrorSlot;
 
                 Debug.Log($"[LightPanel] 绘制镜槽[{i}]: 索引({slot.xindex}, {slot.yindex}), " +
-                         $"位置({centerX:F2}, {centerY:F2}), 旋转{rotationAngle}°");
+                         $"位置({centerX:F2}, {centerY:F2}), 旋转{rotationAngle}°, 数字{slot.number}");
             }
             else
             {

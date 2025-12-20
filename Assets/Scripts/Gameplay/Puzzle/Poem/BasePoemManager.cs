@@ -55,7 +55,7 @@ public abstract class BasePoemManager : Puzzle
         }
 
         // 确保在销毁时恢复玩家移动控制
-        EventBus.LocalPublish(new FreezeEvent { isOpen = false });
+        UIManager.Instance?.SetFrozen(false);
     }
 
     /*
@@ -134,7 +134,7 @@ public abstract class BasePoemManager : Puzzle
         }
 
         // 禁用玩家移动
-        EventBus.LocalPublish(new FreezeEvent { isOpen = true });
+        UIManager.Instance?.SetFrozen(true);
     }
 
     public static void ClosePanel()
@@ -163,7 +163,7 @@ public abstract class BasePoemManager : Puzzle
         }
 
         // 恢复玩家移动
-        EventBus.LocalPublish(new FreezeEvent { isOpen = false });
+        UIManager.Instance?.SetFrozen(false);
     }
 
     public static bool IsPuzzleCompleted()

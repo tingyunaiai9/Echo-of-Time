@@ -1,11 +1,10 @@
 using UnityEngine;
 using Events; // 引入事件命名空间
 
-/*
- * UI管理器，协调所有UI系统的显示和交互
- */
+// UI管理器，协调所有UI系统的显示和交互
 public class UIManager : Singleton<UIManager>
 {
+    [Header("UI面板")]
     [Tooltip("日记界面游戏对象")]
     public GameObject DiaryPanel;
     [Tooltip("背包界面游戏对象")]
@@ -15,6 +14,17 @@ public class UIManager : Singleton<UIManager>
 
     [Tooltip("主 UI 画布（包含日记按钮等常驻 UI），用于在谜题中隐藏")]
     public Canvas mainCanvas;
+    [Header("HUD按钮")]
+    [Tooltip("日记按钮游戏对象")]
+    public GameObject DiaryButton;
+    [Tooltip("背包按钮游戏对象")]
+    public GameObject InventoryButton;
+    [Tooltip("指南按钮游戏对象")]
+    public GameObject TipButton;
+
+    [Header("状态标记")]
+    [Tooltip("当前是否有UI面板打开")]
+    public bool UIFrozen = false;
 
     protected override void Awake()
     {
@@ -29,7 +39,6 @@ public class UIManager : Singleton<UIManager>
                 mainCanvas = GetComponentInParent<Canvas>();
             }
         }
-        InitializeAllUI();
         EventBus.Subscribe<IntroEndEvent>(OnIntroEnd);
     }
 
@@ -51,22 +60,57 @@ public class UIManager : Singleton<UIManager>
         base.OnDestroy();
     }
 
-    /* 每帧更新 */
+    // 每帧更新
     void Update()
     {
         HandleUIInput();
         TestUI();
     }
 
-    // 供UI组件调用以触发冻结事件
-    public void EmitFreezeEvent(bool isOpen)
+    // 统一设置冻结状态，替代 FreezeEvent 发布
+    public void SetFrozen(bool isOpen)
     {
-        EventBus.LocalPublish(new FreezeEvent { isOpen = isOpen });
+        if (UIFrozen == isOpen) return;
+        UIFrozen = isOpen;
+        
+        // 根据冻结状态启用/禁用 HUD 按钮
+        SetHUDButtonsInteractable(!isOpen);
+        
+        Debug.Log($"[UIManager] UIFrozen -> {UIFrozen}");
     }
 
-    /// <summary>
+    // 设置 HUD 按钮的可交互状态
+    private void SetHUDButtonsInteractable(bool interactable)
+    {
+        if (DiaryButton != null)
+        {
+            var button = DiaryButton.GetComponent<UnityEngine.UI.Button>();
+            if (button != null) button.interactable = interactable;
+        }
+        
+        if (InventoryButton != null)
+        {
+            var button = InventoryButton.GetComponent<UnityEngine.UI.Button>();
+            if (button != null) button.interactable = interactable;
+        }
+        
+        if (TipButton != null)
+        {
+            var button = TipButton.GetComponent<UnityEngine.UI.Button>();
+            if (button != null) button.interactable = interactable;
+        }
+    }
+
+    // 根据当前面板状态刷新冻结标记
+    private void RefreshFrozenState()
+    {
+        bool anyOpen = (DiaryPanel != null && DiaryPanel.activeSelf)
+                        || (InventoryPanel != null && InventoryPanel.activeSelf)
+                        || (TipPanel != null && TipPanel.activeSelf);
+        SetFrozen(anyOpen);
+    }
+
     /// 设置主 UI（如日记按钮）的可见性/交互性
-    /// </summary>
     public void SetMainUIActive(bool active)
     {
         if (mainCanvas != null)
@@ -90,22 +134,25 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
-    /// <summary>
     /// 关闭日记面板
-    /// </summary>
     public void CloseDiary()
     {
         if (DiaryPanel != null && DiaryPanel.activeSelf)
         {
             DiaryPanel.SetActive(false);
-            EventBus.LocalPublish(new FreezeEvent { isOpen = false });
+            RefreshFrozenState();
             Debug.Log("[UIManager] CloseDiary called.");
         }
     }
 
-    /* 处理所有 UI 相关的按键 */
+    // 处理所有 UI 相关的按键
     private void HandleUIInput()
     {
+        if (UIFrozen)
+        {
+            // 如果已经冻结，则不处理打开操作
+            return;
+        }
         // 背包开关 (B键)
         if (Input.GetKeyDown(KeyCode.B))
         {
@@ -122,7 +169,7 @@ public class UIManager : Singleton<UIManager>
                     InventoryPanel.SetActive(false);
                 }
             }
-            EventBus.LocalPublish(new FreezeEvent { isOpen = InventoryPanel.activeSelf });
+            RefreshFrozenState();
             Debug.Log("[UIManager] B键按下，切换背包。");
         }
 
@@ -134,7 +181,7 @@ public class UIManager : Singleton<UIManager>
                 bool isActive = DiaryPanel.activeSelf;
                 DiaryPanel.SetActive(!isActive);
             }
-            EventBus.LocalPublish(new FreezeEvent { isOpen = DiaryPanel.activeSelf });
+            RefreshFrozenState();
             Debug.Log("[UIManager] F1键按下，切换日记页面。");
         }
 
@@ -146,7 +193,7 @@ public class UIManager : Singleton<UIManager>
                 bool isActive = TipPanel.activeSelf;
                 TipPanel.SetActive(!isActive);
             }
-            EventBus.LocalPublish(new FreezeEvent { isOpen = TipPanel.activeSelf });
+            RefreshFrozenState();
             Debug.Log("[UIManager] H键按下，切换指南页面。");
         }
     }
@@ -208,10 +255,5 @@ public class UIManager : Singleton<UIManager>
             Debug.Log($"[UIManager] 线索图片压缩成功，大小：{spriteBytes.Length} 字节");
             ClueBoard.AddClueEntry(timeline, spriteBytes, SharedClueType.Image);
         }
-    }
-
-    public void InitializeAllUI()
-    {
-        // 初始化 UI 面板...
     }
 }

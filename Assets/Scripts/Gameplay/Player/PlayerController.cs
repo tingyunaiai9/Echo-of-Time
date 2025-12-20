@@ -152,32 +152,30 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
-    /* 本地玩家启动时订阅背包事件 */
+    /* 本地玩家启动时初始化 */
     public override void OnStartLocalPlayer()
     {
         base.OnStartLocalPlayer();
-        EventBus.Subscribe<FreezeEvent>(OnBackpackStateChanged);
-
         AcquireBackgroundBounds();
 
+        // 同步当前 UI 冻结状态
+        bool frozen = UIManager.Instance != null && UIManager.Instance.UIFrozen;
+        OnBackpackStateChanged(frozen);
         // 初始化同步状态记录
         _lastSentIsWalking = _isWalking;
         _lastSentFlipX = _flipX;
     }
 
-    /* 销毁时取消订阅 */
+    /* 销毁时 */
     void OnDestroy()
     {
-        if (isLocalPlayer)
-        {
-            EventBus.Unsubscribe<FreezeEvent>(OnBackpackStateChanged);
-        }
+        // 无事件订阅需要取消
     }
 
-    /* 背包状态变化回调 */
-    void OnBackpackStateChanged(FreezeEvent e)
+    /* 背包/冻结状态变化回调 */
+    void OnBackpackStateChanged(bool isOpen)
     {
-        isBackpackOpen = e.isOpen;
+        isBackpackOpen = isOpen;
         if (isBackpackOpen)
         {
             // 停止移动
@@ -339,6 +337,13 @@ public class PlayerController : NetworkBehaviour
     void Update()
     {
         if (!isLocalPlayer) return;
+
+        // 监测 UI 冻结状态变化
+        bool uiFrozen = UIManager.Instance != null && UIManager.Instance.UIFrozen;
+        if (uiFrozen != isBackpackOpen)
+        {
+            OnBackpackStateChanged(uiFrozen);
+        }
 
         // 背包打开时，禁用游戏输入（移动、交互等）
         if (isBackpackOpen) return;

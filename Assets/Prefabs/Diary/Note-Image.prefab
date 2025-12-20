@@ -195,7 +195,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Note
   noteTitleText: {fileID: 5977916565324604669}
   noteImage: {fileID: 830738054945595352}
-  viewImageButton: {fileID: 1554710119489094201}
 --- !u!1 &5355615118834196204
 GameObject:
   m_ObjectHideFlags: 0
@@ -229,11 +228,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 4156791919414083997}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 50, y: 50}
-  m_Pivot: {x: 1, y: 0}
+  m_SizeDelta: {x: 40, y: 40}
+  m_Pivot: {x: 1, y: 1}
 --- !u!222 &8870252930443115578
 CanvasRenderer:
   m_ObjectHideFlags: 0
