@@ -293,10 +293,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8871418275385414889}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 6643653447867744096}
+        m_TargetAssemblyTypeName: TipManager, Assembly-CSharp
+        m_MethodName: CloseTipPanel
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -744,3 +744,5 @@ MonoBehaviour:
   - "\u6B63\u786E\u5339\u914D\u7684\u8BD7\u53E5\u4F1A\u663E\u793A\u7EFF\u8272\u5E76\u505C\u7559\u5728\u6B63\u786E\u4F4D\u7F6E"
   currentImage: {fileID: 7353890072608378224}
   currentText: {fileID: 988860972435564367}
+  previousButton: {fileID: 7044661424487667103}
+  nextButton: {fileID: 2171551579572913502}
