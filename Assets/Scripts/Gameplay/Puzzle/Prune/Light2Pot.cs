@@ -24,10 +24,13 @@ namespace Game.Gameplay.Puzzle.Light2
         public bool testMode = false;
 
         private bool localIsPlanted = false;
+        private Collider m_Collider;
 
         protected override void Start()
         {
             base.Start();
+            m_Collider = GetComponent<Collider>();
+
             if (notificationController == null)
             {
                 notificationController = NotificationController.Instance;
@@ -47,21 +50,21 @@ namespace Game.Gameplay.Puzzle.Light2
             // Handle Tree Visibility for Republic and Future
             if (timeline == TimelineType.Republic || timeline == TimelineType.Future)
             {
+                bool shouldShow = false;
                 if (treeObject != null)
                 {
-                    bool shouldShow = isPlanted || testMode;
+                    shouldShow = isPlanted || testMode;
                     if (treeObject.activeSelf != shouldShow)
                     {
                         treeObject.SetActive(shouldShow);
                     }
                 }
 
-                // If planted, disable this interaction (so player interacts with the tree instead)
-                // We can do this by disabling the collider or this component.
-                // But we need Update to keep running to detect if it gets unplanted (unlikely but possible).
-                // So we'll just handle it in OnInteract or use a separate collider for the tree that blocks this one.
-                // For simplicity, if tree is active, we can just return in OnInteract or let the tree collider cover the pot.
-                // But to be safe, let's check in OnInteract.
+                // If planted (tree shown), disable this interaction so player interacts with the tree instead
+                if (m_Collider != null)
+                {
+                    m_Collider.enabled = !shouldShow;
+                }
             }
         }
 
