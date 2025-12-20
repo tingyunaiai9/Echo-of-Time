@@ -41,15 +41,15 @@ public class Clue : Interaction
         {
             discovered = true;
 
-            if (clueText == "应揭之天干")
+            if (clueID == 5) // 如果是天干线索，添加共享文字线索
             {
                 ClueBoard.AddClueEntry(TimelinePlayer.Local.timeline, TimelinePlayer.Local.currentLevel, clueDescription);
             }
-            else if (clueText == "罗盘")
+            else if (clueID == 2) // 如果是罗盘线索，添加共享图片线索
             {
                 ClueBoard.AddClueEntry(TimelinePlayer.Local.timeline, TimelinePlayer.Local.currentLevel, ImageUtils.CompressSpriteToJpegBytes(clueImage, 80));
             }
-            else if (clueText == "对照表")
+            else if (clueID == 4) // 如果当前是ASCII对照表线索，添加至背包当中
             {
                 EventBus.LocalPublish(new ClueDiscoveredEvent
                 {
@@ -61,7 +61,7 @@ public class Clue : Interaction
                     image = clueImage
                 });
             }
-            else
+            else if (clueID == 1 || clueID == 3) // 如果是其他第二层的线索，添加到关键线索当中
             {
                 EventBus.LocalPublish(new ClueDiscoveredEvent
                 {

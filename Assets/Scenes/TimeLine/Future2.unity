@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 161863450}
   - component: {fileID: 161863449}
   m_Layer: 7
-  m_Name: screen (1)
+  m_Name: compTable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -165,6 +165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74c289d1144714a2081d9d81afeaf8ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Clue
+  clueID: 4
   clueText: "\u5BF9\u7167\u8868"
   clueDescription: "\u4E00\u4E2A\u5BF9\u7167\u8868\uFF0C\u6216\u8BB8\u54EA\u91CC\u4F1A\u7528\u5F97\u5230"
   clueIcon: {fileID: 21300000, guid: 2c80a25174032864f8b77f9b9f69640b, type: 3}
@@ -1506,6 +1507,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74c289d1144714a2081d9d81afeaf8ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Clue
+  clueID: 5
   clueText: "\u5E94\u63ED\u4E4B\u5929\u5E72"
   clueDescription: "\u672A\u65AB\u4E4B\u6728\uFF0C\u5929\u5E72\u6709\u4E03\uFF1A\u4E1C\u56ED\u4E4B\u6811\uFF0C\u679D\u6761\u8F7D\u8363\uFF1B\u751F\u4E8E\u5B50\u534A\uFF0C\u4E11\u65F6\u521D\u840C\uFF1B\u6843\u854A\u672A\u7EFD\uFF0C\u8302\u7136\u81F3\u8FB0\u3002\u98DE\u5F71\u53C8\u901D\uFF0C\u664C\u5348\u5F52\u571F\u3002"
   clueIcon: {fileID: 21300000, guid: ce2c04154ab168c4dbcf0dd0c0792a89, type: 3}

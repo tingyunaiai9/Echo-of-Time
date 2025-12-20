@@ -836,6 +836,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74c289d1144714a2081d9d81afeaf8ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Clue
+  clueID: 2
   clueText: "\u7F57\u76D8"
   clueDescription: "\u7F57\u76D8\u6240\u6307\uFF0C\u5F80\u65E5\u6B8B\u7247\n"
   clueIcon: {fileID: 21300000, guid: 9c95d2eb9cc0aeb4e82d5e5526db59cb, type: 3}
@@ -1833,6 +1834,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74c289d1144714a2081d9d81afeaf8ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Clue
+  clueID: 3
   clueText: "\u534A\u5757\u624B\u7EE2"
   clueDescription: "\u4EC5\u7EE3\u5B8C\u53F3\u534A\u90E8\u5206\uFF0C\u80FD\u6E05\u6670\u770B\u5230
     \u201C\u6765\u201D \u5B57\u7684 \u201C\u4E00\u201D\u201C\u7C73\u201D \u7ED3\u6784\uFF0C\u4F46\u5DE6\u534A\u90E8\u5206\u7684
