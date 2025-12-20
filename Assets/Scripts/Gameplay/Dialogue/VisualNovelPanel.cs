@@ -50,6 +50,15 @@ public class VisualNovelPanel : MonoBehaviour
         EventBus.Unsubscribe<StartDialogueEvent>(OnStartDialogue);
     }
 
+    void Update()
+    {
+        // 空格键推进到下一句（或快速完成打字）
+        if (panelRoot != null && panelRoot.activeSelf && Input.GetKeyDown(KeyCode.Space))
+        {
+            OnContinueClicked();
+        }
+    }
+
     // 事件回调
     private void OnStartDialogue(StartDialogueEvent evt)
     {
