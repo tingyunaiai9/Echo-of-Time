@@ -54,72 +54,47 @@ public class ClueBoard : MonoBehaviour
     /* 线索更新事件回调 */
     void OnClueUpdated(ClueSharedEvent e)
     {
-        switch (e.ClueType)
+        if (e.imageData == null && e.text == null)
         {
-            case SharedClueType.Image:
-                AddClueEntry(e.timeline, e.imageData, SharedClueType.Image, false);
-                break;
-            case SharedClueType.Text:
-                AddClueEntry(e.timeline, e.textData ?? string.Empty, SharedClueType.Text, false);
-                break;
-            default:
-                Debug.LogWarning("[ClueBoard] 收到未知类型的 ClueSharedEvent");
-                break;
+            Debug.LogWarning("[ClueBoard] 收到 ClueSharedEvent，但没有有效数据");
+            return;
+        }else if (e.imageData != null)
+        {
+            AddClueEntry(e.timeline, e.imageData, false);
+        }
+        else
+        {
+            AddClueEntry(e.timeline, e.text, false);
         }
 
         Debug.Log("[ClueBoard] 收到线索共享事件，已添加新线索条目");
     }
 
-    // 图片/文本统一入口（byte[] 版本）
-    public static void AddClueEntry(int timeline, byte[] data, SharedClueType clueType, bool publish = true)
+    // 图片入口
+    public static void AddClueEntry(int timeline, byte[] data, bool publish = true)
     {
         if (!EnsureInstance()) return;
-
-        switch (clueType)
+        s_instance.CreateClueEntry(timeline, data);
+        if (publish)
         {
-            case SharedClueType.Image:
-                s_instance.CreateClueEntry(timeline, data);
-                if (publish)
+            // 使用 ImageNetworkSender 分块发送大图，避免 Mirror 消息过大
+            if (ImageNetworkSender.LocalInstance != null)
+            {
+                ImageNetworkSender.LocalInstance.SendImage(data, timeline, "Clue");
+            }
+            else
+            {
+                EventBus.Publish(new ClueSharedEvent
                 {
-                    // 使用 ImageNetworkSender 分块发送大图，避免 Mirror 消息过大
-                    if (ImageNetworkSender.LocalInstance != null)
-                    {
-                        ImageNetworkSender.LocalInstance.SendImage(data, timeline, "Clue");
-                    }
-                    else
-                    {
-                        EventBus.Publish(new ClueSharedEvent
-                        {
-                            timeline = timeline,
-                            imageData = data,
-                            ClueType = SharedClueType.Image
-                        });
-                    }
-                }
-                break;
-
-            case SharedClueType.Text:
-                string textPayload = data != null ? Encoding.UTF8.GetString(data) : string.Empty;
-                s_instance.CreateClueEntry(timeline, textPayload);
-                if (publish)
-                {
-                    EventBus.Publish(new ClueSharedEvent
-                    {
-                        timeline = timeline,
-                        textData = textPayload,
-                        ClueType = SharedClueType.Text
-                    });
-                }
-                break;
-
-            default:
-                Debug.LogWarning("[ClueBoard] AddClueEntry 收到未知线索类型");
-                break;
+                    timeline = timeline,
+                    imageData = data,
+                });
+            }
         }
     }
 
     // 文本入口
-    public static void AddClueEntry(int timeline, string text, SharedClueType clueType, bool publish = true)
+    public static void AddClueEntry(int timeline, string text, bool publish = true)
     {
         if (!EnsureInstance()) return;
 
@@ -129,8 +104,7 @@ public class ClueBoard : MonoBehaviour
             EventBus.Publish(new ClueSharedEvent
             {
                 timeline = timeline,
-                textData = text,
-                ClueType = clueType
+                text = text,
             });
         }
     }

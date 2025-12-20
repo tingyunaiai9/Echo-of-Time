@@ -124,7 +124,7 @@ public class ImageNetworkSender : NetworkBehaviour
 
         if (imageType == "Clue")
         {
-            ClueBoard.AddClueEntry(timeline, fullImage, SharedClueType.Image, publish: false);
+            ClueBoard.AddClueEntry(timeline, fullImage, publish: false);
         }
         else
         {

@@ -179,7 +179,7 @@ public class PaintManager : MonoBehaviour
             byte[] spriteBytes = ImageUtils.CompressSpriteToJpegBytes(sharedClueSprite, 80);
             if (spriteBytes != null)
             {
-                ClueBoard.AddClueEntry(timeline, spriteBytes, SharedClueType.Image);
+                ClueBoard.AddClueEntry(timeline, spriteBytes);
                 Debug.Log($"[PuzzleManager] 已共享线索图片到便签墙，大小：{spriteBytes.Length} 字节");
             }
             else

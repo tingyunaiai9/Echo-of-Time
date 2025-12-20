@@ -42,18 +42,10 @@ namespace Events
         public string[] inventoryItems;
     }
 
-    // 日记线索共享事件
-    public enum SharedClueType
-    {
-        Text,
-        Image
-    }
-
     public class ClueSharedEvent
     {
         public byte[] imageData = null;
-        public string textData = null;
-        public SharedClueType ClueType;
+        public string text = null;
         public int timeline; // 时间线（0=Ancient, 1=Modern, 2=Future）
     }
 
