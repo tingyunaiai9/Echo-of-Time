@@ -18,7 +18,7 @@ public class ResultPanel : MonoBehaviour
     [Tooltip("需要匹配的正确答案")]
     public string correctAnswer = "";
     [Tooltip("按层数配置的正确答案列表，第1层索引0，第2层索引1，以此类推")]
-    public List<string> levelAnswers = new List<string>() { "南山", "归去" }; // 初始前两层答案
+    public List<string> levelAnswers = new List<string>() { "南山", "归去|归来" }; // 初始前两层答案
 
     private TMP_Text confirmButtonText;
     private bool isConfirmButtonCooldown;
@@ -97,7 +97,19 @@ public class ResultPanel : MonoBehaviour
         string expectedAnswer = GetCorrectAnswerForLevel(currentLevel);
         Debug.Log($"[ResultPanel] 当前层数: {currentLevel}, 期望答案: '{expectedAnswer}', 玩家输入: '{userAnswer}'");
 
-        if (string.Equals(userAnswer, expectedAnswer, StringComparison.Ordinal))
+        // 支持多答案匹配（使用 | 分隔）
+        bool isCorrect = false;
+        string[] possibleAnswers = expectedAnswer.Split('|');
+        foreach (var ans in possibleAnswers)
+        {
+            if (string.Equals(userAnswer, ans.Trim(), StringComparison.Ordinal))
+            {
+                isCorrect = true;
+                break;
+            }
+        }
+
+        if (isCorrect)
         {
             Debug.Log("[ResultPanel] 答案正确！");
 
