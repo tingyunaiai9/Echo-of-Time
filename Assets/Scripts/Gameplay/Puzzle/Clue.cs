@@ -8,6 +8,8 @@ using Game.UI;
 public class Clue : Interaction
 {
     [Header("线索内容")]
+    [Tooltip("线索唯一ID")]
+    public int clueID;
     [TextArea(2, 4)]
     [Tooltip("线索简短文本，显示在物品栏")]
     public string clueText;
