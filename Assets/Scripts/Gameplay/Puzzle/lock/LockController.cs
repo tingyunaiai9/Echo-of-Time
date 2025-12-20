@@ -145,7 +145,14 @@ public class LockController : MonoBehaviour
             {
                 if (notificationController != null)
                 {
-                    notificationController.ShowNotification("需要古代玩家将竹简放入匣子中。\nAncient player needs to place the bamboo scroll.");
+                    notificationController.ShowNotification("需要古代玩家将竹简放入匣子中。\n");
+                }
+            }
+            else
+            {
+                if (notificationController != null)
+                {
+                    notificationController.ShowNotification("现在，未来玩家可以拿到竹简了。\n");
                 }
             }
         }
