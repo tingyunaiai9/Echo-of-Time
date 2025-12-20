@@ -54,17 +54,19 @@ public class ClueBoard : MonoBehaviour
     /* 线索更新事件回调 */
     void OnClueUpdated(ClueSharedEvent e)
     {
-        if (e.imageData == null && e.text == null)
+        // 根据事件中实际携带的数据类型区分图片/文字
+        if (e.imageData != null && e.imageData.Length > 0)
         {
-            Debug.LogWarning("[ClueBoard] 收到 ClueSharedEvent，但没有有效数据");
-            return;
-        }else if (e.imageData != null)
+            CreateClueEntry(e.timeline, e.level, e.imageData);
+        }
+        else if (!string.IsNullOrEmpty(e.text))
         {
-            AddClueEntry(e.timeline, e.level, e.imageData, false);
+            CreateClueEntry(e.timeline, e.level, e.text);
         }
         else
         {
-            AddClueEntry(e.timeline, e.level, e.text, false);
+            Debug.LogWarning("[ClueBoard] 收到 ClueSharedEvent，但既没有图片也没有文本数据");
+            return;
         }
 
         Debug.Log("[ClueBoard] 收到线索共享事件，已添加新线索条目");
