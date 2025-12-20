@@ -65,7 +65,16 @@ public class TimelinePlayer : NetworkBehaviour
             ResultPanel.Reset();
             // ClueBoard.Reset();
             SceneDirector.Instance?.TryLoadTimelineNow();
-            UIManager.Instance?.CloseDiary();
+            
+            if (UIManager.Instance != null)
+            {
+                Debug.Log("[TimelinePlayer] Calling UIManager.CloseDiary()");
+                UIManager.Instance.CloseDiary();
+            }
+            else
+            {
+                Debug.LogError("[TimelinePlayer] UIManager.Instance is null! Cannot close diary.");
+            }
 
             // 注意：位置重置逻辑已移交至 SceneDirector 在场景加载完成后调用
             // 避免因 OnLevelChanged 触发时机早于场景加载而导致的问题
