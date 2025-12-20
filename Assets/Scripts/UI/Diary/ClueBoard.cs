@@ -25,7 +25,8 @@ public class ClueBoard : MonoBehaviour
     public Transform contentParent;
 
     private static ClueBoard s_instance;
-    
+    private static bool s_subscribed; 
+
     // 便签位置数组（循环使用）
     private static readonly Vector2[] notePositions = new Vector2[]
     {
@@ -43,28 +44,40 @@ public class ClueBoard : MonoBehaviour
     void Awake()
     {
         s_instance = this;
-        EventBus.Subscribe<ClueSharedEvent>(OnClueUpdated);
     }
 
-    void OnDestroy()
+    // 确保订阅事件（静态初始化）
+    
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    private static void EnsureSubscribed()
     {
-        EventBus.Unsubscribe<ClueSharedEvent>(OnClueUpdated);
+        if (s_subscribed) return;
+        EventBus.Subscribe<ClueSharedEvent>(OnClueUpdatedStatic);
+        s_subscribed = true;
+    }
+    
+    private static void OnClueUpdatedStatic(ClueSharedEvent e)
+    {
+        if (!EnsureInstance()) return;
+        s_instance.OnClueUpdated(e);
     }
 
     /* 线索更新事件回调 */
     void OnClueUpdated(ClueSharedEvent e)
     {
-        if (e.imageData == null && e.text == null)
+        // 根据事件中实际携带的数据类型区分图片/文字
+        if (e.imageData != null && e.imageData.Length > 0)
         {
-            Debug.LogWarning("[ClueBoard] 收到 ClueSharedEvent，但没有有效数据");
-            return;
-        }else if (e.imageData != null)
+            CreateClueEntry(e.timeline, e.level, e.imageData);
+        }
+        else if (!string.IsNullOrEmpty(e.text))
         {
-            AddClueEntry(e.timeline, e.level, e.imageData, false);
+            CreateClueEntry(e.timeline, e.level, e.text);
         }
         else
         {
-            AddClueEntry(e.timeline, e.level, e.text, false);
+            Debug.LogWarning("[ClueBoard] 收到 ClueSharedEvent，但既没有图片也没有文本数据");
+            return;
         }
 
         Debug.Log("[ClueBoard] 收到线索共享事件，已添加新线索条目");

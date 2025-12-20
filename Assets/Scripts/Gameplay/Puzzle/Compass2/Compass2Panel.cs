@@ -5,7 +5,7 @@ using System.Collections;
 using TMPro;
 using Events;
 
-public class Compass2Panel : Puzzle, IPointerClickHandler
+public class Compass2Panel : PuzzleManager, IPointerClickHandler
 {
     [Header("图像配置")]
     [Tooltip("内圈图像对象")]
@@ -24,6 +24,9 @@ public class Compass2Panel : Puzzle, IPointerClickHandler
     public float rotationAngle = 60f;
     [Tooltip("旋转动画时长（秒）")]
     public float rotationDuration = 0.3f;
+    [Tooltip("金黄色颜色值")]
+    public Color goldenColor = new Color(1f, 0.84f, 0f, 1f); // 金黄色
+
 
     private int middleRotationProgress = 0;
     private int outerRotationProgress = 0;
@@ -93,9 +96,15 @@ public class Compass2Panel : Puzzle, IPointerClickHandler
         CheckPuzzleCompletion();
     }
 
+
     private void CheckPuzzleCompletion()
     {
-        if (!isPuzzleCompleted && middleRotationProgress%6 == middleTargetRotations && outerRotationProgress%6 == outerTargetRotations)
+        int middle = ((middleRotationProgress % 6) + 6) % 6;
+        int outer = ((outerRotationProgress % 6) + 6) % 6;
+        int middleTarget = ((middleTargetRotations % 6) + 6) % 6;
+        int outerTarget = ((outerTargetRotations % 6) + 6) % 6;
+
+        if (!isPuzzleCompleted && middle == middleTarget && outer == outerTarget)
         {
             isPuzzleCompleted = true;
             OnPuzzleCompleted();
@@ -151,13 +160,13 @@ public class Compass2Panel : Puzzle, IPointerClickHandler
             }
         };
 
-        AddGreenOverlay(InnerImage, onOverlayComplete);
-        AddGreenOverlay(MiddleImage, onOverlayComplete);
-        AddGreenOverlay(OuterImage, onOverlayComplete);
+        AddGoldenOverlay(InnerImage, onOverlayComplete);
+        AddGoldenOverlay(MiddleImage, onOverlayComplete);
+        AddGoldenOverlay(OuterImage, onOverlayComplete);
     }
     
     // 为指定的图像添加绿色透明遮罩
-    private void AddGreenOverlay(RectTransform image, System.Action onComplete)
+    private void AddGoldenOverlay(RectTransform image, System.Action onComplete)
     {
         if (image == null)
         {
@@ -175,13 +184,13 @@ public class Compass2Panel : Puzzle, IPointerClickHandler
         // 设置初始透明度为 0
         canvasGroup.alpha = 0f;
     
-        // 添加绿色遮罩
+        // 添加金色遮罩
         Image overlay = image.GetComponent<Image>();
         if (overlay == null)
         {
             overlay = image.gameObject.AddComponent<Image>();
         }
-        overlay.color = new Color(0f, 1f, 0f, 0.5f); // 半透明绿色
+        overlay.color = goldenColor;
     
         // 动画：渐显 -> 等待 -> 渐隐
         LeanTween.alphaCanvas(canvasGroup, 1f, 0.5f).setOnComplete(() =>
@@ -194,5 +203,25 @@ public class Compass2Panel : Puzzle, IPointerClickHandler
                 onComplete?.Invoke();
             });
         });
+    }
+
+    public void ResetPuzzle()
+    {
+        // 重置旋转进度
+        middleRotationProgress = 0;
+        outerRotationProgress = 0;
+        isPuzzleCompleted = false;
+
+        // 重置图像旋转
+        if (MiddleImage != null)
+        {
+            MiddleImage.localEulerAngles = Vector3.zero;
+        }
+        if (OuterImage != null)
+        {
+            OuterImage.localEulerAngles = Vector3.zero;
+        }
+
+        Debug.Log("[Compass2Panel] 谜题已重置");
     }
 }

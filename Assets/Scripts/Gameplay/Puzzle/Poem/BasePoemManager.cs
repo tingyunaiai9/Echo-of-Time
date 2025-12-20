@@ -6,7 +6,7 @@ using Events;
  * 提供通用的计数、面板开关、冻结事件发布等逻辑
  * 具体的动画与完成逻辑由子类实现
  */
-public abstract class BasePoemManager : Puzzle
+public abstract class BasePoemManager : PuzzleManager
 {
     [Header("配置")]
     [Tooltip("需要匹配的总数")]

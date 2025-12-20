@@ -4,11 +4,18 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using Events;
+using UnityEditor.EditorTools;
+using Game.UI;
 
 public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
-    [Header("文字答案设置")]
+    [Header("游戏对象引用")]
+    [Tooltip("文字答案设置")]
     public List<Word> words = new List<Word>();
+    [Tooltip("线索按钮游戏对象")]
+    public GameObject clueButton;
+    [Tooltip("通知控制器引用")]
+    public NotificationController notificationController;
 
     [Header("Rewards")]
     [Tooltip("Name of the Handkerchief object to find in the scene")]
@@ -108,6 +115,22 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         if (AreAllWordsGolden() && !s_isPuzzleCompleted)
         {
             OnPuzzleCompleted();
+        }
+    }
+
+    void OnEnable() 
+    {
+        if (UIManager.Instance.PruneClueUnlocked && clueButton != null)
+        {
+            clueButton.SetActive(true);
+        }
+        if (notificationController == null)
+        {
+            notificationController = NotificationController.Instance;
+            if (notificationController == null)
+            {
+                notificationController = FindFirstObjectByType<NotificationController>();
+            }
         }
     }
 
@@ -239,7 +262,7 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     /*
     * 谜题完成时调用
     */
-    public static void OnPuzzleCompleted()
+    public void OnPuzzleCompleted()
     {
         // 设置完成标志
         s_isPuzzleCompleted = true;
@@ -266,7 +289,8 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
                 }
             }
         }
-        
+
+        notificationController.ShowNotification("Puzzle Completed: Prune");
         EventBus.LocalPublish(new PuzzleCompletedEvent
         {
             sceneName = "Light2"
