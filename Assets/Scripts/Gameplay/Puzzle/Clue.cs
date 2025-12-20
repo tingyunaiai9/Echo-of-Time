@@ -41,18 +41,19 @@ public class Clue : Interaction
         {
             discovered = true;
 
-            if (clueID == 5) // 如果是天干线索，添加共享文字线索
+            if (clueID == 5) // 如果是天干线索，添加日记共享文字线索
             {
                 ClueBoard.AddClueEntry(TimelinePlayer.Local.timeline, TimelinePlayer.Local.currentLevel, clueDescription);
             }
-            else if (clueID == 2) // 如果是罗盘线索，添加共享图片线索
+            else if (clueID == 2) // 如果是罗盘线索，添加日记共享图片线索
             {
                 ClueBoard.AddClueEntry(TimelinePlayer.Local.timeline, TimelinePlayer.Local.currentLevel, ImageUtils.CompressSpriteToJpegBytes(clueImage, 80));
             }
-            else if (clueID == 4) // 如果当前是ASCII对照表线索，添加至背包当中
+            else if (clueID == 1 || clueID == 3) // 如果是手绢或者便签，添加到日记关键线索当中
             {
                 EventBus.LocalPublish(new ClueDiscoveredEvent
                 {
+                    isKeyClue = true,
                     playerNetId = pid,
                     clueId = gameObject.name,
                     clueText = clueText,
@@ -61,11 +62,10 @@ public class Clue : Interaction
                     image = clueImage
                 });
             }
-            else if (clueID == 1 || clueID == 3) // 如果是其他第二层的线索，添加到关键线索当中
+            else // 如果当前是ASCII对照表线索或者第三层当中的线索，添加至背包当中
             {
                 EventBus.LocalPublish(new ClueDiscoveredEvent
                 {
-                    isKeyClue = true,
                     playerNetId = pid,
                     clueId = gameObject.name,
                     clueText = clueText,
