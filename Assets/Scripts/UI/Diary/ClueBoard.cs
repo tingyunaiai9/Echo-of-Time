@@ -25,7 +25,8 @@ public class ClueBoard : MonoBehaviour
     public Transform contentParent;
 
     private static ClueBoard s_instance;
-    
+    private static bool s_subscribed; 
+
     // 便签位置数组（循环使用）
     private static readonly Vector2[] notePositions = new Vector2[]
     {
@@ -43,12 +44,22 @@ public class ClueBoard : MonoBehaviour
     void Awake()
     {
         s_instance = this;
-        EventBus.Subscribe<ClueSharedEvent>(OnClueUpdated);
     }
 
-    void OnDestroy()
+    // 确保订阅事件（静态初始化）
+    
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    private static void EnsureSubscribed()
     {
-        EventBus.Unsubscribe<ClueSharedEvent>(OnClueUpdated);
+        if (s_subscribed) return;
+        EventBus.Subscribe<ClueSharedEvent>(OnClueUpdatedStatic);
+        s_subscribed = true;
+    }
+    
+    private static void OnClueUpdatedStatic(ClueSharedEvent e)
+    {
+        if (!EnsureInstance()) return;
+        s_instance.OnClueUpdated(e);
     }
 
     /* 线索更新事件回调 */
