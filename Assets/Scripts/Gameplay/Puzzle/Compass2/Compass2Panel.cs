@@ -5,7 +5,7 @@ using System.Collections;
 using TMPro;
 using Events;
 
-public class Compass2Panel : Puzzle, IPointerClickHandler
+public class Compass2Panel : PuzzleManager, IPointerClickHandler
 {
     [Header("图像配置")]
     [Tooltip("内圈图像对象")]

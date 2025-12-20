@@ -6,7 +6,7 @@ using TMPro;
 using Game.Gameplay.Puzzle.Paint2;
 using Events;
 
-public class CompassPanel : Puzzle, IPointerClickHandler
+public class CompassPanel : PuzzleManager, IPointerClickHandler
 {
     [Header("图像配置")]
     [Tooltip("外圈图像对象")]

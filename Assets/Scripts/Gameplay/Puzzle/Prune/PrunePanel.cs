@@ -4,11 +4,14 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using Events;
+using UnityEditor.EditorTools;
 
 public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
     [Header("文字答案设置")]
     public List<Word> words = new List<Word>();
+    [Tooltip("线索按钮游戏对象")]
+    public GameObject clueButton;
 
     [Header("Rewards")]
     [Tooltip("Name of the Handkerchief object to find in the scene")]
@@ -108,6 +111,14 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         if (AreAllWordsGolden() && !s_isPuzzleCompleted)
         {
             OnPuzzleCompleted();
+        }
+    }
+
+    void OnEnable() 
+    {
+        if (UIManager.Instance.PruneClueUnlocked && clueButton != null)
+        {
+            clueButton.SetActive(true);
         }
     }
 

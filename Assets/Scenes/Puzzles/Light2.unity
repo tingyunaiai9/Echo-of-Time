@@ -447,6 +447,7 @@ MonoBehaviour:
   - {fileID: 1254146431}
   - {fileID: 2129755374}
   - {fileID: 25969136}
+  clueButton: {fileID: 2061350727}
   handkerchiefObjectName: Handkerchief
   seedObjectName: Seed
   cursorTexture: {fileID: 2800000, guid: 800e72f09ea981141a79c6501275ddee, type: 3}
