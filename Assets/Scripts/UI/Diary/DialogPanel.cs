@@ -140,6 +140,9 @@ public class DialogPanel : MonoBehaviour
 
         string userInput = inputField.text.Trim();
         inputField.text = "";
+        
+        // 禁用输入框，防止在 AI 响应期间发送新消息
+        inputField.interactable = false;
 
         // 获取当前玩家的时间线
         int timeline = TimelinePlayer.Local.timeline;
@@ -240,6 +243,12 @@ public class DialogPanel : MonoBehaviour
                 MessageContent = finalContent,
                 timeline = timeline
             });
+        }
+        
+        // 重新启用输入框
+        if (inputField != null)
+        {
+            inputField.interactable = true;
         }
 
         Debug.Log("[DialogPanel] 流式输出协程结束");
@@ -362,6 +371,12 @@ public class DialogPanel : MonoBehaviour
                 MessageContent = finalMessage,
                 timeline = timeline
             });
+        }
+        
+        // 重新启用输入框
+        if (inputField != null)
+        {
+            inputField.interactable = true;
         }
     
         Debug.Log("[DialogPanel] ImageGenCoroutine 结束");

@@ -16,6 +16,9 @@ public class LargeNoteSlot : MonoBehaviour
     [Tooltip("用于显示诗句的文本组件")]
     public TMP_Text poemText;
 
+    [Tooltip("诗句颜色")]
+    public Color poemColor = Color.white;
+
     [Tooltip("边框图片组件（可以是自身的 Outline 或独立的 Image）")]
     public Outline borderOutline;
 
@@ -57,7 +60,7 @@ public class LargeNoteSlot : MonoBehaviour
         if (poemText != null && !isFilled)
         {
             poemText.text = text;
-            poemText.color = Color.white;
+            poemText.color = poemColor;
             isFilled = true;
             Debug.Log($"[LargeNoteSlot] {noteId} 已填充: {text}");
         }

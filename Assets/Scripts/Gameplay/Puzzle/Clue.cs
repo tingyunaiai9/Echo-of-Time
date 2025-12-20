@@ -1,5 +1,6 @@
 using UnityEngine;
 using Events;
+using Game.UI;
 
 /*
  * 调查类：调查线索，仅反馈信息，不会消失
@@ -72,14 +73,14 @@ public class Clue : Interaction
                 });
             }
         }
-
+        UIManager.Instance.SetFrozen(true);
         // 查找并显示 ClueCanvas
         GameObject canvasObj = GameObject.Find("ClueCanvas");
         ClueCanvas canvas = canvasObj != null ? canvasObj.GetComponent<ClueCanvas>() : null;
 
         if (canvas != null)
         {
-            canvas.ShowClue(clueImage, clueDescription);
+            canvas.ShowClue(clueText, clueImage, clueDescription);
         }
         else
         {
