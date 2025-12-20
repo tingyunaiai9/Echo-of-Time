@@ -195,4 +195,24 @@ public class Compass2Panel : Puzzle, IPointerClickHandler
             });
         });
     }
+
+    public void ResetPuzzle()
+    {
+        // 重置旋转进度
+        middleRotationProgress = 0;
+        outerRotationProgress = 0;
+        isPuzzleCompleted = false;
+
+        // 重置图像旋转
+        if (MiddleImage != null)
+        {
+            MiddleImage.localEulerAngles = Vector3.zero;
+        }
+        if (OuterImage != null)
+        {
+            OuterImage.localEulerAngles = Vector3.zero;
+        }
+
+        Debug.Log("[Compass2Panel] 谜题已重置");
+    }
 }
