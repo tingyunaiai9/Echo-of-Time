@@ -175,11 +175,12 @@ public class PaintManager : MonoBehaviour
         // 共享图片线索到便签墙（参考 UIManager Minus 键流程）
         if (sharedClueSprite != null)
         {
-            int timeline = TimelinePlayer.Local != null ? TimelinePlayer.Local.timeline : 0;
+            int timeline = TimelinePlayer.Local.timeline;
+            int level = TimelinePlayer.Local.currentLevel;
             byte[] spriteBytes = ImageUtils.CompressSpriteToJpegBytes(sharedClueSprite, 80);
             if (spriteBytes != null)
             {
-                ClueBoard.AddClueEntry(timeline, spriteBytes);
+                ClueBoard.AddClueEntry(timeline, level, spriteBytes);
                 Debug.Log($"[PuzzleManager] 已共享线索图片到便签墙，大小：{spriteBytes.Length} 字节");
             }
             else

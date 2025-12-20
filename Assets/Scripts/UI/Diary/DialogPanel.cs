@@ -260,6 +260,7 @@ public class DialogPanel : MonoBehaviour
         isStreaming = true;
     
         int timeline = TimelinePlayer.Local.timeline;
+        int level = TimelinePlayer.Local.currentLevel;
         Debug.Log($"[DialogPanel] ImageGenCoroutine 启动，Timeline: {timeline}, Prompt: {prompt}");
     
         string imageUrl = null;
@@ -323,7 +324,7 @@ public class DialogPanel : MonoBehaviour
                         if (ImageNetworkSender.LocalInstance != null)
                         {
                             // 走网络发送：切分 -> 发送 -> Rpc回来 -> 显示
-                            ImageNetworkSender.LocalInstance.SendImage(compressedData, timeline);
+                            ImageNetworkSender.LocalInstance.SendImage(compressedData, timeline, level);
                         }
 
                         // 图片生成成功后，移除"俺在思考……"占位消息

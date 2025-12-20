@@ -59,10 +59,11 @@ public class Poem2Manager : BasePoemManager
         {
             Sprite sprite = Resources.Load<Sprite>("Clue_Poem2");
             int timeline = TimelinePlayer.Local.timeline;
+            int level = TimelinePlayer.Local.currentLevel;
             // 压缩图片，避免过大
             byte[] spriteBytes = ImageUtils.CompressSpriteToJpegBytes(sprite, 80);
             Debug.Log($"[UIManager] 线索图片压缩成功，大小：{spriteBytes.Length} 字节");
-            ClueBoard.AddClueEntry(timeline, spriteBytes);
+            ClueBoard.AddClueEntry(timeline, level,spriteBytes);
         }
         
         // 打开控制台面板
