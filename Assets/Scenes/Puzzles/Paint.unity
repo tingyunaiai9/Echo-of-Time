@@ -626,6 +626,7 @@ MonoBehaviour:
         m_CallState: 2
   puzzlePanel: {fileID: 353986452}
   consolePanel: {fileID: 1604598620}
+  tipPanel: {fileID: 1145545515}
   clueSprite: {fileID: 21300000, guid: 47cfc86ad61ce1644965b64bde04ac97, type: 3}
   sharedClueSprite: {fileID: 21300000, guid: f81d93b1171e21948841cfe599000627, type: 3}
   clueName: "\u4E00\u5E45\u753B"
@@ -2460,6 +2461,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8871418275385414889, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
   m_PrefabInstance: {fileID: 1145545512}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1145545515 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+  m_PrefabInstance: {fileID: 1145545512}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1145545514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef43875cbe6ba46a4ad90e9b8ed6741c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TipManager
 --- !u!1001 &1223666828
 PrefabInstance:
   m_ObjectHideFlags: 0

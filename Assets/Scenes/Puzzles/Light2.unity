@@ -449,6 +449,7 @@ MonoBehaviour:
   - {fileID: 25969136}
   clueButton: {fileID: 2061350727}
   notificationController: {fileID: 1722164378}
+  tipPanel: {fileID: 3463630201625114126}
   handkerchiefObjectName: Handkerchief
   seedObjectName: Seed
   cursorTexture: {fileID: 2800000, guid: 800e72f09ea981141a79c6501275ddee, type: 3}
@@ -14100,13 +14101,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8871418275385414889, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+--- !u!114 &3463630201625114126 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+  m_PrefabInstance: {fileID: 3463630201625114125}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1891010395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef43875cbe6ba46a4ad90e9b8ed6741c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TipManager
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

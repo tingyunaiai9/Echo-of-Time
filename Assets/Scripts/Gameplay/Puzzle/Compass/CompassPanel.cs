@@ -55,6 +55,7 @@ public class CompassPanel : PuzzleManager, IPointerClickHandler
     private int stepProgress = 0;
     private Coroutine flashCoroutine;
     private bool isPuzzleCompleted = false; // 标记谜题是否已完成
+    private static bool s_tipShown = false;
 
     public void Awake()
     {
@@ -67,10 +68,11 @@ public class CompassPanel : PuzzleManager, IPointerClickHandler
         if (ResultImage == null) Debug.LogError("[CompassPanel] ResultImage 未设置！请在 Inspector 中分配该引用.");
         if (notificationController == null) Debug.LogError("[CompassPanel] NotificationController 未设置！请在 Inspector 中分配该引用.");
         if (tipPanel == null) Debug.LogError("[CompassPanel] TipPanel 未设置！请在 Inspector 中分配该引用.");
-        if (TipManager.tipShown == true)
+        if (s_tipShown == true)
         {
             tipPanel.gameObject.SetActive(false);
         }
+        s_tipShown = true;
 
         // 获取 Outline 组件并记录初始状态
         if (OuterImage != null)

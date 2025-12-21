@@ -17,6 +17,8 @@ public class Compass2Panel : PuzzleManager, IPointerClickHandler
     public RectTransform OuterImage;
     [Tooltip("提示面板")]
     public NotificationController notificationController;
+    [Tooltip("指南面板")]
+    public TipManager tipPanel;
 
     [Header("圆环参数")]
     [Tooltip("圆环内半径")]
@@ -30,7 +32,6 @@ public class Compass2Panel : PuzzleManager, IPointerClickHandler
     [Tooltip("金黄色颜色值")]
     public Color goldenColor = new Color(1f, 0.84f, 0f, 1f); // 金黄色
 
-
     private int middleRotationProgress = 0;
     private int outerRotationProgress = 0;
 
@@ -42,6 +43,21 @@ public class Compass2Panel : PuzzleManager, IPointerClickHandler
     public int outerTargetRotations = 2;
 
     private bool isPuzzleCompleted = false;
+    private static bool s_tipShown = false;
+
+    void Awake()
+    {
+        if (InnerImage == null) Debug.LogError("[Compass2Panel] InnerImage 未设置！请在 Inspector 中分配该引用.");
+        if (MiddleImage == null) Debug.LogError("[Compass2Panel] MiddleImage 未设置！请在 Inspector 中分配该引用.");
+        if (OuterImage == null) Debug.LogError("[Compass2Panel] OuterImage 未设置！请在 Inspector 中分配该引用.");
+        if (notificationController == null) Debug.LogError("[Compass2Panel] NotificationController 未设置！请在 Inspector 中分配该引用.");
+        if (tipPanel == null) Debug.LogError("[Compass2Panel] TipPanel 未设置！请在 Inspector 中分配该引用.");
+        if (s_tipShown == true)
+        {
+            tipPanel.gameObject.SetActive(false);
+        }
+        s_tipShown = true;
+    }
 
     public void OnPointerClick(PointerEventData eventData)
     {

@@ -16,6 +16,8 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     public GameObject clueButton;
     [Tooltip("通知控制器引用")]
     public NotificationController notificationController;
+    [Tooltip("指南面板引用")]
+    public TipManager tipPanel;
 
     [Header("Rewards")]
     [Tooltip("Name of the Handkerchief object to find in the scene")]
@@ -50,6 +52,7 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     // 谜题完成标志
     private static bool s_isPuzzleCompleted = false;
+    private static bool s_tipShown = false;
 
     private static PrunePanel s_instance;
 
@@ -81,7 +84,16 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         {
             Debug.LogWarning("[PrunePanel] 未设置 notificationController！");
         }
-    
+        if (tipPanel == null)
+        {
+            Debug.LogWarning("[PrunePanel] 未设置 tipPanel！");
+        }
+        if (s_tipShown == true)
+        {
+            tipPanel.gameObject.SetActive(false);
+        }
+        s_tipShown = true;
+        
         // 在 macOS 上预先缩放光标纹理
         if (Application.platform == RuntimePlatform.OSXPlayer || 
             Application.platform == RuntimePlatform.OSXEditor)
