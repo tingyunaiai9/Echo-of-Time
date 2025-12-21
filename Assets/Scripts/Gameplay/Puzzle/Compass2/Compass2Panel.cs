@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using System.Collections;
 using TMPro;
 using Events;
+using Game.UI;
 
 public class Compass2Panel : PuzzleManager, IPointerClickHandler
 {
@@ -14,6 +15,8 @@ public class Compass2Panel : PuzzleManager, IPointerClickHandler
     public RectTransform MiddleImage;
     [Tooltip("外圈图像对象")]
     public RectTransform OuterImage;
+    [Tooltip("提示面板")]
+    public NotificationController notificationController;
 
     [Header("圆环参数")]
     [Tooltip("圆环内半径")]
@@ -96,7 +99,6 @@ public class Compass2Panel : PuzzleManager, IPointerClickHandler
         CheckPuzzleCompletion();
     }
 
-
     private void CheckPuzzleCompletion()
     {
         int middle = ((middleRotationProgress % 6) + 6) % 6;
@@ -130,6 +132,7 @@ public class Compass2Panel : PuzzleManager, IPointerClickHandler
             icon = OuterImage.GetComponent<Image>()?.sprite,
             image = OuterImage.GetComponent<Image>()?.sprite
         });
+        notificationController.ShowNotification("谜题已完成！空间似乎发生了奇妙的变化");
     
         // 添加绿色透明遮罩，并在动画完成后激活 EndSceneIntro
         int completedCount = 0;
@@ -165,7 +168,7 @@ public class Compass2Panel : PuzzleManager, IPointerClickHandler
         AddGoldenOverlay(OuterImage, onOverlayComplete);
     }
     
-    // 为指定的图像添加绿色透明遮罩
+    // 为指定的图像添加金色透明遮罩
     private void AddGoldenOverlay(RectTransform image, System.Action onComplete)
     {
         if (image == null)

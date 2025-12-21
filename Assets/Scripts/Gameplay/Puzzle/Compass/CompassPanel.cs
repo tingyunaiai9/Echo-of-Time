@@ -5,6 +5,7 @@ using System.Collections;
 using TMPro;
 using Game.Gameplay.Puzzle.Paint2;
 using Events;
+using Game.UI;
 
 public class CompassPanel : PuzzleManager, IPointerClickHandler
 {
@@ -15,6 +16,8 @@ public class CompassPanel : PuzzleManager, IPointerClickHandler
     public RectTransform InnerImage;
     [Tooltip("结果图像对象")]
     public RectTransform ResultImage;
+    [Tooltip("提示面板")]
+    public NotificationController notificationController;
     
     [Header("圆环参数")]
     [Tooltip("圆环内半径")]
@@ -56,33 +59,11 @@ public class CompassPanel : PuzzleManager, IPointerClickHandler
         panelTransform = GetComponent<RectTransform>();
         canvas = GetComponentInParent<Canvas>();
 
-        // 如果未手动设置 OuterImage，尝试自动查找
-        if (OuterImage == null)
-        {
-            Transform outerTransform = transform.Find("OuterImage");
-            if (outerTransform != null)
-            {
-                OuterImage = outerTransform.GetComponent<RectTransform>();
-            }
-            else
-            {
-                Debug.LogError("[PaintPanel] 未找到 OuterImage 对象！");
-            }
-        }
-
-        // 尝试查找 InnerImage
-        if (InnerImage == null)
-        {
-            Transform innerTransform = transform.Find("InnerImage");
-            if (innerTransform != null)
-            {
-                InnerImage = innerTransform.GetComponent<RectTransform>();
-            }
-            else
-            {
-                Debug.LogWarning("[PaintPanel] 未找到 InnerImage 对象（请检查层级）");
-            }
-        }
+        // 检查必要组件是否已分配
+        if (OuterImage == null) Debug.LogError("[CompassPanel] OuterImage 未设置！请在 Inspector 中分配该引用。");
+        if (InnerImage == null) Debug.LogError("[CompassPanel] InnerImage 未设置！请在 Inspector 中分配该引用.");
+        if (ResultImage == null) Debug.LogError("[CompassPanel] ResultImage 未设置！请在 Inspector 中分配该引用.");
+        if (notificationController == null) Debug.LogError("[CompassPanel] NotificationController 未设置！请在 Inspector 中分配该引用.");
 
         // 获取 Outline 组件并记录初始状态
         if (OuterImage != null)
@@ -364,7 +345,7 @@ public class CompassPanel : PuzzleManager, IPointerClickHandler
             Debug.Log($"[UIManager] 线索图片压缩成功，大小：{spriteBytes.Length} 字节");
             ClueBoard.AddClueEntry(timeline, level, spriteBytes);
         }
-
+        notificationController.ShowNotification("谜题已完成！新线索已添加到日记及背包当中。");
     }
 
     /* 重置旋转状态，清空计数并重置所有数字显示 */
