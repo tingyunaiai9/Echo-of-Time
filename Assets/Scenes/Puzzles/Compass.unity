@@ -708,7 +708,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8871418275385414889, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -725,6 +725,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8871418275385414889, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
   m_PrefabInstance: {fileID: 322320698}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &322320701 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+  m_PrefabInstance: {fileID: 322320698}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 322320700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef43875cbe6ba46a4ad90e9b8ed6741c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TipManager
 --- !u!1 &372584474
 GameObject:
   m_ObjectHideFlags: 0
@@ -1144,6 +1155,7 @@ MonoBehaviour:
   InnerImage: {fileID: 418193218}
   ResultImage: {fileID: 1626567638}
   notificationController: {fileID: 1420742681}
+  tipPanel: {fileID: 322320701}
   innerRadius: 200
   outerRadius: 450
   rotationAngle: 30

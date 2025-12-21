@@ -15,6 +15,7 @@ public class TipManager : MonoBehaviour
     public Button nextButton; // 下一张提示图片按钮
 
     private int currentTipIndex = 0; // 当前显示的提示图片索引
+    public static bool tipShown = false; // 提示面板是否已显示
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void OnEnable() 
@@ -70,5 +71,6 @@ public class TipManager : MonoBehaviour
         previousButton.gameObject.SetActive(true);
         nextButton.gameObject.SetActive(true);
         this.gameObject.SetActive(false);
+        tipShown = true;
     }
 }

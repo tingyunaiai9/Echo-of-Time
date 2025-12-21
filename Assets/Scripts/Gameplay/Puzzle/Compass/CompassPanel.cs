@@ -18,6 +18,8 @@ public class CompassPanel : PuzzleManager, IPointerClickHandler
     public RectTransform ResultImage;
     [Tooltip("提示面板")]
     public NotificationController notificationController;
+    [Tooltip("指南面板")]
+    public TipManager tipPanel;
     
     [Header("圆环参数")]
     [Tooltip("圆环内半径")]
@@ -64,6 +66,11 @@ public class CompassPanel : PuzzleManager, IPointerClickHandler
         if (InnerImage == null) Debug.LogError("[CompassPanel] InnerImage 未设置！请在 Inspector 中分配该引用.");
         if (ResultImage == null) Debug.LogError("[CompassPanel] ResultImage 未设置！请在 Inspector 中分配该引用.");
         if (notificationController == null) Debug.LogError("[CompassPanel] NotificationController 未设置！请在 Inspector 中分配该引用.");
+        if (tipPanel == null) Debug.LogError("[CompassPanel] TipPanel 未设置！请在 Inspector 中分配该引用.");
+        if (TipManager.tipShown == true)
+        {
+            tipPanel.gameObject.SetActive(false);
+        }
 
         // 获取 Outline 组件并记录初始状态
         if (OuterImage != null)
