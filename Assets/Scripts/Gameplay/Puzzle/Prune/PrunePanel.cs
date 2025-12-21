@@ -77,6 +77,10 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         {
             Debug.LogWarning("[PrunePanel] 未设置 cursorTexturePressed！");
         }
+        if (notificationController == null)
+        {
+            Debug.LogWarning("[PrunePanel] 未设置 notificationController！");
+        }
     
         // 在 macOS 上预先缩放光标纹理
         if (Application.platform == RuntimePlatform.OSXPlayer || 
@@ -123,14 +127,6 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         if (UIManager.Instance.PruneClueUnlocked && clueButton != null)
         {
             clueButton.SetActive(true);
-        }
-        if (notificationController == null)
-        {
-            notificationController = NotificationController.Instance;
-            if (notificationController == null)
-            {
-                notificationController = FindFirstObjectByType<NotificationController>();
-            }
         }
     }
 
@@ -290,7 +286,7 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             }
         }
 
-        notificationController.ShowNotification("Puzzle Completed: Prune");
+        notificationController.ShowNotification("当前谜题已完成！场景当初似乎出现了一些变化。");
         EventBus.LocalPublish(new PuzzleCompletedEvent
         {
             sceneName = "Light2"
