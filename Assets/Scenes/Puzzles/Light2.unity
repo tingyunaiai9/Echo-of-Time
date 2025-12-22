@@ -14080,6 +14080,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+      propertyPath: tipTitle
+      value: "\u526A\u679D"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: 'tipWords.Array.data[0]'
       value: "\u4FEE\u526A\u9752\u94DC\u6811\u679D\u53F6\uFF0C\u5C06\u7279\u5B9A\u6C49\u5B57\u9732\u51FA"
       objectReference: {fileID: 0}

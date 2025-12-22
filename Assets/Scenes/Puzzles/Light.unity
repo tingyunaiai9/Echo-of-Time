@@ -441,6 +441,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+      propertyPath: tipTitle
+      value: "\u5F15\u5149"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: 'tipWords.Array.data[0]'
       value: "\u5C06\u6563\u843D\u7684\u955C\u5B50\u63D2\u5165\u7279\u5B9A\u7684\u51F9\u69FD"
       objectReference: {fileID: 0}
