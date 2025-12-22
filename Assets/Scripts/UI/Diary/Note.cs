@@ -26,14 +26,38 @@ public class Note : MonoBehaviour
             Debug.LogWarning($"[{GetType().Name}.OnClickViewImage] noteImage 或其 sprite 未设置");
             return;
         }
-        
-        // 使用 FindObjectsByType 并指定 FindObjectsInactive.Include 来查找未激活对象
-        ClueImagePanel clueImagePanel = FindFirstObjectByType<ClueImagePanel>(FindObjectsInactive.Include);
 
-        // 激活 ClueImagePanel
+        // 找到 ClueImagePanel（包含未激活对象）
+        ClueImagePanel clueImagePanel = FindFirstObjectByType<ClueImagePanel>(FindObjectsInactive.Include);
+        if (clueImagePanel == null)
+        {
+            Debug.LogWarning($"[{GetType().Name}.OnClickViewImage] 未找到 ClueImagePanel");
+            return;
+        }
+
+        // 激活根节点
         clueImagePanel.gameObject.SetActive(true);
-    
-        // 设置 ClueImagePanel 的图片
-        ClueImagePanel.SetClueImage(noteImage.sprite);
+
+        // 在 ClueImagePanel 下查找名为 ImageDisplay 的 Image 组件（包含未激活）
+        Image imageDisplay = null;
+        var images = clueImagePanel.GetComponentsInChildren<Image>(true);
+        for (int i = 0; i < images.Length; i++)
+        {
+            if (images[i].name == "ImageDisplay")
+            {
+                imageDisplay = images[i];
+                break;
+            }
+        }
+
+        if (imageDisplay == null)
+        {
+            Debug.LogWarning($"[{GetType().Name}.OnClickViewImage] 未在 ClueImagePanel 下找到名为 ImageDisplay 的 Image 组件");
+            return;
+        }
+
+        imageDisplay.gameObject.SetActive(true);
+        imageDisplay.preserveAspect = true;
+        imageDisplay.sprite = noteImage.sprite;
     }
 }
