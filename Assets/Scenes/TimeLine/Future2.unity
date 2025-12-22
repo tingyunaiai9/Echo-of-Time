@@ -1320,7 +1320,7 @@ MonoBehaviour:
   seedItemId: Light2Seed
   treeObject: {fileID: 1936971607}
   notificationController: {fileID: 0}
-  testMode: 1
+  testMode: 0
 --- !u!212 &1456438082
 SpriteRenderer:
   m_ObjectHideFlags: 0

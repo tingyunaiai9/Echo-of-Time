@@ -600,7 +600,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &872927303
 Transform:
   m_ObjectHideFlags: 0
@@ -1215,7 +1215,7 @@ MonoBehaviour:
   seedItemId: Light2Seed
   treeObject: {fileID: 872927302}
   notificationController: {fileID: 0}
-  testMode: 1
+  testMode: 0
 --- !u!1 &1311505132
 GameObject:
   m_ObjectHideFlags: 0
