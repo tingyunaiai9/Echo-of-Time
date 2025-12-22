@@ -69,7 +69,6 @@ namespace Events
     // 每一层探索进度事件
     public class LevelProgressEvent
     {
-        public int level;
     }
 
     public class PuzzleCompletedEvent

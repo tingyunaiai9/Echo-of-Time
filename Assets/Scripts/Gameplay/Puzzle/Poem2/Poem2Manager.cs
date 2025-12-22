@@ -42,6 +42,9 @@ public class Poem2Manager : BasePoemManager
         {
             sceneName = "Poem2"
         });
+        EventBus.LocalPublish(new LevelProgressEvent
+        {
+        });
 
         // 发布 ClueDiscoveredEvent 事件
         EventBus.LocalPublish(new ClueDiscoveredEvent

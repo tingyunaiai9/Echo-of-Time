@@ -39,7 +39,7 @@ public class UIManager : Singleton<UIManager>
         new List<int>() {1, 0, 0}, // 民国时间线
         new List<int>() {1, 0, 0}  // 未来时间线
     };
-    public static int s_levelProgressCount = 1;
+    public static int s_levelProgressCount = 0;
 
     protected override void Awake()
     {

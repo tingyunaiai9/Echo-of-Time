@@ -7686,6 +7686,7 @@ MonoBehaviour:
   DiaryPanel: {fileID: 1924663762}
   InventoryPanel: {fileID: 255870193}
   TipPanel: {fileID: 534900696}
+  notificationController: {fileID: 1403563514}
   mainCanvas: {fileID: 1829174780}
   DiaryButton: {fileID: 1155842141}
   InventoryButton: {fileID: 163052456}
