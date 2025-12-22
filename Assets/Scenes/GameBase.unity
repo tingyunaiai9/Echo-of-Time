@@ -11259,6 +11259,14 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 2059308716}
+    - target: {fileID: 3511887106903849167, guid: 63f8bbab5d71d4bd9a7b9515e3f00741, type: 3}
+      propertyPath: m_SortingOrder
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 3511887106903849167, guid: 63f8bbab5d71d4bd9a7b9515e3f00741, type: 3}
+      propertyPath: m_PlaneDistance
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 4236665228758547916, guid: 63f8bbab5d71d4bd9a7b9515e3f00741, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
@@ -11378,5 +11386,5 @@ SceneRoots:
   - {fileID: 1829174781}
   - {fileID: 1391008354}
   - {fileID: 928905259}
-  - {fileID: 7699767927035993780}
   - {fileID: 234273447}
+  - {fileID: 7699767927035993780}
