@@ -63,17 +63,15 @@ namespace Events
         public Sprite image;
     }
 
-    // 玩家打开独立UI界面时发布
-    
-    public class FreezeEvent
-    {
-        public bool isOpen;
-    }
-
     /*
      * 谜题与进度相关事件
      */
-    // 谜题完成时发布
+    // 每一层探索进度事件
+    public class LevelProgressEvent
+    {
+        public int level;
+    }
+
     public class PuzzleCompletedEvent
     {
         public string sceneName;
@@ -100,16 +98,6 @@ namespace Events
     public class IntroEndEvent
     {
     }
-
-
-
-    /*
-     * 时间线交互事件
-     */
-
-    /*
-     * UI与视听反馈事件
-     */
 
     // 房间创建/加入进度事件
     public class RoomProgressEvent

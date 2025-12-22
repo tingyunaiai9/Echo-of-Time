@@ -1,6 +1,9 @@
 using UnityEngine;
 using Events;
-using Unity.Sync.Relay.Message; // 引入事件命名空间
+using Unity.Sync.Relay.Message;
+using Game.UI;
+using Unity.UOS.COSXML.Log;
+using System.Collections.Generic; // 引入事件命名空间
 
 // UI管理器，协调所有UI系统的显示和交互
 public class UIManager : Singleton<UIManager>
@@ -12,7 +15,8 @@ public class UIManager : Singleton<UIManager>
     public GameObject InventoryPanel;
     [Tooltip("指南界面游戏对象")]
     public GameObject TipPanel;
-
+    [Tooltip("通知面板游戏对象")]
+    public NotificationController notificationController;
     [Tooltip("主 UI 画布（包含日记按钮等常驻 UI），用于在谜题中隐藏")]
     public Canvas mainCanvas;
     [Header("HUD按钮")]
@@ -28,6 +32,14 @@ public class UIManager : Singleton<UIManager>
     public bool UIFrozen = false;
     [Tooltip("Prune谜题提示是否解锁")]
     public bool PruneClueUnlocked = false;
+    [Tooltip("三时间线三层当中的探索进度矩阵")]
+    public List<List<int>> TimelineLevelProgress = new List<List<int>>()
+    {
+        new List<int>() {1, 0, 0}, // 古代时间线
+        new List<int>() {1, 0, 0}, // 民国时间线
+        new List<int>() {1, 0, 0}  // 未来时间线
+    };
+    public static int s_levelProgressCount = 1;
 
     protected override void Awake()
     {
@@ -44,6 +56,7 @@ public class UIManager : Singleton<UIManager>
         }
         EventBus.Subscribe<IntroEndEvent>(OnIntroEnd);
         EventBus.Subscribe<ClueSharedEvent>(OnClueShared);
+        EventBus.Subscribe<LevelProgressEvent>(OnProgress);
     }
 
     public void OnIntroEnd(IntroEndEvent evt)
@@ -69,10 +82,24 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
+    public void OnProgress(LevelProgressEvent evt)
+    {
+        Debug.Log("[UIManager] 收到 LevelProgressEvent，探索进度加1。");
+        s_levelProgressCount += 1;
+        int timeline = TimelinePlayer.Local.timeline;
+        int level = TimelinePlayer.Local.currentLevel;
+        if (s_levelProgressCount >= TimelineLevelProgress[timeline][level - 1])
+        {
+            Debug.Log("[UIManager] 当前时间线和层数的所有线索已发现，显示通知。");
+            notificationController.ShowNotification("所有线索已发现，请使用日记和其他玩家进行沟通！");
+        }
+    }
+
     protected override void OnDestroy()
     {
         EventBus.Unsubscribe<ClueSharedEvent>(OnClueShared);
         EventBus.Unsubscribe<IntroEndEvent>(OnIntroEnd);
+        EventBus.Unsubscribe<LevelProgressEvent>(OnProgress);
         base.OnDestroy();
     }
 
