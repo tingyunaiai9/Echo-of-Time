@@ -122,6 +122,22 @@ public class SceneDirector : Singleton<SceneDirector>
         return $"{timelineScenePrefixes[timeline]}{level}";
     }
 
+    // 获取最上层（排除 DontDestroyOnLoad）的场景
+    public bool TryGetTopNonDontDestroyScene(out Scene scene)
+    {
+        for (int i = SceneManager.sceneCount - 1; i >= 0; i--)
+        {
+            var current = SceneManager.GetSceneAt(i);
+            if (current.name == "DontDestroyOnLoad") continue;
+            scene = current;
+            return true;
+        }
+
+        scene = default;
+        return false;
+    }
+
+
     /*
      * 协程：以叠加模式加载 StartPage 场景并设为活动场景
      */

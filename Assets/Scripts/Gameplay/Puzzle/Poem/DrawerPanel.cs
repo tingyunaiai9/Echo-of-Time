@@ -78,7 +78,7 @@ public class DrawerPanel : MonoBehaviour
     }
 
     // 鼠标点击时调用
-    private void OnPointerClick()
+    public void OnPointerClick()
     {
         if (imageGameObject != null)
         {

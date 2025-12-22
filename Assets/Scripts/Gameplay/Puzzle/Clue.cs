@@ -74,6 +74,8 @@ public class Clue : Interaction
                     image = clueImage
                 });
             }
+            // 发布探索进度事件
+            EventBus.LocalPublish(new LevelProgressEvent {});
         }
         UIManager.Instance.SetFrozen(true);
         // 查找并显示 ClueCanvas
