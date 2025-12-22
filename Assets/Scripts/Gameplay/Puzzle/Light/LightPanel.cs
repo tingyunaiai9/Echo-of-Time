@@ -32,6 +32,8 @@ public class LightPanel : MonoBehaviour
     [Header("配置")]
     [Tooltip("根对象（用于显示/隐藏）")]
     public GameObject PanelRoot;
+    [Tooltip("指南面板")]
+    public TipManager tipPanel;
 
     [Header("镜槽预制体")]
     public GameObject MirrorSlotPrefab;
@@ -51,6 +53,7 @@ public class LightPanel : MonoBehaviour
 
     // 谜题完成标志
     private static bool s_isPuzzleCompleted = false;
+    private static bool s_tipShown = false;
     
     private const int GRID_COLS = 11; // 列数
     private const int GRID_ROWS = 5;  // 行数
@@ -80,7 +83,11 @@ public class LightPanel : MonoBehaviour
             s_isOpen = false;
             s_isPuzzleCompleted = false;
         }
-    
+        if (s_tipShown == true)
+        {
+            tipPanel.gameObject.SetActive(false);
+        }
+        s_tipShown = true;
         // 获取 Background 容器
         backgroundTransform = transform.Find("Background");
         if (backgroundTransform == null)

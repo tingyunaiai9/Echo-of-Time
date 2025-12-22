@@ -325,6 +325,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LargeNoteSlot
   noteId: 4
   poemText: {fileID: 0}
+  poemColor: {r: 1, g: 1, b: 1, a: 1}
   borderOutline: {fileID: 0}
   normalBorderWidth: {x: 2, y: 2}
   highlightBorderWidth: {x: 5, y: 5}
@@ -469,6 +470,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragHandler
   correctLargeNoteId: 5
   poemText: {fileID: 0}
+  poemColor: {r: 0, g: 0, b: 0, a: 1}
   maxDetectionDistance: 150
 --- !u!225 &70654118
 CanvasGroup:
@@ -1373,6 +1375,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragHandler
   correctLargeNoteId: 4
   poemText: {fileID: 0}
+  poemColor: {r: 0, g: 0, b: 0, a: 1}
   maxDetectionDistance: 150
 --- !u!225 &373163635
 CanvasGroup:
@@ -2104,6 +2107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragHandler
   correctLargeNoteId: 8
   poemText: {fileID: 0}
+  poemColor: {r: 0, g: 0, b: 0, a: 1}
   maxDetectionDistance: 150
 --- !u!225 &650587521
 CanvasGroup:
@@ -2538,6 +2542,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8871418275385414889, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
   m_PrefabInstance: {fileID: 744423975}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &744423978 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+  m_PrefabInstance: {fileID: 744423975}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 744423977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef43875cbe6ba46a4ad90e9b8ed6741c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TipManager
 --- !u!1 &848451198
 GameObject:
   m_ObjectHideFlags: 0
@@ -2608,6 +2623,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LargeNoteSlot
   noteId: 5
   poemText: {fileID: 0}
+  poemColor: {r: 1, g: 1, b: 1, a: 1}
   borderOutline: {fileID: 0}
   normalBorderWidth: {x: 2, y: 2}
   highlightBorderWidth: {x: 5, y: 5}
@@ -2856,6 +2872,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragHandler
   correctLargeNoteId: 7
   poemText: {fileID: 0}
+  poemColor: {r: 0, g: 0, b: 0, a: 1}
   maxDetectionDistance: 150
 --- !u!225 &953620590
 CanvasGroup:
@@ -3413,6 +3430,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LargeNoteSlot
   noteId: 1
   poemText: {fileID: 0}
+  poemColor: {r: 1, g: 1, b: 1, a: 1}
   borderOutline: {fileID: 0}
   normalBorderWidth: {x: 2, y: 2}
   highlightBorderWidth: {x: 5, y: 5}
@@ -3689,6 +3707,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragHandler
   correctLargeNoteId: 3
   poemText: {fileID: 0}
+  poemColor: {r: 0, g: 0, b: 0, a: 1}
   maxDetectionDistance: 150
 --- !u!225 &1462000171
 CanvasGroup:
@@ -3794,6 +3813,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragHandler
   correctLargeNoteId: 2
   poemText: {fileID: 0}
+  poemColor: {r: 0, g: 0, b: 0, a: 1}
   maxDetectionDistance: 150
 --- !u!225 &1647376383
 CanvasGroup:
@@ -3915,6 +3935,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LargeNoteSlot
   noteId: 3
   poemText: {fileID: 0}
+  poemColor: {r: 1, g: 1, b: 1, a: 1}
   borderOutline: {fileID: 0}
   normalBorderWidth: {x: 2, y: 2}
   highlightBorderWidth: {x: 5, y: 5}
@@ -4302,6 +4323,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LargeNoteSlot
   noteId: 2
   poemText: {fileID: 0}
+  poemColor: {r: 1, g: 1, b: 1, a: 1}
   borderOutline: {fileID: 0}
   normalBorderWidth: {x: 2, y: 2}
   highlightBorderWidth: {x: 5, y: 5}
@@ -4483,7 +4505,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2abcfa0e2a43845cb85f2073e3552ef6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Poem1Manager
+  puzzleID: 
+  puzzleName: 
+  isCompleted: 0
   totalNotesRequired: 5
+  tipPanel: {fileID: 744423978}
   panelRoot: {fileID: 1766814043}
   drawerPanel: {fileID: 222388687}
   animationDuration: 1
@@ -5005,6 +5031,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragHandler
   correctLargeNoteId: 6
   poemText: {fileID: 0}
+  poemColor: {r: 0, g: 0, b: 0, a: 1}
   maxDetectionDistance: 150
 --- !u!225 &2044889294
 CanvasGroup:
@@ -5110,6 +5137,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragHandler
   correctLargeNoteId: 1
   poemText: {fileID: 0}
+  poemColor: {r: 0, g: 0, b: 0, a: 1}
   maxDetectionDistance: 150
 --- !u!225 &2048660283
 CanvasGroup:

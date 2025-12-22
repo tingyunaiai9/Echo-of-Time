@@ -25,6 +25,10 @@ public class PaintManager : MonoBehaviour
     [Tooltip("拼图完成后要打开的 ConsolePanel 面板（在 Canvas 下）")]
     public GameObject consolePanel;
 
+    [Header("提示面板")]
+    [Tooltip("指南面板")]
+    public TipManager tipPanel;
+
     [Header("线索设置")]
     [Tooltip("拼图完成后获得的线索图片")]
     public Sprite clueSprite;
@@ -43,6 +47,17 @@ public class PaintManager : MonoBehaviour
     private Dictionary<int, PuzzleMask> masks = new Dictionary<int, PuzzleMask>();
     private int correctPieces = 0;
     private int totalPieces;
+
+    private static bool s_tipShown = false;
+
+    void Awake()
+    {
+        if (s_tipShown && tipPanel != null)
+        {
+            tipPanel.gameObject.SetActive(false);
+        }
+        s_tipShown = true;
+    }
 
     void Start()
     {

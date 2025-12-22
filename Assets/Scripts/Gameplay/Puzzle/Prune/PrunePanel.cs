@@ -16,6 +16,8 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     public GameObject clueButton;
     [Tooltip("通知控制器引用")]
     public NotificationController notificationController;
+    [Tooltip("指南面板引用")]
+    public TipManager tipPanel;
 
     [Header("Rewards")]
     [Tooltip("Name of the Handkerchief object to find in the scene")]
@@ -50,6 +52,7 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     // 谜题完成标志
     private static bool s_isPuzzleCompleted = false;
+    private static bool s_tipShown = false;
 
     private static PrunePanel s_instance;
 
@@ -77,7 +80,20 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         {
             Debug.LogWarning("[PrunePanel] 未设置 cursorTexturePressed！");
         }
-    
+        if (notificationController == null)
+        {
+            Debug.LogWarning("[PrunePanel] 未设置 notificationController！");
+        }
+        if (tipPanel == null)
+        {
+            Debug.LogWarning("[PrunePanel] 未设置 tipPanel！");
+        }
+        if (s_tipShown == true)
+        {
+            tipPanel.gameObject.SetActive(false);
+        }
+        s_tipShown = true;
+
         // 在 macOS 上预先缩放光标纹理
         if (Application.platform == RuntimePlatform.OSXPlayer || 
             Application.platform == RuntimePlatform.OSXEditor)
@@ -85,13 +101,13 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             if (cursorTexture != null)
             {
                 scaledCursorTexture = ScaleTexture(cursorTexture, macOSScale);
-                scaledHotspot = new Vector2(scaledCursorTexture.width / 2f, scaledCursorTexture.height / 2f); // 设置热点为中心
+                scaledHotspot = new Vector2(scaledCursorTexture.width / 4f, scaledCursorTexture.height / 4f); // 设置热点为剪刀所在位置
             }
             
             if (cursorTexturePressed != null)
             {
                 scaledCursorTexturePressed = ScaleTexture(cursorTexturePressed, macOSScale);
-                scaledHotspotPressed = new Vector2(scaledCursorTexturePressed.width / 2f, scaledCursorTexturePressed.height / 2f); // 设置热点为中心
+                scaledHotspotPressed = new Vector2(scaledCursorTexturePressed.width / 4f, scaledCursorTexturePressed.height / 4f); // 设置热点为剪刀所在位置
             }
         }
         else
@@ -99,8 +115,8 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             // Windows 平台直接使用原始纹理
             scaledCursorTexture = cursorTexture;
             scaledCursorTexturePressed = cursorTexturePressed;
-            scaledHotspot = cursorTexture != null ? new Vector2(cursorTexture.width / 2f, cursorTexture.height / 2f) : Vector2.zero; // 设置热点为中心
-            scaledHotspotPressed = cursorTexturePressed != null ? new Vector2(cursorTexturePressed.width / 2f, cursorTexturePressed.height / 2f) : Vector2.zero; // 设置热点为中心
+            scaledHotspot = cursorTexture != null ? new Vector2(cursorTexture.width / 4f, cursorTexture.height / 4f) : Vector2.zero; // 设置热点为剪刀所在位置
+            scaledHotspotPressed = cursorTexturePressed != null ? new Vector2(cursorTexturePressed.width / 4f, cursorTexturePressed.height / 4f) : Vector2.zero; // 设置热点为剪刀所在位置
         }
     }
     
@@ -123,14 +139,6 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         if (UIManager.Instance.PruneClueUnlocked && clueButton != null)
         {
             clueButton.SetActive(true);
-        }
-        if (notificationController == null)
-        {
-            notificationController = NotificationController.Instance;
-            if (notificationController == null)
-            {
-                notificationController = FindFirstObjectByType<NotificationController>();
-            }
         }
     }
 
@@ -290,7 +298,7 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             }
         }
 
-        notificationController.ShowNotification("Puzzle Completed: Prune");
+        notificationController.ShowNotification("当前谜题已完成！场景当初似乎出现了一些变化。");
         EventBus.LocalPublish(new PuzzleCompletedEvent
         {
             sceneName = "Light2"
@@ -346,4 +354,5 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     
         //Debug.Log($"[PrunePanel] 金黄色单词数量: {goldenCount}/{totalCount}");
         return goldenCount == totalCount && totalCount > 0;
-    }}
+    }
+}

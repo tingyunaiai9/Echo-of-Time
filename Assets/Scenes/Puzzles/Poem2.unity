@@ -1655,7 +1655,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8871418275385414889, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1672,6 +1672,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8871418275385414889, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
   m_PrefabInstance: {fileID: 358394849}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &358394852 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+  m_PrefabInstance: {fileID: 358394849}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 358394851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef43875cbe6ba46a4ad90e9b8ed6741c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TipManager
 --- !u!1 &359950995
 GameObject:
   m_ObjectHideFlags: 0
@@ -3016,6 +3027,7 @@ MonoBehaviour:
   puzzleName: 
   isCompleted: 0
   totalNotesRequired: 4
+  tipPanel: {fileID: 358394852}
   panelRoot: {fileID: 681755362}
   consolePanel: {fileID: 948439223}
 --- !u!1 &789690926
