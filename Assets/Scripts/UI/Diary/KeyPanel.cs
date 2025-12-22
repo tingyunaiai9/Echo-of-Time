@@ -56,9 +56,10 @@ public class KeyPanel : MonoBehaviour
         if (imageViewerImage == null)
             imageViewerImage = imageViewer.GetComponentInChildren<Image>(true);
 
-        imageViewerImage.sprite = KeyImage.sprite;
+        imageViewerImage.preserveAspect = true;
         imageViewer.SetActive(true);
         imageViewerImage.gameObject.SetActive(true);
+        imageViewerImage.sprite = KeyImage.sprite;
         // imageViewerImage.SetNativeSize();     // 按需：用容器自适配可移除
 
     }
