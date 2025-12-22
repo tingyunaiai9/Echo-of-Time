@@ -5,7 +5,8 @@ using Events;
 using Unity.Sync.Relay.Message;
 using Game.UI;
 using Unity.UOS.COSXML.Log;
-using System.Collections.Generic; // 引入事件命名空间
+using System.Collections.Generic;
+using Unity.VisualScripting; // 引入事件命名空间
 
 // UI管理器，协调所有UI系统的显示和交互
 public class UIManager : Singleton<UIManager>
@@ -37,9 +38,9 @@ public class UIManager : Singleton<UIManager>
     [Tooltip("三时间线三层当中的探索进度矩阵")]
     public List<List<int>> TimelineLevelProgress = new List<List<int>>()
     {
-        new List<int>() {1, 1, 1}, // 古代时间线
-        new List<int>() {1, 1, 1}, // 民国时间线
-        new List<int>() {1, 1, 1}  // 未来时间线
+        new List<int>() {1, 2, 3}, // 古代时间线
+        new List<int>() {1, 4, 3}, // 民国时间线
+        new List<int>() {1, 5, 3}  // 未来时间线
     };
     public static int s_levelProgressCount = 0;
 
@@ -103,25 +104,32 @@ public class UIManager : Singleton<UIManager>
         // 如果无法获取目标场景名称，则保持原有行为立即通知
         if (string.IsNullOrEmpty(targetScene))
         {
-            notificationController.ShowNotification("所有线索已发现，请使用日记和其他玩家进行沟通！");
+            Debug.LogWarning("[UIManager] 目标场景名称为空，无法等待时间线场景置顶");
+            yield break;
+        }
+        if (SceneDirector.Instance.TryGetTopNonDontDestroyScene(out var topScene) && topScene.IsValid() && topScene.name == targetScene)
+        {
+            // 已经在顶层，通知面板空闲后等待2s直接显示通知
+            while (notificationController.IsShowing) yield return null;
+            yield return new WaitForSeconds(2f);
+            notificationController?.ShowNotification("所有线索已发现，请使用日记和其他玩家进行沟通！");
             yield break;
         }
 
         // 等待直到最上层（排除 DontDestroyOnLoad）的场景为时间线场景
         while (true)
         {
-            if (SceneDirector.Instance.TryGetTopNonDontDestroyScene(out var topScene)
-                && topScene.IsValid()
-                && topScene.name == targetScene)
+            if (SceneDirector.Instance.TryGetTopNonDontDestroyScene(out var currentTopScene)
+                && currentTopScene.IsValid()
+                && currentTopScene.name == targetScene)
             {
                 break;
             }
             yield return null;
         }
 
-        notificationController.ShowNotification("所有线索已发现，请使用日记和其他玩家进行沟通！");
+        notificationController?.ShowNotification("所有线索已发现，请使用日记和其他玩家进行沟通！");
     }
-
 
     protected override void OnDestroy()
     {
