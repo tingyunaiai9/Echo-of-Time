@@ -1312,7 +1312,7 @@ MonoBehaviour:
   playOnce: 1
   gameOverPanel: {fileID: 629865805}
   easterEggDialogue: {fileID: 11400000, guid: c69c42828fb3fd2488dd316e3ac400ca, type: 2}
-  easterEggDelay: 5
+  easterEggDelay: 8
 --- !u!4 &1484602947
 Transform:
   m_ObjectHideFlags: 0
