@@ -43,9 +43,18 @@ public class Clue : Interaction
             {
                 ClueBoard.AddClueEntry(TimelinePlayer.Local.timeline, TimelinePlayer.Local.currentLevel, clueDescription);
             }
-            else if (clueID == 2) // 如果是罗盘线索，添加日记共享图片线索
+            else if (clueID == 2) // 如果是罗盘线索，添加至日记共享图片线索
             {
-                ClueBoard.AddClueEntry(TimelinePlayer.Local.timeline, TimelinePlayer.Local.currentLevel, ImageUtils.CompressSpriteToJpegBytes(clueImage, 80));
+                ClueSharedEvent evt = new ClueSharedEvent
+                {
+                    clueId = clueID,
+                    timeline = TimelinePlayer.Local.timeline,
+                    level = TimelinePlayer.Local.currentLevel,
+                    imageData = ImageUtils.CompressSpriteToJpegBytes(clueImage, 80)
+                };
+                // 本地并且全局发布事件
+                EventBus.LocalPublish(evt);
+                EventBus.Publish(evt); 
             }
             else if (clueID == 1 || clueID == 3) // 如果是手绢或者便签，添加到日记关键线索当中
             {

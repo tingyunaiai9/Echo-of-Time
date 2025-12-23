@@ -35,6 +35,8 @@ public class UIManager : Singleton<UIManager>
     public bool UIFrozen = false;
     [Tooltip("Prune谜题提示是否解锁")]
     public bool PruneClueUnlocked = false;
+    [Tooltip("Lock谜题提示是否解锁")]
+    public bool LockClueUnlocked = false;
     [Tooltip("三时间线三层当中的探索进度矩阵")]
     public List<List<int>> TimelineLevelProgress = new List<List<int>>()
     {
@@ -82,6 +84,11 @@ public class UIManager : Singleton<UIManager>
         {
             PruneClueUnlocked = true;
             Debug.Log("[UIManager] Prune 谜题线索已解锁，PruneClueUnlocked 设置为 true。");
+        }
+        if (evt.clueId == 2) // 罗盘线索
+        {
+            LockClueUnlocked = true;
+            Debug.Log("[UIManager] Lock 谜题线索已解锁，LockClueUnlocked 设置为 true。");
         }
     }
 
