@@ -10,6 +10,7 @@ public class TipForLevel : MonoBehaviour
     public TipManager tipManager; // 引用TipManager脚本
     public UIManager uiManager; // 引用UIManager脚本
     public Button closeButton; // 关闭按钮引用
+    public bool tipShown = false; // 提示是否已显示
 
     void Start()
     {
@@ -22,12 +23,13 @@ public class TipForLevel : MonoBehaviour
     private void OnIntroEnd(IntroEndEvent evt)
     {
         int level = TimelinePlayer.Local.currentLevel;
-        if (level == levelNumber)
+        if (level == levelNumber && !tipShown)
         {
             // 启用提示面板
             tipManager.gameObject.SetActive(true);
             uiManager.SetFrozen(true);
             Debug.Log("[Level3Tip] 已调用 UIManager.SetFrozen(true)");
+            tipShown = true;
         }
     }
     public void CloseTipPanel()

@@ -90,20 +90,12 @@ public class ClueBoard : MonoBehaviour
         s_instance.CreateClueEntry(timeline, level, data);
         if (publish)
         {
-            // 使用 ImageNetworkSender 分块发送大图，避免 Mirror 消息过大
-            if (ImageNetworkSender.LocalInstance != null)
+            EventBus.Publish(new ClueSharedEvent
             {
-                ImageNetworkSender.LocalInstance.SendImage(data, timeline, level, "Clue");
-            }
-            else
-            {
-                EventBus.Publish(new ClueSharedEvent
-                {
-                    timeline = timeline,
-                    level = level,
-                    imageData = data,
-                });
-            }
+                timeline = timeline,
+                level = level,
+                imageData = data,
+            });
         }
     }
 

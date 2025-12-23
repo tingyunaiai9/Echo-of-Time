@@ -39,6 +39,7 @@ public class Clue : Interaction
         {
             discovered = true;
 
+            // 日记相关事件
             if (clueID == 5) // 如果是天干线索，添加日记共享文字线索
             {
                 ClueBoard.AddClueEntry(TimelinePlayer.Local.timeline, TimelinePlayer.Local.currentLevel, clueDescription);
@@ -56,7 +57,9 @@ public class Clue : Interaction
                 EventBus.LocalPublish(evt);
                 EventBus.Publish(evt); 
             }
-            else if (clueID == 1 || clueID == 3) // 如果是手绢或者便签，添加到日记关键线索当中
+
+            // 背包相关事件
+            if (clueID == 1 || clueID == 3) // 如果是手绢或者便签，添加到日记关键线索和背包当中
             {
                 EventBus.LocalPublish(new ClueDiscoveredEvent
                 {
@@ -69,7 +72,7 @@ public class Clue : Interaction
                     image = clueImage
                 });
             }
-            else // 如果当前是ASCII对照表线索或者第三层当中的线索，添加至背包当中
+            else // 其他线索直接添加至背包当中
             {
                 EventBus.LocalPublish(new ClueDiscoveredEvent
                 {
