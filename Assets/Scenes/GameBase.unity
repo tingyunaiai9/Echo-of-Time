@@ -5195,7 +5195,7 @@ MonoBehaviour:
   correctAnswer: 
   levelAnswers:
   - "\u5357\u5C71"
-  - "\u5F52\u53BB"
+  - "\u5F52\u53BB|\u5F52\u6765"
 --- !u!1 &878058399
 GameObject:
   m_ObjectHideFlags: 0
