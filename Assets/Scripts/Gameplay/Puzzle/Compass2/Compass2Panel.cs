@@ -170,7 +170,7 @@ public class Compass2Panel : PuzzleManager, IPointerClickHandler
     
         // 添加绿色透明遮罩，并在动画完成后激活 EndSceneIntro
         int completedCount = 0;
-        int totalCount = 3;
+        int totalCount = 5; // 1个指针动画 + 4个金色遮罩动画
 
         System.Action onOverlayComplete = () =>
         {
@@ -196,11 +196,47 @@ public class Compass2Panel : PuzzleManager, IPointerClickHandler
                 }
             }
         };
-
+        
+        DisplayRotation(PointerImage, onOverlayComplete);
         AddGoldenOverlay(InnerImage, onOverlayComplete);
         AddGoldenOverlay(Circle1, onOverlayComplete);
         AddGoldenOverlay(Circle2, onOverlayComplete);
         AddGoldenOverlay(Circle3, onOverlayComplete);
+    }
+
+    private void DisplayRotation(RectTransform image, System.Action onComplete)
+    {
+        if (image == null)
+        {
+            onComplete?.Invoke();
+            return;
+        }
+    
+        // 获取或添加 CanvasGroup 组件
+        CanvasGroup canvasGroup = image.GetComponent<CanvasGroup>();
+        if (canvasGroup == null)
+        {
+            canvasGroup = image.gameObject.AddComponent<CanvasGroup>();
+        }
+    
+        // 设置初始透明度为 0
+        canvasGroup.alpha = 0f;
+
+        // 动画：渐显（与加速旋转同时进行）
+        LeanTween.alphaCanvas(canvasGroup, 1f, 0.5f);
+
+        // 加速旋转动画（旋转1080度）
+        LeanTween.rotateAroundLocal(image.gameObject, Vector3.forward, 1080f, 1f)
+            .setEase(LeanTweenType.easeInQuad)
+            .setOnComplete(() =>
+            {
+                // 旋转完成后开始渐隐
+                LeanTween.alphaCanvas(canvasGroup, 0f, 0.5f).setOnComplete(() =>
+                {
+                    // 动画结束后通知完成
+                    onComplete?.Invoke();
+                });
+            });
     }
     
     // 为指定的图像添加金色透明遮罩

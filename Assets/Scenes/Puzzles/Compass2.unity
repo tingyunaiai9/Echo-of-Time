@@ -724,6 +724,7 @@ MonoBehaviour:
   puzzleName: 
   isCompleted: 0
   InnerImage: {fileID: 358320420}
+  PointerImage: {fileID: 1571560671}
   Circle1: {fileID: 450009552}
   Circle2: {fileID: 384025262}
   Circle3: {fileID: 1866332511}
