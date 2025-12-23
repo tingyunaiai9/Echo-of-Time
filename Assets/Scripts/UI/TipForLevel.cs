@@ -2,8 +2,11 @@ using Events;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Level3Tip : MonoBehaviour
+public class TipForLevel : MonoBehaviour
 {
+    [Header("关卡编号")]
+    public int levelNumber; // 关卡编号
+    [Header("提示面板")]
     public TipManager tipManager; // 引用TipManager脚本
     public UIManager uiManager; // 引用UIManager脚本
     public Button closeButton; // 关闭按钮引用
@@ -19,7 +22,7 @@ public class Level3Tip : MonoBehaviour
     private void OnIntroEnd(IntroEndEvent evt)
     {
         int level = TimelinePlayer.Local.currentLevel;
-        if (level == 3)
+        if (level == levelNumber)
         {
             // 启用提示面板
             tipManager.gameObject.SetActive(true);
