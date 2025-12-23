@@ -67,7 +67,7 @@ public class Poem1Manager : BasePoemManager
         RectTransform poemRect = panelRoot.GetComponent<RectTransform>();
 
         // 计算向上移动的距离（2/3的高度）
-/*         float moveDistance = poemRect.rect.height * 2f / 3f;
+        float moveDistance = poemRect.rect.height * 2f / 3f;
         Vector2 targetPosition = poemRect.anchoredPosition + new Vector2(0, moveDistance);
 
         // 激活 DrawerPanel
@@ -87,5 +87,5 @@ public class Poem1Manager : BasePoemManager
             {
                 Debug.Log("[Poem1Manager] 动画完成");
             });
- */    }
+    }
 }
