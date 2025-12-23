@@ -269,7 +269,7 @@ public class TimelinePlayer : NetworkBehaviour
         isVisible = visible; // SyncVar 同步到所有客户端，触发 hook
     }
     
-    void OnGUI()
+    /*void OnGUI()
     {
         if (!isLocalPlayer) return;
         
@@ -280,7 +280,7 @@ public class TimelinePlayer : NetworkBehaviour
         info += $"Transport ID: {transportId}";
         
         GUI.Box(new Rect(10, 10, 200, 100), info);
-    }
+    }*/
     
     private string GetTimelineName(int timeline)
     {

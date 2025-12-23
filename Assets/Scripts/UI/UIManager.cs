@@ -1,5 +1,6 @@
 using UnityEngine;
-using Events; // 引入事件命名空间
+using Events;
+using Unity.Sync.Relay.Message; // 引入事件命名空间
 
 // UI管理器，协调所有UI系统的显示和交互
 public class UIManager : Singleton<UIManager>
@@ -25,6 +26,8 @@ public class UIManager : Singleton<UIManager>
     [Header("状态标记")]
     [Tooltip("当前是否有UI面板打开")]
     public bool UIFrozen = false;
+    [Tooltip("Prune谜题提示是否解锁")]
+    public bool PruneClueUnlocked = false;
 
     protected override void Awake()
     {
@@ -40,6 +43,7 @@ public class UIManager : Singleton<UIManager>
             }
         }
         EventBus.Subscribe<IntroEndEvent>(OnIntroEnd);
+        EventBus.Subscribe<ClueSharedEvent>(OnClueShared);
     }
 
     public void OnIntroEnd(IntroEndEvent evt)
@@ -55,8 +59,20 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
+    public void OnClueShared(ClueSharedEvent evt)
+    {
+        // 如果是 Prune 谜题的线索，解锁提示
+        if (!string.IsNullOrEmpty(evt.text)) // 未来第二层的文字线索
+        {
+            PruneClueUnlocked = true;
+            Debug.Log("[UIManager] Prune 谜题线索已解锁，PruneClueUnlocked 设置为 true。");
+        }
+    }
+
     protected override void OnDestroy()
     {
+        EventBus.Unsubscribe<ClueSharedEvent>(OnClueShared);
+        EventBus.Unsubscribe<IntroEndEvent>(OnIntroEnd);
         base.OnDestroy();
     }
 
@@ -241,8 +257,9 @@ public class UIManager : Singleton<UIManager>
         {
             Debug.Log("[UIManager] Shift + Minus键按下，添加测试文字共享线索条目。");
             int timeline = TimelinePlayer.Local.timeline;
+            int level = TimelinePlayer.Local.currentLevel;
             string clueText = "未斫之木，天干有七：东园之树，枝条载荣；生于子半，丑时初萌；桃蕊未绽，茂然至辰。飞影又逝，晌午归土。";
-            ClueBoard.AddClueEntry(timeline, clueText, SharedClueType.Text);
+            ClueBoard.AddClueEntry(timeline, level, clueText);
         }
         else if (Input.GetKeyDown(KeyCode.Minus))
         {
@@ -250,10 +267,11 @@ public class UIManager : Singleton<UIManager>
             
             Sprite sprite = Resources.Load<Sprite>("Clue_Poem1");
             int timeline = TimelinePlayer.Local.timeline;
+            int level = TimelinePlayer.Local.currentLevel;
             // 压缩图片，避免过大
             byte[] spriteBytes = ImageUtils.CompressSpriteToJpegBytes(sprite, 80);
             Debug.Log($"[UIManager] 线索图片压缩成功，大小：{spriteBytes.Length} 字节");
-            ClueBoard.AddClueEntry(timeline, spriteBytes, SharedClueType.Image);
+            ClueBoard.AddClueEntry(timeline, level, spriteBytes);
         }
     }
 }

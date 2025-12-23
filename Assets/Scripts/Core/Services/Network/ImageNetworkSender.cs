@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using System;
+using Events;
 
 public class ImageNetworkSender : NetworkBehaviour
 {
@@ -22,7 +23,7 @@ public class ImageNetworkSender : NetworkBehaviour
         LocalInstance = this;
     }
 
-    public void SendImage(byte[] imageData, int timeline, string imageType = "Chat")
+    public void SendImage(byte[] imageData, int timeline, int level, string imageType = "Chat")
     {
         if (imageData == null || imageData.Length == 0) return;
 
@@ -35,10 +36,10 @@ public class ImageNetworkSender : NetworkBehaviour
         // 计算分块
         int totalChunks = Mathf.CeilToInt(imageData.Length / (float)CHUNK_SIZE);
 
-        StartCoroutine(SendChunksProcess(imageId, totalChunks, timeline, imageData, imageType));
+        StartCoroutine(SendChunksProcess(imageId, totalChunks, timeline, level, imageData, imageType));
     }
 
-    private IEnumerator SendChunksProcess(int imageId, int totalChunks, int timeline, byte[] fullData, string imageType)
+    private IEnumerator SendChunksProcess(int imageId, int totalChunks, int timeline, int level, byte[] fullData, string imageType)
     {
         for (int i = 0; i < totalChunks; i++)
         {
@@ -55,6 +56,7 @@ public class ImageNetworkSender : NetworkBehaviour
                 chunkIndex = i,
                 totalChunks = totalChunks,
                 timeline = timeline,
+                level = level,
                 chunkData = chunk,
                 imageType = imageType
             });
@@ -86,11 +88,11 @@ public class ImageNetworkSender : NetworkBehaviour
         if (receiveBuffer[msg.imageId].Count == msg.totalChunks)
         {
             Debug.Log($"[Network] 图片接收完整 ID: {msg.imageId}");
-            ReassembleAndShow(msg.imageId, msg.totalChunks, msg.timeline, msg.imageType);
+            ReassembleAndShow(msg.imageId, msg.totalChunks, msg.timeline, msg.level, msg.imageType);
         }
     }
 
-    private void ReassembleAndShow(int imageId, int totalChunks, int timeline, string imageType)
+    private void ReassembleAndShow(int imageId, int totalChunks, int timeline, int level, string imageType)
     {
         if (!receiveBuffer.ContainsKey(imageId)) return;
 
@@ -123,7 +125,7 @@ public class ImageNetworkSender : NetworkBehaviour
 
         if (imageType == "Clue")
         {
-            ClueBoard.AddClueEntry(timeline, fullImage, publish: false);
+            ClueBoard.AddClueEntry(timeline, level, fullImage, publish: false);
         }
         else
         {

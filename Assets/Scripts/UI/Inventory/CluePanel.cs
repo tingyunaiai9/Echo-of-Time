@@ -108,18 +108,18 @@ public class CluePanel : Inventory
         // 保持原始宽高比例
         imageViewerImage.preserveAspect = true;
         var sprite = currentDetailImage;
-        if (sprite != null)
-        {
-            float w = sprite.rect.width;
-            float h = sprite.rect.height;
-            if (w > 0f && h > 0f)
-            {
-                var fitter = imageViewerImage.GetComponent<AspectRatioFitter>();
-                if (fitter == null) fitter = imageViewerImage.gameObject.AddComponent<AspectRatioFitter>();
-                fitter.aspectMode = AspectRatioFitter.AspectMode.FitInParent; // 在父容器内按比例适配
-                fitter.aspectRatio = w / h;
-            }
-        }
+        // if (sprite != null)
+        // {
+        //     float w = sprite.rect.width;
+        //     float h = sprite.rect.height;
+        //     if (w > 0f && h > 0f)
+        //     {
+        //         var fitter = imageViewerImage.GetComponent<AspectRatioFitter>();
+        //         if (fitter == null) fitter = imageViewerImage.gameObject.AddComponent<AspectRatioFitter>();
+        //         fitter.aspectMode = AspectRatioFitter.AspectMode.FitInParent; // 在父容器内按比例适配
+        //         fitter.aspectRatio = w / h;
+        //     }
+        // }
 
         imageViewer.SetActive(true);
         imageViewerImage.gameObject.SetActive(true);

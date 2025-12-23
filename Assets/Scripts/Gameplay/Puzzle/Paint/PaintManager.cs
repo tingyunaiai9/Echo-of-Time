@@ -25,6 +25,10 @@ public class PaintManager : MonoBehaviour
     [Tooltip("拼图完成后要打开的 ConsolePanel 面板（在 Canvas 下）")]
     public GameObject consolePanel;
 
+    [Header("提示面板")]
+    [Tooltip("指南面板")]
+    public TipManager tipPanel;
+
     [Header("线索设置")]
     [Tooltip("拼图完成后获得的线索图片")]
     public Sprite clueSprite;
@@ -43,6 +47,17 @@ public class PaintManager : MonoBehaviour
     private Dictionary<int, PuzzleMask> masks = new Dictionary<int, PuzzleMask>();
     private int correctPieces = 0;
     private int totalPieces;
+
+    private static bool s_tipShown = false;
+
+    void Awake()
+    {
+        if (s_tipShown && tipPanel != null)
+        {
+            tipPanel.gameObject.SetActive(false);
+        }
+        s_tipShown = true;
+    }
 
     void Start()
     {
@@ -175,11 +190,12 @@ public class PaintManager : MonoBehaviour
         // 共享图片线索到便签墙（参考 UIManager Minus 键流程）
         if (sharedClueSprite != null)
         {
-            int timeline = TimelinePlayer.Local != null ? TimelinePlayer.Local.timeline : 0;
+            int timeline = TimelinePlayer.Local.timeline;
+            int level = TimelinePlayer.Local.currentLevel;
             byte[] spriteBytes = ImageUtils.CompressSpriteToJpegBytes(sharedClueSprite, 80);
             if (spriteBytes != null)
             {
-                ClueBoard.AddClueEntry(timeline, spriteBytes);
+                ClueBoard.AddClueEntry(timeline, level, spriteBytes);
                 Debug.Log($"[PuzzleManager] 已共享线索图片到便签墙，大小：{spriteBytes.Length} 字节");
             }
             else

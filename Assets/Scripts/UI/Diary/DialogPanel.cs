@@ -260,6 +260,7 @@ public class DialogPanel : MonoBehaviour
         isStreaming = true;
     
         int timeline = TimelinePlayer.Local.timeline;
+        int level = TimelinePlayer.Local.currentLevel;
         Debug.Log($"[DialogPanel] ImageGenCoroutine 启动，Timeline: {timeline}, Prompt: {prompt}");
     
         string imageUrl = null;
@@ -317,13 +318,13 @@ public class DialogPanel : MonoBehaviour
                     {
                         Debug.Log($"[Jimeng] 图片压缩成功，压缩后大小: {compressedData.Length} 字节");
 
-                        // 如果没有联网（单机模式调试），则直接本地显示
-                        AddChatImage(compressedData, timeline, publish: false);
+                        // 创建图片消息（强制设置 timeline 为 3，表示即梦图片）
+                        s_instance.CreateChatImage(imageData, 3);
                         // 检查本地玩家的网络组件是否存在
                         if (ImageNetworkSender.LocalInstance != null)
                         {
                             // 走网络发送：切分 -> 发送 -> Rpc回来 -> 显示
-                            ImageNetworkSender.LocalInstance.SendImage(compressedData, timeline);
+                            ImageNetworkSender.LocalInstance.SendImage(compressedData, timeline, level);
                         }
 
                         // 图片生成成功后，移除"俺在思考……"占位消息

@@ -32,6 +32,8 @@ public class LightPanel : MonoBehaviour
     [Header("配置")]
     [Tooltip("根对象（用于显示/隐藏）")]
     public GameObject PanelRoot;
+    [Tooltip("指南面板")]
+    public TipManager tipPanel;
 
     [Header("镜槽预制体")]
     public GameObject MirrorSlotPrefab;
@@ -51,6 +53,7 @@ public class LightPanel : MonoBehaviour
 
     // 谜题完成标志
     private static bool s_isPuzzleCompleted = false;
+    private static bool s_tipShown = false;
     
     private const int GRID_COLS = 11; // 列数
     private const int GRID_ROWS = 5;  // 行数
@@ -80,7 +83,11 @@ public class LightPanel : MonoBehaviour
             s_isOpen = false;
             s_isPuzzleCompleted = false;
         }
-    
+        if (s_tipShown == true)
+        {
+            tipPanel.gameObject.SetActive(false);
+        }
+        s_tipShown = true;
         // 获取 Background 容器
         backgroundTransform = transform.Find("Background");
         if (backgroundTransform == null)
@@ -291,19 +298,19 @@ public class LightPanel : MonoBehaviour
             image = icon // 假设 image 和 icon 是相同的
         });
 
+        // 打开控制台面板
+        ConsolePanel.TogglePanel();
+
         // 同步线索到日记
         if (TimelinePlayer.Local != null)
         {
             Sprite sprite = Resources.Load<Sprite>("Clue_Light1");
             int timeline = TimelinePlayer.Local.timeline;
+            int level = TimelinePlayer.Local.currentLevel;
             // 压缩图片，避免过大
             byte[] spriteBytes = ImageUtils.CompressSpriteToJpegBytes(sprite, 80);
-            Debug.Log($"[UIManager] 线索图片压缩成功，大小：{spriteBytes.Length} 字节");
-            ClueBoard.AddClueEntry(timeline, spriteBytes);
+            ClueBoard.AddClueEntry(timeline, level, spriteBytes);
         }
-
-        // 打开控制台面板
-        ConsolePanel.TogglePanel();
     }
     
     void Update()
@@ -322,8 +329,8 @@ public class LightPanel : MonoBehaviour
     }
 
     /*
-        * 检查谜题是否完成
-        */
+    * 检查谜题是否完成
+    */
     private float puzzleCompletionTimer = 0f; // 谜题完成计时器
     private bool isWaitingForCompletion = false; // 是否正在等待完成
 

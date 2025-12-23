@@ -6,11 +6,15 @@ using Events;
  * 提供通用的计数、面板开关、冻结事件发布等逻辑
  * 具体的动画与完成逻辑由子类实现
  */
-public abstract class BasePoemManager : Puzzle
+public abstract class BasePoemManager : PuzzleManager
 {
     [Header("配置")]
     [Tooltip("需要匹配的总数")]
     public int totalNotesRequired = 5;
+
+    [Header("提示面板")]
+    [Tooltip("指南面板")]
+    public TipManager tipPanel;
 
     protected int matchedCount = 0;
 
@@ -19,6 +23,7 @@ public abstract class BasePoemManager : Puzzle
     protected static bool s_isOpen;
     protected static bool s_initialized = false;
     protected static bool s_isPuzzleCompleted = false;
+    protected static bool s_tipShown = false;
 
     protected virtual void Awake()
     {
@@ -26,6 +31,11 @@ public abstract class BasePoemManager : Puzzle
         s_initialized = false;
         s_isOpen = false;
         s_isPuzzleCompleted = false;
+        if (s_tipShown && tipPanel != null)
+        {
+            tipPanel.gameObject.SetActive(false);
+        }
+        s_tipShown = true;
         matchedCount = 0;
 
         // 让子类做额外的初始化（如关闭特定面板）

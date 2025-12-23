@@ -61,6 +61,14 @@ public class ResultPanel : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+        {
+            OnConfirmButtonClicked();
+        }
+    }
+
     void OnDestroy()
     {
         if (confirmButton != null)

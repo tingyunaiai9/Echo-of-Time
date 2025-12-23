@@ -25,7 +25,8 @@ public class ClueBoard : MonoBehaviour
     public Transform contentParent;
 
     private static ClueBoard s_instance;
-    
+    private static bool s_subscribed; 
+
     // 便签位置数组（循环使用）
     private static readonly Vector2[] notePositions = new Vector2[]
     {
@@ -43,105 +44,82 @@ public class ClueBoard : MonoBehaviour
     void Awake()
     {
         s_instance = this;
-        EventBus.Subscribe<ClueSharedEvent>(OnClueUpdated);
     }
 
-    void OnDestroy()
+    // 确保订阅事件（静态初始化）
+    
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    private static void EnsureSubscribed()
     {
-        EventBus.Unsubscribe<ClueSharedEvent>(OnClueUpdated);
+        if (s_subscribed) return;
+        EventBus.Subscribe<ClueSharedEvent>(OnClueUpdatedStatic);
+        s_subscribed = true;
+    }
+    
+    private static void OnClueUpdatedStatic(ClueSharedEvent e)
+    {
+        if (!EnsureInstance()) return;
+        s_instance.OnClueUpdated(e);
     }
 
     /* 线索更新事件回调 */
     void OnClueUpdated(ClueSharedEvent e)
     {
-        switch (e.ClueType)
+        // 根据事件中实际携带的数据类型区分图片/文字
+        if (e.imageData != null && e.imageData.Length > 0)
         {
-            case SharedClueType.Image:
-                AddClueEntry(e.timeline, e.imageData, SharedClueType.Image, false);
-                break;
-            case SharedClueType.Text:
-                AddClueEntry(e.timeline, e.textData ?? string.Empty, SharedClueType.Text, false);
-                break;
-            default:
-                Debug.LogWarning("[ClueBoard] 收到未知类型的 ClueSharedEvent");
-                break;
+            CreateClueEntry(e.timeline, e.level, e.imageData);
+        }
+        else if (!string.IsNullOrEmpty(e.text))
+        {
+            CreateClueEntry(e.timeline, e.level, e.text);
+        }
+        else
+        {
+            Debug.LogWarning("[ClueBoard] 收到 ClueSharedEvent，但既没有图片也没有文本数据");
+            return;
         }
 
         Debug.Log("[ClueBoard] 收到线索共享事件，已添加新线索条目");
     }
 
-    // 兼容旧调用：默认图片类型
-    public static void AddClueEntry(int timeline, byte[] imageBytes, bool publish = true)
-    {
-        AddClueEntry(timeline, imageBytes, SharedClueType.Image, publish);
-    }
-
-    // 图片/文本统一入口（byte[] 版本）
-    public static void AddClueEntry(int timeline, byte[] data, SharedClueType clueType, bool publish = true)
+    // 图片入口
+    public static void AddClueEntry(int timeline, int level, byte[] data, bool publish = true)
     {
         if (!EnsureInstance()) return;
-
-        switch (clueType)
+        s_instance.CreateClueEntry(timeline, level, data);
+        if (publish)
         {
-            case SharedClueType.Image:
-                s_instance.CreateClueEntry(timeline, data);
-                if (publish)
+            // 使用 ImageNetworkSender 分块发送大图，避免 Mirror 消息过大
+            if (ImageNetworkSender.LocalInstance != null)
+            {
+                ImageNetworkSender.LocalInstance.SendImage(data, timeline, level, "Clue");
+            }
+            else
+            {
+                EventBus.Publish(new ClueSharedEvent
                 {
-                    // 使用 ImageNetworkSender 分块发送大图，避免 Mirror 消息过大
-                    if (ImageNetworkSender.LocalInstance != null)
-                    {
-                        ImageNetworkSender.LocalInstance.SendImage(data, timeline, "Clue");
-                    }
-                    else
-                    {
-                        EventBus.Publish(new ClueSharedEvent
-                        {
-                            timeline = timeline,
-                            imageData = data,
-                            ClueType = SharedClueType.Image
-                        });
-                    }
-                }
-                break;
-
-            case SharedClueType.Text:
-                string textPayload = data != null ? Encoding.UTF8.GetString(data) : string.Empty;
-                s_instance.CreateClueEntry(timeline, textPayload);
-                if (publish)
-                {
-                    EventBus.Publish(new ClueSharedEvent
-                    {
-                        timeline = timeline,
-                        textData = textPayload,
-                        ClueType = SharedClueType.Text
-                    });
-                }
-                break;
-
-            default:
-                Debug.LogWarning("[ClueBoard] AddClueEntry 收到未知线索类型");
-                break;
+                    timeline = timeline,
+                    level = level,
+                    imageData = data,
+                });
+            }
         }
     }
 
-    // 文本版本便捷入口
-    public static void AddClueEntry(int timeline, string text, bool publish = true)
-    {
-        AddClueEntry(timeline, text, SharedClueType.Text, publish);
-    }
-
-    public static void AddClueEntry(int timeline, string text, SharedClueType clueType, bool publish = true)
+    // 文本入口
+    public static void AddClueEntry(int timeline, int level, string text, bool publish = true)
     {
         if (!EnsureInstance()) return;
 
-        s_instance.CreateClueEntry(timeline, text);
+        s_instance.CreateClueEntry(timeline, level, text);
         if (publish)
         {
             EventBus.Publish(new ClueSharedEvent
             {
                 timeline = timeline,
-                textData = text,
-                ClueType = clueType
+                level = level,
+                text = text,
             });
         }
     }
@@ -173,12 +151,12 @@ public class ClueBoard : MonoBehaviour
     }
     
     /* 创建单个线索条目 - 图片 */
-    private void CreateClueEntry(int timeline, byte[] imageBytes)
+    private void CreateClueEntry(int timeline, int level, byte[] imageBytes)
     {
         if (contentParent == null || Note_Image == null) return;
         
         GameObject newNote = Instantiate(Note_Image, contentParent);
-        ApplyCommonLayout(newNote, timeline);
+        ApplyCommonLayout(newNote, timeline, level);
 
         // 处理共享图片
         if (imageBytes != null && imageBytes.Length > 0)
@@ -228,12 +206,12 @@ public class ClueBoard : MonoBehaviour
     }
 
     /* 创建单个线索条目 - 文本 */
-    private void CreateClueEntry(int timeline, string textContent)
+    private void CreateClueEntry(int timeline, int level, string textContent)
     {
         if (contentParent == null || Note_Text == null) return;
 
         GameObject newNote = Instantiate(Note_Text, contentParent);
-        ApplyCommonLayout(newNote, timeline);
+        ApplyCommonLayout(newNote, timeline, level);
 
         // 设置正文文本（找到第一个非 DateText 的 TMP_Text）
         TMP_Text[] texts = newNote.GetComponentsInChildren<TMP_Text>();
@@ -248,7 +226,7 @@ public class ClueBoard : MonoBehaviour
     }
 
     // 公共布局逻辑：位置与日期标签
-    private void ApplyCommonLayout(GameObject noteGO, int timeline)
+    private void ApplyCommonLayout(GameObject noteGO, int timeline, int level)
     {
         // 设置便签位置
         RectTransform rectTransform = noteGO.GetComponent<RectTransform>();
@@ -268,16 +246,31 @@ public class ClueBoard : MonoBehaviour
                 switch (timeline)
                 {
                     case 0:
-                        dateTextComponent.text = "Ancient";
+                        dateTextComponent.text = "古代";
                         break;
                     case 1:
-                        dateTextComponent.text = "Modern";
+                        dateTextComponent.text = "民国";
                         break;
                     case 2:
-                        dateTextComponent.text = "Future";
+                        dateTextComponent.text = "未来";
                         break;
                     default:
-                        dateTextComponent.text = "Unknown";
+                        dateTextComponent.text = "未知";
+                        break;
+                }
+                switch(level)
+                {
+                    case 1:
+                        dateTextComponent.text += " - 第一层";
+                        break;
+                    case 2:
+                        dateTextComponent.text += " - 第二层";
+                        break;
+                    case 3:
+                        dateTextComponent.text += " - 第三层";
+                        break;
+                    default:
+                        dateTextComponent.text += " - 未知章节";
                         break;
                 }
             }
@@ -299,16 +292,3 @@ public class ClueBoard : MonoBehaviour
     }
 }
 
-/* 线索条目数据结构 */
-[System.Serializable]
-public class ClueEntryData
-{
-    public string date;
-    public string content;
-
-    public ClueEntryData(string date, string content)
-    {
-        this.date = date;
-        this.content = content;
-    }
-}
