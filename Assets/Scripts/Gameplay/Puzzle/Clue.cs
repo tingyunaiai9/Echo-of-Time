@@ -32,12 +32,12 @@ public class Clue : Interaction
     public override void OnInteract(PlayerController player)
     {
         if (!CheckPuzzleConditions()) return;
+        uint pid = player != null ? player.netId : 0u;
 
         // 标记调查
         if (!discovered)
         {
             discovered = true;
-            uint pid = player != null ? player.netId : 0u;
 
             if (clueID == 5) // 如果是天干线索，添加日记共享文字线索
             {
@@ -84,20 +84,20 @@ public class Clue : Interaction
             // 发布探索进度事件
             EventBus.LocalPublish(new LevelProgressEvent {});
             UIManager.Instance.SetFrozen(true);
-            // 查找并显示 ClueCanvas
-            GameObject canvasObj = GameObject.Find("ClueCanvas");
-            ClueCanvas canvas = canvasObj != null ? canvasObj.GetComponent<ClueCanvas>() : null;
-
-            if (canvas != null)
-            {
-                canvas.ShowClue(clueText, clueImage, clueDescription);
-            }
-            else
-            {
-                Debug.LogWarning("ClueCanvas not found in the scene!");
-            }
-
-            Debug.Log($"调查线索 -> 对象: {gameObject.name}, 玩家: {pid}\n内容: {clueText}");
         }
+        // 查找并显示 ClueCanvas
+        GameObject canvasObj = GameObject.Find("ClueCanvas");
+        ClueCanvas canvas = canvasObj != null ? canvasObj.GetComponent<ClueCanvas>() : null;
+
+        if (canvas != null)
+        {
+            canvas.ShowClue(clueText, clueImage, clueDescription);
+        }
+        else
+        {
+            Debug.LogWarning("ClueCanvas not found in the scene!");
+        }
+
+        Debug.Log($"调查线索 -> 对象: {gameObject.name}, 玩家: {pid}\n内容: {clueText}");
     }
 }
