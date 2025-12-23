@@ -7693,6 +7693,7 @@ MonoBehaviour:
   TipButton: {fileID: 532785116}
   UIFrozen: 0
   PruneClueUnlocked: 0
+  LockClueUnlocked: 0
 --- !u!4 &1391008354
 Transform:
   m_ObjectHideFlags: 0
@@ -10121,8 +10122,8 @@ RectTransform:
   - {fileID: 2144517305}
   - {fileID: 255870196}
   - {fileID: 1924663766}
-  - {fileID: 493294495}
   - {fileID: 534900695}
+  - {fileID: 493294495}
   - {fileID: 1022776799}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
