@@ -127,7 +127,7 @@ public class ResultPanel : MonoBehaviour
                 confirmButton.interactable = false;
             }
 
-            resultContent.text = "答案正确！";
+            resultContent.text = "答案正确！等待其他玩家输入...";
             resultContent.interactable = false;
 
             if (localPlayer != null)
