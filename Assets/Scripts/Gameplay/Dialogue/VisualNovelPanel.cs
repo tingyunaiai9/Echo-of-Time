@@ -94,16 +94,25 @@ public class VisualNovelPanel : MonoBehaviour
         // 设置背景图：本行有则用本行，没有则沿用上一行
         if (backgroundImage != null)
         {
-            Sprite bg = line.backgroundSprite != null ? line.backgroundSprite : _lastBackgroundSprite;
-            if (bg != null)
+            // 如果勾选了清空背景，则隐藏背景并重置记录
+            if (line.clearBackground)
             {
-                backgroundImage.sprite = bg;
-                backgroundImage.gameObject.SetActive(true);
-                _lastBackgroundSprite = bg;
+                backgroundImage.gameObject.SetActive(false);
+                _lastBackgroundSprite = null;
             }
             else
             {
-                backgroundImage.gameObject.SetActive(false);
+                Sprite bg = line.backgroundSprite != null ? line.backgroundSprite : _lastBackgroundSprite;
+                if (bg != null)
+                {
+                    backgroundImage.sprite = bg;
+                    backgroundImage.gameObject.SetActive(true);
+                    _lastBackgroundSprite = bg;
+                }
+                else
+                {
+                    backgroundImage.gameObject.SetActive(false);
+                }
             }
         }
 

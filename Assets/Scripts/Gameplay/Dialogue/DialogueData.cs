@@ -19,6 +19,9 @@ public class DialogueLine
 
     [Tooltip("角色立绘（可选）")]
     public Sprite characterSprite;
+
+    [Tooltip("是否清空当前背景图")]
+    public bool clearBackground = false;
 }
 
 [CreateAssetMenu(fileName = "NewDialogue", menuName = "Dialogue/DialogueData")]
