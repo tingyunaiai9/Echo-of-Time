@@ -1911,6 +1911,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6da78e5fc35d0435287bd189593a996d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Level3Tip
+  levelNumber: 3
   tipManager: {fileID: 1096600703}
   uiManager: {fileID: 0}
   closeButton: {fileID: 1096600705}
