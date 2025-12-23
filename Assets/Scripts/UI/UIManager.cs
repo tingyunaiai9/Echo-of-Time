@@ -73,6 +73,7 @@ public class UIManager : Singleton<UIManager>
             if (TipPanel != null)
             {
                 TipPanel.SetActive(true);
+                RefreshFrozenState();
             }
         }
     }

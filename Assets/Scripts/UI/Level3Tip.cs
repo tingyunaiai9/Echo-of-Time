@@ -20,6 +20,10 @@ public class Level3Tip : MonoBehaviour
             // 启用提示面板
             tipManager.gameObject.SetActive(true);
             
+            // 查找所有场景中的 UIManager 并调用 SetFrozen(true)
+            UIManager uiManager = FindFirstObjectByType<UIManager>();
+            uiManager.SetFrozen(true);
+            Debug.Log("[Level3Tip] 已调用 UIManager.SetFrozen(true)");
         }
     }
 
