@@ -37,6 +37,7 @@ using Events;
  * Echo 网络管理器，基于 Mirror 扩展的跨时空合作网络逻辑
  * 集成 Sync Relay 实现三人联机房间管理和时间线分配
  */
+[DefaultExecutionOrder(-100)]
 public class EchoNetworkManager : Mirror.NetworkManager
 {
     [Header("开发测试选项")]
@@ -45,6 +46,7 @@ public class EchoNetworkManager : Mirror.NetworkManager
     [Header("三人联机房间设置")]
     [SerializeField] private int maxPlayers = 3; // 房间最大玩家数
     [SerializeField] private string roomNamespace = "EchoOfTime"; // Relay 房间命名空间
+    [SerializeField] private int relayHeartbeatTimeout = 60; // Relay 心跳超时时间（秒）
 
     [Header("玩家信息")]
     private string playerUuid; // 当前玩家唯一标识
@@ -62,6 +64,22 @@ public class EchoNetworkManager : Mirror.NetworkManager
     private int _currentLevel = 1;
     private bool _playersRevealed = false; // 是否已揭示所有玩家（只执行一次）
     
+    public override void Awake()
+    {
+        base.Awake();
+        
+        // 允许后台运行，防止切换窗口导致断线
+        Application.runInBackground = true;
+
+        // 设置 Relay 超时时间，防止长时间无操作断线
+        var transport = GetComponent<RelayTransportMirror>();
+        if (transport != null)
+        {
+            transport.HeartbeatTimeout = (uint)relayHeartbeatTimeout;
+            Debug.Log($"[EchoNetworkManager] Set Relay HeartbeatTimeout to {relayHeartbeatTimeout}s");
+        }
+    }
+
     /*
      * Unity 生命周期：启动时初始化网络事件、Relay、注册回调、设置玩家信息
      * 支持本地测试模式和联网模式的自动切换
