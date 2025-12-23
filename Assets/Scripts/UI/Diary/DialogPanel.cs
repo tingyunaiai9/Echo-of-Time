@@ -161,7 +161,7 @@ public class DialogPanel : MonoBehaviour
         if (timeline == 1)
         {
             // 添加民国风格的 Prompt 前缀
-            string stylePrompt = $"一张民国时期的黑白素描，复古风格，线条粗糙，旧纸张质感，{userInput}";
+            string stylePrompt = $"一张民国时期的黑白素描，复古风格，线条粗糙，旧纸张质感，{userInput}，画面当中不能有任何文字描述";
             StartCoroutine(ImageGenCoroutine(stylePrompt));
         }
         else
