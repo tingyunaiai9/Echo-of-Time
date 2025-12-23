@@ -1646,7 +1646,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EndPanelController
   firstImage: {fileID: 2143500640}
   secondImage: {fileID: 146416482}
-  secondImageDelay: 8
+  secondImageDelay: 12
 --- !u!1 &1446064581
 GameObject:
   m_ObjectHideFlags: 0
