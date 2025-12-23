@@ -23,6 +23,12 @@ public class SceneIntro : MonoBehaviour
     [Tooltip("剧情播放完毕后显示的 Game Over 面板")]
     public GameObject gameOverPanel;
 
+    [Header("彩蛋配置")]
+    [Tooltip("EndPanel 显示后延迟播放的彩蛋剧情")]
+    public DialogueData easterEggDialogue;
+    [Tooltip("彩蛋延迟时间")]
+    public float easterEggDelay = 5f;
+
     private bool hasPlayed = false;
 
     void Awake()
@@ -106,6 +112,15 @@ public class SceneIntro : MonoBehaviour
         {
             Debug.Log("[SceneIntro] 剧情结束，显示 Game Over 面板");
             gameOverPanel.SetActive(true);
+        }
+
+        // 彩蛋逻辑：如果有配置彩蛋剧情，则等待指定时间后播放
+        if (easterEggDialogue != null)
+        {
+            yield return new WaitForSeconds(easterEggDelay);
+            gameOverPanel.SetActive(false); // 关闭 Game Over 面板
+            Debug.Log("[SceneIntro] 触发彩蛋剧情");
+            EventBus.LocalPublish(new StartDialogueEvent(easterEggDialogue));
         }
 
         if (playOnce)
