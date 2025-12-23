@@ -1,5 +1,6 @@
 using UnityEngine;
 using Events;
+using Unity.UOS.COSXML.Log;
 
 /*
  * 诗词谜题一号管理器
@@ -49,6 +50,9 @@ public class Poem1Manager : BasePoemManager
             sceneName = "Poem"
         });
 
+        EventBus.LocalPublish(new LevelProgressEvent
+        {
+        });
         if (TimelinePlayer.Local != null)
         {
             Sprite sprite = Resources.Load<Sprite>("Clue_Poem1");

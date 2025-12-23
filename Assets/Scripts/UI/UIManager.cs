@@ -1,6 +1,12 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using System.Collections;
 using Events;
-using Unity.Sync.Relay.Message; // 引入事件命名空间
+using Unity.Sync.Relay.Message;
+using Game.UI;
+using Unity.UOS.COSXML.Log;
+using System.Collections.Generic;
+using Unity.VisualScripting; // 引入事件命名空间
 
 // UI管理器，协调所有UI系统的显示和交互
 public class UIManager : Singleton<UIManager>
@@ -12,7 +18,8 @@ public class UIManager : Singleton<UIManager>
     public GameObject InventoryPanel;
     [Tooltip("指南界面游戏对象")]
     public GameObject TipPanel;
-
+    [Tooltip("通知面板游戏对象")]
+    public NotificationController notificationController;
     [Tooltip("主 UI 画布（包含日记按钮等常驻 UI），用于在谜题中隐藏")]
     public Canvas mainCanvas;
     [Header("HUD按钮")]
@@ -28,6 +35,14 @@ public class UIManager : Singleton<UIManager>
     public bool UIFrozen = false;
     [Tooltip("Prune谜题提示是否解锁")]
     public bool PruneClueUnlocked = false;
+    [Tooltip("三时间线三层当中的探索进度矩阵")]
+    public List<List<int>> TimelineLevelProgress = new List<List<int>>()
+    {
+        new List<int>() {1, 2, 3}, // 古代时间线
+        new List<int>() {1, 4, 3}, // 民国时间线
+        new List<int>() {1, 5, 3}  // 未来时间线
+    };
+    public static int s_levelProgressCount = 0;
 
     protected override void Awake()
     {
@@ -44,6 +59,7 @@ public class UIManager : Singleton<UIManager>
         }
         EventBus.Subscribe<IntroEndEvent>(OnIntroEnd);
         EventBus.Subscribe<ClueSharedEvent>(OnClueShared);
+        EventBus.Subscribe<LevelProgressEvent>(OnLevelProgress);
     }
 
     public void OnIntroEnd(IntroEndEvent evt)
@@ -69,10 +85,57 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
+    public void OnLevelProgress(LevelProgressEvent evt)
+    {
+        s_levelProgressCount += 1;
+        Debug.Log("[UIManager] 收到 LevelProgressEvent，当前探索进度: " + s_levelProgressCount);
+        int timeline = TimelinePlayer.Local.timeline;
+        int level = TimelinePlayer.Local.currentLevel;
+        if (s_levelProgressCount >= TimelineLevelProgress[timeline][level - 1])
+        {
+            Debug.Log("[UIManager] 当前时间线和层数的所有线索已发现，等待时间线场景置顶后显示通知。");
+            string targetScene = SceneDirector.Instance.GetSceneName(timeline, level);
+            StartCoroutine(WaitForTimelineSceneAndNotify(targetScene));
+        }
+    }
+
+    private IEnumerator WaitForTimelineSceneAndNotify(string targetScene)
+    {
+        // 如果无法获取目标场景名称，则保持原有行为立即通知
+        if (string.IsNullOrEmpty(targetScene))
+        {
+            Debug.LogWarning("[UIManager] 目标场景名称为空，无法等待时间线场景置顶");
+            yield break;
+        }
+        if (SceneDirector.Instance.TryGetTopNonDontDestroyScene(out var topScene) && topScene.IsValid() && topScene.name == targetScene)
+        {
+            // 已经在顶层，通知面板空闲后等待2s直接显示通知
+            while (notificationController.IsShowing) yield return null;
+            yield return new WaitForSeconds(2f);
+            notificationController?.ShowNotification("所有线索已发现，请使用日记和其他玩家进行沟通！");
+            yield break;
+        }
+
+        // 等待直到最上层（排除 DontDestroyOnLoad）的场景为时间线场景
+        while (true)
+        {
+            if (SceneDirector.Instance.TryGetTopNonDontDestroyScene(out var currentTopScene)
+                && currentTopScene.IsValid()
+                && currentTopScene.name == targetScene)
+            {
+                break;
+            }
+            yield return null;
+        }
+
+        notificationController?.ShowNotification("所有线索已发现，请使用日记和其他玩家进行沟通！");
+    }
+
     protected override void OnDestroy()
     {
         EventBus.Unsubscribe<ClueSharedEvent>(OnClueShared);
         EventBus.Unsubscribe<IntroEndEvent>(OnIntroEnd);
+        EventBus.Unsubscribe<LevelProgressEvent>(OnLevelProgress);
         base.OnDestroy();
     }
 

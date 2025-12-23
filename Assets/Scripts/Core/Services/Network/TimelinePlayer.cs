@@ -70,6 +70,7 @@ public class TimelinePlayer : NetworkBehaviour
             {
                 Debug.Log("[TimelinePlayer] Calling UIManager.CloseDiary()");
                 UIManager.Instance.CloseDiary();
+                UIManager.s_levelProgressCount = 0; // 重置探索进度
             }
             else
             {

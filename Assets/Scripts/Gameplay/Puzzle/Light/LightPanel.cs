@@ -286,6 +286,9 @@ public class LightPanel : MonoBehaviour
         {
             sceneName = "Light"
         });
+        EventBus.LocalPublish(new LevelProgressEvent
+        {
+        });
         // 发布 ClueDiscoveredEvent 事件
         EventBus.LocalPublish(new ClueDiscoveredEvent
         {

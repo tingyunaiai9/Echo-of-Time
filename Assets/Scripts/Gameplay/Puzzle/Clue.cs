@@ -33,13 +33,11 @@ public class Clue : Interaction
     {
         if (!CheckPuzzleConditions()) return;
 
-        string who = player != null ? player.gameObject.name : "Unknown";
-        uint pid = player != null ? player.netId : 0u;
-
         // 标记调查
         if (!discovered)
         {
             discovered = true;
+            uint pid = player != null ? player.netId : 0u;
 
             if (clueID == 5) // 如果是天干线索，添加日记共享文字线索
             {
@@ -74,21 +72,23 @@ public class Clue : Interaction
                     image = clueImage
                 });
             }
-        }
-        UIManager.Instance.SetFrozen(true);
-        // 查找并显示 ClueCanvas
-        GameObject canvasObj = GameObject.Find("ClueCanvas");
-        ClueCanvas canvas = canvasObj != null ? canvasObj.GetComponent<ClueCanvas>() : null;
+            // 发布探索进度事件
+            EventBus.LocalPublish(new LevelProgressEvent {});
+            UIManager.Instance.SetFrozen(true);
+            // 查找并显示 ClueCanvas
+            GameObject canvasObj = GameObject.Find("ClueCanvas");
+            ClueCanvas canvas = canvasObj != null ? canvasObj.GetComponent<ClueCanvas>() : null;
 
-        if (canvas != null)
-        {
-            canvas.ShowClue(clueText, clueImage, clueDescription);
-        }
-        else
-        {
-            Debug.LogWarning("ClueCanvas not found in the scene!");
-        }
+            if (canvas != null)
+            {
+                canvas.ShowClue(clueText, clueImage, clueDescription);
+            }
+            else
+            {
+                Debug.LogWarning("ClueCanvas not found in the scene!");
+            }
 
-        Debug.Log($"调查线索 -> 对象: {gameObject.name}, 玩家: {who}\n内容: {clueText}");
+            Debug.Log($"调查线索 -> 对象: {gameObject.name}, 玩家: {pid}\n内容: {clueText}");
+        }
     }
 }

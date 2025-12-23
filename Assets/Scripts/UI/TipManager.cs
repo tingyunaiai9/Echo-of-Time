@@ -7,6 +7,8 @@ public class TipManager : MonoBehaviour
 {
     [SerializeField]
     [Header("提示图片与按钮")]
+    public TextMeshProUGUI tipTitleText; // 提示面板标题文本
+    public string tipTitle = "提示"; // 提示面板标题
     public List<Sprite> tipImages; // 存储提示图片的列表
     public List<string> tipWords; // 存储提示文字的列表
     public Image currentImage; // 当前显示的提示图片
@@ -19,6 +21,7 @@ public class TipManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void OnEnable() 
     {
+        tipTitleText.text = tipTitle;
         currentImage.sprite = tipImages[0];
         currentText.text = tipWords[0];
         UpdateButtonVisibility();

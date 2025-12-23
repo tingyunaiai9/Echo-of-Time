@@ -333,6 +333,10 @@ public class CompassPanel : PuzzleManager, IPointerClickHandler
             sceneName = "Compass"
         });
 
+        EventBus.LocalPublish(new LevelProgressEvent
+        {
+        });
+
         EventBus.LocalPublish(new ClueDiscoveredEvent
         {
             isKeyClue = true,

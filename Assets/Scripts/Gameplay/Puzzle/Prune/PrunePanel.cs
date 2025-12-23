@@ -303,6 +303,9 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         {
             sceneName = "Light2"
         });
+        EventBus.LocalPublish(new LevelProgressEvent
+        {
+        });
     }
 
     private static void ActivateRewardObject(string objectName)

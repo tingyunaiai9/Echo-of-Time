@@ -9,6 +9,9 @@ namespace Game.UI
     {
         public static NotificationController Instance { get; private set; }
 
+        // 是否正在播放通知动画
+        public bool IsShowing => currentCoroutine != null;
+
         [Header("UI References")]
         [Tooltip("The RectTransform of the notification panel (the object with the Image background)")]
         [SerializeField] private RectTransform notificationPanel;
@@ -67,6 +70,7 @@ namespace Game.UI
             if (currentCoroutine != null)
             {
                 StopCoroutine(currentCoroutine);
+                currentCoroutine = null;
             }
             currentCoroutine = StartCoroutine(NotificationSequence(message));
         }
@@ -124,6 +128,9 @@ namespace Game.UI
             {
                 canvasGroup.alpha = 0;
             }
+
+            // 动画结束，标记为空闲
+            currentCoroutine = null;
         }
         
         // Test method to trigger from Inspector context menu

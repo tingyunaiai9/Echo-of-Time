@@ -137,6 +137,9 @@ public class Compass2Panel : PuzzleManager, IPointerClickHandler
         {
             sceneName = "Compass2"
         });
+        EventBus.LocalPublish(new LevelProgressEvent
+        {
+        });
     
         EventBus.LocalPublish(new ClueDiscoveredEvent
         {
