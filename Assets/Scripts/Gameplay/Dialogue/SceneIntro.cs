@@ -28,31 +28,16 @@ public class SceneIntro : MonoBehaviour
     public DialogueData easterEggDialogue;
     [Tooltip("彩蛋延迟时间")]
     public float easterEggDelay = 5f;
+    [Tooltip("彩蛋结束后显示的最终面板")]
+    public GameObject finalGameOverPanel;
 
     private bool hasPlayed = false;
 
     void Awake()
     {
         // 确保开始时面板是隐藏的
-        if (gameOverPanel != null)
-        {
-            // 如果面板里有多余的 EventSystem，销毁它以防报错
-            var es = gameOverPanel.GetComponentInChildren<UnityEngine.EventSystems.EventSystem>();
-            if (es != null)
-            {
-                // 立即销毁，防止 Update 报错
-                if (es.gameObject == gameOverPanel)
-                {
-                    DestroyImmediate(es); // 如果组件在 Panel 上，只销毁组件
-                }
-                else
-                {
-                    DestroyImmediate(es.gameObject); // 否则销毁子物体
-                }
-            }
-            
-            gameOverPanel.SetActive(false);
-        }
+        if (gameOverPanel != null) gameOverPanel.SetActive(false);
+        if (finalGameOverPanel != null) finalGameOverPanel.SetActive(false);
     }
 
     void Start()
@@ -118,9 +103,23 @@ public class SceneIntro : MonoBehaviour
         if (easterEggDialogue != null)
         {
             yield return new WaitForSeconds(easterEggDelay);
-            gameOverPanel.SetActive(false); // 关闭 Game Over 面板
+            if (gameOverPanel != null) gameOverPanel.SetActive(false);
             Debug.Log("[SceneIntro] 触发彩蛋剧情");
             EventBus.LocalPublish(new StartDialogueEvent(easterEggDialogue));
+
+            // 等待彩蛋剧情结束
+            bool easterEggFinished = false;
+            System.Action<DialogueEndEvent> onEasterEggEnd = e => { easterEggFinished = true; };
+            EventBus.Subscribe<DialogueEndEvent>(onEasterEggEnd);
+            while (!easterEggFinished) yield return null;
+            EventBus.Unsubscribe<DialogueEndEvent>(onEasterEggEnd);
+
+            // 显示最终面板
+            if (finalGameOverPanel != null)
+            {
+                Debug.Log("[SceneIntro] 彩蛋结束，显示最终面板");
+                finalGameOverPanel.SetActive(true);
+            }
         }
 
         if (playOnce)
