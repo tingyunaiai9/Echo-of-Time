@@ -4,7 +4,9 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using Events;
-using UnityEditor.EditorTools;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using Game.UI;
 
 public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
