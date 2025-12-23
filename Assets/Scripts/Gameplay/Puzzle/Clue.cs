@@ -32,20 +32,29 @@ public class Clue : Interaction
     public override void OnInteract(PlayerController player)
     {
         if (!CheckPuzzleConditions()) return;
+        uint pid = player != null ? player.netId : 0u;
 
         // 标记调查
         if (!discovered)
         {
             discovered = true;
-            uint pid = player != null ? player.netId : 0u;
 
             if (clueID == 5) // 如果是天干线索，添加日记共享文字线索
             {
                 ClueBoard.AddClueEntry(TimelinePlayer.Local.timeline, TimelinePlayer.Local.currentLevel, clueDescription);
             }
-            else if (clueID == 2) // 如果是罗盘线索，添加日记共享图片线索
+            else if (clueID == 2) // 如果是罗盘线索，添加至日记共享图片线索
             {
-                ClueBoard.AddClueEntry(TimelinePlayer.Local.timeline, TimelinePlayer.Local.currentLevel, ImageUtils.CompressSpriteToJpegBytes(clueImage, 80));
+                ClueSharedEvent evt = new ClueSharedEvent
+                {
+                    clueId = clueID,
+                    timeline = TimelinePlayer.Local.timeline,
+                    level = TimelinePlayer.Local.currentLevel,
+                    imageData = ImageUtils.CompressSpriteToJpegBytes(clueImage, 80)
+                };
+                // 本地并且全局发布事件
+                EventBus.LocalPublish(evt);
+                EventBus.Publish(evt); 
             }
             else if (clueID == 1 || clueID == 3) // 如果是手绢或者便签，添加到日记关键线索当中
             {
@@ -75,20 +84,20 @@ public class Clue : Interaction
             // 发布探索进度事件
             EventBus.LocalPublish(new LevelProgressEvent {});
             UIManager.Instance.SetFrozen(true);
-            // 查找并显示 ClueCanvas
-            GameObject canvasObj = GameObject.Find("ClueCanvas");
-            ClueCanvas canvas = canvasObj != null ? canvasObj.GetComponent<ClueCanvas>() : null;
-
-            if (canvas != null)
-            {
-                canvas.ShowClue(clueText, clueImage, clueDescription);
-            }
-            else
-            {
-                Debug.LogWarning("ClueCanvas not found in the scene!");
-            }
-
-            Debug.Log($"调查线索 -> 对象: {gameObject.name}, 玩家: {pid}\n内容: {clueText}");
         }
+        // 查找并显示 ClueCanvas
+        GameObject canvasObj = GameObject.Find("ClueCanvas");
+        ClueCanvas canvas = canvasObj != null ? canvasObj.GetComponent<ClueCanvas>() : null;
+
+        if (canvas != null)
+        {
+            canvas.ShowClue(clueText, clueImage, clueDescription);
+        }
+        else
+        {
+            Debug.LogWarning("ClueCanvas not found in the scene!");
+        }
+
+        Debug.Log($"调查线索 -> 对象: {gameObject.name}, 玩家: {pid}\n内容: {clueText}");
     }
 }
