@@ -97,12 +97,25 @@ public class SceneIntro : MonoBehaviour
         {
             Debug.Log("[SceneIntro] 剧情结束，显示 Game Over 面板");
             gameOverPanel.SetActive(true);
+
+            // 等待 EndPanelController 完成两张图片的展示
+            var endPanelController = gameOverPanel.GetComponent<EndPanelController>();
+            if (endPanelController != null && easterEggDialogue != null)
+            {
+                bool panelFinished = false;
+                endPanelController.OnSecondImageTimeout += () => { panelFinished = true; };
+                while (!panelFinished) yield return null;
+            }
+            else
+            {
+                // 如果没有 EndPanelController，使用原逻辑等待固定时间
+                yield return new WaitForSeconds(easterEggDelay);
+            }
         }
 
-        // 彩蛋逻辑：如果有配置彩蛋剧情，则等待指定时间后播放
+        // 彩蛋逻辑：如果有配置彩蛋剧情，则播放
         if (easterEggDialogue != null)
         {
-            yield return new WaitForSeconds(easterEggDelay);
             if (gameOverPanel != null) gameOverPanel.SetActive(false);
             Debug.Log("[SceneIntro] 触发彩蛋剧情");
             EventBus.LocalPublish(new StartDialogueEvent(easterEggDialogue));
