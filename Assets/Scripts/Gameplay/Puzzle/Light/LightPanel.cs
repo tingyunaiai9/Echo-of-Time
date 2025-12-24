@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using Events;
 
 /* 镜槽（MirrorSlot)结构体
@@ -10,6 +11,7 @@ public struct MirrorSlot
 {
     public int xindex;
     public int yindex;
+    public int number;
     public enum Direction
     {
         TOP_LEFT,
@@ -30,6 +32,8 @@ public class LightPanel : MonoBehaviour
     [Header("配置")]
     [Tooltip("根对象（用于显示/隐藏）")]
     public GameObject PanelRoot;
+    [Tooltip("指南面板")]
+    public TipManager tipPanel;
 
     [Header("镜槽预制体")]
     public GameObject MirrorSlotPrefab;
@@ -49,6 +53,7 @@ public class LightPanel : MonoBehaviour
 
     // 谜题完成标志
     private static bool s_isPuzzleCompleted = false;
+    private static bool s_tipShown = false;
     
     private const int GRID_COLS = 11; // 列数
     private const int GRID_ROWS = 5;  // 行数
@@ -78,7 +83,11 @@ public class LightPanel : MonoBehaviour
             s_isOpen = false;
             s_isPuzzleCompleted = false;
         }
-    
+        if (s_tipShown == true)
+        {
+            tipPanel.gameObject.SetActive(false);
+        }
+        s_tipShown = true;
         // 获取 Background 容器
         backgroundTransform = transform.Find("Background");
         if (backgroundTransform == null)
@@ -144,9 +153,9 @@ public class LightPanel : MonoBehaviour
         {
             var slot = mirrorSlots[i];
             if (slot.xindex == 0 && slot.yindex == 0) continue; // 跳过未配置的槽
-        // 将 Inspector 中的索引（从 1 开始）转换为数组索引（从 0 开始）
-        int arrayXIndex = slot.xindex - 1;
-        int arrayYIndex = slot.yindex - 1;
+            // 将 Inspector 中的索引（从 1 开始）转换为数组索引（从 0 开始）
+            int arrayXIndex = slot.xindex - 1;
+            int arrayYIndex = slot.yindex - 1;
 
             // 检查索引是否在有效范围内
             if (arrayXIndex < 0 || arrayXIndex >= GRID_COLS ||
@@ -209,11 +218,31 @@ public class LightPanel : MonoBehaviour
                     image.color = grayColor;
                 }
 
+                // 在镜槽中央添加数字文本
+                GameObject textObj = new GameObject("NumberText");
+                textObj.transform.SetParent(mirrorSlot.transform, false);
+                
+                TextMeshProUGUI numberText = textObj.AddComponent<TextMeshProUGUI>();
+                numberText.text = slot.number.ToString();
+                numberText.fontSize = 60;
+                numberText.alignment = TextAlignmentOptions.Center;
+                numberText.color = Color.black;
+                
+                // 设置 RectTransform 使其填充整个父对象
+                RectTransform textRect = textObj.GetComponent<RectTransform>();
+                textRect.anchorMin = Vector2.zero;
+                textRect.anchorMax = Vector2.one;
+                textRect.sizeDelta = Vector2.zero;
+                textRect.anchoredPosition = Vector2.zero;
+                
+                // 反向旋转文本，使其始终保持正向显示
+                textRect.localRotation = Quaternion.Euler(0, 0, -rotationAngle);
+
                 // 保存到数组中
                 generatedMirrorSlots[i] = mirrorSlot;
 
                 Debug.Log($"[LightPanel] 绘制镜槽[{i}]: 索引({slot.xindex}, {slot.yindex}), " +
-                         $"位置({centerX:F2}, {centerY:F2}), 旋转{rotationAngle}°");
+                         $"位置({centerX:F2}, {centerY:F2}), 旋转{rotationAngle}°, 数字{slot.number}");
             }
             else
             {
@@ -257,6 +286,9 @@ public class LightPanel : MonoBehaviour
         {
             sceneName = "Light"
         });
+        EventBus.LocalPublish(new LevelProgressEvent
+        {
+        });
         // 发布 ClueDiscoveredEvent 事件
         EventBus.LocalPublish(new ClueDiscoveredEvent
         {
@@ -269,19 +301,19 @@ public class LightPanel : MonoBehaviour
             image = icon // 假设 image 和 icon 是相同的
         });
 
+        // 打开控制台面板
+        ConsolePanel.TogglePanel();
+
         // 同步线索到日记
         if (TimelinePlayer.Local != null)
         {
             Sprite sprite = Resources.Load<Sprite>("Clue_Light1");
             int timeline = TimelinePlayer.Local.timeline;
+            int level = TimelinePlayer.Local.currentLevel;
             // 压缩图片，避免过大
             byte[] spriteBytes = ImageUtils.CompressSpriteToJpegBytes(sprite, 80);
-            Debug.Log($"[UIManager] 线索图片压缩成功，大小：{spriteBytes.Length} 字节");
-            ClueBoard.AddClueEntry(timeline, spriteBytes);
+            ClueBoard.AddClueEntry(timeline, level, spriteBytes);
         }
-
-        // 打开控制台面板
-        ConsolePanel.TogglePanel();
     }
     
     void Update()
@@ -300,8 +332,8 @@ public class LightPanel : MonoBehaviour
     }
 
     /*
-        * 检查谜题是否完成
-        */
+    * 检查谜题是否完成
+    */
     private float puzzleCompletionTimer = 0f; // 谜题完成计时器
     private bool isWaitingForCompletion = false; // 是否正在等待完成
 
@@ -375,64 +407,5 @@ public class LightPanel : MonoBehaviour
                 Debug.Log("[LightPanel] 有镜槽未激活，重置计时器");
             }
         }
-    }
-
-    // ============ 静态面板控制方法 ============
-
-    /*
-     * 切换面板开关状态
-     */
-    public static void TogglePanel()
-    {
-        if (s_isOpen)
-            ClosePanel();
-        else
-            OpenPanel();
-    }
-
-    /*
-     * 打开光线谜题面板
-     */
-    public static void OpenPanel()
-    {
-        if (s_root == null)
-        {
-            Debug.LogWarning("[LightPanel] 无法打开面板：根对象为空");
-            return;
-        }
-
-        s_isOpen = true;
-        s_root.SetActive(true);
-        Debug.Log("[LightPanel] 面板已打开");
-
-        // 禁用玩家移动
-        EventBus.LocalPublish(new FreezeEvent { isOpen = true });
-    }
-
-    /*
-     * 关闭光线谜题面板
-     */
-    public static void ClosePanel()
-    {
-        if (s_root == null)
-        {
-            Debug.LogWarning("[LightPanel] 无法关闭面板：根对象为空");
-            return;
-        }
-
-        s_isOpen = false;
-        s_root.SetActive(false);
-        Debug.Log("[LightPanel] 面板已关闭");
-
-        // 恢复玩家移动
-        EventBus.LocalPublish(new FreezeEvent { isOpen = false });
-    }
-
-    /*
-     * 获取谜题是否已完成
-     */
-    public static bool IsPuzzleCompleted()
-    {
-        return s_isPuzzleCompleted;
     }
 }

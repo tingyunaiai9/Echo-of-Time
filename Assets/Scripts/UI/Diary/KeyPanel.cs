@@ -1,15 +1,19 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Events;
+using UnityEngine.InputSystem;
 
 public class KeyPanel : MonoBehaviour
 {
+    [Header("重要线索图片显示")]
+    [Tooltip("重要线索图片容器")]
+    public GameObject KeyImageContainer;
     [Tooltip("重要线索图片")]
     public Image KeyImage;
     private static KeyPanel s_instance;
     [Header("DetailBar 大图查看")]
-    [SerializeField] GameObject imageViewer;       // 弹出层/大图面板
-    [SerializeField] Image imageViewerImage;       // 用于显示大图的 Image
+    [SerializeField] GameObject imageViewer;      
+    [SerializeField] Image imageViewerImage;      
 
     void Awake()
     {
@@ -31,12 +35,8 @@ public class KeyPanel : MonoBehaviour
         if (e.isKeyClue && e.image != null)
         {
             KeyImage.sprite = e.image;
-            
-            // 设置透明度为完全不透明
-            Color color = KeyImage.color;
-            color.a = 1f;
-            KeyImage.color = color;
-            
+            KeyImageContainer.SetActive(true);
+                        
             // 设置宽度为 400pt，高度根据原始比例计算
             float targetWidth = 400f;
             float aspectRatio = (float)e.image.texture.height / e.image.texture.width;
@@ -56,9 +56,10 @@ public class KeyPanel : MonoBehaviour
         if (imageViewerImage == null)
             imageViewerImage = imageViewer.GetComponentInChildren<Image>(true);
 
-        imageViewerImage.sprite = KeyImage.sprite;
+        imageViewerImage.preserveAspect = true;
         imageViewer.SetActive(true);
         imageViewerImage.gameObject.SetActive(true);
+        imageViewerImage.sprite = KeyImage.sprite;
         // imageViewerImage.SetNativeSize();     // 按需：用容器自适配可移除
 
     }
@@ -68,9 +69,8 @@ public class KeyPanel : MonoBehaviour
         if (s_instance != null)
         {
             s_instance.KeyImage.sprite = null;
-            Color color = s_instance.KeyImage.color;
-            color.a = 0f;
-            s_instance.KeyImage.color = color;
+            s_instance.KeyImageContainer.SetActive(false);
+            Debug.Log("[KeyPanel.Reset] 关键线索面板已重置");
         }
     }
 }

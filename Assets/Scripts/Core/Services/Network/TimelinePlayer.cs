@@ -60,12 +60,22 @@ public class TimelinePlayer : NetworkBehaviour
         // 仅在本地玩家上重置本地UI（提交按钮从“正确！”恢复为“提交”）
         if (isLocalPlayer)
         {
-            DialogPanel.Reset();
+            DialogPanel.ResetMessage();
             KeyPanel.Reset();
             ResultPanel.Reset();
-            ClueBoard.Reset();
+            // ClueBoard.Reset();
             SceneDirector.Instance?.TryLoadTimelineNow();
-            UIManager.Instance?.CloseDiary();
+            
+            if (UIManager.Instance != null)
+            {
+                Debug.Log("[TimelinePlayer] Calling UIManager.CloseDiary()");
+                UIManager.Instance.CloseDiary();
+                UIManager.s_levelProgressCount = 0; // 重置探索进度
+            }
+            else
+            {
+                Debug.LogError("[TimelinePlayer] UIManager.Instance is null! Cannot close diary.");
+            }
 
             // 注意：位置重置逻辑已移交至 SceneDirector 在场景加载完成后调用
             // 避免因 OnLevelChanged 触发时机早于场景加载而导致的问题
@@ -260,7 +270,7 @@ public class TimelinePlayer : NetworkBehaviour
         isVisible = visible; // SyncVar 同步到所有客户端，触发 hook
     }
     
-    void OnGUI()
+    /*void OnGUI()
     {
         if (!isLocalPlayer) return;
         
@@ -271,7 +281,7 @@ public class TimelinePlayer : NetworkBehaviour
         info += $"Transport ID: {transportId}";
         
         GUI.Box(new Rect(10, 10, 200, 100), info);
-    }
+    }*/
     
     private string GetTimelineName(int timeline)
     {

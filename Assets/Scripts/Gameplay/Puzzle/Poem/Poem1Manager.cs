@@ -1,5 +1,6 @@
 using UnityEngine;
 using Events;
+// using Unity.UOS.COSXML.Log;
 
 /*
  * 诗词谜题一号管理器
@@ -37,7 +38,7 @@ public class Poem1Manager : BasePoemManager
         }
     }
 
-    protected override void OnPuzzleCompleted()
+    public override void OnPuzzleCompleted()
     {
         Debug.Log("[Poem1Manager] 谜题完成！开始播放上移动画");
 
@@ -49,14 +50,18 @@ public class Poem1Manager : BasePoemManager
             sceneName = "Poem"
         });
 
+        EventBus.LocalPublish(new LevelProgressEvent
+        {
+        });
         if (TimelinePlayer.Local != null)
         {
             Sprite sprite = Resources.Load<Sprite>("Clue_Poem1");
             int timeline = TimelinePlayer.Local.timeline;
+            int level = TimelinePlayer.Local.currentLevel;
             // 压缩图片，避免过大
             byte[] spriteBytes = ImageUtils.CompressSpriteToJpegBytes(sprite, 80);
             Debug.Log($"[UIManager] 线索图片压缩成功，大小：{spriteBytes.Length} 字节");
-            ClueBoard.AddClueEntry(timeline, spriteBytes);
+            ClueBoard.AddClueEntry(timeline, level, spriteBytes);
         }
 
         RectTransform poemRect = panelRoot.GetComponent<RectTransform>();

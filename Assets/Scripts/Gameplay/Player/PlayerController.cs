@@ -54,6 +54,17 @@ public class PlayerController : NetworkBehaviour
     /* 背包打开时禁用游戏输入 */
     bool isBackpackOpen;
 
+    // 网络同步变量
+    [SyncVar(hook = nameof(OnIsWalkingChanged))]
+    private bool _isWalking;
+
+    [SyncVar(hook = nameof(OnFlipXChanged))]
+    private bool _flipX;
+
+    // 本地状态追踪，防止重复发送 Command
+    private bool _lastSentIsWalking;
+    private bool _lastSentFlipX;
+
     /* 初始化刚体和相机 */
     void Awake()
     {
@@ -141,60 +152,127 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
-    /* 本地玩家启动时订阅背包事件 */
+    /* 本地玩家启动时初始化 */
     public override void OnStartLocalPlayer()
     {
         base.OnStartLocalPlayer();
-        EventBus.Subscribe<FreezeEvent>(OnBackpackStateChanged);
-
         AcquireBackgroundBounds();
+
+        // 同步当前 UI 冻结状态
+        var uiMgr = FindFirstObjectByType<UIManager>();
+        bool frozen = uiMgr != null && uiMgr.UIFrozen;
+        OnBackpackStateChanged(frozen);
         
+        // 初始化同步状态记录
+        _lastSentIsWalking = _isWalking;
+        _lastSentFlipX = _flipX;
     }
 
-    /* 销毁时取消订阅 */
+    /* 销毁时 */
     void OnDestroy()
     {
-        if (isLocalPlayer)
-        {
-            EventBus.Unsubscribe<FreezeEvent>(OnBackpackStateChanged);
-        }
+        // 无事件订阅需要取消
     }
 
-    /* 背包状态变化回调 */
-    void OnBackpackStateChanged(FreezeEvent e)
+    /* 背包/冻结状态变化回调 */
+    void OnBackpackStateChanged(bool isOpen)
     {
-        isBackpackOpen = e.isOpen;
+        isBackpackOpen = isOpen;
+        if (isBackpackOpen)
+        {
+            // 停止移动
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector3.zero;
+            }
+            // 停止动画
+            UpdateAnimation(0f);
+        }
     }
 
     /* 更新动画状态和朝向 */
     void UpdateAnimation(float horizontalInput)
     {
-        // 动态查找当前激活的皮肤组件，优先查找当前激活的子物体上的组件
+        EnsureComponents();
+
+        // 1. 计算目标状态
+        bool targetFlipX = _lastSentFlipX; // 保持上一次的状态
+        if (horizontalInput != 0)
+        {
+            targetFlipX = (horizontalInput < 0);
+        }
         
+        bool targetIsWalking = Mathf.Abs(horizontalInput) > 0.01f;
+
+        // 2. 本地立即应用表现 (预测)
+        if (spriteRenderer != null) spriteRenderer.flipX = targetFlipX;
+        if (animator != null) animator.SetBool(IsWalking, targetIsWalking);
+
+        // 3. 检查是否需要同步到服务器
+        if (targetFlipX != _lastSentFlipX)
+        {
+            CmdSetFlipX(targetFlipX);
+            _lastSentFlipX = targetFlipX;
+        }
+
+        if (targetIsWalking != _lastSentIsWalking)
+        {
+            CmdSetWalking(targetIsWalking);
+            _lastSentIsWalking = targetIsWalking;
+        }
+    }
+
+    // 确保获取到当前激活的 Animator 和 SpriteRenderer (因为 TimelinePlayer 可能会切换皮肤)
+    private void EnsureComponents()
+    {
         if (animator == null || !animator.gameObject.activeInHierarchy)
         {
-            animator = GetComponentInChildren<Animator>(false); // false 表示只查找激活的物体
+            animator = GetComponentInChildren<Animator>(false);
         }
         
         if (spriteRenderer == null || !spriteRenderer.gameObject.activeInHierarchy)
         {
-            spriteRenderer = GetComponentInChildren<SpriteRenderer>(false); // false 表示只查找激活的物体
-        }
-
-        // 处理朝向翻转
-        if (spriteRenderer != null && horizontalInput != 0)
-        {
-            // 向左走时翻转，向右走时不翻转
-            spriteRenderer.flipX = (horizontalInput < 0);
-        }
-
-        // 处理动画状态切换
-        if (animator != null)
-        {
-            bool isWalking = Mathf.Abs(horizontalInput) > 0.01f;
-            animator.SetBool(IsWalking, isWalking);
+            spriteRenderer = GetComponentInChildren<SpriteRenderer>(false);
         }
     }
+
+    #region Network Animation Sync
+
+    [Command]
+    private void CmdSetWalking(bool value)
+    {
+        _isWalking = value;
+    }
+
+    [Command]
+    private void CmdSetFlipX(bool value)
+    {
+        _flipX = value;
+    }
+
+    private void OnIsWalkingChanged(bool oldVal, bool newVal)
+    {
+        // 非本地玩家通过 Hook 更新动画
+        // 本地玩家在 UpdateAnimation 中已经更新了，但为了保证最终一致性，也可以执行
+        // 为了避免本地预测时的冲突，通常本地玩家可以忽略 Hook，或者 Hook 只是作为修正
+        // 这里简单处理：都执行，确保组件引用是最新的
+        EnsureComponents();
+        if (animator != null)
+        {
+            animator.SetBool(IsWalking, newVal);
+        }
+    }
+
+    private void OnFlipXChanged(bool oldVal, bool newVal)
+    {
+        EnsureComponents();
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.flipX = newVal;
+        }
+    }
+
+    #endregion
 
     /* 当前选中的交互对象 */
     private Interaction currentInteraction;
@@ -261,6 +339,14 @@ public class PlayerController : NetworkBehaviour
     void Update()
     {
         if (!isLocalPlayer) return;
+
+        // 监测 UI 冻结状态变化
+        var uiMgr = FindFirstObjectByType<UIManager>();
+        bool uiFrozen = uiMgr != null && uiMgr.UIFrozen;
+        if (uiFrozen != isBackpackOpen)
+        {
+            OnBackpackStateChanged(uiFrozen);
+        }
 
         // 背包打开时，禁用游戏输入（移动、交互等）
         if (isBackpackOpen) return;

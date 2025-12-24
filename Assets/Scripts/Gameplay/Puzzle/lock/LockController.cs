@@ -2,6 +2,7 @@ using UnityEngine;
 using Game.UI;
 using Game.Gameplay.Puzzle.Poem2;
 using Events;
+using UnityEngine.UI;
 
 public class LockController : MonoBehaviour
 {
@@ -19,8 +20,11 @@ public class LockController : MonoBehaviour
     [Header("Poem2 Logic")]
     public GameObject scrollInsideBox;
     public NotificationController notificationController;
+    public TipManager tipPanel;
+    public GameObject clueButton;
 
     bool isUnlocked = false;
+    public static bool s_tipShown = false;
 
     void Start()
     {
@@ -31,6 +35,19 @@ public class LockController : MonoBehaviour
             {
                 notificationController = FindFirstObjectByType<NotificationController>();
             }
+        }
+        if (s_tipShown == true)
+        {
+            tipPanel.gameObject.SetActive(false);
+        }
+        s_tipShown = true;
+    }
+
+    void OnEnable()
+    {
+        if (UIManager.Instance.LockClueUnlocked == true) 
+        {
+            clueButton.SetActive(true);
         }
     }
 
@@ -145,7 +162,14 @@ public class LockController : MonoBehaviour
             {
                 if (notificationController != null)
                 {
-                    notificationController.ShowNotification("需要古代玩家将竹简放入匣子中。\nAncient player needs to place the bamboo scroll.");
+                    notificationController.ShowNotification("需要古代玩家将竹简放入匣子中。\n");
+                }
+            }
+            else
+            {
+                if (notificationController != null)
+                {
+                    notificationController.ShowNotification("现在，未来玩家可以拿到竹简了。\n");
                 }
             }
         }

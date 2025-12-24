@@ -105,7 +105,22 @@ public class CluePanel : Inventory
             Debug.LogError("[CluePanel] 未找到用于显示大图的 Image 组件。");
             return;
         }
-        
+        // 保持原始宽高比例
+        imageViewerImage.preserveAspect = true;
+        var sprite = currentDetailImage;
+        // if (sprite != null)
+        // {
+        //     float w = sprite.rect.width;
+        //     float h = sprite.rect.height;
+        //     if (w > 0f && h > 0f)
+        //     {
+        //         var fitter = imageViewerImage.GetComponent<AspectRatioFitter>();
+        //         if (fitter == null) fitter = imageViewerImage.gameObject.AddComponent<AspectRatioFitter>();
+        //         fitter.aspectMode = AspectRatioFitter.AspectMode.FitInParent; // 在父容器内按比例适配
+        //         fitter.aspectRatio = w / h;
+        //     }
+        // }
+
         imageViewer.SetActive(true);
         imageViewerImage.gameObject.SetActive(true);
         imageViewerImage.sprite = currentDetailImage;

@@ -30,7 +30,7 @@ public class Poem2Manager : BasePoemManager
         }
     }
 
-    protected override void OnPuzzleCompleted()
+    public override void OnPuzzleCompleted()
     {
 
         // 获取 ConsolePanel 下的 ConsoleImage
@@ -41,6 +41,9 @@ public class Poem2Manager : BasePoemManager
         EventBus.LocalPublish(new PuzzleCompletedEvent
         {
             sceneName = "Poem2"
+        });
+        EventBus.LocalPublish(new LevelProgressEvent
+        {
         });
 
         // 发布 ClueDiscoveredEvent 事件
@@ -59,10 +62,11 @@ public class Poem2Manager : BasePoemManager
         {
             Sprite sprite = Resources.Load<Sprite>("Clue_Poem2");
             int timeline = TimelinePlayer.Local.timeline;
+            int level = TimelinePlayer.Local.currentLevel;
             // 压缩图片，避免过大
             byte[] spriteBytes = ImageUtils.CompressSpriteToJpegBytes(sprite, 80);
             Debug.Log($"[UIManager] 线索图片压缩成功，大小：{spriteBytes.Length} 字节");
-            ClueBoard.AddClueEntry(timeline, spriteBytes);
+            ClueBoard.AddClueEntry(timeline, level,spriteBytes);
         }
         
         // 打开控制台面板

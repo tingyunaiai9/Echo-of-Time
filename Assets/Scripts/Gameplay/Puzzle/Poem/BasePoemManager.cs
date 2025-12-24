@@ -6,11 +6,15 @@ using Events;
  * 提供通用的计数、面板开关、冻结事件发布等逻辑
  * 具体的动画与完成逻辑由子类实现
  */
-public abstract class BasePoemManager : MonoBehaviour
+public abstract class BasePoemManager : PuzzleManager
 {
     [Header("配置")]
     [Tooltip("需要匹配的总数")]
     public int totalNotesRequired = 5;
+
+    [Header("提示面板")]
+    [Tooltip("指南面板")]
+    public TipManager tipPanel;
 
     protected int matchedCount = 0;
 
@@ -19,6 +23,7 @@ public abstract class BasePoemManager : MonoBehaviour
     protected static bool s_isOpen;
     protected static bool s_initialized = false;
     protected static bool s_isPuzzleCompleted = false;
+    protected static bool s_tipShown = false;
 
     protected virtual void Awake()
     {
@@ -26,6 +31,11 @@ public abstract class BasePoemManager : MonoBehaviour
         s_initialized = false;
         s_isOpen = false;
         s_isPuzzleCompleted = false;
+        if (s_tipShown && tipPanel != null)
+        {
+            tipPanel.gameObject.SetActive(false);
+        }
+        s_tipShown = true;
         matchedCount = 0;
 
         // 让子类做额外的初始化（如关闭特定面板）
@@ -55,7 +65,7 @@ public abstract class BasePoemManager : MonoBehaviour
         }
 
         // 确保在销毁时恢复玩家移动控制
-        EventBus.LocalPublish(new FreezeEvent { isOpen = false });
+        UIManager.Instance?.SetFrozen(false);
     }
 
     /*
@@ -76,7 +86,7 @@ public abstract class BasePoemManager : MonoBehaviour
     /*
      * 子类实现谜题完成后的具体逻辑
      */
-    protected abstract void OnPuzzleCompleted();
+    public abstract override void OnPuzzleCompleted();
 
     /*
      * 供子类在 Awake 时做额外初始化（默认无操作）
@@ -134,7 +144,7 @@ public abstract class BasePoemManager : MonoBehaviour
         }
 
         // 禁用玩家移动
-        EventBus.LocalPublish(new FreezeEvent { isOpen = true });
+        UIManager.Instance?.SetFrozen(true);
     }
 
     public static void ClosePanel()
@@ -163,7 +173,7 @@ public abstract class BasePoemManager : MonoBehaviour
         }
 
         // 恢复玩家移动
-        EventBus.LocalPublish(new FreezeEvent { isOpen = false });
+        UIManager.Instance?.SetFrozen(false);
     }
 
     public static bool IsPuzzleCompleted()

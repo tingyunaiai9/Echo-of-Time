@@ -772,7 +772,8 @@ MonoBehaviour:
       m_Calls: []
   noteObject: {fileID: 0}
   noteObjectName: note
-  notificationController: {fileID: 0}
+  tipPanel: {fileID: 1663229184}
+  notificationController: {fileID: 267209963}
 --- !u!1001 &200427246
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4865,6 +4866,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+      propertyPath: tipTitle
+      value: "\u62FC\u753B"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: 'tipWords.Array.data[0]'
       value: "\u5C06\u6563\u843D\u7684\u788E\u7247\u62FC\u56DE\u753B\u4E2D"
       objectReference: {fileID: 0}
@@ -4886,7 +4891,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8871418275385414889, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4898,6 +4903,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1486200735131179702, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
   m_PrefabInstance: {fileID: 1663229182}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1663229184 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+  m_PrefabInstance: {fileID: 1663229182}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1612587611}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef43875cbe6ba46a4ad90e9b8ed6741c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TipManager
 --- !u!1001 &1699131558
 PrefabInstance:
   m_ObjectHideFlags: 0

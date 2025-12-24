@@ -176,10 +176,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u6C34\n\u5317\n\u539F\n\u5357\n\u8349\n\u8272\n\u65B0\n\n\u96EA\n\u6D88\n\u98CE\n\u6696\n\u4E0D\n\u751F\n\u5C18"
+  m_text: "\u6C34\n\u5317\n\u539F<b>\n\u5357</b>\n\u8349\n\u8272\n\u65B0\n\n\u96EA\n\u6D88\n\u98CE\n\u6696\n\u4E0D\n\u751F\n\u5C18"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
-  m_sharedMaterial: {fileID: -8588852133097181418, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5c5ac64b947792d4b88d4a0981ffe9a9, type: 2}
+  m_sharedMaterial: {fileID: 684731690854960430, guid: 5c5ac64b947792d4b88d4a0981ffe9a9, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -325,6 +325,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LargeNoteSlot
   noteId: 4
   poemText: {fileID: 0}
+  poemColor: {r: 1, g: 1, b: 1, a: 1}
   borderOutline: {fileID: 0}
   normalBorderWidth: {x: 2, y: 2}
   highlightBorderWidth: {x: 5, y: 5}
@@ -469,6 +470,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragHandler
   correctLargeNoteId: 5
   poemText: {fileID: 0}
+  poemColor: {r: 0, g: 0, b: 0, a: 1}
   maxDetectionDistance: 150
 --- !u!225 &70654118
 CanvasGroup:
@@ -577,10 +579,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u665A\n\u6765\n\u5C71\n\u98CE\n\u626B\n\u843D\n\u82F1\n\n\u4E94\n\u8272\n\u8679\n\u9713\n\u660E\n\u7EFF\n\u82D4"
+  m_text: "\u665A\n\u6765<b>\n\u5C71</b>\n\u98CE\n\u626B\n\u843D\n\u82F1\n\n\u4E94\n\u8272\n\u8679\n\u9713\n\u660E\n\u7EFF\n\u82D4"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
-  m_sharedMaterial: {fileID: -8588852133097181418, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5c5ac64b947792d4b88d4a0981ffe9a9, type: 2}
+  m_sharedMaterial: {fileID: 684731690854960430, guid: 5c5ac64b947792d4b88d4a0981ffe9a9, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -713,10 +715,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u6843\\n\u82B1\\n\u6D41\\n\u6C34\\n\u7A85\\n\u7136\\n\u53BB\\n \\n\u522B\\n\u6709\\n\u5929\\n\u5730\\n\u975E\\n\u4EBA\\n\u95F4"
+  m_text: "\u6843\\n\u82B1\\n\u6D41\\n\u6C34\\n\u7A85\\n<b>\u7136</b>\\n\u53BB\\n
+    \\n\u522B\\n\u6709\\n\u5929\\n\u5730\\n\u975E\\n\u4EBA\\n\u95F4"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
-  m_sharedMaterial: {fileID: -8588852133097181418, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5c5ac64b947792d4b88d4a0981ffe9a9, type: 2}
+  m_sharedMaterial: {fileID: 684731690854960430, guid: 5c5ac64b947792d4b88d4a0981ffe9a9, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1027,10 +1030,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u60A0\\n\u60A0\\n\u51FA\\n\u5C71\\n\u6C34\\n \\n\u6D69\\n\u6D69\\n\u65E0\\n\u505C\\n\u6CE8"
+  m_text: "<b>\u60A0</b>\\n\u60A0\\n\u51FA\\n\u5C71\\n\u6C34\\n \\n\u6D69\\n\u6D69\\n\u65E0\\n\u505C\\n\u6CE8"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
-  m_sharedMaterial: {fileID: -8588852133097181418, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5c5ac64b947792d4b88d4a0981ffe9a9, type: 2}
+  m_sharedMaterial: {fileID: 684731690854960430, guid: 5c5ac64b947792d4b88d4a0981ffe9a9, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1242,8 +1245,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u6C5F\n\u78A7\n\u9E1F\n\u903E\n\u767D\n\n\u5C71\n\u9752\n\u82B1\n\u6B32\n\u71C3"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
-  m_sharedMaterial: {fileID: -8588852133097181418, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5c5ac64b947792d4b88d4a0981ffe9a9, type: 2}
+  m_sharedMaterial: {fileID: 684731690854960430, guid: 5c5ac64b947792d4b88d4a0981ffe9a9, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1373,6 +1376,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragHandler
   correctLargeNoteId: 4
   poemText: {fileID: 0}
+  poemColor: {r: 0, g: 0, b: 0, a: 1}
   maxDetectionDistance: 150
 --- !u!225 &373163635
 CanvasGroup:
@@ -1618,10 +1622,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u6811\n\u6DF1\n\u65F6\n\u89C1\n\u9E7F\n\n\u6EAA\n\u5348\n\u4E0D\n\u95FB\n\u949F"
+  m_text: "\u6811\n\u6DF1\n\u65F6<b>\n\u89C1\n</b>\u9E7F\n\n\u6EAA\n\u5348\n\u4E0D\n\u95FB\n\u949F"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
-  m_sharedMaterial: {fileID: -8588852133097181418, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5c5ac64b947792d4b88d4a0981ffe9a9, type: 2}
+  m_sharedMaterial: {fileID: 684731690854960430, guid: 5c5ac64b947792d4b88d4a0981ffe9a9, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1912,7 +1916,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 633723892}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 222388689}
+        m_TargetAssemblyTypeName: DrawerPanel, Assembly-CSharp
+        m_MethodName: OnPointerClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &633723892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2104,6 +2120,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragHandler
   correctLargeNoteId: 8
   poemText: {fileID: 0}
+  poemColor: {r: 0, g: 0, b: 0, a: 1}
   maxDetectionDistance: 150
 --- !u!225 &650587521
 CanvasGroup:
@@ -2214,8 +2231,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u6625\n\u6F6E\n\u5E26\n\u96E8\n\u665A\n\u6765\n\u6025\n\n\u91CE\n\u6E21\n\u65E0\n\u4EBA\n\u821F\n\u81EA\n\u6A2A"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
-  m_sharedMaterial: {fileID: -8588852133097181418, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5c5ac64b947792d4b88d4a0981ffe9a9, type: 2}
+  m_sharedMaterial: {fileID: 684731690854960430, guid: 5c5ac64b947792d4b88d4a0981ffe9a9, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2350,8 +2367,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
-  m_sharedMaterial: {fileID: -8588852133097181418, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5c5ac64b947792d4b88d4a0981ffe9a9, type: 2}
+  m_sharedMaterial: {fileID: 684731690854960430, guid: 5c5ac64b947792d4b88d4a0981ffe9a9, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2381,7 +2398,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -2515,9 +2532,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+      propertyPath: tipTitle
+      value: "\u62FC\u8BD7"
+      objectReference: {fileID: 0}
     - target: {fileID: 8871418275385414889, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: m_Name
       value: TipPanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 8871418275385414889, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2534,6 +2559,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8871418275385414889, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
   m_PrefabInstance: {fileID: 744423975}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &744423978 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+  m_PrefabInstance: {fileID: 744423975}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 744423977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef43875cbe6ba46a4ad90e9b8ed6741c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TipManager
 --- !u!1 &848451198
 GameObject:
   m_ObjectHideFlags: 0
@@ -2604,6 +2640,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LargeNoteSlot
   noteId: 5
   poemText: {fileID: 0}
+  poemColor: {r: 1, g: 1, b: 1, a: 1}
   borderOutline: {fileID: 0}
   normalBorderWidth: {x: 2, y: 2}
   highlightBorderWidth: {x: 5, y: 5}
@@ -2852,6 +2889,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragHandler
   correctLargeNoteId: 7
   poemText: {fileID: 0}
+  poemColor: {r: 0, g: 0, b: 0, a: 1}
   maxDetectionDistance: 150
 --- !u!225 &953620590
 CanvasGroup:
@@ -2962,8 +3000,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
-  m_sharedMaterial: {fileID: -8588852133097181418, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5c5ac64b947792d4b88d4a0981ffe9a9, type: 2}
+  m_sharedMaterial: {fileID: 684731690854960430, guid: 5c5ac64b947792d4b88d4a0981ffe9a9, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2993,7 +3031,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -3262,8 +3300,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
-  m_sharedMaterial: {fileID: -8588852133097181418, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5c5ac64b947792d4b88d4a0981ffe9a9, type: 2}
+  m_sharedMaterial: {fileID: 684731690854960430, guid: 5c5ac64b947792d4b88d4a0981ffe9a9, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3293,7 +3331,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -3409,6 +3447,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LargeNoteSlot
   noteId: 1
   poemText: {fileID: 0}
+  poemColor: {r: 1, g: 1, b: 1, a: 1}
   borderOutline: {fileID: 0}
   normalBorderWidth: {x: 2, y: 2}
   highlightBorderWidth: {x: 5, y: 5}
@@ -3685,6 +3724,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragHandler
   correctLargeNoteId: 3
   poemText: {fileID: 0}
+  poemColor: {r: 0, g: 0, b: 0, a: 1}
   maxDetectionDistance: 150
 --- !u!225 &1462000171
 CanvasGroup:
@@ -3790,6 +3830,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragHandler
   correctLargeNoteId: 2
   poemText: {fileID: 0}
+  poemColor: {r: 0, g: 0, b: 0, a: 1}
   maxDetectionDistance: 150
 --- !u!225 &1647376383
 CanvasGroup:
@@ -3911,6 +3952,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LargeNoteSlot
   noteId: 3
   poemText: {fileID: 0}
+  poemColor: {r: 1, g: 1, b: 1, a: 1}
   borderOutline: {fileID: 0}
   normalBorderWidth: {x: 2, y: 2}
   highlightBorderWidth: {x: 5, y: 5}
@@ -4151,8 +4193,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u660E\n\u6708\n\u677E\n\u95F4\n\u7167\n\n\u6E05\n\u6CC9\n\u77F3\n\u4E0A\n\u6D41"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
-  m_sharedMaterial: {fileID: -8588852133097181418, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5c5ac64b947792d4b88d4a0981ffe9a9, type: 2}
+  m_sharedMaterial: {fileID: 684731690854960430, guid: 5c5ac64b947792d4b88d4a0981ffe9a9, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4298,6 +4340,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LargeNoteSlot
   noteId: 2
   poemText: {fileID: 0}
+  poemColor: {r: 1, g: 1, b: 1, a: 1}
   borderOutline: {fileID: 0}
   normalBorderWidth: {x: 2, y: 2}
   highlightBorderWidth: {x: 5, y: 5}
@@ -4479,7 +4522,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2abcfa0e2a43845cb85f2073e3552ef6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Poem1Manager
+  puzzleID: 
+  puzzleName: 
+  isCompleted: 0
   totalNotesRequired: 5
+  tipPanel: {fileID: 744423978}
   panelRoot: {fileID: 1766814043}
   drawerPanel: {fileID: 222388687}
   animationDuration: 1
@@ -4734,8 +4781,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
-  m_sharedMaterial: {fileID: -8588852133097181418, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5c5ac64b947792d4b88d4a0981ffe9a9, type: 2}
+  m_sharedMaterial: {fileID: 684731690854960430, guid: 5c5ac64b947792d4b88d4a0981ffe9a9, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4765,7 +4812,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -4870,8 +4917,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
-  m_sharedMaterial: {fileID: -8588852133097181418, guid: 9d24403649b8c4340b72fff566c13891, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5c5ac64b947792d4b88d4a0981ffe9a9, type: 2}
+  m_sharedMaterial: {fileID: 684731690854960430, guid: 5c5ac64b947792d4b88d4a0981ffe9a9, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4901,7 +4948,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -5001,6 +5048,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragHandler
   correctLargeNoteId: 6
   poemText: {fileID: 0}
+  poemColor: {r: 0, g: 0, b: 0, a: 1}
   maxDetectionDistance: 150
 --- !u!225 &2044889294
 CanvasGroup:
@@ -5106,6 +5154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DragHandler
   correctLargeNoteId: 1
   poemText: {fileID: 0}
+  poemColor: {r: 0, g: 0, b: 0, a: 1}
   maxDetectionDistance: 150
 --- !u!225 &2048660283
 CanvasGroup:

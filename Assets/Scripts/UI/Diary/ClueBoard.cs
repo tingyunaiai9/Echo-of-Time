@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
+using System.Text;
 using Events;
 using Unity.VisualScripting;
 
@@ -15,14 +16,17 @@ using Unity.VisualScripting;
  */
 public class ClueBoard : MonoBehaviour
 {
-    [Tooltip("便签预制体")]
-    public GameObject Note;
+    [Tooltip("图片便签预制体")]
+    public GameObject Note_Image;
+    [Tooltip("文字便签预制体")]
+    public GameObject Note_Text;
 
     [Tooltip("便签容器")]
     public Transform contentParent;
 
     private static ClueBoard s_instance;
-    
+    private static bool s_subscribed; 
+
     // 便签位置数组（循环使用）
     private static readonly Vector2[] notePositions = new Vector2[]
     {
@@ -40,100 +44,111 @@ public class ClueBoard : MonoBehaviour
     void Awake()
     {
         s_instance = this;
-        EventBus.Subscribe<ClueSharedEvent>(OnClueUpdated);
     }
 
-    void OnDestroy()
+    // 确保订阅事件（静态初始化）
+    
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    private static void EnsureSubscribed()
     {
-        EventBus.Unsubscribe<ClueSharedEvent>(OnClueUpdated);
+        if (s_subscribed) return;
+        EventBus.Subscribe<ClueSharedEvent>(OnClueUpdatedStatic);
+        s_subscribed = true;
+    }
+    
+    private static void OnClueUpdatedStatic(ClueSharedEvent e)
+    {
+        if (!EnsureInstance()) return;
+        s_instance.OnClueUpdated(e);
     }
 
     /* 线索更新事件回调 */
     void OnClueUpdated(ClueSharedEvent e)
     {
-        AddClueEntry(e.timeline, e.imageData, false);
+        // 根据事件中实际携带的数据类型区分图片/文字
+        if (e.imageData != null && e.imageData.Length > 0)
+        {
+            CreateClueEntry(e.timeline, e.level, e.imageData);
+        }
+        else if (!string.IsNullOrEmpty(e.text))
+        {
+            CreateClueEntry(e.timeline, e.level, e.text);
+        }
+        else
+        {
+            Debug.LogWarning("[ClueBoard] 收到 ClueSharedEvent，但既没有图片也没有文本数据");
+            return;
+        }
+
         Debug.Log("[ClueBoard] 收到线索共享事件，已添加新线索条目");
     }
 
-    public static void AddClueEntry(int timeline, byte[] imageBytes, bool publish = true)
+    // 图片入口
+    public static void AddClueEntry(int timeline, int level, byte[] data, bool publish = true)
     {
-        // 懒加载实例，防止 Awake 尚未执行或对象未激活导致静态实例为空
-        if (s_instance == null)
+        if (!EnsureInstance()) return;
+        s_instance.CreateClueEntry(timeline, level, data);
+        if (publish)
         {
-            s_instance = Object.FindFirstObjectByType<ClueBoard>();
-            if (s_instance == null)
+            EventBus.Publish(new ClueSharedEvent
             {
-                Debug.LogWarning("[ClueBoard] AddClueEntry 调用时未找到 ClueBoard 实例，条目未创建。");
-                return;
-            }
-            else
+                timeline = timeline,
+                level = level,
+                imageData = data,
+            });
+        }
+    }
+
+    // 文本入口
+    public static void AddClueEntry(int timeline, int level, string text, bool publish = true)
+    {
+        if (!EnsureInstance()) return;
+
+        s_instance.CreateClueEntry(timeline, level, text);
+        if (publish)
+        {
+            EventBus.Publish(new ClueSharedEvent
             {
-                Debug.Log("[ClueBoard] 懒加载 ClueBoard 实例成功，继续添加条目。");
+                timeline = timeline,
+                level = level,
+                text = text,
+            });
+        }
+    }
+
+    // 确保实例存在（包含未激活对象）
+    private static bool EnsureInstance()
+    {
+        if (s_instance != null) return true;
+
+        ClueBoard[] allBoards = Resources.FindObjectsOfTypeAll<ClueBoard>();
+        foreach (var board in allBoards)
+        {
+            // 排除预制体，只查找场景中的对象
+            if (board.gameObject.scene.isLoaded)
+            {
+                s_instance = board;
+                Debug.Log("[ClueBoard] 懒加载 ClueBoard 实例成功（包括非激活对象）");
+                break;
             }
         }
 
-        s_instance.CreateClueEntry(timeline, imageBytes);
-        if (publish)
+        if (s_instance == null)
         {
-            // 使用 ImageNetworkSender 分块发送大图，避免 Mirror 消息过大
-            if (ImageNetworkSender.LocalInstance != null)
-            {
-                ImageNetworkSender.LocalInstance.SendImage(imageBytes, timeline, "Clue");
-            }
-            else
-            {
-                // 如果没有 ImageNetworkSender (例如未联网)，尝试走普通事件总线
-                EventBus.Publish(new ClueSharedEvent
-                {
-                    timeline = timeline,
-                    imageData = imageBytes
-                });
-            }
+            Debug.LogWarning("[ClueBoard] AddClueEntry 调用时未找到 ClueBoard 实例，条目未创建。");
+            return false;
         }
+
+        return true;
     }
     
-    /* 创建单个线索条目 */
-    private void CreateClueEntry(int timeline, byte[] imageBytes = null)
+    /* 创建单个线索条目 - 图片 */
+    private void CreateClueEntry(int timeline, int level, byte[] imageBytes)
     {
-        if (contentParent == null || Note == null) return;
+        if (contentParent == null || Note_Image == null) return;
         
-        GameObject newNote = Instantiate(Note, contentParent);
-        
-        // 设置便签位置
-        RectTransform rectTransform = newNote.GetComponent<RectTransform>();
-        if (rectTransform != null)
-        {
-            // 使用当前位置索引获取位置
-            rectTransform.anchoredPosition = notePositions[currentPositionIndex];
-            
-            // 更新索引，循环使用位置
-            currentPositionIndex = (currentPositionIndex + 1) % notePositions.Length;
-        }
-    
-        // 设置日期文本
-        Transform dateTextTransform = newNote.transform.Find("DateText");
-        if (dateTextTransform != null)
-        {
-            TMP_Text dateTextComponent = dateTextTransform.GetComponent<TMP_Text>();
-            if (dateTextComponent != null)
-            {
-            switch (timeline)
-            {
-                case 0:
-                dateTextComponent.text = "Ancient";
-                break;
-                case 1:
-                dateTextComponent.text = "Modern";
-                break;
-                case 2:
-                dateTextComponent.text = "Future";
-                break;
-                default:
-                dateTextComponent.text = "Unknown";
-                break;
-            }
-            }
-        }
+        GameObject newNote = Instantiate(Note_Image, contentParent);
+        ApplyCommonLayout(newNote, timeline, level);
 
         // 处理共享图片
         if (imageBytes != null && imageBytes.Length > 0)
@@ -182,6 +197,78 @@ public class ClueBoard : MonoBehaviour
         }
     }
 
+    /* 创建单个线索条目 - 文本 */
+    private void CreateClueEntry(int timeline, int level, string textContent)
+    {
+        if (contentParent == null || Note_Text == null) return;
+
+        GameObject newNote = Instantiate(Note_Text, contentParent);
+        ApplyCommonLayout(newNote, timeline, level);
+
+        // 设置正文文本（找到第一个非 DateText 的 TMP_Text）
+        TMP_Text[] texts = newNote.GetComponentsInChildren<TMP_Text>();
+        foreach (var tmp in texts)
+        {
+            if (tmp.name != "DateText")
+            {
+                tmp.text = textContent;
+                break;
+            }
+        }
+    }
+
+    // 公共布局逻辑：位置与日期标签
+    private void ApplyCommonLayout(GameObject noteGO, int timeline, int level)
+    {
+        // 设置便签位置
+        RectTransform rectTransform = noteGO.GetComponent<RectTransform>();
+        if (rectTransform != null)
+        {
+            rectTransform.anchoredPosition = notePositions[currentPositionIndex];
+            currentPositionIndex = (currentPositionIndex + 1) % notePositions.Length;
+        }
+
+        // 设置日期文本
+        Transform dateTextTransform = noteGO.transform.Find("DateText");
+        if (dateTextTransform != null)
+        {
+            TMP_Text dateTextComponent = dateTextTransform.GetComponent<TMP_Text>();
+            if (dateTextComponent != null)
+            {
+                switch (timeline)
+                {
+                    case 0:
+                        dateTextComponent.text = "古代";
+                        break;
+                    case 1:
+                        dateTextComponent.text = "民国";
+                        break;
+                    case 2:
+                        dateTextComponent.text = "未来";
+                        break;
+                    default:
+                        dateTextComponent.text = "未知";
+                        break;
+                }
+                switch(level)
+                {
+                    case 1:
+                        dateTextComponent.text += " - 第一层";
+                        break;
+                    case 2:
+                        dateTextComponent.text += " - 第二层";
+                        break;
+                    case 3:
+                        dateTextComponent.text += " - 第三层";
+                        break;
+                    default:
+                        dateTextComponent.text += " - 未知章节";
+                        break;
+                }
+            }
+        }
+    }
+
     public static void Reset()
     {
         if (s_instance != null)
@@ -197,16 +284,3 @@ public class ClueBoard : MonoBehaviour
     }
 }
 
-/* 线索条目数据结构 */
-[System.Serializable]
-public class ClueEntryData
-{
-    public string date;
-    public string content;
-
-    public ClueEntryData(string date, string content)
-    {
-        this.date = date;
-        this.content = content;
-    }
-}

@@ -25,6 +25,10 @@ namespace Game.Gameplay.Puzzle.Paint2
         [Tooltip("Name of the Note object to find in the scene if noteObject is not assigned")]
         public string noteObjectName = "Note";
 
+        [Header("提示面板")]
+        [Tooltip("指南面板")]
+        public TipManager tipPanel;
+
         private Dictionary<int, PuzzleMask> masks = new Dictionary<int, PuzzleMask>();
         
         private int correctPieces = 0;
@@ -33,9 +37,20 @@ namespace Game.Gameplay.Puzzle.Paint2
         
         private bool areMissingPiecesActive = false;
 
+        private static bool s_tipShown = false;
+
         [Header("UI 引用")]
         [Tooltip("如果不填，会自动查找全局单例")]
         public NotificationController notificationController;
+
+        void Awake()
+        {
+            if (s_tipShown && tipPanel != null)
+            {
+                tipPanel.gameObject.SetActive(false);
+            }
+            s_tipShown = true;
+        }
 
         void Start()
         {
@@ -80,13 +95,24 @@ namespace Game.Gameplay.Puzzle.Paint2
             
             // Check inventory and activate missing pieces if needed
             CheckMissingPieces();
-
-
         }
 
         void OnEnable()
         {
             CheckMissingPieces();
+        }
+
+        void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                Debug.Log("[Paint2] P键按下，触发拼图完成效果");
+                // Simulate completing all pieces
+                while (correctPieces < totalPieces)
+                {
+                    OnPieceCorrect(correctPieces + 1);
+                }
+            }
         }
 
         void InitializeMasks()

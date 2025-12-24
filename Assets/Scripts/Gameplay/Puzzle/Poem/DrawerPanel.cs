@@ -78,7 +78,7 @@ public class DrawerPanel : MonoBehaviour
     }
 
     // 鼠标点击时调用
-    private void OnPointerClick()
+    public void OnPointerClick()
     {
         if (imageGameObject != null)
         {
@@ -94,7 +94,7 @@ public class DrawerPanel : MonoBehaviour
             isKeyClue = true,
             playerNetId = 0,
             clueId = "poem_clue",
-            clueText = "拼好5首诗句后抽屉中的一幅画。",
+            clueText = "抽屉中的一幅画",
             clueDescription = "这幅画可能隐藏着重要的线索。",
             icon = icon,
             image = icon // 假设 image 和 icon 是相同的

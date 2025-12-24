@@ -1,5 +1,6 @@
 using UnityEngine;
 using Events;
+using Game.UI;
 
 /*
  * 调查类：调查线索，仅反馈信息，不会消失
@@ -7,6 +8,8 @@ using Events;
 public class Clue : Interaction
 {
     [Header("线索内容")]
+    [Tooltip("线索唯一ID")]
+    public int clueID;
     [TextArea(2, 4)]
     [Tooltip("线索简短文本，显示在物品栏")]
     public string clueText;
@@ -29,8 +32,6 @@ public class Clue : Interaction
     public override void OnInteract(PlayerController player)
     {
         if (!CheckPuzzleConditions()) return;
-
-        string who = player != null ? player.gameObject.name : "Unknown";
         uint pid = player != null ? player.netId : 0u;
 
         // 标记调查
@@ -38,37 +39,68 @@ public class Clue : Interaction
         {
             discovered = true;
 
-            EventBus.LocalPublish(new ClueDiscoveredEvent
+            // 日记相关事件
+            if (clueID == 5) // 如果是天干线索，添加日记共享文字线索
             {
-                playerNetId = pid,
-                clueId = gameObject.name,
-                clueText = clueText,
-                clueDescription = clueDescription,
-                icon = clueIcon,
-                image = clueImage
-            });
-        }
+                ClueBoard.AddClueEntry(TimelinePlayer.Local.timeline, TimelinePlayer.Local.currentLevel, clueDescription);
+            }
+            else if (clueID == 2) // 如果是罗盘线索，添加至日记共享图片线索
+            {
+                ClueSharedEvent evt = new ClueSharedEvent
+                {
+                    clueId = clueID,
+                    timeline = TimelinePlayer.Local.timeline,
+                    level = TimelinePlayer.Local.currentLevel,
+                    imageData = ImageUtils.CompressSpriteToJpegBytes(clueImage, 80)
+                };
+                // 本地并且全局发布事件
+                EventBus.LocalPublish(evt);
+                EventBus.Publish(evt); 
+            }
 
+            // 背包相关事件
+            if (clueID == 1 || clueID == 3) // 如果是手绢或者便签，添加到日记关键线索和背包当中
+            {
+                EventBus.LocalPublish(new ClueDiscoveredEvent
+                {
+                    isKeyClue = true,
+                    playerNetId = pid,
+                    clueId = gameObject.name,
+                    clueText = clueText,
+                    clueDescription = clueDescription,
+                    icon = clueIcon,
+                    image = clueImage
+                });
+            }
+            else // 其他线索直接添加至背包当中
+            {
+                EventBus.LocalPublish(new ClueDiscoveredEvent
+                {
+                    playerNetId = pid,
+                    clueId = gameObject.name,
+                    clueText = clueText,
+                    clueDescription = clueDescription,
+                    icon = clueIcon,
+                    image = clueImage
+                });
+            }
+            // 发布探索进度事件
+            EventBus.LocalPublish(new LevelProgressEvent {});
+            UIManager.Instance.SetFrozen(true);
+        }
         // 查找并显示 ClueCanvas
         GameObject canvasObj = GameObject.Find("ClueCanvas");
         ClueCanvas canvas = canvasObj != null ? canvasObj.GetComponent<ClueCanvas>() : null;
 
         if (canvas != null)
         {
-            canvas.ShowClue(clueImage, clueDescription);
-            
-            Sprite sprite = clueImage;
-            int timeline = TimelinePlayer.Local.timeline;
-            // 压缩图片，避免过大
-            byte[] spriteBytes = ImageUtils.CompressSpriteToJpegBytes(sprite, 80);
-            Debug.Log($"[UIManager] 线索图片压缩成功，大小：{spriteBytes.Length} 字节");
-            ClueBoard.AddClueEntry(timeline, spriteBytes);
+            canvas.ShowClue(clueText, clueImage, clueDescription);
         }
         else
         {
             Debug.LogWarning("ClueCanvas not found in the scene!");
         }
 
-        Debug.Log($"调查线索 -> 对象: {gameObject.name}, 玩家: {who}\n内容: {clueText}");
+        Debug.Log($"调查线索 -> 对象: {gameObject.name}, 玩家: {pid}\n内容: {clueText}");
     }
 }

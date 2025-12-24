@@ -42,12 +42,13 @@ namespace Events
         public string[] inventoryItems;
     }
 
-    // 日记线索共享事件
-
     public class ClueSharedEvent
     {
-        public byte[] imageData;
+        public int clueId = 0;
         public int timeline; // 时间线（0=Ancient, 1=Modern, 2=Future）
+        public int level; // 层数（1=第一层，2=第二层，3=第三层）
+        public byte[] imageData = null;
+        public string text = null;
     }
 
     // 线索被发现时发布
@@ -63,17 +64,14 @@ namespace Events
         public Sprite image;
     }
 
-    // 玩家打开独立UI界面时发布
-    
-    public class FreezeEvent
-    {
-        public bool isOpen;
-    }
-
     /*
      * 谜题与进度相关事件
      */
-    // 谜题完成时发布
+    // 每一层探索进度事件
+    public class LevelProgressEvent
+    {
+    }
+
     public class PuzzleCompletedEvent
     {
         public string sceneName;
@@ -97,15 +95,9 @@ namespace Events
     {
     }
 
-
-
-    /*
-     * 时间线交互事件
-     */
-
-    /*
-     * UI与视听反馈事件
-     */
+    public class IntroEndEvent
+    {
+    }
 
     // 房间创建/加入进度事件
     public class RoomProgressEvent

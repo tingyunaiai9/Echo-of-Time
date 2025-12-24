@@ -50,11 +50,20 @@ public class VisualNovelPanel : MonoBehaviour
         EventBus.Unsubscribe<StartDialogueEvent>(OnStartDialogue);
     }
 
+    void Update()
+    {
+        // 空格键推进到下一句（或快速完成打字）
+        if (panelRoot != null && panelRoot.activeSelf && Input.GetKeyDown(KeyCode.Space))
+        {
+            OnContinueClicked();
+        }
+    }
+
     // 事件回调
     private void OnStartDialogue(StartDialogueEvent evt)
     {
         Debug.Log("OnStartDialogue() - 已收到开始剧情事件！");
-        EventBus.LocalPublish(new FreezeEvent {isOpen = true}); // 暂停游戏
+        UIManager.Instance?.SetFrozen(true); // 暂停游戏
         StartDialogue(evt.data);
     }
 
@@ -85,16 +94,25 @@ public class VisualNovelPanel : MonoBehaviour
         // 设置背景图：本行有则用本行，没有则沿用上一行
         if (backgroundImage != null)
         {
-            Sprite bg = line.backgroundSprite != null ? line.backgroundSprite : _lastBackgroundSprite;
-            if (bg != null)
+            // 如果勾选了清空背景，则隐藏背景并重置记录
+            if (line.clearBackground)
             {
-                backgroundImage.sprite = bg;
-                backgroundImage.gameObject.SetActive(true);
-                _lastBackgroundSprite = bg;
+                backgroundImage.gameObject.SetActive(false);
+                _lastBackgroundSprite = null;
             }
             else
             {
-                backgroundImage.gameObject.SetActive(false);
+                Sprite bg = line.backgroundSprite != null ? line.backgroundSprite : _lastBackgroundSprite;
+                if (bg != null)
+                {
+                    backgroundImage.sprite = bg;
+                    backgroundImage.gameObject.SetActive(true);
+                    _lastBackgroundSprite = bg;
+                }
+                else
+                {
+                    backgroundImage.gameObject.SetActive(false);
+                }
             }
         }
 
@@ -198,8 +216,8 @@ public class VisualNovelPanel : MonoBehaviour
     {
         panelRoot.SetActive(false);
         Debug.Log("剧情结束");
-        // 这里可以发送一个剧情结束事件，恢复玩家控制
-        EventBus.LocalPublish(new FreezeEvent {isOpen = false});
+        // 这里可以恢复玩家控制
+        UIManager.Instance?.SetFrozen(false);
         EventBus.LocalPublish(new DialogueEndEvent());
     }
 }

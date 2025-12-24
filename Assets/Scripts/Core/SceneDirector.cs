@@ -111,6 +111,9 @@ public class SceneDirector : Singleton<SceneDirector>
         {
             TimelinePlayer.Local.TriggerResetPosition();
         }
+
+        // 加载完成后销毁 StartPage UI
+        DestroyStartPageUI();
     }
 
     public string GetSceneName(int timeline, int level)
@@ -118,6 +121,22 @@ public class SceneDirector : Singleton<SceneDirector>
         if (timeline < 0 || timeline >= timelineScenePrefixes.Length) return "";
         return $"{timelineScenePrefixes[timeline]}{level}";
     }
+
+    // 获取最上层（排除 DontDestroyOnLoad）的场景
+    public bool TryGetTopNonDontDestroyScene(out Scene scene)
+    {
+        for (int i = SceneManager.sceneCount - 1; i >= 0; i--)
+        {
+            var current = SceneManager.GetSceneAt(i);
+            if (current.name == "DontDestroyOnLoad") continue;
+            scene = current;
+            return true;
+        }
+
+        scene = default;
+        return false;
+    }
+
 
     /*
      * 协程：以叠加模式加载 StartPage 场景并设为活动场景
@@ -182,6 +201,7 @@ public class SceneDirector : Singleton<SceneDirector>
                     Debug.Log("[SceneDirector] 本地测试模式：跳过自动加载时间线场景，由 LocalTestLauncher 负责");
                     // 仍然卸载 StartPage（如果需要）
                     UnloadSceneIfLoaded(startPageScene);
+                    DestroyStartPageUI();
                     return;
                 }
             }
@@ -223,6 +243,7 @@ public class SceneDirector : Singleton<SceneDirector>
         if (local == null || local.timeline < 0)
         {
             Debug.LogWarning("[SceneDirector] Local timeline not ready, skip timeline scene loading.");
+            DestroyStartPageUI();
             yield break;
         }
 
@@ -239,6 +260,20 @@ public class SceneDirector : Singleton<SceneDirector>
         if (sc.isLoaded)
         {
             SceneManager.UnloadSceneAsync(sc);
+        }
+    }
+
+    /*
+     * 销毁 StartPage 的 UI 根对象（如果存在）
+     * 用于在场景加载完成后移除加载界面
+     */
+    private void DestroyStartPageUI()
+    {
+        var smc = FindFirstObjectByType<StartMenuController>();
+        if (smc != null)
+        {
+            Debug.Log("[SceneDirector] Destroying StartPage UI");
+            Destroy(smc.transform.root.gameObject);
         }
     }
 }

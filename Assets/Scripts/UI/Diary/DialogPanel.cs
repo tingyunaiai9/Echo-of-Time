@@ -22,21 +22,19 @@ using System.Net.Http;
 
 public class DialogPanel : MonoBehaviour
 {
-    [Tooltip("聊天消息预制体（包含MessageText和TypeText两个子对象）")]
+    [Header("聊天区域组件引用")]
+    [Tooltip("聊天消息预制体")]
     public GameObject chatMessagePrefab;
-
+    [Tooltip("第一条聊天消息预制体")]
+    public GameObject firstChatMessagePrefab;
     [Tooltip("聊天图片预制体")]
     public GameObject chatImagePrefab;
-
     [Tooltip("聊天消息容器（Vertical Layout Group）")]
     public Transform chatContent;
 
+    [Header("输入区域组件引用")]
     [Tooltip("输入框组件")]
     public TMP_InputField inputField;
-
-    [Tooltip("发送按钮")]
-    public Button sendButton;
-
     [Tooltip("不同时间线头像图片")]
     public Sprite[] avatarSprites = new Sprite[3]; // 不同时间线的头像图片
     [Tooltip("默认头像图片")]
@@ -68,23 +66,51 @@ public class DialogPanel : MonoBehaviour
             chatContent = transform.Find("LeftPanel/ChatPanel/ChatScrollView/Viewport/Content");
         if (inputField == null)
             inputField = transform.Find("LeftPanel/InputPanel/InputField").GetComponent<TMP_InputField>();
-        if (sendButton == null)
-            sendButton = transform.Find("LeftPanel/InputPanel/SendButton").GetComponent<Button>();
         
-        // 绑定按钮事件
-        sendButton.onClick.AddListener(OnSendButtonClicked);
-
         EventBus.Subscribe<ChatMessageUpdatedEvent>(OnChatMessageUpdated);
         EventBus.Subscribe<ChatImageUpdatedEvent>(OnChatImageUpdated);
-        //EventBus.Subscribe<AnswerCorrectEvent>(OnReceiveAnswerCorrectEvent);
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+        {
+            OnSendButtonClicked();
+        }
+    }
+
+    void OnEnable()
+    {
+        Debug.Log("[DialogPanel] 日记对话面板已初始化并启用");
+        if (firstChatMessagePrefab != null && chatContent != null)
+        {
+            // 添加第一条欢迎消息
+            Transform messageTextTransform = firstChatMessagePrefab.transform.Find("MessageText");
+            TMP_Text messageText = messageTextTransform.GetComponent<TMP_Text>();
+            if (TimelinePlayer.Local != null)
+            {
+                int timeline = TimelinePlayer.Local.timeline;
+                switch (timeline)
+                {
+                    case 0:
+                        messageText.text = "千言万语皆空妄，真言唯我为世诠。";
+                        break;
+                    case 1:
+                        messageText.text = "万象纷纭皆是幻，真容待我笔中现。";
+                        break;
+                    case 2:
+                        messageText.text = "欲将心语化星文，暗寄荧屏无字痕。";
+                        break;
+                    default:
+                        messageText.text = "欢迎来到桃花源";
+                        break;
+                }
+            } 
+        }
     }
 
     void OnDestroy()
     {
-        if (sendButton != null)
-        {
-            sendButton.onClick.RemoveListener(OnSendButtonClicked);
-        }
         EventBus.Unsubscribe<ChatMessageUpdatedEvent>(OnChatMessageUpdated);
         EventBus.Unsubscribe<ChatImageUpdatedEvent>(OnChatImageUpdated);
         //EventBus.Unsubscribe<AnswerCorrectEvent>(OnReceiveAnswerCorrectEvent);
@@ -103,7 +129,7 @@ public class DialogPanel : MonoBehaviour
     }
     
     /* 发送按钮点击事件 */
-    private void OnSendButtonClicked()
+    public void OnSendButtonClicked()
     {
         Debug.Log("[DialogPanel] 发送按钮被点击");
         if (inputField == null || string.IsNullOrWhiteSpace(inputField.text))
@@ -114,6 +140,9 @@ public class DialogPanel : MonoBehaviour
 
         string userInput = inputField.text.Trim();
         inputField.text = "";
+        
+        // 禁用输入框，防止在 AI 响应期间发送新消息
+        inputField.interactable = false;
 
         // 获取当前玩家的时间线
         int timeline = TimelinePlayer.Local.timeline;
@@ -132,7 +161,7 @@ public class DialogPanel : MonoBehaviour
         if (timeline == 1)
         {
             // 添加民国风格的 Prompt 前缀
-            string stylePrompt = $"一张民国时期的黑白素描，复古风格，线条粗糙，旧纸张质感，{userInput}";
+            string stylePrompt = $"一张民国时期的黑白素描，复古风格，线条粗糙，旧纸张质感，{userInput}，画面当中不能有任何文字描述";
             StartCoroutine(ImageGenCoroutine(stylePrompt));
         }
         else
@@ -215,6 +244,12 @@ public class DialogPanel : MonoBehaviour
                 timeline = timeline
             });
         }
+        
+        // 重新启用输入框
+        if (inputField != null)
+        {
+            inputField.interactable = true;
+        }
 
         Debug.Log("[DialogPanel] 流式输出协程结束");
     }
@@ -225,6 +260,7 @@ public class DialogPanel : MonoBehaviour
         isStreaming = true;
     
         int timeline = TimelinePlayer.Local.timeline;
+        int level = TimelinePlayer.Local.currentLevel;
         Debug.Log($"[DialogPanel] ImageGenCoroutine 启动，Timeline: {timeline}, Prompt: {prompt}");
     
         string imageUrl = null;
@@ -282,14 +318,14 @@ public class DialogPanel : MonoBehaviour
                     {
                         Debug.Log($"[Jimeng] 图片压缩成功，压缩后大小: {compressedData.Length} 字节");
 
-                        // 如果没有联网（单机模式调试），则直接本地显示
-                        AddChatImage(compressedData, timeline, publish: false);
-                        // 检查本地玩家的网络组件是否存在
-                        if (ImageNetworkSender.LocalInstance != null)
+                        // 创建图片消息（强制设置 timeline 为 3，表示即梦图片）
+                        s_instance.CreateChatImage(imageData, 3);
+                        // 发布图片事件，统一由 EventBus 处理网络发送
+                        EventBus.Publish(new ChatImageUpdatedEvent
                         {
-                            // 走网络发送：切分 -> 发送 -> Rpc回来 -> 显示
-                            ImageNetworkSender.LocalInstance.SendImage(compressedData, timeline);
-                        }
+                            imageData = compressedData,
+                            timeline = timeline
+                        });
 
                         // 图片生成成功后，移除"俺在思考……"占位消息
                         if (currentStreamingMessageGO != null)
@@ -336,6 +372,12 @@ public class DialogPanel : MonoBehaviour
                 MessageContent = finalMessage,
                 timeline = timeline
             });
+        }
+        
+        // 重新启用输入框
+        if (inputField != null)
+        {
+            inputField.interactable = true;
         }
     
         Debug.Log("[DialogPanel] ImageGenCoroutine 结束");
@@ -589,22 +631,23 @@ public class DialogPanel : MonoBehaviour
         newImageMessage.transform.SetAsLastSibling();
     }
 
-    public static void Reset()
+    public static void ResetMessage()
     {
         if (s_instance != null)
         {
-            // 清空聊天内容
-            foreach (Transform child in s_instance.chatContent)
+            // 清空聊天内容，但保留第一条消息
+            int childCount = s_instance.chatContent.childCount;
+            for (int i = childCount - 1; i >= 1; i--) // 从最后一个开始，保留索引0（第一条消息）
             {
-                Destroy(child.gameObject);
+                Destroy(s_instance.chatContent.GetChild(i).gameObject);
             }
+            
             s_instance.currentStreamingText = null;
             s_instance.currentStreamingMessageGO = null;
             s_instance.streamQueue.Clear();
             s_instance.isStreaming = false;
         }
     }
-
     /* 根据 timeline 获取时间线名称 */
     private string GetTimelineName(int timeline)
     {
