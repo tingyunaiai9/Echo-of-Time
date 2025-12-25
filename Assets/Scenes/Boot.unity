@@ -193,7 +193,7 @@ GameObject:
   m_Component:
   - component: {fileID: 60728183}
   - component: {fileID: 60728185}
-  - component: {fileID: 60728184}
+  - component: {fileID: 60728186}
   m_Layer: 0
   m_Name: '@Light2Manager'
   m_TagString: Untagged
@@ -216,18 +216,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 54185987}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &60728184
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 60728182}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5738e0ec3ddd00479b4713185f540dd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Game.Gameplay.Puzzle.Light2.Light2Manager
 --- !u!114 &60728185
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -245,6 +233,22 @@ MonoBehaviour:
   serverOnly: 0
   visibility: 0
   hasSpawned: 0
+--- !u!114 &60728186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 60728182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efb9cc5b90c5d4055aea2036f8b38673, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Gameplay.Puzzle.Light2.Light2Manager
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  isSeedPlanted: 0
 --- !u!1 &123294566
 GameObject:
   m_ObjectHideFlags: 0
@@ -483,6 +487,7 @@ MonoBehaviour:
   skipRelay: 0
   maxPlayers: 3
   roomNamespace: EchoOfTime
+  relayHeartbeatTimeout: 60
 --- !u!4 &611270532
 Transform:
   m_ObjectHideFlags: 0

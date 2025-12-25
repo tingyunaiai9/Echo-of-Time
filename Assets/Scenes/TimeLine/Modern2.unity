@@ -802,7 +802,7 @@ GameObject:
   - component: {fileID: 872927303}
   - component: {fileID: 872927304}
   - component: {fileID: 872927306}
-  - component: {fileID: 872927305}
+  - component: {fileID: 872927307}
   m_Layer: 8
   m_Name: tree
   m_TagString: Untagged
@@ -883,22 +883,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &872927305
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 872927302}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 08063b9cd8fd79b408347a9b08d678c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Game.Gameplay.Puzzle.Light2.Light2Tree
-  timeline: 0
-  puzzleSceneName: Light2
-  screenObject: {fileID: 0}
-  notificationController: {fileID: 0}
 --- !u!65 &872927306
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -920,6 +904,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3.92, y: 5.41, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &872927307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 872927302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7bafcd5966f694ae28a5c670854e45f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Gameplay.Puzzle.Light2.Light2Tree
+  timeline: 0
+  puzzleSceneName: Light2
+  screenObject: {fileID: 0}
+  notificationController: {fileID: 0}
 --- !u!1 &889656434
 GameObject:
   m_ObjectHideFlags: 0
@@ -1305,8 +1305,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1151637471}
   - component: {fileID: 1151637472}
-  - component: {fileID: 1151637474}
   - component: {fileID: 1151637473}
+  - component: {fileID: 1151637474}
   m_Layer: 8
   m_Name: pot
   m_TagString: Untagged
@@ -1417,7 +1417,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1151637470}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee1cfe285acaecd4c8eaa1f1c360fb10, type: 3}
+  m_Script: {fileID: 11500000, guid: 6eda1122792a741c5940692de7b4a9b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Gameplay.Puzzle.Light2.Light2Pot
   timeline: 1
