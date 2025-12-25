@@ -25,10 +25,6 @@ public class Word : MonoBehaviour
     {
         // 获取 TextMeshProUGUI 组件（UI 版本）
         textMeshPro = GetComponent<TextMeshProUGUI>();
-        if (textMeshPro == null)
-        {
-            Debug.LogError($"[Word] {gameObject.name} 缺少 TextMeshProUGUI 组件！");
-        }
         
         // 获取 Outline 组件
         outline = GetComponent<Outline>();

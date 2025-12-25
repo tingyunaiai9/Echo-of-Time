@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class StartGameRelay : MonoBehaviour
 {
+
     public void OnClickConfirm()
     {
         if (SceneDirector.Instance != null)

@@ -320,12 +320,12 @@ public class DialogPanel : MonoBehaviour
 
                         // 创建图片消息（强制设置 timeline 为 3，表示即梦图片）
                         s_instance.CreateChatImage(imageData, 3);
-                        // 检查本地玩家的网络组件是否存在
-                        if (ImageNetworkSender.LocalInstance != null)
+                        // 发布图片事件，统一由 EventBus 处理网络发送
+                        EventBus.Publish(new ChatImageUpdatedEvent
                         {
-                            // 走网络发送：切分 -> 发送 -> Rpc回来 -> 显示
-                            ImageNetworkSender.LocalInstance.SendImage(compressedData, timeline, level);
-                        }
+                            imageData = compressedData,
+                            timeline = timeline
+                        });
 
                         // 图片生成成功后，移除"俺在思考……"占位消息
                         if (currentStreamingMessageGO != null)

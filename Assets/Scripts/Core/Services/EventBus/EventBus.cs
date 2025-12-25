@@ -53,6 +53,42 @@ public class EventBus : Singleton<EventBus>
 
         if (isGameEvent)
         {
+            // 处理包含图片数据的事件，使用 ImageNetworkSender 分块发送
+            if (ImageNetworkSender.LocalInstance != null)
+            {
+                // 检查是否为 ClueSharedEvent
+                if (eventData is Events.ClueSharedEvent clueEvent)
+                {
+                    if (clueEvent.imageData != null && clueEvent.imageData.Length > 0)
+                    {
+                        ImageNetworkSender.LocalInstance.SendImage(
+                            clueEvent.imageData, 
+                            clueEvent.timeline, 
+                            clueEvent.level, 
+                            "Clue"
+                        );
+                        return; // 图片通过网络发送，不再走普通事件同步
+                    }
+                }
+                // 检查是否为 ChatImageUpdatedEvent
+                else if (eventData is Events.ChatImageUpdatedEvent chatImageEvent)
+                {
+                    if (chatImageEvent.imageData != null && chatImageEvent.imageData.Length > 0)
+                    {
+                        // 从事件中获取timeline，如果没有则使用本地玩家的timeline
+                        int timeline = chatImageEvent.timeline;
+                        int level = TimelinePlayer.Local != null ? TimelinePlayer.Local.currentLevel : 1;
+                        ImageNetworkSender.LocalInstance.SendImage(
+                            chatImageEvent.imageData, 
+                            timeline, 
+                            level, 
+                            "Chat"
+                        );
+                        return; // 图片通过网络发送，不再走普通事件同步
+                    }
+                }
+            }
+            
             NetworkEventRelay.Instance.RelayGameEvent(eventData);
         }
         else

@@ -1332,9 +1332,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 703507074}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be7c91622cee5496f9853489eb763ca3, type: 3}
+  m_Script: {fileID: 11500000, guid: b0db27b0d235e4b80bd663bc1a69aa56, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NewMonoBehaviourScript
+  m_EditorClassIdentifier: Assembly-CSharp::CompassPanel
   puzzleID: 
   puzzleName: 
   isCompleted: 0
@@ -1343,8 +1343,8 @@ MonoBehaviour:
   ResultImage: {fileID: 1626567638}
   notificationController: {fileID: 1420742681}
   tipPanel: {fileID: 322320701}
-  innerRadius: 200
-  outerRadius: 450
+  innerRadius: 220
+  outerRadius: 500
   rotationAngle: 30
   rotationDuration: 0.3
   digitTexts:
@@ -1437,7 +1437,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 703507078}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: CompassPanel, Assembly-CSharp
         m_MethodName: ResetRotation
         m_Mode: 1

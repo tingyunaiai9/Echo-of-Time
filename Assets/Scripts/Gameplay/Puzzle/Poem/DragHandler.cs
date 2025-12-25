@@ -3,7 +3,9 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
-using UnityEditor.EditorTools;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 /*
  * 小纸条拖拽处理脚本

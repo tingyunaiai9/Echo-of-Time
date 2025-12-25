@@ -4,7 +4,7 @@ using System.Collections;
 using Events;
 using Unity.Sync.Relay.Message;
 using Game.UI;
-using Unity.UOS.COSXML.Log;
+// using Unity.UOS.COSXML.Log;
 using System.Collections.Generic;
 using Unity.VisualScripting; // 引入事件命名空间
 

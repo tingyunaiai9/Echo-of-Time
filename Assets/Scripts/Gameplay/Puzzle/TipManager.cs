@@ -19,7 +19,7 @@ public class TipManager : MonoBehaviour
     private int currentTipIndex = 0; // 当前显示的提示图片索引
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void OnEnable() 
+    void OnEnable()
     {
         tipTitleText.text = tipTitle;
         currentImage.sprite = tipImages[0];
