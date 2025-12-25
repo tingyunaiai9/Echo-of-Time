@@ -228,10 +228,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5738e0ec3ddd00479b4713185f540dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Gameplay.Puzzle.Light2.Light2Manager
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0
-  isSeedPlanted: 0
 --- !u!114 &60728185
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -717,7 +717,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 703507074}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aac4db8d2a05d4bad993f6d9510a22f6, type: 3}
+  m_Script: {fileID: 11500000, guid: 9b283a36da1614fe0a995b09ae4a4e8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Compass2Panel
   puzzleID: 
@@ -737,7 +737,7 @@ MonoBehaviour:
   rotationAngle: -60
   rotationDuration: 0.3
   goldenColor: {r: 1, g: 0.84, b: 0, a: 1}
-  innerTargetRotations: 4
+  innerTargetRotations: 3
   middleTargetRotations: 2
   outerTargetRotations: 1
 --- !u!1 &729214282
@@ -822,7 +822,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 703507078}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Compass2Panel, Assembly-CSharp
         m_MethodName: ResetPuzzle
         m_Mode: 1
@@ -1589,11 +1589,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1782421115120420154, guid: 63f8bbab5d71d4bd9a7b9515e3f00741, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4236665228758547916, guid: 63f8bbab5d71d4bd9a7b9515e3f00741, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 200
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5517123704750828895, guid: 63f8bbab5d71d4bd9a7b9515e3f00741, type: 3}
       propertyPath: m_Pivot.x
@@ -1677,23 +1677,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5628707281970429866, guid: 63f8bbab5d71d4bd9a7b9515e3f00741, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5628707281970429866, guid: 63f8bbab5d71d4bd9a7b9515e3f00741, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5628707281970429866, guid: 63f8bbab5d71d4bd9a7b9515e3f00741, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 729
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5628707281970429866, guid: 63f8bbab5d71d4bd9a7b9515e3f00741, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 464.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5628707281970429866, guid: 63f8bbab5d71d4bd9a7b9515e3f00741, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -100
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

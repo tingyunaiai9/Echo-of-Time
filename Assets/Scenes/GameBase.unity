@@ -5993,7 +5993,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1022776798}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37c4abebcdd9b4bc9a628c02c8c932f5, type: 3}
+  m_Script: {fileID: 11500000, guid: e843c63e53178452aa5be4f767d62dfb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ClueImagePanel
   ClueImageDisplay: {fileID: 346526919}
