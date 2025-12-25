@@ -172,7 +172,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 23045488}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab6c0bb4f2fdd3f45b65f84ccb371fca, type: 3}
+  m_Script: {fileID: 11500000, guid: ecde71c41cb2a47f4af1d956c1d1dcdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Piece
 --- !u!1 &25969131
@@ -186,8 +186,8 @@ GameObject:
   - component: {fileID: 25969132}
   - component: {fileID: 25969134}
   - component: {fileID: 25969133}
-  - component: {fileID: 25969136}
   - component: {fileID: 25969135}
+  - component: {fileID: 25969136}
   m_Layer: 5
   m_Name: Word7
   m_TagString: Untagged
@@ -337,7 +337,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 25969131}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8dbbef28b4bd0438f8cc8c44f156001d, type: 3}
+  m_Script: {fileID: 11500000, guid: 8f2dfe5c8bfad412c9953c7a038bf340, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Word
   Pieces: {fileID: 1522057645}
@@ -438,22 +438,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 32613857}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 99cce6a603b89be409b56ba869d514d8, type: 3}
+  m_Script: {fileID: 11500000, guid: fd3e84caae1c04e439b7fdaa0f35c02f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PrunePanel
-  words:
-  - {fileID: 1618483944}
-  - {fileID: 354101922}
-  - {fileID: 1254146431}
-  - {fileID: 2129755374}
-  - {fileID: 25969136}
-  - {fileID: 1195276143}
-  - {fileID: 2049671768}
+  Words: {fileID: 754965639}
+  wordIndexes: 0100000002000000040000000500000007000000080000000a000000
   clueButton: {fileID: 2061350727}
   notificationController: {fileID: 1722164378}
   tipPanel: {fileID: 3463630201625114126}
-  handkerchiefObjectName: Handkerchief
-  seedObjectName: Seed
+  handkerchiefObjectName: handkerchief
+  seedObjectName: seed
   cursorTexture: {fileID: 2800000, guid: 800e72f09ea981141a79c6501275ddee, type: 3}
   cursorTexturePressed: {fileID: 2800000, guid: 732666e4ca1097b40b5b570f8f583e9e, type: 3}
   hotspot: {x: 0, y: 0}
@@ -1087,7 +1081,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 132828556}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab6c0bb4f2fdd3f45b65f84ccb371fca, type: 3}
+  m_Script: {fileID: 11500000, guid: ecde71c41cb2a47f4af1d956c1d1dcdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Piece
 --- !u!1 &133972705
@@ -1143,7 +1137,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 133972705}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab6c0bb4f2fdd3f45b65f84ccb371fca, type: 3}
+  m_Script: {fileID: 11500000, guid: ecde71c41cb2a47f4af1d956c1d1dcdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Piece
 --- !u!1 &167180314
@@ -1193,7 +1187,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 167180314}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab6c0bb4f2fdd3f45b65f84ccb371fca, type: 3}
+  m_Script: {fileID: 11500000, guid: ecde71c41cb2a47f4af1d956c1d1dcdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Piece
 --- !u!1 &173362317
@@ -1486,7 +1480,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 216911860}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab6c0bb4f2fdd3f45b65f84ccb371fca, type: 3}
+  m_Script: {fileID: 11500000, guid: ecde71c41cb2a47f4af1d956c1d1dcdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Piece
 --- !u!1 &285828669
@@ -1761,8 +1755,8 @@ GameObject:
   - component: {fileID: 354101918}
   - component: {fileID: 354101920}
   - component: {fileID: 354101919}
-  - component: {fileID: 354101922}
   - component: {fileID: 354101921}
+  - component: {fileID: 354101922}
   m_Layer: 5
   m_Name: Word2
   m_TagString: Untagged
@@ -1912,7 +1906,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 354101917}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8dbbef28b4bd0438f8cc8c44f156001d, type: 3}
+  m_Script: {fileID: 11500000, guid: 8f2dfe5c8bfad412c9953c7a038bf340, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Word
   Pieces: {fileID: 1522057645}
@@ -2374,7 +2368,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 448886978}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab6c0bb4f2fdd3f45b65f84ccb371fca, type: 3}
+  m_Script: {fileID: 11500000, guid: ecde71c41cb2a47f4af1d956c1d1dcdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Piece
 --- !u!1 &455863718
@@ -2697,7 +2691,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 538148454}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab6c0bb4f2fdd3f45b65f84ccb371fca, type: 3}
+  m_Script: {fileID: 11500000, guid: ecde71c41cb2a47f4af1d956c1d1dcdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Piece
 --- !u!1 &546337156
@@ -2929,7 +2923,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 574900456}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab6c0bb4f2fdd3f45b65f84ccb371fca, type: 3}
+  m_Script: {fileID: 11500000, guid: ecde71c41cb2a47f4af1d956c1d1dcdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Piece
 --- !u!1 &621223540
@@ -2979,7 +2973,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 621223540}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab6c0bb4f2fdd3f45b65f84ccb371fca, type: 3}
+  m_Script: {fileID: 11500000, guid: ecde71c41cb2a47f4af1d956c1d1dcdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Piece
 --- !u!1 &625807552
@@ -3357,8 +3351,8 @@ GameObject:
   - component: {fileID: 663970452}
   - component: {fileID: 663970454}
   - component: {fileID: 663970453}
-  - component: {fileID: 663970456}
   - component: {fileID: 663970455}
+  - component: {fileID: 663970456}
   m_Layer: 5
   m_Name: Word6
   m_TagString: Untagged
@@ -3508,7 +3502,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 663970451}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8dbbef28b4bd0438f8cc8c44f156001d, type: 3}
+  m_Script: {fileID: 11500000, guid: 8f2dfe5c8bfad412c9953c7a038bf340, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Word
   Pieces: {fileID: 1522057645}
@@ -3800,8 +3794,8 @@ GameObject:
   - component: {fileID: 689984209}
   - component: {fileID: 689984211}
   - component: {fileID: 689984210}
-  - component: {fileID: 689984213}
   - component: {fileID: 689984212}
+  - component: {fileID: 689984213}
   m_Layer: 5
   m_Name: Word3
   m_TagString: Untagged
@@ -3951,7 +3945,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 689984208}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8dbbef28b4bd0438f8cc8c44f156001d, type: 3}
+  m_Script: {fileID: 11500000, guid: 8f2dfe5c8bfad412c9953c7a038bf340, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Word
   Pieces: {fileID: 1522057645}
@@ -4509,7 +4503,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 847398395}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab6c0bb4f2fdd3f45b65f84ccb371fca, type: 3}
+  m_Script: {fileID: 11500000, guid: ecde71c41cb2a47f4af1d956c1d1dcdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Piece
 --- !u!1 &869413642
@@ -5446,8 +5440,8 @@ GameObject:
   - component: {fileID: 1011780909}
   - component: {fileID: 1011780913}
   - component: {fileID: 1011780912}
-  - component: {fileID: 1011780911}
   - component: {fileID: 1011780910}
+  - component: {fileID: 1011780914}
   m_Layer: 5
   m_Name: Word11
   m_TagString: Untagged
@@ -5489,23 +5483,6 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
---- !u!114 &1011780911
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1011780908}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8dbbef28b4bd0438f8cc8c44f156001d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Word
-  Pieces: {fileID: 1522057645}
-  coverGroups: 09000000
-  goldenColor: {r: 1, g: 0.84, b: 0, a: 1}
-  outlineWidth: 1.5
-  isActivated: 0
 --- !u!114 &1011780912
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5605,6 +5582,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1011780908}
   m_CullTransparentMesh: 1
+--- !u!114 &1011780914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1011780908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f2dfe5c8bfad412c9953c7a038bf340, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Word
+  Pieces: {fileID: 1522057645}
+  coverGroups: 09000000
+  goldenColor: {r: 1, g: 0.84, b: 0, a: 1}
+  outlineWidth: 1.5
+  isActivated: 0
 --- !u!1 &1034640121
 GameObject:
   m_ObjectHideFlags: 0
@@ -6193,7 +6187,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 301719d3db782bc43ab43792e9d4c5a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResetButton
-  piecesParent: {fileID: 1522057645}
+  piecesParent: {fileID: 0}
   wordsParent: {fileID: 0}
   resetColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!1 &1095950641
@@ -6246,7 +6240,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1095950641}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab6c0bb4f2fdd3f45b65f84ccb371fca, type: 3}
+  m_Script: {fileID: 11500000, guid: ecde71c41cb2a47f4af1d956c1d1dcdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Piece
 --- !u!1 &1115057101
@@ -6299,7 +6293,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1115057101}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab6c0bb4f2fdd3f45b65f84ccb371fca, type: 3}
+  m_Script: {fileID: 11500000, guid: ecde71c41cb2a47f4af1d956c1d1dcdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Piece
 --- !u!1 &1138151580
@@ -6813,8 +6807,8 @@ GameObject:
   - component: {fileID: 1195276139}
   - component: {fileID: 1195276141}
   - component: {fileID: 1195276140}
-  - component: {fileID: 1195276143}
   - component: {fileID: 1195276142}
+  - component: {fileID: 1195276143}
   m_Layer: 5
   m_Name: Word8
   m_TagString: Untagged
@@ -6964,7 +6958,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1195276138}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8dbbef28b4bd0438f8cc8c44f156001d, type: 3}
+  m_Script: {fileID: 11500000, guid: 8f2dfe5c8bfad412c9953c7a038bf340, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Word
   Pieces: {fileID: 1522057645}
@@ -7074,8 +7068,8 @@ GameObject:
   - component: {fileID: 1254146427}
   - component: {fileID: 1254146429}
   - component: {fileID: 1254146428}
-  - component: {fileID: 1254146431}
   - component: {fileID: 1254146430}
+  - component: {fileID: 1254146431}
   m_Layer: 5
   m_Name: Word4
   m_TagString: Untagged
@@ -7225,7 +7219,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1254146426}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8dbbef28b4bd0438f8cc8c44f156001d, type: 3}
+  m_Script: {fileID: 11500000, guid: 8f2dfe5c8bfad412c9953c7a038bf340, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Word
   Pieces: {fileID: 1522057645}
@@ -7330,7 +7324,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1292018831}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab6c0bb4f2fdd3f45b65f84ccb371fca, type: 3}
+  m_Script: {fileID: 11500000, guid: ecde71c41cb2a47f4af1d956c1d1dcdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Piece
 --- !u!1 &1296864175
@@ -7380,7 +7374,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1296864175}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab6c0bb4f2fdd3f45b65f84ccb371fca, type: 3}
+  m_Script: {fileID: 11500000, guid: ecde71c41cb2a47f4af1d956c1d1dcdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Piece
 --- !u!1 &1305035806
@@ -7432,7 +7426,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1305035806}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab6c0bb4f2fdd3f45b65f84ccb371fca, type: 3}
+  m_Script: {fileID: 11500000, guid: ecde71c41cb2a47f4af1d956c1d1dcdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Piece
 --- !u!1 &1312786092
@@ -7537,8 +7531,8 @@ GameObject:
   - component: {fileID: 1324542250}
   - component: {fileID: 1324542252}
   - component: {fileID: 1324542251}
-  - component: {fileID: 1324542254}
   - component: {fileID: 1324542253}
+  - component: {fileID: 1324542254}
   m_Layer: 5
   m_Name: Word9
   m_TagString: Untagged
@@ -7688,11 +7682,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1324542249}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8dbbef28b4bd0438f8cc8c44f156001d, type: 3}
+  m_Script: {fileID: 11500000, guid: 8f2dfe5c8bfad412c9953c7a038bf340, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Word
   Pieces: {fileID: 1522057645}
-  coverGroups: 0a0000000d000000
+  coverGroups: 0d0000000a000000
   goldenColor: {r: 1, g: 0.84, b: 0, a: 1}
   outlineWidth: 1.5
   isActivated: 0
@@ -8156,7 +8150,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1363094723}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab6c0bb4f2fdd3f45b65f84ccb371fca, type: 3}
+  m_Script: {fileID: 11500000, guid: ecde71c41cb2a47f4af1d956c1d1dcdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Piece
 --- !u!1 &1366538051
@@ -8624,7 +8618,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1389897070}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab6c0bb4f2fdd3f45b65f84ccb371fca, type: 3}
+  m_Script: {fileID: 11500000, guid: ecde71c41cb2a47f4af1d956c1d1dcdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Piece
 --- !u!1 &1403569157
@@ -8812,7 +8806,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1408015217}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab6c0bb4f2fdd3f45b65f84ccb371fca, type: 3}
+  m_Script: {fileID: 11500000, guid: ecde71c41cb2a47f4af1d956c1d1dcdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Piece
 --- !u!1 &1414770873
@@ -9590,7 +9584,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1516656455}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab6c0bb4f2fdd3f45b65f84ccb371fca, type: 3}
+  m_Script: {fileID: 11500000, guid: ecde71c41cb2a47f4af1d956c1d1dcdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Piece
 --- !u!1 &1517369699
@@ -10144,8 +10138,8 @@ GameObject:
   - component: {fileID: 1618483940}
   - component: {fileID: 1618483942}
   - component: {fileID: 1618483941}
-  - component: {fileID: 1618483944}
   - component: {fileID: 1618483943}
+  - component: {fileID: 1618483944}
   m_Layer: 5
   m_Name: Word1
   m_TagString: Untagged
@@ -10295,7 +10289,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1618483939}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8dbbef28b4bd0438f8cc8c44f156001d, type: 3}
+  m_Script: {fileID: 11500000, guid: 8f2dfe5c8bfad412c9953c7a038bf340, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Word
   Pieces: {fileID: 1522057645}
@@ -10538,7 +10532,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1683007343}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab6c0bb4f2fdd3f45b65f84ccb371fca, type: 3}
+  m_Script: {fileID: 11500000, guid: ecde71c41cb2a47f4af1d956c1d1dcdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Piece
 --- !u!1 &1686844593
@@ -12748,8 +12742,8 @@ GameObject:
   - component: {fileID: 2000456233}
   - component: {fileID: 2000456237}
   - component: {fileID: 2000456236}
-  - component: {fileID: 2000456235}
   - component: {fileID: 2000456234}
+  - component: {fileID: 2000456238}
   m_Layer: 5
   m_Name: Word12
   m_TagString: Untagged
@@ -12791,23 +12785,6 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
---- !u!114 &2000456235
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2000456232}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8dbbef28b4bd0438f8cc8c44f156001d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Word
-  Pieces: {fileID: 1522057645}
-  coverGroups: 02000000
-  goldenColor: {r: 1, g: 0.84, b: 0, a: 1}
-  outlineWidth: 1.5
-  isActivated: 0
 --- !u!114 &2000456236
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12907,6 +12884,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2000456232}
   m_CullTransparentMesh: 1
+--- !u!114 &2000456238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2000456232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f2dfe5c8bfad412c9953c7a038bf340, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Word
+  Pieces: {fileID: 1522057645}
+  coverGroups: 02000000
+  goldenColor: {r: 1, g: 0.84, b: 0, a: 1}
+  outlineWidth: 1.5
+  isActivated: 0
 --- !u!1 &2020447270
 GameObject:
   m_ObjectHideFlags: 0
@@ -12961,7 +12955,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2020447270}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab6c0bb4f2fdd3f45b65f84ccb371fca, type: 3}
+  m_Script: {fileID: 11500000, guid: ecde71c41cb2a47f4af1d956c1d1dcdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Piece
 --- !u!1 &2049671763
@@ -12975,8 +12969,8 @@ GameObject:
   - component: {fileID: 2049671764}
   - component: {fileID: 2049671766}
   - component: {fileID: 2049671765}
-  - component: {fileID: 2049671768}
   - component: {fileID: 2049671767}
+  - component: {fileID: 2049671768}
   m_Layer: 5
   m_Name: Word10
   m_TagString: Untagged
@@ -13126,7 +13120,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2049671763}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8dbbef28b4bd0438f8cc8c44f156001d, type: 3}
+  m_Script: {fileID: 11500000, guid: 8f2dfe5c8bfad412c9953c7a038bf340, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Word
   Pieces: {fileID: 1522057645}
@@ -13778,8 +13772,8 @@ GameObject:
   - component: {fileID: 2129755370}
   - component: {fileID: 2129755372}
   - component: {fileID: 2129755371}
-  - component: {fileID: 2129755374}
   - component: {fileID: 2129755373}
+  - component: {fileID: 2129755374}
   m_Layer: 5
   m_Name: Word5
   m_TagString: Untagged
@@ -13929,7 +13923,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2129755369}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8dbbef28b4bd0438f8cc8c44f156001d, type: 3}
+  m_Script: {fileID: 11500000, guid: 8f2dfe5c8bfad412c9953c7a038bf340, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Word
   Pieces: {fileID: 1522057645}

@@ -4,6 +4,8 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using Events;
+using System.Diagnostics.Contracts;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -12,8 +14,10 @@ using Game.UI;
 public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
     [Header("游戏对象引用")]
-    [Tooltip("文字答案设置")]
-    public List<Word> words = new List<Word>();
+    [Tooltip("文字集合游戏对象")]
+    public GameObject Words;
+    [Tooltip("文字答案设置（范围在1-12之间）")]
+    public List<int> wordIndexes = new List<int> {1, 2, 4, 5, 7, 8, 10};
     [Tooltip("线索按钮游戏对象")]
     public GameObject clueButton;
     [Tooltip("通知控制器引用")]
@@ -48,6 +52,8 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     [Header("点击状态持续时间")]
     [Tooltip("点击后光标保持按下状态的时间（秒）")]
     public float pressedDuration = 0.2f;
+
+    private List<Word> words = new List<Word>();
 
     private bool isPointerInside = false;
     private bool isPressed = false;
@@ -95,6 +101,14 @@ public class PrunePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             tipPanel.gameObject.SetActive(false);
         }
         s_tipShown = true;
+        foreach (int wordIndex in wordIndexes)
+        {
+            string childName = $"Word{wordIndex}";
+            Transform child = Words.transform.Find(childName);
+            Word word = child.GetComponent<Word>();
+            words.Add(word);
+        }
+
 
         // 在 macOS 上预先缩放光标纹理
         if (Application.platform == RuntimePlatform.OSXPlayer || 

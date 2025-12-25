@@ -39,11 +39,6 @@ public class Piece : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, 
                     childOutlines[i].enabled = false; // 初始不显示
                 }
                 
-                Debug.Log($"[Piece] {gameObject.name} 使用子对象的 {childOutlines.Length} 个 Outline 组件");
-            }
-            else
-            {
-                Debug.LogWarning($"[Piece] {gameObject.name} 及其子对象均未找到 Outline 组件");
             }
         }
     }
