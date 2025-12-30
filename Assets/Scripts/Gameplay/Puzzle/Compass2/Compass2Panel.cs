@@ -53,6 +53,8 @@ public class Compass2Panel : PuzzleManager, IPointerClickHandler
     public int outerTargetRotations = 1;
 
     private bool isPuzzleCompleted = false;
+    // 标记当前是否有旋转动画在播放，播放期间禁止点击
+    private bool isRotating = false;
     private static bool s_tipShown = false;
 
     void Awake()
@@ -71,6 +73,9 @@ public class Compass2Panel : PuzzleManager, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        // 旋转动画进行中时，忽略点击
+        if (isRotating) return;
+
         if (Circle1 == null || Circle2 == null || Circle3 == null)
         {
             Debug.LogError("[Compass2Panel] 必须设置 InnerImage, MiddleImage 和 OuterImage！");
@@ -117,8 +122,15 @@ public class Compass2Panel : PuzzleManager, IPointerClickHandler
         if (image == null) return;
 
         float angle = clickX > 0 ? clockwiseAngle : counterClockwiseAngle;
+        // 标记开始旋转，期间不再响应点击
+        isRotating = true;
         LeanTween.rotateZ(image.gameObject, image.localEulerAngles.z + angle, rotationDuration)
-            .setEase(LeanTweenType.easeInOutQuad);
+            .setEase(LeanTweenType.easeInOutQuad)
+            .setOnComplete(() =>
+            {
+                // 单次旋转动画结束后恢复可点击
+                isRotating = false;
+            });
 
         // 更新旋转进度
         progress += clickX > 0 ? 1 : -1;
@@ -286,6 +298,7 @@ public class Compass2Panel : PuzzleManager, IPointerClickHandler
         middleRotationProgress = 0;
         outerRotationProgress = 0;
         isPuzzleCompleted = false;
+        isRotating = false;
 
         // 重置图像旋转
         if (Circle1 != null)
