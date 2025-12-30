@@ -60,7 +60,7 @@ public class ResultPanel : MonoBehaviour
             confirmButtonText = confirmButton.GetComponentInChildren<TMP_Text>();
         }
     }
-
+/* 取消了 Update 中的回车提交功能，避免和聊天输入冲突
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
@@ -68,7 +68,7 @@ public class ResultPanel : MonoBehaviour
             OnConfirmButtonClicked();
         }
     }
-
+ */
     void OnDestroy()
     {
         if (confirmButton != null)
