@@ -1,12 +1,23 @@
+/*
+ * utils.cs
+ * 图片工具方法集合：负责图片的压缩、解码与格式转换，供网络传输与 UI 显示使用。
+ */
 using UnityEngine;
 using System.IO;
 
+/*
+ * ImageUtils 类
+ * 提供静态工具方法：将 Sprite/图片字节流压缩为 JPEG，以及从 JPEG 恢复 Sprite。
+ */
 public static class ImageUtils
 {
-    /// <summary>
-    /// 压缩Sprite图片为JPEG格式的byte[]，用于网络传输。
-    /// quality参数建议为50~90，越低压缩越大但画质越差。
-    /// </summary>
+    /*
+     * CompressSpriteToJpegBytes
+     * 将给定的 Sprite 压缩为 JPEG 格式的字节数组，适合网络传输。
+     * 参数：
+     * - sprite: 待压缩的 Sprite
+     * - quality: JPEG 压缩质量（1-100），默认 50
+     */
     public static byte[] CompressSpriteToJpegBytes(Sprite sprite, int quality = 50)
     {
         if (sprite == null || sprite.texture == null)
@@ -36,9 +47,10 @@ public static class ImageUtils
         return jpgBytes;
     }
 
-    /// <summary>
-    /// 从JPEG字节流还原为Sprite
-    /// </summary>
+    /*
+     * SpriteFromJpegBytes
+     * 从 JPEG 字节流还原为 Sprite 对象。
+     */
     public static Sprite SpriteFromJpegBytes(byte[] jpgBytes)
     {
         if (jpgBytes == null || jpgBytes.Length == 0)
@@ -49,12 +61,14 @@ public static class ImageUtils
         return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100f);
     }
 
-    /// <summary>
-    /// 对原始图片字节流（byte[]，如PNG/JPG）进行压缩为JPEG格式的byte[]，用于网络传输。
-    /// </summary>
-    /// <param name="imageBytes">原始图片字节流（PNG/JPG等）</param>
-    /// <param name="quality">JPEG压缩质量（1-100）</param>
-    /// <returns>压缩后的JPEG byte[]，如失败返回null</returns>
+    /*
+     * CompressImageBytesToJpeg
+     * 将原始图片字节流（PNG/JPG 等）压缩为 JPEG 字节流。
+     * 参数：
+     * - imageBytes: 原始图片字节流
+     * - quality: JPEG 压缩质量（1-100）
+     * 返回：压缩后的 JPEG 字节流，失败返回 null
+     */
     public static byte[] CompressImageBytesToJpeg(byte[] imageBytes, int quality = 50)
     {
         if (imageBytes == null || imageBytes.Length == 0)

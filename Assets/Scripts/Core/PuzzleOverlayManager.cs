@@ -1,3 +1,10 @@
+/*
+ * PuzzleOverlayManager.cs
+ * 通用谜题场景叠加管理器。
+ * 支持多个谜题场景的局部加载与卸载，不影响其他玩家。
+ * 提供谜题嵌套、玩家控制禁用、相机调整等功能。
+ */
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,22 +15,15 @@ using Game.UI;
 using Events;
 
 /*
- * PuzzleOverlayManager
- * 通用谜题场景叠加管理器：支持多个谜题 Scene 的局部、本地加载与卸载，不影响其他玩家。
- * 功能点：
- * - OpenPuzzle(sceneName, options)
- * - ClosePuzzle() / CloseAll()
- * - 支持谜题嵌套（堆栈）或只允许一个（可配置）
- * - 打开时记录并可恢复前一个激活场景
- * - 可选禁用玩家控制 / 锁鼠标 / 黑屏淡入淡出（留扩展点）
- * - 事件：OnPuzzleOpened / OnPuzzleClosed / OnAllClosed
- * - 仅本地客户端加载，不调用 ServerChangeScene
+ * PuzzleOverlayManager 类
+ * 管理谜题场景的加载、关闭和叠加。
+ * 提供事件通知和玩家控制管理。
  */
 public class PuzzleOverlayManager : MonoBehaviour
 {
-    /// <summary>
-    /// The singleton instance of the PuzzleOverlayManager.
-    /// </summary>
+    /*
+     * PuzzleOverlayManager 的单例实例。
+     */
     public static PuzzleOverlayManager singleton { get; private set; }
 
     [Header("General Options")]
@@ -35,8 +35,11 @@ public class PuzzleOverlayManager : MonoBehaviour
     [SerializeField] private bool restorePreviousActiveScene = true;
 
     [Header("Player Control Options")]
+    [Tooltip("谜题期间是否禁用玩家控制。")]
     [SerializeField] private bool disablePlayerControlDuringPuzzle = true;
+    [Tooltip("谜题期间是否解锁鼠标。")]
     [SerializeField] private bool unlockCursorDuringPuzzle = true;
+    [Tooltip("退出谜题时是否重新锁定鼠标。")]
     [SerializeField] private bool relockCursorOnExit = true;
 
     [Header("Camera Options")]
@@ -55,7 +58,8 @@ public class PuzzleOverlayManager : MonoBehaviour
     [Tooltip("用于提示谜题已完成的通知 UI 控制器")]
     public NotificationController notificationUI;
 
-    [Header("Debug")] [SerializeField] private bool verboseLog = true;
+    [Header("Debug")]
+    [SerializeField] private bool verboseLog = true;
 
     // 事件：外部可订阅
     public event Action<string> OnPuzzleOpened;       // 参数：谜题场景名
@@ -105,15 +109,21 @@ public class PuzzleOverlayManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// A static convenient property to access the singleton instance without using PuzzleOverlayManager.singleton.
-    /// It's the same as PuzzleOverlayManager.singleton.
-    /// </summary>
+    /*
+     * Instance
+     * 提供一个便捷的静态属性用于访问单例实例（等同于 PuzzleOverlayManager.singleton）。
+     */
     public static PuzzleOverlayManager Instance => singleton;
 
     public bool HasAnyPuzzleOpen => puzzleStack.Count > 0;
     public string CurrentPuzzleSceneName => puzzleStack.Count > 0 ? puzzleStack.Peek().SceneName : null;
 
+    /*
+     * OpenPuzzle
+     * 打开指定的谜题场景。
+     * 参数：
+     * - sceneName: 谜题场景名称。
+     */
     public void OpenPuzzle(string sceneName)
     {
         if (busy)
@@ -153,6 +163,8 @@ public class PuzzleOverlayManager : MonoBehaviour
             {
                 Debug.Log("[PuzzleOverlay] 镜子数量不足，无法打开谜题: " + sceneName);
             }
+            var panel = FindFirstObjectByType<MirrorPanel>(FindObjectsInactive.Include);
+            panel?.ResetAllMirrors();
             return;
         }
         StartCoroutine(CoOpenPuzzle(sceneName));
@@ -180,10 +192,11 @@ public class PuzzleOverlayManager : MonoBehaviour
         StartCoroutine(CoCloseAll());
     }
 
-    /// <summary>
-    /// 标记指定谜题已完成，后续调用 OpenPuzzle 时将直接提示已完成而不再打开。
-    /// 由各谜题在完成时调用。
-    /// </summary>
+    /*
+     * MarkPuzzleCompleted
+     * 标记指定谜题已完成，后续调用 OpenPuzzle 时将直接提示已完成而不再打开。
+     * 由各谜题在完成时调用。
+     */
     public void MarkPuzzleCompleted(string sceneName)
     {
         if (string.IsNullOrEmpty(sceneName)) return;

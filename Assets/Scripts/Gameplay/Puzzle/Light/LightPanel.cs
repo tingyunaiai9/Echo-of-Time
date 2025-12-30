@@ -34,6 +34,10 @@ public class LightPanel : MonoBehaviour
     public GameObject PanelRoot;
     [Tooltip("指南面板")]
     public TipManager tipPanel;
+    [Tooltip("激光预制体")]
+    public GameObject Laser;
+    [Tooltip("镜槽背景板")]
+    public Transform backgroundTransform; // Background 容器
 
     [Header("镜槽预制体")]
     public GameObject MirrorSlotPrefab;
@@ -62,7 +66,6 @@ public class LightPanel : MonoBehaviour
     private const float GRID_END_X = 1739f;   // 最后一个格子右下角 X 坐标
     private const float GRID_END_Y = -887f;   // 最后一个格子右下角 Y 坐标
     
-    private Transform backgroundTransform; // Background 容器
     
     // 记录生成的镜槽游戏对象列表，顺序与 mirrorSlots 数组对应
     private GameObject[] generatedMirrorSlots;
@@ -88,13 +91,6 @@ public class LightPanel : MonoBehaviour
             tipPanel.gameObject.SetActive(false);
         }
         s_tipShown = true;
-        // 获取 Background 容器
-        backgroundTransform = transform.Find("Background");
-        if (backgroundTransform == null)
-        {
-            Debug.LogError("[LightPanel] 未找到 Background 对象");
-            return;
-        }
     
         // 生成镜槽
         DrawMirrorSlots();
