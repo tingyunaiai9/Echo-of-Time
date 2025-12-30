@@ -22,5 +22,6 @@ public class PuzzleExitButton : MonoBehaviour
             return;
         }
         PuzzleOverlayManager.Instance.ClosePuzzle();
+        UIManager.Instance.SetFrozen(false);
     }
 }

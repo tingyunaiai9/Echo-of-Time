@@ -88,6 +88,7 @@ public class Clue : Interaction
             EventBus.LocalPublish(new LevelProgressEvent {});
             UIManager.Instance.SetFrozen(true);
         }
+        UIManager.Instance.SetFrozen(true);
         // 查找并显示 ClueCanvas
         GameObject canvasObj = GameObject.Find("ClueCanvas");
         ClueCanvas canvas = canvasObj != null ? canvasObj.GetComponent<ClueCanvas>() : null;
