@@ -1,3 +1,10 @@
+/*
+ * UIManager.cs
+ * 游戏 UI 管理器：负责协调日记、背包、指南、通知等面板的显示与交互。
+ * - 订阅并响应全局事件
+ * - 管理 HUD 按钮的交互状态
+ * - 提供快捷键测试与调试方法
+ */
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
@@ -8,7 +15,10 @@ using Game.UI;
 using System.Collections.Generic;
 using Unity.VisualScripting; // 引入事件命名空间
 
-// UI管理器，协调所有UI系统的显示和交互
+/*
+ * UIManager 类
+ * 负责管理游戏内主要 UI 面板与 HUD 按钮的显示、交互和全局冻结逻辑。
+ */
 public class UIManager : Singleton<UIManager>
 {
     [Header("UI面板")]
@@ -210,7 +220,10 @@ public class UIManager : Singleton<UIManager>
         SetFrozen(anyOpen);
     }
 
-    /// 设置主 UI（如日记按钮）的可见性/交互性
+    /* 设置主 UI（如日记按钮）的可见性/交互性
+     * 参数：
+     * - active: 是否启用主 UI
+     */
     public void SetMainUIActive(bool active)
     {
         if (mainCanvas != null)
@@ -234,7 +247,9 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
-    /// 关闭日记面板
+    /* 关闭日记面板
+     * 如日记面板处于打开状态则关闭并刷新冻结状态
+     */
     public void CloseDiary()
     {
         if (DiaryPanel != null && DiaryPanel.activeSelf)
