@@ -77,6 +77,12 @@ namespace Events
         public string sceneName;
     }
 
+    public class LevelChangedEvent
+    {
+        public int oldLevel;
+        public int newLevel;
+    }
+
     // 玩家回答正确时发布
     public class AnswerCorrectEvent
     {
