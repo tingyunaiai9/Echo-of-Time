@@ -1,3 +1,8 @@
+/* UI/NotificationController.cs
+ * 通用通知控制器
+ * 处理游戏内的浮动提示信息显示、动画效果及生命周期管理
+ */
+
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -5,6 +10,10 @@ using System.Collections;
 
 namespace Game.UI
 {
+    /*
+     * 通知控制器类，单例模式
+     * 负责管理全局通知UI的显示队列和动画逻辑
+     */
     public class NotificationController : MonoBehaviour
     {
         public static NotificationController Instance { get; private set; }
@@ -40,6 +49,10 @@ namespace Game.UI
 
         private Coroutine currentCoroutine;
 
+        /*
+         * 初始化单例及组件引用
+         * 设置初始UI状态为隐藏
+         */
         private void Awake()
         {
             if (Instance == null) Instance = this;
@@ -61,10 +74,10 @@ namespace Game.UI
             }
         }
 
-        /// <summary>
-        /// Shows the notification with the specified message.
-        /// </summary>
-        /// <param name="message">The text to display.</param>
+        /*
+         * 显示指定内容的通知
+         * message: 要显示的文本内容
+         */
         public void ShowNotification(string message)
         {
             if (currentCoroutine != null)
@@ -75,6 +88,10 @@ namespace Game.UI
             currentCoroutine = StartCoroutine(NotificationSequence(message));
         }
 
+        /*
+         * 通知的完整动画序列协程
+         * 包含：设置内容 -> 滑入 -> 停留 -> 淡出
+         */
         private IEnumerator NotificationSequence(string message)
         {
             // 1. Setup content
@@ -133,7 +150,9 @@ namespace Game.UI
             currentCoroutine = null;
         }
         
-        // Test method to trigger from Inspector context menu
+        /*
+         * 测试方法，用于在Inspector中手动触发通知
+         */
         [ContextMenu("Test Notification")]
         public void TestNotification()
         {

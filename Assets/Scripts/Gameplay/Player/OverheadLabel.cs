@@ -1,10 +1,15 @@
+/* Gameplay/Player/OverheadLabel.cs
+ * 玩家头顶标签控制器
+ * 负责显示玩家名称与角色信息，并处理UI跟随与朝向逻辑
+ */
+
 using UnityEngine;
 using Mirror;
 using TMPro;
 
-/// <summary>
-/// 玩家头顶标签：显示玩家名称与角色，并始终朝向主摄像机。
-/// </summary>
+/*
+ * 玩家头顶标签类：显示玩家名称与角色，并始终朝向主摄像机。
+ */
 public class OverheadLabel : NetworkBehaviour
 {
     [Header("引用组件")]
@@ -20,17 +25,27 @@ public class OverheadLabel : NetworkBehaviour
     TimelinePlayer timelinePlayer;
     PlayerRole playerRole;
 
+    /*
+     * 初始化，获取相关组件引用
+     */
     void Awake()
     {
         timelinePlayer = GetComponent<TimelinePlayer>();
         playerRole = GetComponent<PlayerRole>();
     }
 
+    /*
+     * 启动时刷新显示内容
+     */
     void Start()
     {
         Refresh();
     }
 
+    /*
+     * 每帧更新UI位置和朝向
+     * 确保UI始终位于头顶并面向摄像机
+     */
     void LateUpdate()
     {
         if (followHead == null || worldCanvas == null) return;
@@ -45,9 +60,9 @@ public class OverheadLabel : NetworkBehaviour
         }
     }
 
-    /// <summary>
-    /// 更新头顶文本内容（显示玩家名称与角色）。
-    /// </summary>
+    /*
+     * 更新头顶文本内容（显示玩家名称与角色）。
+     */
     public void Refresh()
     {
         if (text == null) return;
