@@ -64,20 +64,6 @@ public class UIManager : Singleton<UIManager>
         EventBus.Subscribe<LevelProgressEvent>(OnLevelProgress);
     }
 
-    public void OnIntroEnd(IntroEndEvent evt)
-    {
-        int level = TimelinePlayer.Local.currentLevel;
-        // 根据当前关卡决定是否显示提示面板
-        if (level == 1)
-        {
-            if (TipPanel != null)
-            {
-                TipPanel.SetActive(true);
-                RefreshFrozenState();
-            }
-        }
-    }
-
     public void OnClueShared(ClueSharedEvent evt)
     {
         // 如果是 Prune 谜题的线索，解锁提示
@@ -107,6 +93,34 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
+    public void OnIntroEnd(IntroEndEvent evt)
+    {
+        Debug.Log("[UIManager] 收到 IntroEndEvent，初始化 TipPanel 和 TipButton。");
+    
+        // 查找场景中所有 TipManager 类型的游戏对象
+        TipManager[] tipManagers = FindObjectsOfType<TipManager>(true); // 包括非激活对象
+        if (tipManagers.Length == 0)
+        {
+            Debug.LogError("[UIManager] 未找到任何 TipManager，无法初始化 TipPanel。");
+            return;
+        }
+    
+        // 将 TipPanel 设置为 tipManagers 数组中的最后一个元素
+        TipPanel = tipManagers[tipManagers.Length - 1].gameObject;
+    
+        var button = TipButton.GetComponent<UnityEngine.UI.Button>();
+        if (button != null)
+        {
+            button.onClick.AddListener(() =>
+            {
+                if (TipPanel != null)
+                {
+                    TipPanel.SetActive(true);
+                }
+            });
+        }
+        Debug.Log("[UIManager] TipButton 点击监听已绑定，TipPanel 设置为最后一个 TipManager。");
+    }
     private IEnumerator WaitForTimelineSceneAndNotify(string targetScene)
     {
         // 如果无法获取目标场景名称，则保持原有行为立即通知
@@ -142,7 +156,6 @@ public class UIManager : Singleton<UIManager>
     protected override void OnDestroy()
     {
         EventBus.Unsubscribe<ClueSharedEvent>(OnClueShared);
-        EventBus.Unsubscribe<IntroEndEvent>(OnIntroEnd);
         EventBus.Unsubscribe<LevelProgressEvent>(OnLevelProgress);
         base.OnDestroy();
     }

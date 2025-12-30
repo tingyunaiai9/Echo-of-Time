@@ -28,14 +28,14 @@ public class TipForLevel : MonoBehaviour
             // 启用提示面板
             tipManager.gameObject.SetActive(true);
             uiManager.SetFrozen(true);
-            Debug.Log("[Level3Tip] 已调用 UIManager.SetFrozen(true)");
+            Debug.Log("[LevelTip] 已调用 UIManager.SetFrozen(true)");
             tipShown = true;
         }
     }
     public void CloseTipPanel()
     {
         uiManager.SetFrozen(false);
-        Debug.Log("[Level3Tip] 已调用 UIManager.SetFrozen(false)");
+        Debug.Log("[LevelTip] 已调用 UIManager.SetFrozen(false)");
     }
 
     private void OnDestroy()

@@ -525,6 +525,7 @@ MonoBehaviour:
   tipManager: {fileID: 1435479915}
   uiManager: {fileID: 0}
   closeButton: {fileID: 1435479917}
+  tipShown: 0
 --- !u!4 &453919257
 Transform:
   m_ObjectHideFlags: 0
@@ -1196,6 +1197,10 @@ PrefabInstance:
     - target: {fileID: 1486200735131179702, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
+      propertyPath: tipTitle
+      value: "\u7B2C\u4E09\u5C42"
       objectReference: {fileID: 0}
     - target: {fileID: 6643653447867744096, guid: 6761c01fef32d48378d6ba1ddd103eb2, type: 3}
       propertyPath: tipWords.Array.size
