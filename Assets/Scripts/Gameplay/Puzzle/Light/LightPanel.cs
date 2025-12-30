@@ -91,13 +91,6 @@ public class LightPanel : MonoBehaviour
             tipPanel.gameObject.SetActive(false);
         }
         s_tipShown = true;
-        // 获取 Background 容器
-        backgroundTransform = transform.Find("Background");
-        if (backgroundTransform == null)
-        {
-            Debug.LogError("[LightPanel] 未找到 Background 对象");
-            return;
-        }
     
         // 生成镜槽
         DrawMirrorSlots();

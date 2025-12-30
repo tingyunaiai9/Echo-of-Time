@@ -163,6 +163,8 @@ public class PuzzleOverlayManager : MonoBehaviour
             {
                 Debug.Log("[PuzzleOverlay] 镜子数量不足，无法打开谜题: " + sceneName);
             }
+            var panel = FindFirstObjectByType<MirrorPanel>(FindObjectsInactive.Include);
+            panel?.ResetAllMirrors();
             return;
         }
         StartCoroutine(CoOpenPuzzle(sceneName));
