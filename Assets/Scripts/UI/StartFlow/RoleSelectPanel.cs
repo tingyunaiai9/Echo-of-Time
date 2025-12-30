@@ -29,9 +29,19 @@ public class RoleSelectPanel : MonoBehaviour
     public Button startButton;
     public TMP_Text startButtonText;
 
+    [Header("房间信息显示")]
+    public TMP_Text roomNameText;
+    public TMP_Text roomCodeText;
+
     // 本地缓存
     private PlayerRole localRole;
     private TimelinePlayer localTimeline;
+    private EchoNetworkManager nm;
+
+    void Awake()
+    {
+        nm = FindFirstObjectByType<EchoNetworkManager>();
+    }
 
     void OnEnable()
     {
@@ -57,6 +67,14 @@ public class RoleSelectPanel : MonoBehaviour
         RefreshRoleUI();
         TryBindLocal(); // 确保本地引用存在
         UpdateStartButton();
+        UpdateRoomInfo();
+    }
+
+    void UpdateRoomInfo()
+    {
+        if (nm == null) return;
+        if (roomNameText != null) roomNameText.text = nm.CurrentRoomName;
+        if (roomCodeText != null) roomCodeText.text = nm.CurrentRoomCode;
     }
 
     /// <summary>
