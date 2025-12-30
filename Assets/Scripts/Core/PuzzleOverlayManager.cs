@@ -70,7 +70,7 @@ public class PuzzleOverlayManager : MonoBehaviour
     private readonly Stack<PuzzleContext> puzzleStack = new Stack<PuzzleContext>();
 
     // 已完成的谜题集合，避免重复打开
-    private readonly HashSet<string> completedPuzzles = new HashSet<string>();
+    public readonly HashSet<string> completedPuzzles = new HashSet<string>();
 
     // 正在进行的加载/卸载操作保护
     private bool busy = false;
