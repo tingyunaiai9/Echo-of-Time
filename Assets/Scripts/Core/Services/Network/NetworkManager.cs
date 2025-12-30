@@ -54,6 +54,9 @@ public class EchoNetworkManager : Mirror.NetworkManager
 
     [Header("房间信息")]
     private RelayRoom currentRoom; // 当前房间信息（Relay 同步）
+    public string CurrentRoomName => currentRoom?.Name;
+    public string CurrentRoomCode => currentRoom?.RoomCode;
+
     private Dictionary<uint, int> playerTimelineMap = new Dictionary<uint, int>(); // 玩家时间线分配表（TransportId -> Timeline）
     private readonly Dictionary<int, int> _timelineByConnectionId = new Dictionary<int, int>(); // 连接ID -> 时间线映射（用于断线重连恢复）
 
