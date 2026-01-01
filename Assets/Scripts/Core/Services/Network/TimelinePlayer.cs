@@ -4,6 +4,7 @@
 
 using Mirror;
 using UnityEngine;
+using Events;
 
 public class TimelinePlayer : NetworkBehaviour
 {
@@ -76,10 +77,12 @@ public class TimelinePlayer : NetworkBehaviour
             {
                 Debug.LogError("[TimelinePlayer] UIManager.Instance is null! Cannot close diary.");
             }
-
-            // 注意：位置重置逻辑已移交至 SceneDirector 在场景加载完成后调用
-            // 避免因 OnLevelChanged 触发时机早于场景加载而导致的问题
         }
+        EventBus.LocalPublish(new LevelChangedEvent
+        {
+            oldLevel = oldLevel,
+            newLevel = newLevel,
+        });
     }
 
     // 供外部（如 SceneDirector）调用，在场景加载完成后重置玩家位置

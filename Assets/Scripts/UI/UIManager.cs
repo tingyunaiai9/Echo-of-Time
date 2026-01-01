@@ -1,3 +1,10 @@
+/*
+ * UIManager.cs
+ * 游戏 UI 管理器：负责协调日记、背包、指南、通知等面板的显示与交互。
+ * - 订阅并响应全局事件
+ * - 管理 HUD 按钮的交互状态
+ * - 提供快捷键测试与调试方法
+ */
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
@@ -8,7 +15,10 @@ using Game.UI;
 using System.Collections.Generic;
 using Unity.VisualScripting; // 引入事件命名空间
 
-// UI管理器，协调所有UI系统的显示和交互
+/*
+ * UIManager 类
+ * 负责管理游戏内主要 UI 面板与 HUD 按钮的显示、交互和全局冻结逻辑。
+ */
 public class UIManager : Singleton<UIManager>
 {
     [Header("UI面板")]
@@ -64,20 +74,6 @@ public class UIManager : Singleton<UIManager>
         EventBus.Subscribe<LevelProgressEvent>(OnLevelProgress);
     }
 
-    public void OnIntroEnd(IntroEndEvent evt)
-    {
-        int level = TimelinePlayer.Local.currentLevel;
-        // 根据当前关卡决定是否显示提示面板
-        if (level == 1)
-        {
-            if (TipPanel != null)
-            {
-                TipPanel.SetActive(true);
-                RefreshFrozenState();
-            }
-        }
-    }
-
     public void OnClueShared(ClueSharedEvent evt)
     {
         // 如果是 Prune 谜题的线索，解锁提示
@@ -107,6 +103,34 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
+    public void OnIntroEnd(IntroEndEvent evt)
+    {
+        Debug.Log("[UIManager] 收到 IntroEndEvent，初始化 TipPanel 和 TipButton。");
+    
+        // 查找场景中所有 TipManager 类型的游戏对象
+        TipManager[] tipManagers = FindObjectsOfType<TipManager>(true); // 包括非激活对象
+        if (tipManagers.Length == 0)
+        {
+            Debug.LogError("[UIManager] 未找到任何 TipManager，无法初始化 TipPanel。");
+            return;
+        }
+    
+        // 将 TipPanel 设置为 tipManagers 数组中的最后一个元素
+        TipPanel = tipManagers[tipManagers.Length - 1].gameObject;
+    
+        var button = TipButton.GetComponent<UnityEngine.UI.Button>();
+        if (button != null)
+        {
+            button.onClick.AddListener(() =>
+            {
+                if (TipPanel != null)
+                {
+                    TipPanel.SetActive(true);
+                }
+            });
+        }
+        Debug.Log("[UIManager] TipButton 点击监听已绑定，TipPanel 设置为最后一个 TipManager。");
+    }
     private IEnumerator WaitForTimelineSceneAndNotify(string targetScene)
     {
         // 如果无法获取目标场景名称，则保持原有行为立即通知
@@ -142,7 +166,6 @@ public class UIManager : Singleton<UIManager>
     protected override void OnDestroy()
     {
         EventBus.Unsubscribe<ClueSharedEvent>(OnClueShared);
-        EventBus.Unsubscribe<IntroEndEvent>(OnIntroEnd);
         EventBus.Unsubscribe<LevelProgressEvent>(OnLevelProgress);
         base.OnDestroy();
     }
@@ -197,7 +220,10 @@ public class UIManager : Singleton<UIManager>
         SetFrozen(anyOpen);
     }
 
-    /// 设置主 UI（如日记按钮）的可见性/交互性
+    /* 设置主 UI（如日记按钮）的可见性/交互性
+     * 参数：
+     * - active: 是否启用主 UI
+     */
     public void SetMainUIActive(bool active)
     {
         if (mainCanvas != null)
@@ -221,7 +247,9 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
-    /// 关闭日记面板
+    /* 关闭日记面板
+     * 如日记面板处于打开状态则关闭并刷新冻结状态
+     */
     public void CloseDiary()
     {
         if (DiaryPanel != null && DiaryPanel.activeSelf)

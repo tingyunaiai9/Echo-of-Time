@@ -60,6 +60,9 @@ public class DialogPanel : MonoBehaviour
     void Awake()
     {
         s_instance = this;
+
+        // 确保后台协程宿主存在（即使本面板被隐藏也能继续运行协程）
+        CoroutineHost.EnsureInstance();
         
         // 查找 UI 元素
         if (chatContent == null)
@@ -162,11 +165,11 @@ public class DialogPanel : MonoBehaviour
         {
             // 添加民国风格的 Prompt 前缀
             string stylePrompt = $"一张民国时期的黑白素描，复古风格，线条粗糙，旧纸张质感，{userInput}，画面当中不能有任何文字描述";
-            StartCoroutine(ImageGenCoroutine(stylePrompt));
+            StartPanelCoroutine(ImageGenCoroutine(stylePrompt));
         }
         else
         {
-            StartCoroutine(StreamingCoroutine(userInput));
+            StartPanelCoroutine(StreamingCoroutine(userInput));
         }
     }
 
@@ -382,6 +385,12 @@ public class DialogPanel : MonoBehaviour
     
         Debug.Log("[DialogPanel] ImageGenCoroutine 结束");
     }    
+
+    /* 使用全局协程宿主启动协程，避免面板隐藏时被自动停止 */
+    private void StartPanelCoroutine(IEnumerator routine)
+    {
+        CoroutineHost.Instance.StartCoroutine(routine);
+    }
 
     /* 创建流式输出的消息容器 */
     private void CreateStreamingMessage(int timeline)
@@ -657,6 +666,24 @@ public class DialogPanel : MonoBehaviour
             case 1: return "Modern";
             case 2: return "Future";
             default: return "Unknown";
+        }
+    }
+
+    /*
+     * CoroutineHost
+     * 全局协程宿主，放在 DontDestroyOnLoad 节点，确保 DialogPanel 隐藏时协程仍可运行。
+     */
+    private class CoroutineHost : MonoBehaviour
+    {
+        private static CoroutineHost _instance;
+        public static CoroutineHost Instance => _instance;
+
+        public static void EnsureInstance()
+        {
+            if (_instance != null) return;
+            var go = new GameObject("DialogPanel_CoroutineHost");
+            DontDestroyOnLoad(go);
+            _instance = go.AddComponent<CoroutineHost>();
         }
     }
 }

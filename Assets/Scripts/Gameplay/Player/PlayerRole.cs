@@ -1,13 +1,18 @@
+/* Gameplay/Player/PlayerRole.cs
+ * 玩家角色管理组件
+ * 处理角色选择、状态同步及服务器端冲突校验
+ */
+
 using UnityEngine;
 using Mirror;
 
 // 角色枚举
 public enum RoleType { Ancient, Modern, Future }
 
-/// <summary>
-/// 玩家角色管理：禁止重复选择同一角色（服务器校验）。
-/// 客户端调用 ChooseRole -> 服务端 CmdChooseRole 校验 -> 成功则更新 SyncVar，失败则通过 TargetRpc 通知客户端。
-/// </summary>
+/*
+ * 玩家角色管理类：禁止重复选择同一角色（服务器校验）。
+ * 客户端调用 ChooseRole -> 服务端 CmdChooseRole 校验 -> 成功则更新 SyncVar，失败则通过 TargetRpc 通知客户端。
+ */
 public class PlayerRole : NetworkBehaviour
 {
     [Header("角色状态")]
@@ -23,39 +28,39 @@ public class PlayerRole : NetworkBehaviour
     [SyncVar]
     public bool isRoleSelected = false;
 
-    /// <summary>
-    /// 客户端请求选择角色（发往服务器）。
-    /// </summary>
+    /*
+     * 客户端请求选择角色（发往服务器）。
+     */
     public void ChooseRole(RoleType newRole)
     {
         if (!isLocalPlayer) return;
         CmdChooseRole(newRole);
     }
 
-    /// <summary>
-    /// 客户端请求切换准备状态。
-    /// </summary>
-    /// <param name="ready">目标准备状态</param>
+    /*
+     * 客户端请求切换准备状态。
+     * ready: 目标准备状态
+     */
     public void SetReady(bool ready)
     {
         if (!isLocalPlayer) return;
         CmdSetReady(ready);
     }
 
-    /// <summary>
-    /// 客户端请求切换角色选择确认状态。
-    /// </summary>
-    /// <param name="selected">目标选择状态</param>
+    /*
+     * 客户端请求切换角色选择确认状态。
+     * selected: 目标选择状态
+     */
     public void SetRoleSelected(bool selected)
     {
         if (!isLocalPlayer) return;
         CmdSetRoleSelected(selected);
     }
 
-    /// <summary>
-    /// 服务端命令：尝试为该玩家设置角色。
-    /// 服务端在所有连接上检查是否已有玩家占用该角色，若占用则拒绝并通知请求者。
-    /// </summary>
+    /*
+     * 服务端命令：尝试为该玩家设置角色。
+     * 服务端在所有连接上检查是否已有玩家占用该角色，若占用则拒绝并通知请求者。
+     */
     [Command]
     void CmdChooseRole(RoleType newRole)
     {
@@ -91,12 +96,12 @@ public class PlayerRole : NetworkBehaviour
         isRoleSelected = selected;
     }
 
-    /// <summary>
-    /// 目标RPC：单独通知请求客户端选择失败的原因。
-    /// </summary>
-    /// <param name="target">目标连接</param>
-    /// <param name="attemptedRole">尝试选择的角色</param>
-    /// <param name="reason">失败原因</param>
+    /*
+     * 目标RPC：单独通知请求客户端选择失败的原因。
+     * target: 目标连接
+     * attemptedRole: 尝试选择的角色
+     * reason: 失败原因
+     */
     [TargetRpc]
     void TargetChooseFailed(NetworkConnection target, RoleType attemptedRole, string reason)
     {

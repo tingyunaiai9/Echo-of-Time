@@ -1,12 +1,19 @@
+/*
+ * Utils.cs
+ * 光照谜题辅助工具：提供鼠标位置获取等便捷方法。
+ */
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/*
+ * Utils 类
+ * 提供静态方法，供光照谜题中获取鼠标世界坐标。
+ */
 public static class Utils
 {
-    /// <summary>
-    /// 获取鼠标在世界坐标系中的位置
-    /// </summary>
-    /// <returns>鼠标的世界坐标位置</returns>
+    /* 获取鼠标在世界坐标系中的位置
+     * 返回值：鼠标的世界坐标（忽略 Z 轴）
+     */
     public static Vector2 GetMousePosition()
     {
         // 使用新的 Input System 获取鼠标在屏幕上的位置

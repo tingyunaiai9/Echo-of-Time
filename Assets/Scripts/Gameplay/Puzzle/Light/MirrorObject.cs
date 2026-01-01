@@ -1,9 +1,16 @@
+/*
+ * MirrorObject.cs
+ * 单个镜子物体的交互逻辑：拖拽、占槽、高亮与占用状态管理。
+ */
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections.Generic;
-using TMPro;
 
+/*
+ * MirrorObject 类
+ * 负责单个镜子的拖拽与镜槽占用，不处理镜子数量与 UI 计数。
+ */
 [RequireComponent(typeof(CanvasGroup))]
 public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
@@ -28,6 +35,10 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     
     [Tooltip("当前占用的镜槽")]
     private GameObject currentMirrorSlot;
+
+    [Header("管理引用")]
+    [Tooltip("镜子面板控制器，用于管理数量与重置")]
+    [SerializeField] private MirrorPanel mirrorPanel;
     
     [Header("镜槽高亮设置")]
     [Tooltip("高亮时的 Outline 颜色")]
@@ -47,27 +58,7 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     // Key: 镜槽GameObject, Value: 占用该镜槽的MirrorObject实例
     private static Dictionary<GameObject, MirrorObject> slotOccupancy = new Dictionary<GameObject, MirrorObject>();
     
-    // ===== 镜子计数管理 =====
-    [Header("UI引用")]
-    [Tooltip("镜子计数文本")]
-    private TextMeshProUGUI mirrorCountText;
-    
-    [Tooltip("重置按钮")]
-    private Button resetButton;
-    
-    [Tooltip("镜像图片(MirrorImage)")]
-    private GameObject mirrorImage;
-    
-    // 静态变量：镜子计数
-    private static int mirrorCount = 5;
-    private const int MAX_MIRROR_COUNT = 5;
-    
-    // 静态列表：记录所有MirrorObject实例
-    private static List<MirrorObject> allMirrorObjects = new List<MirrorObject>();
-
-    /*
-     * 初始化组件和变量
-     */
+    /* 初始化组件和变量 */
     void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
@@ -75,91 +66,12 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         canvas = GetComponentInParent<Canvas>();
         originalPosition = rectTransform.anchoredPosition;
         originalParent = transform.parent;
-        
-        allMirrorObjects.Add(this);
-        
-        // 查找UI组件
-        Transform parent = transform.parent;
-        if (parent != null)
+
+        if (mirrorPanel == null)
         {
-            mirrorCountText = parent.Find("MirrorCount")?.GetComponent<TextMeshProUGUI>();
-            resetButton = parent.Find("ResetButton")?.GetComponent<Button>();
+            mirrorPanel = GetComponentInParent<MirrorPanel>();
         }
-        mirrorImage = gameObject;
-    }
-    
-    /*
-     * 初始化镜子计数显示和重置按钮事件
-     */
-    void Start()
-    {
-        UpdateMirrorCountDisplay();
-        resetButton?.onClick.AddListener(OnResetButtonClicked);
-    }
-    
-    /*
-     * 更新镜子计数显示
-     */
-    private void UpdateMirrorCountDisplay()
-    {
-        if (mirrorCountText != null)
-            mirrorCountText.text = mirrorCount.ToString();
-        
-        // 更新所有镜子的拖拽状态
-        bool canDrag = mirrorCount > 0;
-        foreach (var mirrorObj in allMirrorObjects)
-        {
-            if (mirrorObj?.canvasGroup != null)
-            {
-                mirrorObj.canvasGroup.blocksRaycasts = canDrag;
-                mirrorObj.canvasGroup.interactable = canDrag;
-            }
-        }
-    }
-    
-    /*
-     * 重置按钮点击事件
-     */
-    private void OnResetButtonClicked()
-    {
-        mirrorCount = MAX_MIRROR_COUNT;
-        UpdateMirrorCountDisplay();
-        
-        // 重置所有镜槽
-        BoxCollider2D[] allColliders = FindObjectsByType<BoxCollider2D>(FindObjectsSortMode.None);
-        foreach (BoxCollider2D collider in allColliders)
-        {
-            if (collider.gameObject.layer == LayerMask.NameToLayer("Light") && collider.gameObject.name.Contains("Mirror"))
-            {
-                collider.enabled = false;
-                
-                // 恢复为灰度，透明度 50%
-                Image image = collider.GetComponent<Image>();
-                if (image != null)
-                {
-                    Color grayColor = new Color(0.5f, 0.5f, 0.5f, 0.5f);
-                    image.color = grayColor;
-                }
-                
-                // 清除高亮状态（禁用 Outline）
-                Outline outline = collider.GetComponent<Outline>();
-                if (outline != null)
-                {
-                    outline.enabled = false;
-                }
-            }
-        }
-        slotOccupancy.Clear();
-        
-        // 清除所有 MirrorObject 的高亮状态引用
-        foreach (var mirrorObj in allMirrorObjects)
-        {
-            if (mirrorObj != null)
-            {
-                mirrorObj.currentHighlightedSlot = null;
-                mirrorObj.RemoveFromMirrorSlot();
-            }
-        }
+        mirrorPanel?.RegisterMirror(this);
     }
     
     // ======拖拽事件实现======
@@ -169,7 +81,7 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
      */
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (mirrorCount <= 0) return;
+        if (mirrorPanel != null && !mirrorPanel.HasAvailableMirrors()) return;
         
         originalPosition = rectTransform.anchoredPosition;
         originalParent = transform.parent;
@@ -371,6 +283,9 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
      */
     private void ActivateMirrorSlot(GameObject mirrorSlot)
     {
+        if (mirrorPanel != null && !mirrorPanel.TryConsumeMirror())
+            return;
+
         OccupySlot(mirrorSlot);
         
         // 启用 BoxCollider2D
@@ -385,8 +300,6 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         }
 
         currentMirrorSlot = mirrorSlot;
-        mirrorCount--;
-        UpdateMirrorCountDisplay();
     }
 
     /*
@@ -425,11 +338,41 @@ public class MirrorObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     /*
      * 对象销毁时的清理操作
      */
+    /* 对象销毁时的清理操作 */
     void OnDestroy()
     {
-        allMirrorObjects.Remove(this);
-        resetButton?.onClick.RemoveListener(OnResetButtonClicked);
+        mirrorPanel?.UnregisterMirror(this);
         RemoveFromMirrorSlot();
         DestroyDraggedClone();
+    }
+
+    /* 设置面板引用（由 MirrorPanel 调用） */
+    public void SetPanel(MirrorPanel panel)
+    {
+        mirrorPanel = panel;
+    }
+
+    /* 设置可交互与射线阻挡（由 MirrorPanel 控制） */
+    public void SetInteractable(bool enabled)
+    {
+        if (canvasGroup != null)
+        {
+            canvasGroup.blocksRaycasts = enabled;
+            canvasGroup.interactable = enabled;
+        }
+    }
+
+    /* 重置单个镜子的占位与高亮状态（由 MirrorPanel 调用） */
+    public void ResetMirrorPlacement()
+    {
+        currentHighlightedSlot = null;
+        RemoveFromMirrorSlot();
+        DestroyDraggedClone();
+    }
+
+    /* 清空全局镜槽占用（由 MirrorPanel 调用） */
+    public static void ClearSlotOccupancy()
+    {
+        slotOccupancy.Clear();
     }
 }

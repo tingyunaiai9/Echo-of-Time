@@ -38,5 +38,9 @@ public class InteractToOpenPuzzle : Interaction
 
         Debug.Log($"[InteractToOpenPuzzle] 正在打开谜题: {puzzleSceneName}");
         PuzzleOverlayManager.singleton.OpenPuzzle(puzzleSceneName);
+        if (!PuzzleOverlayManager.singleton.completedPuzzles.Contains(puzzleSceneName))
+        {
+            UIManager.Instance.SetFrozen(true);
+        }
     }
 }

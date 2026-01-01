@@ -37,9 +37,10 @@ public static class JimengService
     private const int PollIntervalMs = 2000; // 轮询间隔 (2秒)
     private const int PollTimeoutSeconds = 60; // 总超时 (60秒)
 
-    /// <summary>
-    /// (公共) 调用 即梦 AI v3.1 API 生成图像 (包含提交 + 轮询)
-    /// </summary>
+    /*
+     * GenerateImage
+     * 对外接口：调用即梦 AI v3.1 API 生成图像（包含任务提交与结果轮询）。
+     */
     public static async Task GenerateImage(
         string prompt,
         Action<string> onSuccess,
@@ -128,9 +129,10 @@ public static class JimengService
         }
     }
 
-    /// <summary>
-    /// (私有) 步骤 1: 提交任务
-    /// </summary>
+    /*
+     * SubmitTaskInternal
+     * 私有方法：向即梦 API 提交生成任务，返回任务 ID。
+     */
     private static async Task<string> SubmitTaskInternal(string prompt)
     {
         var requestBody = new JimengSubmitBody
@@ -169,9 +171,10 @@ public static class JimengService
         }
     }
 
-    /// <summary>
-    /// (私有) 步骤 2: 查询任务
-    /// </summary>
+    /*
+     * QueryTaskInternal
+     * 私有方法：查询任务状态，返回任务查询结果。
+     */
     private static async Task<JimengQueryResponse> QueryTaskInternal(string taskId)
     {
         // 构造 req_json (JSON-in-a-string)
@@ -209,9 +212,10 @@ public static class JimengService
         return JsonConvert.DeserializeObject<JimengQueryResponse>(responseBody);
     }
 
-    /// <summary>
-    /// (私有) 核心鉴权：创建已签名的 HttpRequestMessage
-    /// </summary>
+    /*
+     * CreateSignedRequest
+     * 私有方法：按照火山引擎 SigV4 规范创建已签名的 HttpRequestMessage。
+     */
     private static async Task<HttpRequestMessage> CreateSignedRequest(string url, string jsonBody)
     {
         try

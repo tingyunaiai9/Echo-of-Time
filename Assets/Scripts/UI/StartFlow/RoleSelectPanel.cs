@@ -1,9 +1,17 @@
+/* UI/StartFlow/RoleSelectPanel.cs
+ * 角色选择面板控制器
+ * 处理玩家在房间内的角色选择、UI同步以及房主开始游戏的逻辑
+ */
+
 using Mirror;
 using UnityEngine;
 using Events;
 using TMPro;
 using UnityEngine.UI; // 引入 UI 命名空间
 
+/*
+ * 角色选择面板类，管理角色选择界面的UI交互和网络同步
+ */
 public class RoleSelectPanel : MonoBehaviour
 {
     public StartMenuController flow;
@@ -29,10 +37,26 @@ public class RoleSelectPanel : MonoBehaviour
     public Button startButton;
     public TMP_Text startButtonText;
 
+    [Header("房间信息显示")]
+    public TMP_Text roomNameText;
+    public TMP_Text roomCodeText;
+
     // 本地缓存
     private PlayerRole localRole;
     private TimelinePlayer localTimeline;
+    private EchoNetworkManager nm;
 
+    /*
+     * 初始化，获取网络管理器引用
+     */
+    void Awake()
+    {
+        nm = FindFirstObjectByType<EchoNetworkManager>();
+    }
+
+    /*
+     * 面板启用时绑定按钮事件
+     */
     void OnEnable()
     {
         // 绑定按钮点击事件
@@ -50,18 +74,33 @@ public class RoleSelectPanel : MonoBehaviour
     {
     }
 
+    /*
+     * 每帧更新UI状态
+     */
     void Update()
     {
-        // 每一帧都根据网络数据刷新 UI 显示
-        // 因为 SyncVar 的更新是异步的，所以在 Update 里轮询是最简单的同步 UI 方式
+        /* 每一帧都根据网络数据刷新 UI 显示
+         * 因为 SyncVar 的更新是异步的，所以在 Update 里轮询是最简单的同步 UI 方式
+         */
         RefreshRoleUI();
         TryBindLocal(); // 确保本地引用存在
         UpdateStartButton();
+        UpdateRoomInfo();
     }
 
-    /// <summary>
-    /// 核心逻辑：遍历所有玩家，更新 UI 上的名字
-    /// </summary>
+    /*
+     * 更新房间信息显示（名称和代码）
+     */
+    void UpdateRoomInfo()
+    {
+        if (nm == null) return;
+        if (roomNameText != null) roomNameText.text = nm.CurrentRoomName;
+        if (roomCodeText != null) roomCodeText.text = nm.CurrentRoomCode;
+    }
+
+    /*
+     * 核心逻辑：遍历所有玩家，更新 UI 上的名字
+     */
     void RefreshRoleUI()
     {
         // 1. 先重置所有文本为 Unselected
@@ -74,14 +113,16 @@ public class RoleSelectPanel : MonoBehaviour
         bool modernTaken = false;
         bool futureTaken = false;
 
-        // 2. 查找场景里所有的 TimelinePlayer (包含自己和其他客户端的镜像)
-        // 注意：TimelinePlayer 必须挂载在 Player Prefab 上
+        /* 2. 查找场景里所有的 TimelinePlayer (包含自己和其他客户端的镜像)
+         * 注意：TimelinePlayer 必须挂载在 Player Prefab 上
+         */
         TimelinePlayer[] allPlayers = FindObjectsByType<TimelinePlayer>(FindObjectsSortMode.None);
 
         foreach (var player in allPlayers)
         {
-            // 根据玩家存储的 timeline 变量决定显示名字的位置
-            // 0=Ancient, 1=Modern, 2=Future (对应 TimelinePlayer.cs 的逻辑)
+            /* 根据玩家存储的 timeline 变量决定显示名字的位置
+             * 0=Ancient, 1=Modern, 2=Future (对应 TimelinePlayer.cs 的逻辑)
+             */
             switch (player.timeline)
             {
                 case 0:
@@ -99,9 +140,10 @@ public class RoleSelectPanel : MonoBehaviour
             }
         }
 
-        // 3. 更新按钮的可交互性
-        // 规则：如果这个位置已经被占了(Taken)，无论是不是我，都变灰（不可点击）
-        // 这样用户点击后会有“已选择”的反馈（变灰），想换角色点击其他亮着的按钮即可
+        /* 3. 更新按钮的可交互性
+         * 规则：如果这个位置已经被占了(Taken)，无论是不是我，都变灰（不可点击）
+         * 这样用户点击后会有“已选择”的反馈（变灰），想换角色点击其他亮着的按钮即可
+         */
         poetButton.interactable = !ancientTaken;
         artistButton.interactable = !modernTaken;
         analystButton.interactable = !futureTaken;
@@ -112,6 +154,9 @@ public class RoleSelectPanel : MonoBehaviour
         UpdateCharacterColor(analystCharacterImage, futureTaken);
     }
 
+    /*
+     * 更新角色立绘颜色状态
+     */
     private void UpdateCharacterColor(Image img, bool isTaken)
     {
         if (img == null) return;
@@ -119,19 +164,23 @@ public class RoleSelectPanel : MonoBehaviour
         img.color = isTaken ? Color.white : Color.gray;
     }
 
-    /// <summary>
-    /// 点击角色图片时调用
-    /// </summary>
-    /// <param name="timelineIndex">0, 1, 2</param>
+    /*
+     * 点击角色图片时调用
+     * timelineIndex: 0, 1, 2
+     */
     void OnClickRole(int timelineIndex)
     {
         if (localTimeline == null) return;
 
-        // 发送命令给服务器：我要选这个角色
-        // TimelinePlayer.cs 里的 CmdChooseRole 会更新 SyncVar，随后同步给所有人
+        /* 发送命令给服务器：我要选这个角色
+         * TimelinePlayer.cs 里的 CmdChooseRole 会更新 SyncVar，随后同步给所有人
+         */
         localTimeline.CmdChooseRole(timelineIndex);
     }
 
+    /*
+     * 尝试获取本地玩家的 TimelinePlayer 组件
+     */
     void TryBindLocal()
     {
         if (localTimeline == null && NetworkClient.localPlayer != null)
@@ -142,6 +191,9 @@ public class RoleSelectPanel : MonoBehaviour
     
     // --- 以下是房主开始游戏的逻辑 ---
 
+    /*
+     * 更新开始游戏按钮的状态（仅房主可用）
+     */
     void UpdateStartButton()
     {
         if (startButton == null) return;
@@ -164,6 +216,9 @@ public class RoleSelectPanel : MonoBehaviour
         }
     }
 
+    /*
+     * 检查是否所有玩家都已选择角色
+     */
     private bool CheckAllPlayersHaveRoles()
     {
         TimelinePlayer[] allPlayers = FindObjectsByType<TimelinePlayer>(FindObjectsSortMode.None);
@@ -176,6 +231,9 @@ public class RoleSelectPanel : MonoBehaviour
         return true;
     }
 
+    /*
+     * 房主点击开始游戏按钮
+     */
     public void OnClickStartGame()
     {
         if (!NetworkServer.active) return;

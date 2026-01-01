@@ -54,6 +54,9 @@ public class EchoNetworkManager : Mirror.NetworkManager
 
     [Header("房间信息")]
     private RelayRoom currentRoom; // 当前房间信息（Relay 同步）
+    public string CurrentRoomName => currentRoom?.Name;
+    public string CurrentRoomCode => currentRoom?.RoomCode;
+
     private Dictionary<uint, int> playerTimelineMap = new Dictionary<uint, int>(); // 玩家时间线分配表（TransportId -> Timeline）
     private readonly Dictionary<int, int> _timelineByConnectionId = new Dictionary<int, int>(); // 连接ID -> 时间线映射（用于断线重连恢复）
 
@@ -546,9 +549,9 @@ public class EchoNetworkManager : Mirror.NetworkManager
         playerTimelineMap.Clear();
     }
     
-    /// <summary>
-    /// 服务器端：记录一个玩家已正确回答当前层级的谜题。
-    /// </summary>
+    /*
+     * 服务器端：记录一个玩家已正确回答当前层级的谜题。
+     */
     [Server]
     public void ServerPlayerAnsweredCorrectly(TimelinePlayer player)
     {
@@ -576,9 +579,9 @@ public class EchoNetworkManager : Mirror.NetworkManager
         }
     }
 
-    /// <summary>
-    /// 服务器端：提升所有玩家到下一层。
-    /// </summary>
+    /*
+     * 服务器端：提升所有玩家到下一层。
+     */
     [Server]
     private void ServerAdvanceToNextLevel()
     {
@@ -607,6 +610,9 @@ public class EchoNetworkManager : Mirror.NetworkManager
         Debug.Log($"[NetworkManager] Level advanced to {_currentLevel}. Clients should load new timeline scenes.");
     }
 
+    /*
+     * 服务器端：剧情结束处理
+     */
     [Server]
     public void ServerFinishPlot()
     {
@@ -614,6 +620,9 @@ public class EchoNetworkManager : Mirror.NetworkManager
         // Plot 现在是 Panel，不需要切换场景
     }
 
+    /*
+     * 服务器端：揭示所有玩家（设置可见性为 true）
+     */
     [Server]
     private void ServerRevealAllPlayers()
     {
@@ -890,9 +899,10 @@ public class EchoNetworkManager : Mirror.NetworkManager
             var tp = conn.identity.GetComponent<TimelinePlayer>();
             if (tp != null)
             {
-                // --- 新增命名逻辑 ---
-                // numPlayers 是 Mirror 内置属性，表示当前服务器上的玩家总数
-                // 第一个进来的就是 Player 1，第二个是 Player 2...
+                /* --- 新增命名逻辑 ---
+                 * numPlayers 是 Mirror 内置属性，表示当前服务器上的玩家总数
+                 * 第一个进来的就是 Player 1，第二个是 Player 2...
+                 */
                 string sequentialName = $"Player {numPlayers}"; 
                 
                 // 直接修改 TimelinePlayer 的 SyncVar，这会自动同步给所有客户端
@@ -935,9 +945,10 @@ public class EchoNetworkManager : Mirror.NetworkManager
             Debug.Log($"Client disconnected from server: {connId}");
         }
 
-        // 注意：我们保留 _timelineByConnectionId 中的记录，以便断线重连时恢复
-        // 如果需要彻底清理，可以在这里添加：
-        // _timelineByConnectionId.Remove(conn.connectionId);
+        /* 注意：我们保留 _timelineByConnectionId 中的记录，以便断线重连时恢复
+         * 如果需要彻底清理，可以在这里添加：
+         * _timelineByConnectionId.Remove(conn.connectionId);
+         */
     }
     
     /*
