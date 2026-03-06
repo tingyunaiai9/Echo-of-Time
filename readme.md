@@ -30,7 +30,7 @@
 - 稳定版下载（Release）：https://github.com/tingyunaiai9/Echo-of-Time/releases/latest
 - 历史版本与更新日志：https://github.com/tingyunaiai9/Echo-of-Time/releases
 
-## 演示视频
+## 演示视频（YouTube）
 
-- 点击下载/打开：[Echo of Time 展示视频](video/Echo%20of%20Time%20%E5%B1%95%E7%A4%BA%E8%A7%86%E9%A2%91.mp4)
+[![Echo of Time Demo](https://img.youtube.com/vi/IQ97gqi-Rz0/maxresdefault.jpg)](https://youtu.be/IQ97gqi-Rz0)
 
